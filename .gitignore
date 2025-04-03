@@ -38,4 +38,10 @@ ENV/
 client_secrets.json
 *secrets*.json
 *.xls
-*.pdf 
+*.xlsx
+*.pdf
+
+# Mantener archivos CSV específicos
+!archivos/reservas_HotBoat.csv
+!abonos hotboat.csv
+!gastos hotboat.csv 
