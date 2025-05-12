@@ -31,7 +31,8 @@ def leer_excel_mov_facturados_nacional(ruta_archivo):
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
-    df_final=df_final[["Fecha","Descripción","Monto ($)","Cuotas","Categoría"]]
+    df_final["Monto"] = df_final["Monto ($)"]
+    df_final=df_final[["Fecha","Descripción","Monto","Cuotas","Categoría"]]
   
     return df_final
 
@@ -45,13 +46,13 @@ def leer_excel_mov_no_facturados_nacional(ruta_archivo):
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
-    df_final["Monto ($)"] = df_final["Unnamed: 10"]
-    df_final=df_final[["Fecha","Descripción","Cuotas","Monto ($)", "Ciudad"]]
+    df_final["Monto"] = df_final["Unnamed: 10"]
+    df_final=df_final[["Fecha","Descripción","Cuotas","Monto", "Ciudad"]]
   
     return df_final
 
 
-# Función para leer el archivo Mov No facturado
+
 def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
     df = pd.read_excel(ruta_archivo, sheet_name="Movimientos", header=None)  # Leemos sin encabezado
@@ -64,16 +65,120 @@ def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     # Agregar el año "2025" a cada fecha
     df_final['Fecha'] = df_final['Fecha'] + '/' + año_para_fecha_banco_estado
 
-    df_cargos = df_final[df_final['Cheques / Cargos'] > 0]
-    df_abonos = df_final[df_final['Cheques / Cargos'] == 0]
-    df_abonos["Monto ($)"] = df_abonos["Depósitos / Abonos"]
-    df_abonos['Monto ($)'] = df_abonos['Monto ($)'].replace({'\$': '', '\.': ''}, regex=True).astype(int)
-    df_abonos=df_abonos[["Fecha","Descripción","Monto ($)"]]
-    df_cargos["Monto ($)"] = df_cargos["Cheques / Cargos"]
-    df_cargos=df_cargos[["Fecha","Descripción","Monto ($)"]]
+    # Crear copias explícitas para evitar SettingWithCopyWarning
+    df_cargos = df_final[df_final['Cheques / Cargos'] > 0].copy()
+    df_abonos = df_final[df_final['Cheques / Cargos'] == 0].copy()
+    
+    # Asignar valores usando loc para evitar advertencias
+    df_abonos.loc[:, 'Monto'] = df_abonos['Depósitos / Abonos']
+    df_abonos.loc[:, 'Monto'] = df_abonos['Monto'].replace({'\$': '', '\.': ''}, regex=True).astype(int)
+    df_abonos = df_abonos[["Fecha","Descripción","Monto"]]
+    
+    df_cargos.loc[:, 'Monto'] = df_cargos['Cheques / Cargos']
+    df_cargos = df_cargos[["Fecha","Descripción","Monto"]]
   
     return df_cargos, df_abonos
     
+# Función para leer el archivo Mov No facturado
+def leer_excel_mercado_pago(ruta_archivo, año_para_fecha):
+    """
+    Lee un archivo Excel de Mercado Pago y procesa los datos según los requerimientos.
+    
+    Args:
+        ruta_archivo (str): Ruta al archivo Excel de Mercado Pago
+        año_para_fecha (str): Año a agregar a la fecha (ej: "2025")
+        
+    Returns:
+        tuple: (df_pagos, df_reembolsos) donde:
+            - df_pagos: DataFrame con los pagos aprobados
+            - df_reembolsos: DataFrame con los pagos reembolsados
+    """
+    # Leer el archivo Excel sin encabezado primero
+    df = pd.read_excel(ruta_archivo, header=None)
+    
+    # Encontrar la fila que contiene 'Número de operación'
+    inicio_tabla = df[df.astype(str).apply(lambda x: x.str.contains('Número de operación', case=False)).any(axis=1)].index[0]
+    
+    # Leer el Excel nuevamente usando la fila de 'Número de operación' como encabezado
+    df = pd.read_excel(ruta_archivo, skiprows=inicio_tabla, header=0)
+    
+    # Convertir la fecha al formato correcto y agregar el año
+    def convertir_fecha(fecha_str):
+        try:
+            # Remover 'hs' y espacios extra
+            fecha_str = fecha_str.replace(' hs', '').strip()
+            
+            # Separar la fecha en partes
+            partes = fecha_str.split(' ')
+            
+            # Si tiene 3 partes, es formato corto (día mes hora)
+            # Si tiene 4 partes, es formato largo (día mes año hora)
+            if len(partes) == 3:
+                dia, mes, hora = partes
+                año = año_para_fecha # O el año que necesites
+            elif len(partes) == 4:
+                dia, mes, año, hora = partes
+            else:
+                raise ValueError(f"Formato de fecha inesperado: {fecha_str}")
+                
+            # Diccionario para convertir nombres de meses en español
+            meses = {
+                'ene': '01', 'feb': '02', 'mar': '03', 'abr': '04',
+                'may': '05', 'jun': '06', 'jul': '07', 'ago': '08',
+                'sep': '09', 'oct': '10', 'nov': '11', 'dic': '12'
+            }
+            
+            # Convertir el mes a número
+            mes = meses[mes.lower()]
+            
+            # Formatear la fecha completa
+            fecha_completa = f"{dia.zfill(2)}/{mes}/{año} {hora}"
+            
+            # Convertir a datetime
+            return pd.to_datetime(fecha_completa, format='%d/%m/%Y %H:%M')
+        except Exception as e:
+            print(f"Error al convertir fecha '{fecha_str}': {str(e)}")
+            return None
+    
+    # Aplicar la conversión de fecha
+    df['fecha'] = df['Fecha de la compra'].apply(convertir_fecha)
+    
+    # Crear columna de descripción con valor fijo
+    df['descripcion'] = 'mercadopago'
+    
+    # Seleccionar y renombrar las columnas necesarias
+    columnas_requeridas = {
+        'fecha': 'Fecha',
+        'descripcion': 'Descripción',
+        'Total a recibir': 'Monto',
+        'Herramienta de cobro': 'Herramienta de cobro',
+        'Medio de pago': 'Medio de pago'
+    }
+    
+    # Crear DataFrame de pagos aprobados
+    df_pagos = df[df['Estado'] == 'Aprobado'].copy()
+    df_pagos = df_pagos[columnas_requeridas.keys()].rename(columns=columnas_requeridas)
+    
+    # Crear DataFrame de reembolsos
+    df_reembolsos = df[df['Estado'] == 'Reembolsado'].copy()
+    df_reembolsos = df_reembolsos[columnas_requeridas.keys()].rename(columns=columnas_requeridas)
+    
+    # Asegurar que el Monto sea numérico
+    df_pagos['Monto'] = df_pagos['Monto'].str.replace('$', '').str.replace('.', '')
+    df_reembolsos['Monto'] = df_reembolsos['Monto'].str.replace('$', '').str.replace('.', '')
+    df_pagos['Monto'] = pd.to_numeric(df_pagos['Monto'], errors='coerce')
+    df_reembolsos['Monto'] = pd.to_numeric(df_reembolsos['Monto'], errors='coerce') 
+
+    # Eliminar duplicados y ordenar por fecha
+    df_pagos = df_pagos.drop_duplicates(subset=['Fecha', 'Monto', 'Medio de pago'], keep='first')
+    df_reembolsos = df_reembolsos.drop_duplicates(subset=['Fecha', 'Monto', 'Medio de pago'], keep='first')
+    
+    # Ordenar por fecha
+    df_pagos = df_pagos.sort_values('Fecha')
+    df_reembolsos = df_reembolsos.sort_values('Fecha')
+    
+    return df_pagos, df_reembolsos
+
 
 def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
@@ -84,8 +189,8 @@ def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
-    df_final['Monto ($)'] = df_final['Monto (USD)'] * valor_aproximado_dolar
-    df_final=df_final[['Fecha', 'Descripción', 'Categoría', 'País', 'Monto ($)', 'Monto (USD)']]
+    df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
+    df_final=df_final[['Fecha', 'Descripción', 'Categoría', 'País', 'Monto', 'Monto (USD)']]
     return df_final
 
 
@@ -99,7 +204,7 @@ def leer_excel_mov_no_facturados_internacional(ruta_archivo, valor_aproximado_do
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
     df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto (USD)']]
-    df_final['Monto ($)'] = df_final['Monto (USD)'] * valor_aproximado_dolar
+    df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
     return df_final
 
 def leer_pdf(ruta_archivo):
@@ -237,3 +342,59 @@ def leer_pdf(ruta_archivo):
     except Exception as e:
         print(f"Error procesando el PDF: {str(e)}")
         return None
+
+def limpiar_y_ordenar_dataframe(df):
+    """
+    Elimina filas duplicadas y ordena un DataFrame por fecha.
+    
+    Args:
+        df (pd.DataFrame): DataFrame a procesar. Debe contener las columnas 'Fecha', 'Descripción' y 'Monto'.
+        
+    Returns:
+        pd.DataFrame: DataFrame limpio y ordenado, sin duplicados y ordenado por fecha.
+    """
+
+    df = pd.concat(df, ignore_index=True) 
+
+    # Asegurarse de que la columna Fecha sea datetime
+    df['Fecha'] = pd.to_datetime(df['Fecha'], format='%d/%m/%Y', errors='coerce')
+    
+    # Eliminar filas duplicadas considerando todas las columnas
+    df_limpio = df.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+    
+    # Ordenar por fecha de más antigua a más reciente
+    df_ordenado = df_limpio.sort_values('Fecha')
+    
+    return df_ordenado
+
+def exportar_archivos(df_final, df_abonos, directorio_salida="archivos_output"):
+    """
+    Exporta los DataFrames a archivos CSV en el directorio especificado.
+    
+    Args:
+        df_final (pd.DataFrame): DataFrame con los gastos finales
+        df_abonos (pd.DataFrame): DataFrame con los abonos
+        directorio_salida (str): Directorio donde se guardarán los archivos (default: "archivos_output")
+    """
+    import os
+    
+    # Crear el directorio si no existe
+    os.makedirs(directorio_salida, exist_ok=True)
+    
+    # Exportar gastos
+    try:
+        ruta_gastos = os.path.join(directorio_salida, "gastos hotboat.csv")
+        df_final.to_csv(ruta_gastos, index=False)
+    except PermissionError:
+        print(f"Error: No se puede escribir el archivo '{ruta_gastos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
+    except Exception as e:
+        print(f"Error inesperado al guardar gastos: {str(e)}")
+    
+    # Exportar abonos
+    try:
+        ruta_abonos = os.path.join(directorio_salida, "abonos hotboat.csv")
+        df_abonos.to_csv(ruta_abonos, index=False)
+    except PermissionError:
+        print(f"Error: No se puede escribir el archivo '{ruta_abonos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
+    except Exception as e:
+        print(f"Error inesperado al guardar abonos: {str(e)}")
