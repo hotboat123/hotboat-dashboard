@@ -3,20 +3,20 @@ import pandas as pd
 
 def ver_si_es_nacional_facturado(ruta_archivo):    
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)  # Leemos sin encabezado
     # Encontrar la fila donde está la celda 'Categoría'
-    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Categoría', case=False).any(), axis=1)].index[0]
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     if "Monto Moneda Origen" in df_final.columns:
       return False
     return True
 
 def ver_si_es_nacional_no_facturado(ruta_archivo):    
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', header=None)  # Leemos sin encabezado
     # Encontrar la fila donde está la celda 'Categoría'
-    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    descripcion_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', skiprows=descripcion_fila, header=0)
     if "Monto (USD)" in df_final.columns:
       return False
     return True
@@ -24,13 +24,13 @@ def ver_si_es_nacional_no_facturado(ruta_archivo):
 # Función para leer el archivo Mov facturado
 def leer_excel_mov_facturados_nacional(ruta_archivo):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)  # Leemos sin encabezado
     
     # Encontrar la fila donde está la celda 'Categoría'
     categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Categoría', case=False).any(), axis=1)].index[0]
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final["Monto"] = df_final["Monto ($)"]
     df_final=df_final[["Fecha","Descripción","Monto","Cuotas","Categoría"]]
   
@@ -39,13 +39,13 @@ def leer_excel_mov_facturados_nacional(ruta_archivo):
 # Función para leer el archivo Mov No facturado
 def leer_excel_mov_no_facturados_nacional(ruta_archivo):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', header=None)  # Leemos sin encabezado
     
     # Encontrar la fila donde está la celda 'Categoría'
-    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Fecha', case=False).any(), axis=1)].index[0]
+    descripcion_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', skiprows=descripcion_fila, header=0)
     df_final["Monto"] = df_final["Unnamed: 10"]
     df_final=df_final[["Fecha","Descripción","Cuotas","Monto", "Ciudad"]]
   
@@ -58,10 +58,11 @@ def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     df = pd.read_excel(ruta_archivo, sheet_name="Movimientos", header=None)  # Leemos sin encabezado
     
     # Encontrar la fila donde está la celda 'Categoría'
-    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Fecha', case=False).any(), axis=1)].index[0]
+    descripcion_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name="Movimientos", skiprows=categoria_fila, header=0)
+    df_final = pd.read_excel(ruta_archivo, sheet_name="Movimientos", skiprows=descripcion_fila
+                             , header=0)
     # Agregar el año "2025" a cada fecha
     df_final['Fecha'] = df_final['Fecha'] + '/' + año_para_fecha_banco_estado
 
@@ -182,13 +183,13 @@ def leer_excel_mercado_pago(ruta_archivo, año_para_fecha):
 
 def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)  # Leemos sin encabezado
     
     # Encontrar la fila donde está la celda 'Categoría'
     categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Categoría', case=False).any(), axis=1)].index[0]
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
     df_final=df_final[['Fecha', 'Descripción', 'Categoría', 'País', 'Monto', 'Monto (USD)']]
     return df_final
@@ -196,13 +197,13 @@ def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar
 
 def leer_excel_mov_no_facturados_internacional(ruta_archivo, valor_aproximado_dolar):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name=0, header=None)  # Leemos sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', header=None)  # Leemos sin encabezado
     
     # Encontrar la fila donde está la celda 'Categoría'
-    categoria_fila = df[df.apply(lambda x: x.astype(str).str.contains('Fecha', case=False).any(), axis=1)].index[0]
+    descripcion_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name=0, skiprows=categoria_fila, header=0)
+    df_final = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', skiprows=descripcion_fila, header=0)
     df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto (USD)']]
     df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
     return df_final

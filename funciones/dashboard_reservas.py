@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime
 import os
+from funciones.funciones import *
+from funciones.funciones_reservas import *
 
 # Definir colores y estilos
 COLORS = {

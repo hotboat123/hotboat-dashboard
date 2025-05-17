@@ -3,8 +3,10 @@
 2. Descargar mov no facturados bco chile (opcional)
 3. Revisar ultima fila de abonos bco estado y descargar chequera histórica desde esa fecha (pueden ser varios archivos)
 4. Descargar info mercado pago --> Tu negocio - ventas - descargar Excel de ventas
+5. Descargar Appointments y Payments de Booknetic
 5. Subir toda esa info a carpeta "archivo_input" desde carpeta "descargas"
 6. correr código "gastos_hotboat_sin_Drive.py"
+6. correr código "Informacion_reservas.py"
 7. correr código "analisis_gráficos.py"
 8. abrir link 
 
