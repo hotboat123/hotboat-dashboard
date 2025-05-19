@@ -399,3 +399,76 @@ def exportar_archivos(df_final, df_abonos, directorio_salida="archivos_output"):
         print(f"Error: No se puede escribir el archivo '{ruta_abonos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
     except Exception as e:
         print(f"Error inesperado al guardar abonos: {str(e)}")
+
+def obtener_categoria(descripcion, diccionario_categorias):
+    descripcion_normalizada = str(descripcion).strip().lower()
+    for categoria, palabras_clave in diccionario_categorias.items():
+        for palabra in palabras_clave:
+            palabra_normalizada = str(palabra).strip().lower()
+            if palabra_normalizada in descripcion_normalizada:
+                return categoria
+    return 'Sin categoría'
+
+def categorizar_por_descripcion(df, diccionario_categorias):
+    """
+    Asigna una categoría a cada fila del DataFrame según la coincidencia de palabras clave en la columna 'Descripción'.
+    diccionario_categorias debe ser un dict: {'Categoria1': [palabra1, palabra2, ...], ...}
+    """
+    df = df.copy()
+    df['Categoría_2'] = df['Descripción'].apply(lambda desc: obtener_categoria(desc, diccionario_categorias))
+    return df
+
+def categorizar_por_diccionario(df, diccionario, nombre_columna):
+    """
+    Asigna una categoría a cada fila del DataFrame según la coincidencia de palabras clave en la columna 'Descripción'.
+    El resultado se guarda en la columna nombre_columna. La comparación es insensible a mayúsculas/minúsculas y espacios.
+    """
+    df = df.copy()
+    df[nombre_columna] = df['Descripción'].apply(obtener_categoria)
+    return df
+
+def reordenar_columna_categoria_extra(df):
+    """
+    Mueve la columna 'Categoría_2' a la cuarta posición y 'Categoría 1' a la quinta posición si existen.
+    """
+    cols = list(df.columns)
+    # Mover 'Categoría_2' a la cuarta posición
+    if 'Categoría_2' in cols:
+        cols.insert(3, cols.pop(cols.index('Categoría_2')))
+    # Mover 'Categoría 1' a la quinta posición (después de 'Categoría_2')
+    if 'Categoría 1' in cols:
+        idx_cat2 = cols.index('Categoría_2') if 'Categoría_2' in cols else 2
+        cols.insert(idx_cat2 + 1, cols.pop(cols.index('Categoría 1')))
+    df = df[cols]
+    return df
+
+def eliminar_filas_por_descripcion(df, lista_descripciones):
+    """
+    Elimina filas del DataFrame donde la columna 'Descripción' coincide (ignorando mayúsculas/minúsculas y espacios) con alguna de las descripciones en la lista.
+    """
+    if not lista_descripciones:
+        return df
+    descripciones_normalizadas = [d.strip().lower() for d in lista_descripciones]
+    return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
+
+
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+    df_final = pd.concat([
+        df_banco_estado_cargos,
+        df_banco_chile_facturado_internacional,
+        df_banco_chile_facturado_nacional
+    ], ignore_index=True, sort=False)
+    df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
+    df_final['Fecha'] = pd.to_datetime(df_final['Fecha'], format='%d/%m/%Y', errors='coerce')
+    df_final = df_final[df_final['Monto'] >= 0]
+    df_final = df_final.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+    
+    # Primero categorizar por descripción para obtener Categoría_2
+    df_final = categorizar_por_descripcion(df_final, diccionario_categorias)
+    
+    # Luego categorizar Categoría 1 basándose en Categoría_2
+    if diccionario_categoria_1:
+        df_final['Categoría 1'] = df_final['Categoría_2'].apply(lambda cat2: obtener_categoria(cat2, diccionario_categoria_1))
+    
+    df_final = reordenar_columna_categoria_extra(df_final)
+    return df_final
