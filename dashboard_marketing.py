@@ -18,6 +18,30 @@ from funciones.componentes_dashboard import (
     CARD_STYLE
 )
 
+# Función para crear un contenedor de texto con insights
+def crear_contenedor_insights(id_contenedor, titulo="Conclusiones"):
+    """Crea un contenedor para mostrar insights y conclusiones."""
+    return html.Div([
+        html.H3(titulo, style={
+            'color': COLORS['text'],
+            'fontSize': '18px',
+            'fontWeight': 'bold',
+            'marginBottom': '10px'
+        }),
+        html.Div(id=id_contenedor, style={
+            'color': COLORS['text'],
+            'fontSize': '14px',
+            'lineHeight': '1.5',
+            'padding': '10px'
+        })
+    ], style={
+        'backgroundColor': COLORS['card_bg'],
+        'borderRadius': '5px',
+        'padding': '15px',
+        'marginBottom': '25px',
+        'boxShadow': '0 4px 6px rgba(0, 0, 0, 0.1)'
+    })
+
 # Función para cargar datos de marketing
 def cargar_datos_marketing():
     """Carga los archivos CSV de marketing para el análisis."""
@@ -486,6 +510,207 @@ def crear_grafico_anuncios_rendimiento(df_campana):
     
     return fig
 
+# ======== FUNCIONES PARA GENERAR INSIGHTS ========
+def generar_insights_evolucion_gasto(df_gasto_diario):
+    """Genera insights sobre la evolución del gasto en Meta."""
+    try:
+        # Calcular tendencias y días con mayor/menor gasto
+        total_gasto = df_gasto_diario['Importe gastado (CLP)'].sum()
+        promedio_diario = df_gasto_diario['Importe gastado (CLP)'].mean()
+        
+        # Encontrar día con mayor gasto
+        dia_max_gasto = df_gasto_diario.loc[df_gasto_diario['Importe gastado (CLP)'].idxmax()]
+        
+        # Calcular tendencia (comparar primera mitad vs segunda mitad)
+        mitad = len(df_gasto_diario) // 2
+        if mitad > 0:
+            primera_mitad = df_gasto_diario.iloc[:mitad]['Importe gastado (CLP)'].mean()
+            segunda_mitad = df_gasto_diario.iloc[mitad:]['Importe gastado (CLP)'].mean()
+            tendencia = "creciente" if segunda_mitad > primera_mitad else "decreciente"
+            cambio_porcentual = abs((segunda_mitad - primera_mitad) / primera_mitad * 100) if primera_mitad > 0 else 0
+        else:
+            tendencia = "estable"
+            cambio_porcentual = 0
+        
+        # Generar texto de insights
+        insights = [
+            f"El gasto total en el período analizado fue de ${total_gasto:,.0f} CLP, con un promedio diario de ${promedio_diario:,.0f} CLP.",
+            f"El día con mayor inversión fue el {dia_max_gasto['Día'].strftime('%d/%m/%Y')} con ${dia_max_gasto['Importe gastado (CLP)']:,.0f} CLP.",
+            f"La tendencia del gasto es {tendencia}, con una variación del {cambio_porcentual:.1f}% entre la primera y segunda mitad del período."
+        ]
+        
+        # Añadir insights sobre impresiones y CTR si hay suficientes datos
+        if 'Impresiones' in df_gasto_diario.columns and len(df_gasto_diario) > 1:
+            total_impresiones = df_gasto_diario['Impresiones'].sum()
+            costo_mil_impresiones = (total_gasto / total_impresiones) * 1000 if total_impresiones > 0 else 0
+            insights.append(f"Se generaron {total_impresiones:,.0f} impresiones con un CPM promedio de ${costo_mil_impresiones:.2f} CLP.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: datos insuficientes o error en el análisis. {str(e)}")])
+
+def generar_insights_adsets(df_campana):
+    """Genera insights sobre el rendimiento de los conjuntos de anuncios."""
+    try:
+        # Agrupar por conjunto de anuncios
+        metrics_by_adset = df_campana.groupby('Nombre del conjunto de anuncios').agg({
+            'Importe gastado (CLP)': 'sum',
+            'Impresiones': 'sum',
+            'Clics en el enlace': 'sum',
+            'Artículos agregados al carrito': 'sum'
+        }).reset_index()
+        
+        # Calcular CTR y CPC
+        metrics_by_adset['CTR'] = metrics_by_adset['Clics en el enlace'] / metrics_by_adset['Impresiones'] * 100
+        metrics_by_adset['CPC'] = metrics_by_adset['Importe gastado (CLP)'] / metrics_by_adset['Clics en el enlace']
+        
+        # Ordenar por gasto
+        metrics_by_adset = metrics_by_adset.sort_values('Importe gastado (CLP)', ascending=False)
+        
+        # Obtener mejor y peor conjunto por CTR (entre los que tienen gasto significativo)
+        adsets_significativos = metrics_by_adset[metrics_by_adset['Importe gastado (CLP)'] > metrics_by_adset['Importe gastado (CLP)'].mean() * 0.2]
+        
+        if not adsets_significativos.empty:
+            mejor_ctr = adsets_significativos.loc[adsets_significativos['CTR'].idxmax()]
+            peor_ctr = adsets_significativos.loc[adsets_significativos['CTR'].idxmin()]
+            
+            # Generar insights
+            insights = [
+                f"El conjunto de anuncios con mayor inversión fue '{metrics_by_adset.iloc[0]['Nombre del conjunto de anuncios']}' con ${metrics_by_adset.iloc[0]['Importe gastado (CLP)']:,.0f} CLP.",
+                f"El conjunto con mejor CTR fue '{mejor_ctr['Nombre del conjunto de anuncios']}' con {mejor_ctr['CTR']:.2f}% y un CPC de ${mejor_ctr['CPC']:,.0f} CLP.",
+                f"El conjunto con menor rendimiento (CTR) fue '{peor_ctr['Nombre del conjunto de anuncios']}' con {peor_ctr['CTR']:.2f}% y un CPC de ${peor_ctr['CPC']:,.0f} CLP."
+            ]
+            
+            # Añadir insight sobre conversiones si hay datos
+            if 'Artículos agregados al carrito' in metrics_by_adset.columns:
+                metrics_by_adset['Tasa de conversión'] = metrics_by_adset['Artículos agregados al carrito'] / metrics_by_adset['Clics en el enlace'] * 100
+                
+                if not metrics_by_adset[metrics_by_adset['Artículos agregados al carrito'] > 0].empty:
+                    mejor_conversion = metrics_by_adset.loc[metrics_by_adset['Tasa de conversión'].idxmax()]
+                    insights.append(f"El conjunto con mejor tasa de conversión fue '{mejor_conversion['Nombre del conjunto de anuncios']}' con {mejor_conversion['Tasa de conversión']:.2f}% de clics que resultaron en artículos agregados al carrito.")
+            
+            return html.Div([html.P(insight) for insight in insights])
+        else:
+            return html.Div([html.P("No hay suficientes datos para generar insights sobre los conjuntos de anuncios.")])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: datos insuficientes o error en el análisis. {str(e)}")])
+
+def generar_insights_publicos(df_campana):
+    """Genera insights sobre la comparación de públicos."""
+    try:
+        # Agrupar por tipo de público
+        metrics_by_audience = df_campana.groupby('Público').agg({
+            'Importe gastado (CLP)': 'sum',
+            'Impresiones': 'sum',
+            'Clics en el enlace': 'sum',
+            'Artículos agregados al carrito': 'sum'
+        }).reset_index()
+        
+        # Calcular métricas
+        metrics_by_audience['CTR'] = metrics_by_audience['Clics en el enlace'] / metrics_by_audience['Impresiones'] * 100
+        metrics_by_audience['CPC'] = metrics_by_audience['Importe gastado (CLP)'] / metrics_by_audience['Clics en el enlace']
+        
+        # Filtrar solo públicos principales (Advantage y Pucón)
+        main_audiences = metrics_by_audience[metrics_by_audience['Público'].isin(['Advantage', 'Pucón'])]
+        
+        if len(main_audiences) >= 2:
+            # Comparar rendimiento
+            advantage = main_audiences[main_audiences['Público'] == 'Advantage'].iloc[0]
+            pucon = main_audiences[main_audiences['Público'] == 'Pucón'].iloc[0]
+            
+            # Calcular diferencias porcentuales
+            ctr_diff = (advantage['CTR'] / pucon['CTR'] - 1) * 100 if pucon['CTR'] > 0 else 0
+            cpc_diff = (pucon['CPC'] / advantage['CPC'] - 1) * 100 if advantage['CPC'] > 0 else 0
+            
+            # Determinar cuál es mejor
+            mejor_publico = "Advantage" if advantage['CTR'] > pucon['CTR'] else "Pucón"
+            peor_cpc = "Advantage" if advantage['CPC'] > pucon['CPC'] else "Pucón"
+            
+            # Generar insights
+            insights = [
+                f"El público de {mejor_publico} muestra un mejor CTR con {abs(ctr_diff):.1f}% {'más' if ctr_diff > 0 else 'menos'} que el otro segmento.",
+                f"El costo por clic (CPC) es {'más alto' if cpc_diff > 0 else 'más bajo'} en {peor_cpc} por un {abs(cpc_diff):.1f}%.",
+                f"Advantage tuvo un gasto total de ${advantage['Importe gastado (CLP)']:,.0f} CLP vs ${pucon['Importe gastado (CLP)']:,.0f} CLP para Pucón."
+            ]
+            
+            # Añadir insight sobre conversiones si hay datos
+            if 'Artículos agregados al carrito' in metrics_by_audience.columns:
+                advantage_conv = advantage['Artículos agregados al carrito'] / advantage['Clics en el enlace'] * 100 if advantage['Clics en el enlace'] > 0 else 0
+                pucon_conv = pucon['Artículos agregados al carrito'] / pucon['Clics en el enlace'] * 100 if pucon['Clics en el enlace'] > 0 else 0
+                
+                mejor_conv = "Advantage" if advantage_conv > pucon_conv else "Pucón"
+                conv_diff = (max(advantage_conv, pucon_conv) / max(0.1, min(advantage_conv, pucon_conv)) - 1) * 100
+                
+                insights.append(f"En términos de conversión, el público de {mejor_conv} muestra un rendimiento {conv_diff:.1f}% superior.")
+            
+            return html.Div([html.P(insight) for insight in insights])
+        else:
+            return html.Div([html.P("No hay suficientes datos para comparar los públicos de Advantage y Pucón.")])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: datos insuficientes o error en el análisis. {str(e)}")])
+
+def generar_insights_anuncios(df_campana):
+    """Genera insights sobre el rendimiento de los anuncios."""
+    try:
+        # Agrupar por anuncio y tipo
+        metrics_by_ad = df_campana.groupby(['Nombre del anuncio', 'Tipo de Anuncio']).agg({
+            'Importe gastado (CLP)': 'sum',
+            'Impresiones': 'sum',
+            'Clics en el enlace': 'sum',
+            'Artículos agregados al carrito': 'sum'
+        }).reset_index()
+        
+        # Calcular métricas
+        metrics_by_ad['CTR'] = metrics_by_ad['Clics en el enlace'] / metrics_by_ad['Impresiones'] * 100
+        metrics_by_ad['CPC'] = metrics_by_ad['Importe gastado (CLP)'] / metrics_by_ad['Clics en el enlace']
+        
+        # Ordenar por gasto
+        metrics_by_ad = metrics_by_ad.sort_values('Importe gastado (CLP)', ascending=False)
+        
+        # Filtrar anuncios con gasto significativo
+        significant_ads = metrics_by_ad[metrics_by_ad['Importe gastado (CLP)'] > metrics_by_ad['Importe gastado (CLP)'].mean() * 0.2]
+        
+        if not significant_ads.empty:
+            # Encontrar mejor y peor anuncio por CTR
+            mejor_ctr = significant_ads.loc[significant_ads['CTR'].idxmax()]
+            peor_ctr = significant_ads.loc[significant_ads['CTR'].idxmin()]
+            
+            # Analizar por tipo de anuncio
+            metrics_by_type = df_campana.groupby('Tipo de Anuncio').agg({
+                'Importe gastado (CLP)': 'sum',
+                'Impresiones': 'sum',
+                'Clics en el enlace': 'sum'
+            }).reset_index()
+            
+            metrics_by_type['CTR'] = metrics_by_type['Clics en el enlace'] / metrics_by_type['Impresiones'] * 100
+            metrics_by_type = metrics_by_type.sort_values('CTR', ascending=False)
+            
+            # Generar insights
+            insights = [
+                f"El anuncio con mayor inversión fue '{metrics_by_ad.iloc[0]['Nombre del anuncio']}' ({metrics_by_ad.iloc[0]['Tipo de Anuncio']}) con ${metrics_by_ad.iloc[0]['Importe gastado (CLP)']:,.0f} CLP.",
+                f"El anuncio con mejor CTR fue '{mejor_ctr['Nombre del anuncio']}' ({mejor_ctr['Tipo de Anuncio']}) con {mejor_ctr['CTR']:.2f}% y un CPC de ${mejor_ctr['CPC']:,.0f} CLP.",
+                f"El tipo de anuncio con mejor rendimiento es '{metrics_by_type.iloc[0]['Tipo de Anuncio']}' con un CTR promedio de {metrics_by_type.iloc[0]['CTR']:.2f}%."
+            ]
+            
+            # Añadir insight sobre conversiones si hay datos
+            if 'Artículos agregados al carrito' in metrics_by_ad.columns:
+                metrics_by_ad['Conversión'] = metrics_by_ad['Artículos agregados al carrito'] / metrics_by_ad['Clics en el enlace'] * 100
+                converting_ads = metrics_by_ad[metrics_by_ad['Artículos agregados al carrito'] > 0]
+                
+                if not converting_ads.empty:
+                    mejor_conversion = converting_ads.loc[converting_ads['Conversión'].idxmax()]
+                    insights.append(f"El anuncio con mejor tasa de conversión fue '{mejor_conversion['Nombre del anuncio']}' con {mejor_conversion['Conversión']:.2f}% de clics que resultaron en artículos agregados al carrito.")
+            
+            return html.Div([html.P(insight) for insight in insights])
+        else:
+            return html.Div([html.P("No hay suficientes datos para generar insights sobre los anuncios.")])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: datos insuficientes o error en el análisis. {str(e)}")])
+
 # ======== CREACIÓN DE LA APLICACIÓN ========
 def crear_app_marketing(datos=None):
     """Crea la aplicación Dash para el análisis de marketing."""
@@ -557,11 +782,18 @@ def crear_app_marketing(datos=None):
         # Selector de período para gráficos temporales
         crear_selector_periodo(),
         
-        # Gráficos principales
+        # Gráficos principales con sus insights
         crear_contenedor_grafico('evolucion-gasto-meta', 'Evolución del Gasto en Meta Ads'),
+        crear_contenedor_insights('insights-evolucion', 'Insights: Evolución del Gasto'),
+        
         crear_contenedor_grafico('rendimiento-adsets', 'Rendimiento de Conjuntos de Anuncios'),
+        crear_contenedor_insights('insights-adsets', 'Insights: Conjuntos de Anuncios'),
+        
         crear_contenedor_grafico('comparacion-publicos', 'Comparación de Públicos: Advantage vs Pucón'),
+        crear_contenedor_insights('insights-publicos', 'Insights: Comparación de Públicos'),
+        
         crear_contenedor_grafico('rendimiento-anuncios', 'Rendimiento por Anuncio'),
+        crear_contenedor_insights('insights-anuncios', 'Insights: Rendimiento de Anuncios'),
         
     ], style={
         'padding': 20,
@@ -580,7 +812,12 @@ def crear_app_marketing(datos=None):
          Output('total-clics', 'children'),
          Output('ctr-promedio', 'children'),
          Output('cpc-promedio', 'children'),
-         Output('articulos-carrito', 'children')],
+         Output('articulos-carrito', 'children'),
+         # Nuevos outputs para los insights
+         Output('insights-evolucion', 'children'),
+         Output('insights-adsets', 'children'),
+         Output('insights-publicos', 'children'),
+         Output('insights-anuncios', 'children')],
         [Input('periodo-selector', 'value'),
          Input('date-range-picker', 'start_date'),
          Input('date-range-picker', 'end_date')]
@@ -622,6 +859,12 @@ def crear_app_marketing(datos=None):
         fig_publicos = crear_grafico_comparacion_publicos(df_campana_filtrado)
         fig_anuncios = crear_grafico_anuncios_rendimiento(df_campana_filtrado)
         
+        # Generar insights
+        insights_evolucion = generar_insights_evolucion_gasto(df_gasto_diario_filtrado)
+        insights_adsets = generar_insights_adsets(df_campana_filtrado)
+        insights_publicos = generar_insights_publicos(df_campana_filtrado)
+        insights_anuncios = generar_insights_anuncios(df_campana_filtrado)
+        
         return (
             fig_evolucion,
             fig_adsets,
@@ -632,7 +875,11 @@ def crear_app_marketing(datos=None):
             f'{total_clics:,.0f}',
             f'{ctr_promedio:.2f}%',
             f'${cpc_promedio:.0f}',
-            f'{articulos_carrito:.0f}'
+            f'{articulos_carrito:.0f}',
+            insights_evolucion,
+            insights_adsets,
+            insights_publicos,
+            insights_anuncios
         )
     
     return app

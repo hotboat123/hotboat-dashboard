@@ -109,4 +109,27 @@ def crear_contenedor_grafico(id_grafico, titulo=None, figura=None):
         'backgroundColor': COLORS['card_bg'], 
         'padding': '20px', 
         'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+    })
+
+def crear_contenedor_insights(id_contenedor, titulo="Conclusiones"):
+    """Crea un contenedor para mostrar insights y conclusiones."""
+    return html.Div([
+        html.H3(titulo, style={
+            'color': COLORS['text'],
+            'fontSize': '18px',
+            'fontWeight': 'bold',
+            'marginBottom': '10px'
+        }),
+        html.Div(id=id_contenedor, style={
+            'color': COLORS['text'],
+            'fontSize': '14px',
+            'lineHeight': '1.5',
+            'padding': '10px'
+        })
+    ], style={
+        'backgroundColor': COLORS['card_bg'],
+        'borderRadius': '5px',
+        'padding': '15px',
+        'marginBottom': '25px',
+        'boxShadow': '0 4px 6px rgba(0, 0, 0, 0.1)'
     }) 

@@ -22,6 +22,7 @@ from funciones.componentes_dashboard import (
     crear_selector_periodo,
     crear_tarjetas_metricas,
     crear_contenedor_grafico,
+    crear_contenedor_insights,
     CARD_STYLE
 )
 
@@ -337,6 +338,309 @@ def crear_grafico_avg_sale_value(df_reservas, periodo):
     
     return fig
 
+# ======== FUNCIONES PARA GENERAR INSIGHTS ========
+def generar_insights_reservas(df_reservas, periodo):
+    """Genera insights sobre las reservas."""
+    try:
+        # Calcular tendencias y días con mayor/menor reservas
+        total_reservas = len(df_reservas)
+        
+        if total_reservas == 0:
+            return html.Div([html.P("No hay datos de reservas para el período seleccionado.")])
+        
+        # Agrupar por fecha según período
+        if periodo == 'D':
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'].dt.date
+            agrupacion = 'diario'
+        elif periodo == 'W':
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'] - pd.to_timedelta(df_reservas['fecha_trip'].dt.dayofweek, unit='D')
+            agrupacion = 'semanal'
+        else:  # 'M'
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'].dt.to_period('M').dt.to_timestamp()
+            agrupacion = 'mensual'
+        
+        # Contar reservas por fecha
+        reservas_por_fecha = df_reservas.groupby('fecha_grupo').size().reset_index(name='count')
+        
+        # Encontrar período con más reservas
+        max_reservas = reservas_por_fecha.loc[reservas_por_fecha['count'].idxmax()]
+        
+        # Calcular promedio y tendencia
+        promedio_reservas = reservas_por_fecha['count'].mean()
+        
+        # Si hay suficientes datos, analizar tendencia
+        if len(reservas_por_fecha) > 1:
+            primera_mitad = reservas_por_fecha.iloc[:len(reservas_por_fecha)//2]['count'].mean()
+            segunda_mitad = reservas_por_fecha.iloc[len(reservas_por_fecha)//2:]['count'].mean()
+            tendencia = "creciente" if segunda_mitad > primera_mitad else "decreciente" if segunda_mitad < primera_mitad else "estable"
+            cambio_porcentual = abs((segunda_mitad - primera_mitad) / primera_mitad * 100) if primera_mitad > 0 else 0
+        else:
+            tendencia = "no determinada"
+            cambio_porcentual = 0
+        
+        # Analizar tipo de embarcación y tiempo de viaje
+        tipos_embarcacion = df_reservas['type boat'].value_counts()
+        embarcacion_popular = tipos_embarcacion.index[0] if not tipos_embarcacion.empty else "No disponible"
+        
+        # Generar insights
+        if periodo == 'D':
+            fecha_max = max_reservas['fecha_grupo'].strftime('%d/%m/%Y')
+        elif periodo == 'W':
+            fecha_max = f"semana del {max_reservas['fecha_grupo'].strftime('%d/%m/%Y')}"
+        else:
+            fecha_max = max_reservas['fecha_grupo'].strftime('%B %Y')
+        
+        insights = [
+            f"Se registraron un total de {total_reservas} reservas en el período seleccionado, con un promedio {agrupacion} de {promedio_reservas:.1f} reservas.",
+            f"El período con mayor número de reservas fue {fecha_max} con {max_reservas['count']} reservas.",
+            f"La tendencia de reservas es {tendencia}, con una variación del {cambio_porcentual:.1f}% entre la primera y segunda mitad del período."
+        ]
+        
+        if embarcacion_popular != "No disponible":
+            insights.append(f"La embarcación más popular fue '{embarcacion_popular}', representando el {tipos_embarcacion[embarcacion_popular]/total_reservas*100:.1f}% de las reservas.")
+        
+        # Análisis adicional de ingreso promedio si hay datos de monto
+        if 'TOTAL AMOUNT' in df_reservas.columns:
+            df_reservas['TOTAL AMOUNT'] = pd.to_numeric(df_reservas['TOTAL AMOUNT'], errors='coerce')
+            monto_promedio = df_reservas['TOTAL AMOUNT'].mean()
+            insights.append(f"El monto promedio por reserva fue de ${monto_promedio:,.0f} CLP.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: {str(e)}")])
+
+def generar_insights_ingresos_gastos(df_payments, df_expenses, periodo):
+    """Genera insights sobre ingresos y gastos."""
+    try:
+        # Calcular totales
+        total_ingresos = df_payments['Monto'].sum()
+        total_gastos = df_expenses['Monto'].sum()
+        balance = total_ingresos - total_gastos
+        
+        if total_ingresos == 0 and total_gastos == 0:
+            return html.Div([html.P("No hay datos financieros para el período seleccionado.")])
+        
+        # Agrupar por fecha según período
+        if periodo == 'D':
+            df_payments['fecha_grupo'] = df_payments['Fecha'].dt.date
+            df_expenses['fecha_grupo'] = df_expenses['Fecha'].dt.date
+            agrupacion = 'diario'
+        elif periodo == 'W':
+            df_payments['fecha_grupo'] = df_payments['Fecha'] - pd.to_timedelta(df_payments['Fecha'].dt.dayofweek, unit='D')
+            df_expenses['fecha_grupo'] = df_expenses['Fecha'] - pd.to_timedelta(df_expenses['Fecha'].dt.dayofweek, unit='D')
+            agrupacion = 'semanal'
+        else:  # 'M'
+            df_payments['fecha_grupo'] = df_payments['Fecha'].dt.to_period('M').dt.to_timestamp()
+            df_expenses['fecha_grupo'] = df_expenses['Fecha'].dt.to_period('M').dt.to_timestamp()
+            agrupacion = 'mensual'
+        
+        # Sumar por fecha
+        ingresos_por_fecha = df_payments.groupby('fecha_grupo')['Monto'].sum().reset_index()
+        gastos_por_fecha = df_expenses.groupby('fecha_grupo')['Monto'].sum().reset_index()
+        
+        # Análisis de gastos por categoría
+        categorias_gastos = df_expenses.groupby('Categoría 1')['Monto'].sum().sort_values(ascending=False)
+        
+        # Generar insights
+        insights = [
+            f"El ingreso total fue de ${total_ingresos:,.0f} CLP y el gasto total fue de ${total_gastos:,.0f} CLP.",
+            f"El balance financiero para el período es ${balance:,.0f} CLP, lo que representa un {'superávit' if balance >= 0 else 'déficit'} del {abs(balance/total_ingresos*100 if total_ingresos > 0 else 0):.1f}% respecto a los ingresos."
+        ]
+        
+        # Añadir insight sobre categorías de gastos
+        if not categorias_gastos.empty:
+            principal_categoria = categorias_gastos.index[0]
+            porcentaje_principal = categorias_gastos.iloc[0] / total_gastos * 100
+            insights.append(f"La principal categoría de gastos fue '{principal_categoria}' con ${categorias_gastos.iloc[0]:,.0f} CLP ({porcentaje_principal:.1f}% del total).")
+        
+        # Análisis de tendencia si hay suficientes datos
+        if len(ingresos_por_fecha) > 1:
+            primera_mitad_ingresos = ingresos_por_fecha.iloc[:len(ingresos_por_fecha)//2]['Monto'].sum()
+            segunda_mitad_ingresos = ingresos_por_fecha.iloc[len(ingresos_por_fecha)//2:]['Monto'].sum()
+            
+            tendencia_ingresos = "creciente" if segunda_mitad_ingresos > primera_mitad_ingresos else "decreciente" if segunda_mitad_ingresos < primera_mitad_ingresos else "estable"
+            insights.append(f"La tendencia de ingresos es {tendencia_ingresos} a lo largo del período analizado.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: {str(e)}")])
+
+def generar_insights_horas_populares(df):
+    """Genera insights sobre las horas más populares para reservas."""
+    try:
+        if 'hora_trip' not in df.columns or df.empty:
+            return html.Div([html.P("No hay datos suficientes para analizar las horas populares.")])
+        
+        # Contar reservas por hora
+        reservas_por_hora = df['hora_trip'].value_counts().sort_index()
+        
+        # Encontrar horas pico
+        hora_max = reservas_por_hora.idxmax()
+        
+        # Dividir el día en franjas
+        manana = reservas_por_hora.loc[6:11].sum() if any(h in reservas_por_hora.index for h in range(6, 12)) else 0
+        tarde = reservas_por_hora.loc[12:17].sum() if any(h in reservas_por_hora.index for h in range(12, 18)) else 0
+        noche = reservas_por_hora.loc[18:23].sum() if any(h in reservas_por_hora.index for h in range(18, 24)) else 0
+        
+        # Determinar franja más popular
+        franjas = {'Mañana (6-11h)': manana, 'Tarde (12-17h)': tarde, 'Noche (18-23h)': noche}
+        franja_popular = max(franjas.items(), key=lambda x: x[1])[0]
+        
+        # Calcular porcentaje de la franja más popular
+        total_reservas = sum(franjas.values())
+        porcentaje_franja = franjas[franja_popular] / total_reservas * 100 if total_reservas > 0 else 0
+        
+        # Generar insights
+        insights = [
+            f"La hora más popular para reservas es a las {hora_max}:00h.",
+            f"La franja horaria más concurrida es {franja_popular}, con el {porcentaje_franja:.1f}% de las reservas."
+        ]
+        
+        # Recomendación operativa
+        if hora_max in range(10, 16):
+            insights.append("Recomendación: Asegurar personal adicional durante las horas del mediodía y primeras horas de la tarde para gestionar el mayor volumen de clientes.")
+        elif hora_max in range(6, 10):
+            insights.append("Recomendación: Preparar la operación temprano, ya que hay una significativa demanda en las primeras horas de la mañana.")
+        else:
+            insights.append("Recomendación: Considerar extender los horarios de operación hacia la tarde-noche para maximizar las reservas en esa franja.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: {str(e)}")])
+
+# Añadir después de las funciones para generar insights del dashboard de reservas
+def generar_insights_utilidad_operativa(df_ingresos, df_costos_operativos, df_gastos_marketing, df_costos_fijos, periodo):
+    """Genera insights sobre la utilidad operativa."""
+    try:
+        # Calcular totales
+        total_ingresos = df_ingresos['monto'].sum()
+        total_costos_op = df_costos_operativos['monto'].sum() if df_costos_operativos is not None else 0
+        total_marketing = df_gastos_marketing['monto'].sum() if df_gastos_marketing is not None else 0
+        total_costos_fijos = df_costos_fijos['Monto'].sum() if df_costos_fijos is not None else 0
+        
+        utilidad_operativa = total_ingresos - total_costos_op - total_marketing - total_costos_fijos
+        
+        if total_ingresos == 0:
+            return html.Div([html.P("No hay datos de ingresos para el período seleccionado.")])
+        
+        # Calcular porcentajes
+        margen_op = (utilidad_operativa / total_ingresos) * 100 if total_ingresos > 0 else 0
+        pct_costos_op = (total_costos_op / total_ingresos) * 100 if total_ingresos > 0 else 0
+        pct_marketing = (total_marketing / total_ingresos) * 100 if total_ingresos > 0 else 0
+        pct_costos_fijos = (total_costos_fijos / total_ingresos) * 100 if total_ingresos > 0 else 0
+        
+        # Agrupar por fecha según período para analizar tendencias
+        if periodo == 'D':
+            df_ingresos['fecha_grupo'] = df_ingresos['fecha'].dt.date
+            agrupacion = 'diaria'
+        elif periodo == 'W':
+            df_ingresos['fecha_grupo'] = df_ingresos['fecha'] - pd.to_timedelta(df_ingresos['fecha'].dt.dayofweek, unit='D')
+            agrupacion = 'semanal'
+        else:  # 'M'
+            df_ingresos['fecha_grupo'] = df_ingresos['fecha'].dt.to_period('M').dt.to_timestamp()
+            agrupacion = 'mensual'
+        
+        # Calcular utilidad por período
+        ingresos_por_periodo = df_ingresos.groupby('fecha_grupo')['monto'].sum()
+        
+        # Generar insights
+        insights = [
+            f"La utilidad operativa del período fue de ${utilidad_operativa:,.0f} CLP, representando un margen del {margen_op:.1f}% sobre los ingresos.",
+            f"Los costos operativos representan el {pct_costos_op:.1f}%, los gastos de marketing el {pct_marketing:.1f}% y los costos fijos el {pct_costos_fijos:.1f}% de los ingresos totales."
+        ]
+        
+        # Análisis de rentabilidad
+        if margen_op >= 20:
+            insights.append("La operación muestra una rentabilidad excelente, con un margen operativo superior al 20%.")
+        elif margen_op >= 10:
+            insights.append("La operación muestra una rentabilidad buena, con un margen operativo entre el 10% y 20%.")
+        elif margen_op >= 0:
+            insights.append("La operación muestra una rentabilidad ajustada, con un margen operativo positivo pero inferior al 10%.")
+        else:
+            insights.append("La operación muestra pérdidas en el período analizado. Se recomienda revisar la estructura de costos y estrategias de precio.")
+        
+        # Recomendaciones basadas en los datos
+        mayor_costo = max(pct_costos_op, pct_marketing, pct_costos_fijos)
+        if mayor_costo == pct_costos_op:
+            insights.append("Recomendación: Enfocarse en optimizar los costos operativos, que representan la mayor proporción de los gastos.")
+        elif mayor_costo == pct_marketing:
+            insights.append("Recomendación: Evaluar el retorno de la inversión en marketing para optimizar el gasto en este rubro.")
+        elif mayor_costo == pct_costos_fijos:
+            insights.append("Recomendación: Analizar la estructura de costos fijos y buscar oportunidades de reducción o mayor eficiencia.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: {str(e)}")])
+
+def generar_insights_valor_promedio_venta(df_reservas, periodo):
+    """Genera insights sobre el valor promedio de venta."""
+    try:
+        if df_reservas.empty or 'TOTAL AMOUNT' not in df_reservas.columns:
+            return html.Div([html.P("No hay datos suficientes para analizar el valor promedio de venta.")])
+        
+        # Convertir a numérico
+        df_reservas['TOTAL AMOUNT'] = pd.to_numeric(df_reservas['TOTAL AMOUNT'], errors='coerce')
+        
+        # Calcular promedios
+        valor_promedio = df_reservas['TOTAL AMOUNT'].mean()
+        valor_mediano = df_reservas['TOTAL AMOUNT'].median()
+        
+        # Agrupar por fecha según período
+        if periodo == 'D':
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'].dt.date
+            agrupacion = 'diario'
+        elif periodo == 'W':
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'] - pd.to_timedelta(df_reservas['fecha_trip'].dt.dayofweek, unit='D')
+            agrupacion = 'semanal'
+        else:  # 'M'
+            df_reservas['fecha_grupo'] = df_reservas['fecha_trip'].dt.to_period('M').dt.to_timestamp()
+            agrupacion = 'mensual'
+        
+        # Calcular valor promedio por período
+        promedios_por_periodo = df_reservas.groupby('fecha_grupo')['TOTAL AMOUNT'].mean()
+        
+        # Analizar tendencia si hay suficientes datos
+        if len(promedios_por_periodo) > 1:
+            primera_mitad = promedios_por_periodo.iloc[:len(promedios_por_periodo)//2].mean()
+            segunda_mitad = promedios_por_periodo.iloc[len(promedios_por_periodo)//2:].mean()
+            
+            tendencia = "creciente" if segunda_mitad > primera_mitad else "decreciente" if segunda_mitad < primera_mitad else "estable"
+            cambio_porcentual = abs((segunda_mitad - primera_mitad) / primera_mitad * 100) if primera_mitad > 0 else 0
+        else:
+            tendencia = "no determinada"
+            cambio_porcentual = 0
+        
+        # Generar insights
+        insights = [
+            f"El valor promedio de venta es ${valor_promedio:,.0f} CLP, con un valor mediano de ${valor_mediano:,.0f} CLP.",
+            f"La tendencia del valor promedio es {tendencia}, con una variación del {cambio_porcentual:.1f}% entre la primera y segunda mitad del período."
+        ]
+        
+        # Análisis por tipo de embarcación si está disponible
+        if 'type boat' in df_reservas.columns:
+            promedio_por_tipo = df_reservas.groupby('type boat')['TOTAL AMOUNT'].mean().sort_values(ascending=False)
+            if not promedio_por_tipo.empty:
+                tipo_max = promedio_por_tipo.index[0]
+                tipo_min = promedio_por_tipo.index[-1]
+                insights.append(f"La embarcación '{tipo_max}' genera el mayor valor promedio (${promedio_por_tipo.iloc[0]:,.0f} CLP), mientras que '{tipo_min}' genera el menor (${promedio_por_tipo.iloc[-1]:,.0f} CLP).")
+        
+        # Recomendación
+        if tendencia == "decreciente" and cambio_porcentual > 5:
+            insights.append("Recomendación: Evaluar la estrategia de precios o el mix de servicios, ya que el valor promedio de venta muestra una tendencia decreciente significativa.")
+        elif tendencia == "creciente" and cambio_porcentual > 5:
+            insights.append("Recomendación: Continuar con la estrategia actual que está logrando incrementar el valor promedio de venta.")
+        else:
+            insights.append("Recomendación: Considerar implementar estrategias de up-selling o cross-selling para incrementar el valor promedio de venta.")
+        
+        return html.Div([html.P(insight) for insight in insights])
+    
+    except Exception as e:
+        return html.Div([html.P(f"No se pudieron generar insights: {str(e)}")])
+
 # ======== APLICACIONES SEPARADAS ========
 def crear_app_reservas(datos=None):
     """Crea la aplicación Dash para la página de reservas."""
@@ -374,8 +678,11 @@ def crear_app_reservas(datos=None):
         crear_tarjetas_metricas(),
         crear_selector_periodo(),
         crear_contenedor_grafico('reservas-tiempo'),
+        crear_contenedor_insights('insights-reservas', 'Conclusiones: Tendencia de Reservas'),
         crear_contenedor_grafico('ingresos-tiempo'),
+        crear_contenedor_insights('insights-financieros', 'Conclusiones: Análisis Financiero'),
         crear_contenedor_grafico('horas-populares', figura=crear_grafico_horas_populares(df)),
+        crear_contenedor_insights('insights-horas', 'Conclusiones: Horas Populares'),
     ], style={
         'padding': 20,
         'backgroundColor': COLORS['background'],
@@ -389,7 +696,11 @@ def crear_app_reservas(datos=None):
          Output('total-ingresos', 'children'),
          Output('total-gastos', 'children'),
          Output('balance', 'children'),
-         Output('balance', 'style')],
+         Output('balance', 'style'),
+         # Nuevos outputs para los insights
+         Output('insights-reservas', 'children'),
+         Output('insights-financieros', 'children'),
+         Output('insights-horas', 'children')],
         [Input('periodo-selector', 'value'),
          Input('date-range-picker', 'start_date'),
          Input('date-range-picker', 'end_date')]
@@ -416,6 +727,11 @@ def crear_app_reservas(datos=None):
             'fontSize': '2.5em',
             'margin': '0'
         }
+        
+        # Generar insights
+        insights_reservas = generar_insights_reservas(df_filtrado, periodo)
+        insights_financieros = generar_insights_ingresos_gastos(df_payments_filtrado, df_expenses_filtrado, periodo)
+        insights_horas = generar_insights_horas_populares(df_filtrado)
 
         return (
             fig_reservas,
@@ -424,7 +740,10 @@ def crear_app_reservas(datos=None):
             f'${total_ingresos_filtrado:,.0f}',
             f'${total_gastos_filtrado:,.0f}',
             f'${balance_filtrado:,.0f}',
-            balance_style
+            balance_style,
+            insights_reservas,
+            insights_financieros,
+            insights_horas
         )
     
     return app
@@ -528,12 +847,15 @@ def crear_app_utilidad(datos=None):
         
         # Gráfico interactivo
         crear_contenedor_grafico('grafico-interactivo', 'Análisis Financiero Interactivo'),
+        crear_contenedor_insights('insights-interactivo', 'Conclusiones: Análisis Financiero'),
         
         # Gráfico original de utilidad operativa
         crear_contenedor_grafico('utilidad-operativa-chart', 'Análisis de Utilidad Operativa'),
+        crear_contenedor_insights('insights-utilidad', 'Conclusiones: Utilidad Operativa'),
         
         # Nuevo gráfico de valor promedio de venta
         crear_contenedor_grafico('avg-sale-value-chart', 'Evolución del Valor Promedio de Venta'),
+        crear_contenedor_insights('insights-avg-sale', 'Conclusiones: Valor Promedio de Venta'),
     ], style={
         'padding': 20,
         'backgroundColor': COLORS['background'],
@@ -550,7 +872,11 @@ def crear_app_utilidad(datos=None):
          Output('total-costos-fijos', 'children'),
          Output('utilidad-operativa-valor', 'children'),
          Output('utilidad-operativa-valor', 'style'),
-         Output('avg-sale-value', 'children')],
+         Output('avg-sale-value', 'children'),
+         # Nuevos outputs para los insights
+         Output('insights-interactivo', 'children'),
+         Output('insights-utilidad', 'children'),
+         Output('insights-avg-sale', 'children')],
         [Input('periodo-selector', 'value'),
          Input('date-range-picker', 'start_date'),
          Input('date-range-picker', 'end_date'),
@@ -605,6 +931,21 @@ def crear_app_utilidad(datos=None):
             'fontSize': '2.5em',
             'margin': '0'
         }
+        
+        # Generar insights
+        insights_utilidad = generar_insights_utilidad_operativa(
+            df_ingresos_filtrado,
+            df_costos_operativos_filtrado,
+            df_gastos_marketing_filtrado,
+            df_costos_fijos_filtrado,
+            periodo
+        )
+        
+        # Los insights interactivos son los mismos que los de utilidad operativa
+        insights_interactivo = insights_utilidad
+        
+        # Insights para valor promedio de venta
+        insights_avg_sale = generar_insights_valor_promedio_venta(df_filtrado, periodo)
 
         return (
             fig_utilidad,
@@ -616,7 +957,10 @@ def crear_app_utilidad(datos=None):
             f'${total_costos_fijos:,.0f}',
             f'${utilidad_operativa:,.0f}',
             utilidad_style,
-            f'${avg_sale:,.0f}'
+            f'${avg_sale:,.0f}',
+            insights_interactivo,
+            insights_utilidad,
+            insights_avg_sale
         )
     
     return app
