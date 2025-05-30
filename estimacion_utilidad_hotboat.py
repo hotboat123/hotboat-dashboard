@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from funciones.funciones import crear_columna_fecha
+from inputs_modelo import costo_operativo_por_reserva
 
 def crear_costos_operativos(ruta_reservas):
     print(f"Leyendo archivo de reservas desde: {ruta_reservas}")
@@ -15,7 +16,7 @@ def crear_costos_operativos(ruta_reservas):
     df_costos = pd.DataFrame({
         'id_reserva': df_reservas['ID'],
         'descripcion': 'Costo operativo por reserva',
-        'monto': 20000
+        'monto': costo_operativo_por_reserva,
     })
     
     # Cruzar con el DataFrame de reservas para obtener fecha y email

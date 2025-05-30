@@ -80,3 +80,5 @@ diccionario_categoria_1 = {
 descripciones_a_eliminar = [
     "traspaso deuda internacional", "pago pesos tef", ""
 ] 
+
+costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)

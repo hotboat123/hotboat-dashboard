@@ -52,7 +52,6 @@ def leer_excel_mov_no_facturados_nacional(ruta_archivo):
     return df_final
 
 
-
 def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
     df = pd.read_excel(ruta_archivo, sheet_name="Movimientos", header=None)  # Leemos sin encabezado
@@ -453,6 +452,7 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
 
 
 def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+
     df_final = pd.concat([
         df_banco_estado_cargos,
         df_banco_chile_facturado_internacional,
@@ -472,3 +472,12 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
     
     df_final = reordenar_columna_categoria_extra(df_final)
     return df_final
+
+# Función para crear la columna de fecha
+def crear_columna_fecha(df):
+    df['fecha'] = pd.to_datetime(df[['Año', 'mes', 'dia']].assign(
+        Año=df['Año'].astype(str),
+        mes=df['mes'].astype(str).str.zfill(2),
+        dia=df['dia'].astype(str).str.zfill(2)
+    ).agg('-'.join, axis=1))
+    return df

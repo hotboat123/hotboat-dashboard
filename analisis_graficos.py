@@ -36,8 +36,8 @@ def formato_moneda(valor):
 def cargar_datos():
     """Carga los DataFrames de gastos y abonos"""
     try:
-        df_gastos = pd.read_csv("gastos hotboat.csv")
-        df_abonos = pd.read_csv("abonos hotboat.csv")
+        df_gastos = pd.read_csv("archivos_output/gastos hotboat.csv")
+        df_abonos = pd.read_csv("archivos_output/abonos hotboat.csv")
         
         # Convertir fechas - intentar ambos formatos posibles
         def convertir_fecha(fecha):
@@ -467,7 +467,7 @@ def graficar_reservas_por_dia_mes(df_reservas):
 def main():
     try:
         print("Leyendo archivo de reservas...")
-        df = pd.read_csv("archivos/reservas_HotBoat.csv")
+        df = pd.read_csv("archivos_output/reservas_HotBoat.csv")
         
         print("Procesando fechas...")
         df = procesar_fechas_reservas(df)
