@@ -23,10 +23,43 @@ CARD_STYLE = {
     'color': COLORS['text']
 }
 
-def crear_header():
-    """Crea el encabezado del dashboard."""
+def crear_header(titulo_dashboard="Dashboard HotBoat", puerto_actual=None):
+    """Crea el encabezado del dashboard con navegación."""
+    
+    # Enlaces de navegación
+    enlaces_nav = []
+    
+    # Definir los dashboards disponibles
+    dashboards = [
+        {"nombre": "Reservas", "puerto": 8050, "url": "http://localhost:8050"},
+        {"nombre": "Utilidad Operativa", "puerto": 8055, "url": "http://localhost:8055"},
+        {"nombre": "Marketing", "puerto": 8056, "url": "http://localhost:8056"}
+    ]
+    
+    # Crear enlaces para cada dashboard
+    for dashboard in dashboards:
+        if puerto_actual == dashboard["puerto"]:
+            # Dashboard actual - mostrar como activo
+            enlaces_nav.append(
+                html.Span(dashboard["nombre"], 
+                         style={'color': '#ffffff', 'fontWeight': 'bold', 'marginRight': '20px',
+                               'padding': '8px 12px', 'backgroundColor': 'rgba(255,255,255,0.2)',
+                               'borderRadius': '4px'})
+            )
+        else:
+            # Otros dashboards - mostrar como enlaces
+            enlaces_nav.append(
+                html.A(dashboard["nombre"], 
+                      href=dashboard["url"],
+                      target="_self",
+                      style={'color': '#ffffff', 'textDecoration': 'none', 'marginRight': '20px',
+                            'padding': '8px 12px', 'border': '1px solid rgba(255,255,255,0.3)',
+                            'borderRadius': '4px', 'transition': 'all 0.3s'},
+                      className="dashboard-nav-link")
+            )
+    
     return html.Div([
-        html.H1('Dashboard de Reservas HotBoat', 
+        html.H1(titulo_dashboard, 
                 style={
                     'textAlign': 'center',
                     'color': COLORS['text'],
@@ -34,7 +67,8 @@ def crear_header():
                     'marginTop': 20,
                     'fontWeight': 'bold',
                     'fontSize': '2.5em'
-                })
+                }),
+        html.Div(enlaces_nav, style={'textAlign': 'center', 'marginTop': '20px'})
     ], style={'backgroundColor': COLORS['accent'], 'padding': '20px', 'marginBottom': '30px'})
 
 def crear_filtros(fecha_min, fecha_max):
@@ -109,4 +143,17 @@ def crear_contenedor_grafico(id_grafico, titulo=None, figura=None):
         'backgroundColor': COLORS['card_bg'], 
         'padding': '20px', 
         'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
-    }) 
+    })
+
+def crear_contenedor_insights(id_insights):
+    """Crea un contenedor para mostrar insights."""
+    return html.Div([
+        html.H4("💡 Insights", style={'color': COLORS['text'], 'marginBottom': '15px'}),
+        html.Ul(id=id_insights, style={
+            'color': COLORS['text'],
+            'fontSize': '14px',
+            'lineHeight': '1.6',
+            'padding': '0',
+            'margin': '0'
+        })
+    ], style=CARD_STYLE) 
