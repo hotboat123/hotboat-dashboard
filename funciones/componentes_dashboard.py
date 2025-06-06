@@ -42,9 +42,16 @@ def crear_header(titulo_dashboard="Dashboard HotBoat", puerto_actual=None):
             # Dashboard actual - mostrar como activo
             enlaces_nav.append(
                 html.Span(dashboard["nombre"], 
-                         style={'color': '#ffffff', 'fontWeight': 'bold', 'marginRight': '20px',
-                               'padding': '8px 12px', 'backgroundColor': 'rgba(255,255,255,0.2)',
-                               'borderRadius': '4px'})
+                         style={
+                             'color': '#ffffff', 
+                             'fontWeight': 'bold', 
+                             'marginRight': '20px',
+                             'padding': '10px 15px', 
+                             'backgroundColor': 'rgba(255,255,255,0.3)',
+                             'borderRadius': '8px',
+                             'border': '2px solid rgba(255,255,255,0.5)',
+                             'textShadow': '0 1px 2px rgba(0,0,0,0.3)'
+                         })
             )
         else:
             # Otros dashboards - mostrar como enlaces
@@ -52,24 +59,63 @@ def crear_header(titulo_dashboard="Dashboard HotBoat", puerto_actual=None):
                 html.A(dashboard["nombre"], 
                       href=dashboard["url"],
                       target="_self",
-                      style={'color': '#ffffff', 'textDecoration': 'none', 'marginRight': '20px',
-                            'padding': '8px 12px', 'border': '1px solid rgba(255,255,255,0.3)',
-                            'borderRadius': '4px', 'transition': 'all 0.3s'},
+                      style={
+                          'color': '#ffffff', 
+                          'textDecoration': 'none', 
+                          'marginRight': '20px',
+                          'padding': '10px 15px', 
+                          'border': '2px solid rgba(255,255,255,0.4)',
+                          'borderRadius': '8px', 
+                          'transition': 'all 0.3s ease',
+                          'backgroundColor': 'rgba(255,255,255,0.1)',
+                          'cursor': 'pointer'
+                      },
                       className="dashboard-nav-link")
             )
     
     return html.Div([
-        html.H1(titulo_dashboard, 
-                style={
-                    'textAlign': 'center',
-                    'color': COLORS['text'],
-                    'marginBottom': 30,
-                    'marginTop': 20,
-                    'fontWeight': 'bold',
-                    'fontSize': '2.5em'
-                }),
-        html.Div(enlaces_nav, style={'textAlign': 'center', 'marginTop': '20px'})
-    ], style={'backgroundColor': COLORS['accent'], 'padding': '20px', 'marginBottom': '30px'})
+        # Título principal
+        html.Div([
+            html.H1(titulo_dashboard, 
+                    style={
+                        'textAlign': 'center',
+                        'color': COLORS['text'],
+                        'marginBottom': 20,
+                        'marginTop': 0,
+                        'fontWeight': 'bold',
+                        'fontSize': '2.5em',
+                        'textShadow': '0 2px 4px rgba(0,0,0,0.3)'
+                    })
+        ]),
+        
+        # Barra de navegación
+        html.Div([
+            html.Div("🚤 HotBoat Dashboards:", style={
+                'color': 'rgba(255,255,255,0.8)', 
+                'fontSize': '14px', 
+                'marginBottom': '10px',
+                'textAlign': 'center'
+            }),
+            html.Div(enlaces_nav, style={
+                'textAlign': 'center', 
+                'display': 'flex',
+                'justifyContent': 'center',
+                'flexWrap': 'wrap',
+                'gap': '10px'
+            })
+        ], style={
+            'backgroundColor': 'rgba(0,0,0,0.2)', 
+            'padding': '15px', 
+            'borderRadius': '10px',
+            'marginTop': '10px'
+        })
+    ], style={
+        'backgroundColor': COLORS['accent'], 
+        'padding': '25px', 
+        'marginBottom': '30px',
+        'background': f'linear-gradient(135deg, {COLORS["accent"]} 0%, {COLORS["primary"]} 100%)',
+        'borderBottom': '3px solid rgba(255,255,255,0.2)'
+    })
 
 def crear_filtros(fecha_min, fecha_max):
     """Crea la sección de filtros del dashboard."""
@@ -145,10 +191,10 @@ def crear_contenedor_grafico(id_grafico, titulo=None, figura=None):
         'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
     })
 
-def crear_contenedor_insights(id_insights):
+def crear_contenedor_insights(id_insights, titulo="💡 Insights"):
     """Crea un contenedor para mostrar insights."""
     return html.Div([
-        html.H4("💡 Insights", style={'color': COLORS['text'], 'marginBottom': '15px'}),
+        html.H4(titulo, style={'color': COLORS['text'], 'marginBottom': '15px'}),
         html.Ul(id=id_insights, style={
             'color': COLORS['text'],
             'fontSize': '14px',

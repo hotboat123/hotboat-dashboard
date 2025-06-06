@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""
-Dashboard de Reservas - HotBoat
-Ejecuta el dashboard funcional de reservas
-"""
+# -*- coding: utf-8 -*-
 
+# Importaciones
+print("🚤 INICIANDO DASHBOARD DE RESERVAS HOTBOAT...")
+print("=" * 60)
+
+# Importar funciones desde dashboards.py
 from dashboards import crear_app_reservas, cargar_datos
 
 if __name__ == '__main__':
-    print("\n🚤 INICIANDO DASHBOARD DE RESERVAS HOTBOAT...")
-    print("=" * 60)
     print("📊 Cargando datos...")
     
-    # Cargar datos
+    # Cargar todos los datos necesarios
     datos = cargar_datos()
     
-    # Verificar datos cargados
+    # Mostrar resumen de datos cargados
     print(f"✅ Reservas cargadas: {len(datos['reservas'])} filas")
     print(f"✅ Pagos cargados: {len(datos['pagos'])} filas")
     print(f"✅ Gastos cargados: {len(datos['gastos'])} filas")
@@ -27,5 +27,4 @@ if __name__ == '__main__':
     print("🔄 Para detener: Ctrl+C")
     print("=" * 60)
     
-    # Ejecutar dashboard
     app.run(debug=False, host='0.0.0.0', port=8050) 

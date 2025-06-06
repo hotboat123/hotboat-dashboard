@@ -655,7 +655,7 @@ def crear_app_reservas(datos=None):
     app = dash.Dash(__name__, suppress_callback_exceptions=True)
     
     app.layout = html.Div([
-        crear_header(),
+        crear_header("Dashboard de Reservas HotBoat", 8050),
         html.Div([
             html.Div("DASHBOARD DE RESERVAS", style={
                 'color': COLORS['primary'], 
@@ -666,23 +666,17 @@ def crear_app_reservas(datos=None):
                 'textAlign': 'center',
                 'backgroundColor': COLORS['card_bg'],
                 'borderRadius': '5px'
-            }),
-            html.Div([
-                html.A("Ver Dashboard de Utilidad Operativa", 
-                      href="http://localhost:8051", 
-                      style={'color': '#00a3ff', 'textDecoration': 'none', 'fontSize': '16px'},
-                      target="_blank")
-            ], style={'textAlign': 'center', 'marginBottom': '20px'})
+            })
         ]),
         crear_filtros(df['fecha_trip'].min(), df['fecha_trip'].max()),
         crear_tarjetas_metricas(),
         crear_selector_periodo(),
         crear_contenedor_grafico('reservas-tiempo'),
-        crear_contenedor_insights('insights-reservas', 'Conclusiones: Tendencia de Reservas'),
+        crear_contenedor_insights('insights-reservas'),
         crear_contenedor_grafico('ingresos-tiempo'),
-        crear_contenedor_insights('insights-financieros', 'Conclusiones: Análisis Financiero'),
+        crear_contenedor_insights('insights-financieros'),
         crear_contenedor_grafico('horas-populares', figura=crear_grafico_horas_populares(df)),
-        crear_contenedor_insights('insights-horas', 'Conclusiones: Horas Populares'),
+        crear_contenedor_insights('insights-horas'),
     ], style={
         'padding': 20,
         'backgroundColor': COLORS['background'],
@@ -763,7 +757,7 @@ def crear_app_utilidad(datos=None):
     app = dash.Dash(__name__, suppress_callback_exceptions=True)
     
     app.layout = html.Div([
-        crear_header(),
+        crear_header("Dashboard de Utilidad Operativa HotBoat", 8055),
         html.Div([
             html.Div("DASHBOARD DE UTILIDAD OPERATIVA", style={
                 'color': COLORS['income'], 
@@ -774,13 +768,7 @@ def crear_app_utilidad(datos=None):
                 'textAlign': 'center',
                 'backgroundColor': COLORS['card_bg'],
                 'borderRadius': '5px'
-            }),
-            html.Div([
-                html.A("Ver Dashboard de Reservas", 
-                      href="http://localhost:8050", 
-                      style={'color': '#00a3ff', 'textDecoration': 'none', 'fontSize': '16px'},
-                      target="_blank")
-            ], style={'textAlign': 'center', 'marginBottom': '20px'})
+            })
         ]),
         crear_filtros(df['fecha_trip'].min(), df['fecha_trip'].max()),
         html.Div([
