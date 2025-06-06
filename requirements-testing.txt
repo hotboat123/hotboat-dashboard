@@ -1,0 +1,23 @@
+# Dependencias para Testing de HotBoat Dashboard
+# Instalar con: pip install -r requirements-testing.txt
+
+# Framework de testing principal
+pytest>=7.0.0
+pytest-html>=3.1.0          # Para reportes HTML
+pytest-cov>=4.0.0           # Para coverage de código
+pytest-xdist>=3.0.0         # Para ejecutar tests en paralelo
+
+# Para testing de aplicaciones web/Dash
+selenium>=4.0.0             # Para testing de UI (opcional)
+requests>=2.28.0            # Para testing de endpoints
+
+# Utilidades adicionales
+pytest-mock>=3.10.0         # Para mocking
+pytest-benchmark>=4.0.0     # Para testing de performance (opcional)
+
+# Para análisis de datos en tests
+pandas>=1.5.0
+numpy>=1.24.0
+
+# Para comparaciones y validaciones
+deepdiff>=6.0.0             # Para comparar estructuras complejas 

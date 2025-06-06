@@ -1,0 +1,99 @@
+{
+  "fecha_creacion": "2025-06-06T00:59:36.880791",
+  "metricas": {
+    "reservas": {
+      "filas": 92,
+      "columnas": 18,
+      "columnas_nombres": [
+        "STAFF",
+        "Phone Number",
+        "METHOD",
+        "ID",
+        "TOTAL AMOUNT",
+        "Customer Email",
+        "hora_trip",
+        "fecha_creacion_reserva",
+        "hora_creacion_reserva",
+        "Service",
+        "DUE AMOUNT",
+        "Phone Number_2",
+        "PAID AMOUNT",
+        "DURATION",
+        "STATUS",
+        "Customer",
+        "PAYMENT",
+        "fecha_trip"
+      ]
+    },
+    "pagos": {
+      "filas": 85,
+      "columnas": 3,
+      "columnas_nombres": [
+        "Fecha",
+        "Descripción",
+        "Monto"
+      ]
+    },
+    "gastos": {
+      "filas": 408,
+      "columnas": 9,
+      "columnas_nombres": [
+        "Fecha",
+        "Descripción",
+        "Monto",
+        "Categoría_2",
+        "Categoría 1",
+        "Categoría",
+        "País",
+        "Monto (USD)",
+        "Cuotas"
+      ]
+    },
+    "costos_fijos": {
+      "filas": 6,
+      "columnas": 9,
+      "columnas_nombres": [
+        "Fecha",
+        "Descripción",
+        "Monto",
+        "Categoría_2",
+        "Categoría 1",
+        "Categoría",
+        "País",
+        "Monto (USD)",
+        "Cuotas"
+      ]
+    },
+    "ingresos": {
+      "filas": 104,
+      "columnas": 5,
+      "columnas_nombres": [
+        "fecha",
+        "email",
+        "id_reserva",
+        "descripcion",
+        "monto"
+      ]
+    },
+    "costos_operativos": {
+      "filas": 92,
+      "columnas": 5,
+      "columnas_nombres": [
+        "fecha",
+        "email",
+        "id_reserva",
+        "descripcion",
+        "monto"
+      ]
+    },
+    "gastos_marketing": {
+      "filas": 90,
+      "columnas": 3,
+      "columnas_nombres": [
+        "fecha",
+        "plataforma",
+        "monto"
+      ]
+    }
+  }
+}

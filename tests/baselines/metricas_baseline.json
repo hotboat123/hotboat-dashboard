@@ -1,0 +1,22 @@
+{
+  "fecha_creacion": "2025-06-06T00:59:48.653956",
+  "version": "1.0.0",
+  "metricas": {
+    "total_revenue_reservas": 14313866.0,
+    "avg_revenue_per_booking": 155585.5,
+    "median_revenue_per_booking": 164970.0,
+    "total_reservas": 92,
+    "total_ingresos": 10503663.0,
+    "avg_ingreso": 100996.75961538461,
+    "count_ingresos": 104,
+    "total_costos_operativos": 3220000.0,
+    "avg_costo_operativo": 35000.0,
+    "count_costos_operativos": 92,
+    "total_gastos_marketing": 682296.0,
+    "avg_gasto_marketing": 7581.066666666667,
+    "count_gastos_marketing": 90,
+    "utilidad_bruta": 6601367.0,
+    "margen_utilidad": 0.6284823684842136
+  },
+  "tolerancia": 0.01
+}
