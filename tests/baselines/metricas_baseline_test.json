@@ -1,0 +1,17 @@
+{
+  "total_ingresos_test": 14313866.0,
+  "promedio_ingreso_test": 155585.5,
+  "num_transacciones_ingresos": 92,
+  "total_costos_operativos_test": 3220000.0,
+  "promedio_costo_operativo": 35000.0,
+  "total_gastos_marketing_test": 675000.0,
+  "promedio_gasto_marketing": 7500.0,
+  "total_costos_fijos_mensual": 1900000.0,
+  "num_conceptos_costos_fijos": 6,
+  "utilidad_bruta_test": 11093866.0,
+  "margen_bruto_test": 77.50433041639484,
+  "roi_marketing_test": 2120.5727407407408,
+  "costo_por_transaccion": 35000.0,
+  "fecha_calculo": "2025-06-06T01:10:59.515294",
+  "tipo_datos": "test_estaticos"
+}
