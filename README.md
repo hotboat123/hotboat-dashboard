@@ -1,156 +1,241 @@
-# Para actualizar data
-1. Descargar movimientos facturados bco chile nacional e internacional
-2. Descargar mov no facturados bco chile (opcional)
-3. Revisar ultima fila de abonos bco estado y descargar chequera histórica desde esa fecha (pueden ser varios archivos)
-4. Descargar info mercado pago --> Tu negocio - ventas - descargar Excel de ventas
-5. Descargar Appointments y Payments de Booknetic
-5. Subir toda esa info a carpeta "archivo_input" desde carpeta "descargas"
-6. correr código "gastos_hotboat_sin_Drive.py"
-6. correr código "Informacion_reservas.py"
-7. correr código "analisis_gráficos.py"
-8. abrir link 
+# 🚤 HotBoat - Sistema de Análisis de Datos Náuticos
 
+Sistema integral de análisis de datos para operaciones marítimas de HotBoat, con dashboards interactivos y procesamiento automatizado de datos.
 
+## 📁 Estructura del Proyecto
 
-# Dashboard HotBoat
+```
+hotboat/
+├── 🚤 hotboat_dashboards.py      ← ARCHIVO PRINCIPAL para dashboards
+├── 🔄 hotboat_procesamiento.py   ← ARCHIVO PRINCIPAL para procesamiento
+├── 📊 dashboards/                ← Sistema de dashboards
+│   ├── core/                     ← Módulos optimizados
+│   │   ├── dashboards_main.py    ← Dashboard consolidado principal
+│   │   ├── data_loader.py        ← Carga unificada de datos
+│   │   ├── chart_generators.py   ← Generación de gráficos
+│   │   └── dashboard_components.py ← Componentes UI
+│   ├── utilidad_optimizado.py    ← Dashboard de utilidad (Puerto 8055)
+│   ├── reservas_optimizado.py    ← Dashboard de reservas (Puerto 8050)
+│   ├── marketing_optimizado.py   ← Dashboard de marketing (Puerto 8056)
+│   └── funciones/                ← Funciones auxiliares
+├── 🔧 procesamiento/             ← Sistema de procesamiento
+│   ├── Informacion_reservas.py   ← Procesamiento de reservas
+│   ├── gastos_hotboat_sin_drive.py ← Procesamiento de gastos
+│   ├── estimacion_utilidad_hotboat.py ← Estimaciones de utilidad
+│   └── check_data.py             ← Validación de datos
+├── 📥 archivos_input/            ← Datos de entrada
+├── 📤 archivos_output/           ← Datos procesados
+└── 🧪 tests/                     ← Sistema de testing
+```
 
-Sistema completo de análisis y visualización de datos para HotBoat, incluyendo 3 dashboards especializados.
+## 🚀 Inicio Rápido
 
-## 🚀 Instalación y Configuración
-
-### Requisitos
+### 1. Ejecutar Dashboards
 ```bash
-pip install -r requirements.txt
+# Dashboard específico
+python hotboat_dashboards.py utilidad    # Puerto 8055
+python hotboat_dashboards.py reservas    # Puerto 8050  
+python hotboat_dashboards.py marketing   # Puerto 8056
+
+# Todos los dashboards en paralelo
+python hotboat_dashboards.py todos
+
+# Menú interactivo
+python hotboat_dashboards.py
 ```
 
-### Estructura de Archivos
-```
-├── dashboards.py          # Módulo principal con funciones de dashboard
-├── dashboard_utilidad.py  # Dashboard específico de marketing/utilidad
-├── reservas.py           # Ejecutor del dashboard de reservas
-├── utilidad.py           # Ejecutor del dashboard de utilidad operativa  
-├── marketing.py          # Ejecutor del dashboard de marketing
-├── funciones/            # Componentes y utilidades
-├── archivos_output/      # Datos procesados (CSV)
-└── archivos_input/       # Datos fuente
+### 2. Procesar Datos
+```bash
+# Proceso específico
+python hotboat_procesamiento.py reservas
+python hotboat_procesamiento.py gastos
+python hotboat_procesamiento.py utilidad
+
+# Todos los procesos en secuencia
+python hotboat_procesamiento.py todos
+
+# Menú interactivo
+python hotboat_procesamiento.py
 ```
 
 ## 📊 Dashboards Disponibles
 
-### 1. Dashboard de Reservas
-- **Puerto:** 8050
-- **URL:** http://localhost:8050
-- **Ejecutar:** `python reservas.py`
-- **Características:**
-  - Análisis de reservas por periodo
-  - Métricas de ocupación
-  - Gráficos de tendencias temporales
-  - Análisis de horas populares
-
-### 2. Dashboard de Utilidad Operativa
-- **Puerto:** 8055  
+### 🔹 Dashboard de Utilidad Operativa (Puerto 8055)
+- Análisis de ingresos y gastos operativos
+- Métricas de utilidad y márgenes  
+- Proyecciones financieras
 - **URL:** http://localhost:8055
-- **Ejecutar:** `python utilidad.py`
-- **Características:**
-  - Cálculo de utilidad operativa
-  - Análisis de ingresos vs costos
-  - Comparación de variables financieras
-  - Insights automáticos de rentabilidad
 
-### 3. Dashboard de Marketing
-- **Puerto:** 8056
-- **URL:** http://localhost:8056  
-- **Ejecutar:** `python marketing.py`
-- **Características:**
-  - Análisis detallado de gastos de marketing
-  - ROI de campañas publicitarias
-  - Correlación marketing vs ingresos
-  - Optimización de presupuesto
+### 🔹 Dashboard de Reservas (Puerto 8050)
+- Análisis de reservas y pagos
+- Tendencias de ocupación
+- Análisis de clientes
+- **URL:** http://localhost:8050
 
-## 🎯 Navegación Entre Dashboards
+### 🔹 Dashboard de Marketing (Puerto 8056)
+- Métricas de campañas publicitarias
+- Análisis de CPC, CTR y conversiones
+- ROI por región y audiencia
+- **URL:** http://localhost:8056
 
-Todos los dashboards incluyen una barra de navegación superior que permite cambiar fácilmente entre:
-- **Reservas** → Análisis operativo
-- **Utilidad Operativa** → Análisis financiero integral  
-- **Marketing** → Análisis de marketing y ROI
+## 🔄 Procesamiento de Datos
 
-## 🔧 Uso Rápido
+### 1. **Información de Reservas**
+- Procesa datos de reservas desde archivos Excel/CSV
+- Genera archivos consolidados para análisis
+- Valida integridad de datos de clientes
+
+### 2. **Gastos Operativos**
+- Procesamiento sin dependencia de Google Drive
+- Categorización automática de gastos
+- Generación de reportes financieros
+
+### 3. **Estimaciones de Utilidad**
+- Cálculos de utilidad operativa
+- Proyecciones basadas en tendencias
+- Análisis de rentabilidad por período
+
+### 4. **Validación de Datos**
+- Verificación de calidad de datos
+- Detección de inconsistencias
+- Limpieza automática de datasets
+
+## 🧪 Sistema de Testing
 
 ```bash
-# Dashboard de Reservas
-python reservas.py
+# Ejecutar todos los tests
+python -m pytest tests/ -v
 
-# Dashboard de Utilidad Operativa  
-python utilidad.py
-
-# Dashboard de Marketing
-python marketing.py
+# Tests específicos
+python -m pytest tests/test_data_loading.py
+python -m pytest tests/test_dashboard_outputs.py
+python -m pytest tests/test_metrics_regression.py
 ```
 
-## 📈 Datos Requeridos
+## 📋 Requisitos
 
-Los dashboards requieren los siguientes archivos en `archivos_output/`:
-- `reservas_HotBoat.csv`
-- `ingresos_totales.csv`
-- `costos_operativos.csv`
-- `gastos_marketing.csv`
-- `abonos hotboat.csv`
-- `gastos hotboat.csv`
-
-## 🔄 Estado del Proyecto
-
-✅ **FUNCIONAL** - Todos los dashboards están operativos
-✅ **NAVEGACIÓN** - Sistema de navegación integrado
-✅ **DATOS** - Carga automática de todos los archivos CSV
-✅ **VISUALIZACIÓN** - Gráficos interactivos con Plotly
-
-## Características
-
-- Visualización de reservas por día, semana y mes
-- Gráfico de horarios más populares
-- Interfaz moderna con tema oscuro
-- Métricas clave de reservas
-
-## Requisitos
-
-- Python 3.8+
-- Dependencias listadas en `requirements.txt`
-
-## Instalación
-
-1. Clonar el repositorio:
 ```bash
-git clone https://github.com/hotboat123/hotboat-dashboard.git
-cd hotboat-dashboard
-```
-
-2. Instalar dependencias:
-```bash
+# Instalar dependencias principales
 pip install -r requirements.txt
+
+# Instalar dependencias de testing (opcional)
+pip install -r requirements-testing.txt
 ```
 
-## Uso
+**Dependencias principales:**
+- pandas >= 1.3.0
+- plotly >= 5.0.0
+- dash >= 2.0.0
+- openpyxl >= 3.0.0
 
-1. Asegúrate de tener el archivo de datos `archivos/reservas_HotBoat.csv` en el directorio correcto.
+## 🎯 Casos de Uso
 
-2. Ejecutar el dashboard:
+### Para Análisis Diario
 ```bash
-python dashboard_reservas.py
+# 1. Procesar datos del día
+python hotboat_procesamiento.py todos
+
+# 2. Abrir dashboard de utilidad
+python hotboat_dashboards.py utilidad
 ```
 
-3. Abrir el navegador en `http://localhost:8050`
+### Para Análisis de Marketing
+```bash
+# 1. Procesar datos de marketing
+python hotboat_procesamiento.py marketing
 
-## Estructura del Proyecto
-
-```
-hotboat-dashboard/
-├── archivos/
-│   └── reservas_HotBoat.csv
-├── dashboard_reservas.py
-├── requirements.txt
-└── README.md
+# 2. Abrir dashboard de marketing
+python hotboat_dashboards.py marketing
 ```
 
-## Licencia
+### Para Reportes Gerenciales
+```bash
+# 1. Generar estimaciones de utilidad
+python hotboat_procesamiento.py utilidad
 
-Este proyecto está bajo la Licencia MIT. 
+# 2. Abrir todos los dashboards
+python hotboat_dashboards.py todos
+```
+
+## 🔧 Configuración Avanzada
+
+### Puertos de Dashboards
+Los puertos están predefinidos en `hotboat_dashboards.py`:
+- Utilidad: 8055
+- Reservas: 8050  
+- Marketing: 8056
+
+### Estructura de Datos
+- **Input:** `archivos_input/` - Datos originales en Excel/CSV
+- **Output:** `archivos_output/` - Datos procesados y listos para análisis
+- **Tests:** `tests/test_data/` - Datos estáticos para testing
+
+## 📈 Métricas y KPIs
+
+### Utilidad Operativa
+- Ingresos totales por reservas
+- Costos operativos y fijos
+- Margen de utilidad operativa
+- Proyecciones financieras
+
+### Reservas
+- Tasa de ocupación
+- Valor promedio por reserva
+- Análisis de temporadas
+- Perfil de clientes
+
+### Marketing
+- CPC (Costo por Click)
+- CTR (Click Through Rate)  
+- ROI por campaña
+- Conversiones por región
+
+## 🚀 Optimizaciones
+
+### Arquitectura Modular
+- **Antes:** 15+ archivos dispersos
+- **Después:** 2 archivos principales + estructura organizada
+- **Beneficios:** Mantenimiento simplificado, mejor organización
+
+### Performance
+- Carga optimizada de datos
+- Cacheo inteligente en dashboards
+- Procesamiento paralelo disponible
+
+## 🆘 Solución de Problemas
+
+### Dashboard no arranca
+```bash
+# Verificar que el puerto no esté ocupado
+netstat -an | find "8055"
+
+# Reiniciar con puerto diferente
+python dashboards/utilidad_optimizado.py --port 8057
+```
+
+### Error de datos
+```bash
+# Validar estructura de datos
+python hotboat_procesamiento.py validar
+
+# Ver estado de archivos
+python hotboat_procesamiento.py estado
+```
+
+### Problemas de importación
+```bash
+# Verificar estructura de directorios
+python -c "from pathlib import Path; print([d.name for d in Path('.').iterdir() if d.is_dir()])"
+```
+
+## 📞 Soporte
+
+Para problemas técnicos o consultas sobre el sistema HotBoat:
+1. Revisar logs en consola
+2. Ejecutar validación de datos
+3. Verificar estructura de archivos
+4. Consultar documentación específica en cada módulo
+
+---
+
+**🚤 HotBoat - Navegando hacia el éxito con datos inteligentes** 
