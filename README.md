@@ -12,9 +12,97 @@
 
 
 
-# Dashboard de Reservas HotBoat
+# Dashboard HotBoat
 
-Dashboard interactivo para visualizar y analizar las reservas de HotBoat. Desarrollado con Dash y Plotly.
+Sistema completo de análisis y visualización de datos para HotBoat, incluyendo 3 dashboards especializados.
+
+## 🚀 Instalación y Configuración
+
+### Requisitos
+```bash
+pip install -r requirements.txt
+```
+
+### Estructura de Archivos
+```
+├── dashboards.py          # Módulo principal con funciones de dashboard
+├── dashboard_utilidad.py  # Dashboard específico de marketing/utilidad
+├── reservas.py           # Ejecutor del dashboard de reservas
+├── utilidad.py           # Ejecutor del dashboard de utilidad operativa  
+├── marketing.py          # Ejecutor del dashboard de marketing
+├── funciones/            # Componentes y utilidades
+├── archivos_output/      # Datos procesados (CSV)
+└── archivos_input/       # Datos fuente
+```
+
+## 📊 Dashboards Disponibles
+
+### 1. Dashboard de Reservas
+- **Puerto:** 8050
+- **URL:** http://localhost:8050
+- **Ejecutar:** `python reservas.py`
+- **Características:**
+  - Análisis de reservas por periodo
+  - Métricas de ocupación
+  - Gráficos de tendencias temporales
+  - Análisis de horas populares
+
+### 2. Dashboard de Utilidad Operativa
+- **Puerto:** 8055  
+- **URL:** http://localhost:8055
+- **Ejecutar:** `python utilidad.py`
+- **Características:**
+  - Cálculo de utilidad operativa
+  - Análisis de ingresos vs costos
+  - Comparación de variables financieras
+  - Insights automáticos de rentabilidad
+
+### 3. Dashboard de Marketing
+- **Puerto:** 8056
+- **URL:** http://localhost:8056  
+- **Ejecutar:** `python marketing.py`
+- **Características:**
+  - Análisis detallado de gastos de marketing
+  - ROI de campañas publicitarias
+  - Correlación marketing vs ingresos
+  - Optimización de presupuesto
+
+## 🎯 Navegación Entre Dashboards
+
+Todos los dashboards incluyen una barra de navegación superior que permite cambiar fácilmente entre:
+- **Reservas** → Análisis operativo
+- **Utilidad Operativa** → Análisis financiero integral  
+- **Marketing** → Análisis de marketing y ROI
+
+## 🔧 Uso Rápido
+
+```bash
+# Dashboard de Reservas
+python reservas.py
+
+# Dashboard de Utilidad Operativa  
+python utilidad.py
+
+# Dashboard de Marketing
+python marketing.py
+```
+
+## 📈 Datos Requeridos
+
+Los dashboards requieren los siguientes archivos en `archivos_output/`:
+- `reservas_HotBoat.csv`
+- `ingresos_totales.csv`
+- `costos_operativos.csv`
+- `gastos_marketing.csv`
+- `abonos hotboat.csv`
+- `gastos hotboat.csv`
+
+## 🔄 Estado del Proyecto
+
+✅ **FUNCIONAL** - Todos los dashboards están operativos
+✅ **NAVEGACIÓN** - Sistema de navegación integrado
+✅ **DATOS** - Carga automática de todos los archivos CSV
+✅ **VISUALIZACIÓN** - Gráficos interactivos con Plotly
 
 ## Características
 
