@@ -40,7 +40,19 @@
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: Ejecutar Todos (Recomendado)
+### Opción 1: Ejecutar Todos Simultáneamente (🔥 NUEVO - Recomendado)
+```bash
+# Un solo comando que ejecuta los 3 dashboards
+python ejecutar_todos_dashboards.py
+```
+**✨ Características:**
+- ✅ Ejecuta los 3 dashboards automáticamente
+- ✅ Un solo terminal necesario
+- ✅ Detención fácil con Ctrl+C
+- ✅ Verificación automática de archivos
+- ✅ URLs mostradas al iniciar
+
+### Opción 2: Ejecutar Todos Manualmente (3 terminales)
 ```bash
 # Terminal 1 - Reservas
 python reservas.py
@@ -52,7 +64,7 @@ python utilidad.py
 python marketing.py
 ```
 
-### Opción 2: Ejecutar Individual
+### Opción 3: Ejecutar Individual
 ```bash
 # Solo uno a la vez
 python reservas.py    # Ir a http://localhost:8050
@@ -99,14 +111,22 @@ Dashboard de Marketing:       http://localhost:8056
 ## ⚡ Comandos Rápidos
 
 ```bash
+# 🔥 NUEVO: Ejecutar todos los dashboards (Recomendado)
+python ejecutar_todos_dashboards.py
+
 # Ver puertos ocupados
 netstat -ano | findstr :805
 
 # Detener todos los procesos Python
 taskkill /f /im python.exe
 
-# Reiniciar todo el sistema
+# Alternativa: Ejecutar en 3 terminales separados
 python reservas.py & python utilidad.py & python marketing.py
+
+# Comandos individuales
+python reservas.py     # Puerto 8050
+python utilidad.py     # Puerto 8055  
+python marketing.py    # Puerto 8056
 ```
 
 ---

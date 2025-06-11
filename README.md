@@ -25,14 +25,15 @@ pip install -r requirements.txt
 
 ### Estructura de Archivos
 ```
-├── dashboards.py          # Módulo principal con funciones de dashboard
-├── dashboard_utilidad.py  # Dashboard específico de marketing/utilidad
-├── reservas.py           # Ejecutor del dashboard de reservas
-├── utilidad.py           # Ejecutor del dashboard de utilidad operativa  
-├── marketing.py          # Ejecutor del dashboard de marketing
-├── funciones/            # Componentes y utilidades
-├── archivos_output/      # Datos procesados (CSV)
-└── archivos_input/       # Datos fuente
+├── dashboards.py                  # Módulo principal con funciones de dashboard
+├── dashboard_utilidad.py          # Dashboard específico de marketing/utilidad
+├── reservas.py                   # Ejecutor del dashboard de reservas
+├── utilidad.py                   # Ejecutor del dashboard de utilidad operativa  
+├── marketing.py                  # Ejecutor del dashboard de marketing
+├── ejecutar_todos_dashboards.py  # 🔥 NUEVO: Ejecutor múltiple de todos los dashboards
+├── funciones/                    # Componentes y utilidades
+├── archivos_output/              # Datos procesados (CSV)
+└── archivos_input/               # Datos fuente
 ```
 
 ## 📊 Dashboards Disponibles
@@ -76,6 +77,13 @@ Todos los dashboards incluyen una barra de navegación superior que permite camb
 
 ## 🔧 Uso Rápido
 
+### 🔥 NUEVO: Ejecutar Todos Simultáneamente (Recomendado)
+```bash
+# Un solo comando que ejecuta los 3 dashboards
+python ejecutar_todos_dashboards.py
+```
+
+### Ejecutar Individualmente
 ```bash
 # Dashboard de Reservas
 python reservas.py
@@ -139,6 +147,53 @@ python dashboard_reservas.py
 ```
 
 3. Abrir el navegador en `http://localhost:8050`
+
+## 🚀 Ejecutor Múltiple de Dashboards
+
+### Nuevo: `ejecutar_todos_dashboards.py`
+
+Este archivo ejecuta automáticamente los 3 dashboards simultáneamente usando multiprocessing:
+
+**Características:**
+- ✅ Ejecuta todos los dashboards con un solo comando
+- ✅ Manejo automático de procesos múltiples
+- ✅ Verificación de archivos antes de ejecutar
+- ✅ Detención limpia con Ctrl+C
+- ✅ URLs de acceso mostradas automáticamente
+- ✅ Compatible con Windows, Linux y macOS
+
+**Uso:**
+```bash
+python ejecutar_todos_dashboards.py
+```
+
+**Salida esperada:**
+```
+🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤
+🚤 HOTBOAT DASHBOARDS - EJECUTOR MÚLTIPLE
+🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤
+
+📊 Iniciando todos los dashboards simultáneamente...
+============================================================
+🚀 Iniciando Dashboard de Reservas en puerto 8050...
+✅ Dashboard de Reservas iniciado
+🚀 Iniciando Dashboard de Utilidad Operativa en puerto 8055...
+✅ Dashboard de Utilidad Operativa iniciado
+🚀 Iniciando Dashboard de Marketing en puerto 8056...
+✅ Dashboard de Marketing iniciado
+============================================================
+🎉 TODOS LOS DASHBOARDS INICIADOS EXITOSAMENTE
+============================================================
+
+📱 URLs de acceso:
+   🔗 Dashboard de Reservas: http://localhost:8050
+   🔗 Dashboard de Utilidad Operativa: http://localhost:8055
+   🔗 Dashboard de Marketing: http://localhost:8056
+
+🔄 Para detener todos los dashboards: Ctrl+C
+⚡ Para navegar entre dashboards, usa los enlaces en la interfaz web
+============================================================
+```
 
 ## Estructura del Proyecto
 
