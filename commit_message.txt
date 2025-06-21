@@ -1,0 +1,8 @@
+[Cursor] Actualizar dashboard marketing con inputs (5) y (6)
+
+- Modificar dashboard_marketing_simple.py para usar archivos (5) y (6)
+- Archivo (5): CON región - para gráfico de regiones
+- Archivo (6): SIN región - para demás gráficos
+- Corregir clasificación de tipos de anuncios para incluir "Video pareja dcto"
+- Mejorar gráfico de evolución temporal con conversiones
+- Actualizar .cursorrules con progreso completado 

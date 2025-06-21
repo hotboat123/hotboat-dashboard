@@ -13,31 +13,35 @@ from funciones.componentes_dashboard import crear_header, crear_filtros, crear_s
 
 # Función para cargar datos con más procesamiento
 def cargar_datos():
-    """Carga los archivos CSV de marketing con y sin región."""
+    """Carga los archivos CSV de marketing específicos: (5) CON región y (6) SIN región."""
     try:
-        # Archivo CON región (para gráfico de regiones)
-        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (2).csv"
-        print(f"Cargando archivo CON región: {archivo_con_region}")
+        # Archivo CON región (5) - para gráfico de regiones
+        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5).csv"
+        print(f"🔄 Cargando archivo CON región (5): {archivo_con_region}")
         
         if not os.path.exists(archivo_con_region):
-            print(f"ERROR: No se encuentra el archivo en: {archivo_con_region}")
+            print(f"❌ ERROR: No se encuentra el archivo en: {archivo_con_region}")
             return None, None
         
         df_con_region = pd.read_csv(archivo_con_region)
-        print(f"Archivo CON región cargado. Dimensiones: {df_con_region.shape}")
+        print(f"✅ Archivo CON región (5) cargado. Dimensiones: {df_con_region.shape}")
         
-        # Archivo SIN región (para demás gráficos)  
-        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia.csv"
-        print(f"Cargando archivo SIN región: {archivo_sin_region}")
+        # Archivo SIN región (6) - para demás gráficos  
+        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6).csv"
+        print(f"🔄 Cargando archivo SIN región (6): {archivo_sin_region}")
         
         if not os.path.exists(archivo_sin_region):
-            print(f"ERROR: No se encuentra el archivo en: {archivo_sin_region}")
+            print(f"❌ ERROR: No se encuentra el archivo en: {archivo_sin_region}")
             return None, None
             
         df_sin_region = pd.read_csv(archivo_sin_region)
-        print(f"Archivo SIN región cargado. Dimensiones: {df_sin_region.shape}")
+        print(f"✅ Archivo SIN región (6) cargado. Dimensiones: {df_sin_region.shape}")
         
-        # Procesar archivo CON región
+        print("📊 USANDO NUEVOS INPUTS ESPECÍFICOS:")
+        print(f"   📈 Dataset (6): {len(df_sin_region)} filas - Sin región")
+        print(f"   🗺️ Dataset (5): {len(df_con_region)} filas - Con región")
+        
+        # Procesar archivos con datos actualizados
         numeric_columns = [
             "Importe gastado (CLP)", "Impresiones", "Clics en el enlace", 
             "Artículos agregados al carrito", "CTR (todos)", "CPC (todos)",
@@ -65,23 +69,37 @@ def cargar_datos():
             df['Conversion_Rate'] = (df['Artículos agregados al carrito'] / df['Clics en el enlace'] * 100).fillna(0)
             df['Cost_Per_Conversion'] = (df['Importe gastado (CLP)'] / df['Artículos agregados al carrito']).fillna(0)
             
-            # Clasificar públicos
-            df['Público'] = df['Nombre del conjunto de anuncios'].apply(
-                lambda x: 'Advantage' if 'advantage' in str(x).lower() else 
-                         'Pucón' if 'pucon' in str(x).lower() else 'Otro'
-            )
+            # Clasificar públicos - mantener todas las regiones/públicos separados
+            def clasificar_publico(x):
+                nombre = str(x).lower()
+                if 'advantage' in nombre:
+                    return 'Publico Advantage'
+                elif 'pucon' in nombre:
+                    return 'Publico Pucón'
+                elif 'concepcion' in nombre:
+                    return 'Publico Concepción'
+                elif 'valdivia' in nombre:
+                    return 'Publico Valdivia'
+                elif 'temuco' in nombre:
+                    return 'Test Públicos Temuco'
+                else:
+                    # Mantener el nombre original para otros casos
+                    return str(x)
+            
+            df['Público'] = df['Nombre del conjunto de anuncios'].apply(clasificar_publico)
             
             # Clasificar tipos de anuncios
             df['Tipo_Anuncio'] = df['Nombre del anuncio'].apply(
                 lambda x: 'Video explicativo' if 'explicando servicio' in str(x).lower() else
                          'Video parejas amor' if 'parejas amor' in str(x).lower() else
-                         'Video parejas dcto' if 'parejas dcto' in str(x).lower() else
+                         'Video parejas dcto' if 'parejas dcto' in str(x).lower() or 'pareja dcto' in str(x).lower() else
                          'Otro'
             )
         
-        print("Ambos archivos procesados exitosamente")
-        print(f"✅ Datos CON región: {len(df_con_region)} filas")
-        print(f"✅ Datos SIN región: {len(df_sin_region)} filas")
+        print("🎉 Ambos archivos procesados exitosamente con nuevos inputs")
+        print(f"✅ Dataset (5) CON región: {len(df_con_region)} filas")
+        print(f"✅ Dataset (6) SIN región: {len(df_sin_region)} filas")
+        print("=" * 60)
         return df_con_region, df_sin_region
     
     except Exception as e:
@@ -274,31 +292,51 @@ if df_con_region is not None and df_sin_region is not None:
             
             # 2. Gráfico de evolución temporal con tema oscuro
             if periodo == 'D':
-                df_temporal = df_filtrado_sin_region.groupby('Día')['Importe gastado (CLP)'].sum().reset_index()
-                titulo_evolucion = 'Evolución Diaria del Gasto'
+                df_temporal = df_filtrado_sin_region.groupby('Día').agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                titulo_evolucion = 'Evolución Diaria del Gasto y Conversiones'
             elif periodo == 'W':
-                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time)['Importe gastado (CLP)'].sum().reset_index()
-                titulo_evolucion = 'Evolución Semanal del Gasto'
+                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time).agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                titulo_evolucion = 'Evolución Semanal del Gasto y Conversiones'
             else:
-                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time)['Importe gastado (CLP)'].sum().reset_index()
-                titulo_evolucion = 'Evolución Mensual del Gasto'
+                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time).agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                titulo_evolucion = 'Evolución Mensual del Gasto y Conversiones'
             
             fig_evolucion = go.Figure()
+            
+            # Agregar línea de gasto (eje Y izquierdo)
             fig_evolucion.add_trace(go.Scatter(
                 x=df_temporal['Día'],
                 y=df_temporal['Importe gastado (CLP)'],
                 mode='lines+markers',
-                name='Gasto',
+                name='Gasto (CLP)',
                 line=dict(color=COLORS['expense'], width=3),
                 marker=dict(size=8),
-                fill='tonexty',
-                fillcolor='rgba(231, 76, 60, 0.1)'
+                yaxis='y'
+            ))
+            
+            # Agregar línea de conversiones (eje Y derecho)
+            fig_evolucion.add_trace(go.Scatter(
+                x=df_temporal['Día'],
+                y=df_temporal['Artículos agregados al carrito'],
+                mode='lines+markers',
+                name='Conversiones',
+                line=dict(color=COLORS['income'], width=3),
+                marker=dict(size=8, symbol='diamond'),
+                yaxis='y2'
             ))
             
             fig_evolucion.update_layout(
                 title=titulo_evolucion,
                 xaxis_title='Período',
-                yaxis_title='Gasto (CLP)',
                 height=400,
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -310,12 +348,29 @@ if df_con_region is not None and df_sin_region is not None:
                     title_font={'color': COLORS['text']}
                 ),
                 yaxis=dict(
+                    title='Gasto (CLP)',
+                    titlefont=dict(color=COLORS['expense']),
+                    tickfont=dict(color=COLORS['expense']),
                     showgrid=True,
                     gridcolor=COLORS['grid'],
-                    tickfont={'color': COLORS['text']},
-                    title_font={'color': COLORS['text']}
+                    side='left'
                 ),
-                legend=dict(font=dict(color=COLORS['text'])),
+                yaxis2=dict(
+                    title='Conversiones',
+                    titlefont=dict(color=COLORS['income']),
+                    tickfont=dict(color=COLORS['income']),
+                    showgrid=False,
+                    side='right',
+                    overlaying='y'
+                ),
+                legend=dict(
+                    font=dict(color=COLORS['text']),
+                    orientation='h',
+                    yanchor='bottom',
+                    y=1.02,
+                    xanchor='right',
+                    x=1
+                ),
                 hovermode='x unified'
             )
             

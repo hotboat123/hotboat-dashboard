@@ -94,6 +94,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Include info useful for debugging in the program output.
 - Read the file before you try to edit it.
 - Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
+- **NUEVO**: Para ejecutar los dashboards, usar siempre `ejecutar_todos_dashboards.py` en lugar de ejecutar dashboards individuales.
 
 ## Cursor learned
 
@@ -101,8 +102,103 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
+- **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
 
 # Scratchpad
+
+## Nueva Tarea: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
+
+**Task:** Actualizar dashboard de marketing para usar nuevos archivos de input:
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5) - CON región
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6) - SIN región
+
+**Progreso:**
+[X] Revisar archivos de input disponibles (5) y (6)
+[X] Modificar dashboard_marketing_simple.py para usar nuevos archivos
+[X] Verificar que los archivos existan en la estructura
+[X] Ejecutar dashboard con los nuevos inputs usando ejecutar_todos_dashboards.py
+[X] Verificar funcionamiento correcto
+[X] **NUEVO**: Corregir clasificación de tipos de anuncios
+[X] **NUEVO**: Mejorar gráfico de evolución temporal con conversiones
+
+**Plan:**
+1. ✅ Buscar archivos (5) y (6) en la estructura de archivos
+2. ✅ Modificar la función cargar_datos() en dashboard_marketing_simple.py
+3. ✅ Actualizar cualquier referencia a los archivos anteriores
+4. ✅ Ejecutar usando ejecutar_todos_dashboards.py
+5. ✅ Verificar que funcione correctamente
+6. ✅ **NUEVO**: Corregir clasificación de "Video pareja dcto" vs "Video parejas dcto"
+7. ✅ **NUEVO**: Agregar conversiones al gráfico de evolución temporal
+
+**Archivos Modificados:**
+- ✅ `dashboard_marketing_simple.py` - Actualizado para usar archivos (5) y (6)
+- ✅ Función `cargar_datos()` modificada con nuevos inputs
+- ✅ Mensajes de output actualizados para reflejar nuevos archivos
+- ✅ **NUEVO**: Clasificación de tipos de anuncios corregida
+- ✅ **NUEVO**: Gráfico de evolución temporal mejorado
+
+**Corrección Importante:**
+- ✅ Archivo (5): CON región - para gráfico de regiones
+- ✅ Archivo (6): SIN región - para demás gráficos
+- ✅ **NUEVO**: Corregida clasificación para incluir "Video pareja dcto" (sin 's')
+
+**Problema Identificado y Solucionado:**
+- ❌ Anuncios "Video pareja dcto" (sin 's') se clasificaban como "Otro"
+- ✅ Corregida clasificación para incluir tanto "parejas dcto" como "pareja dcto"
+- ✅ Esto afectaba la suma en "Análisis por Tipos de Anuncios"
+
+**Mejoras Implementadas:**
+- ✅ **NUEVO**: Gráfico de evolución temporal ahora incluye conversiones
+- ✅ Dos ejes Y: Gasto (izquierda) y Conversiones (derecha)
+- ✅ Diferentes colores y marcadores para distinguir las métricas
+- ✅ Leyenda horizontal en la parte superior
+
+**Estado:** ✅ COMPLETADO - Dashboard funcionando con archivos (5) y (6), clasificación corregida y gráfico mejorado
+
+**URLs Dashboard:**
+- 🌐 Marketing: http://localhost:8056 ✅ ACTIVO
+- 🌐 Reservas: http://localhost:8050 ✅ ACTIVO
+- 🌐 Utilidad: http://localhost:8055 ✅ ACTIVO
+
+---
+
+## Tarea Completada: Dashboard Marketing con Inputs Específicos ✅
+
+**Task:** Ejecutar dashboard de marketing con inputs específicos:
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5)
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6)
+
+**Progreso:**
+[X] Revisar estructura del dashboard de marketing
+[X] Identificar cómo maneja los inputs
+[X] Modificar código para usar archivos específicos (3) y (4)
+[X] Ejecutar dashboard con los nuevos parámetros especificados
+[X] Verificar funcionamiento correcto
+[X] Modificar clasificación de públicos para mantener regiones separadas
+
+**Archivos Modificados:**
+- ✅ `dashboard_marketing_simple.py` - Actualizado para usar archivos (3) y (4)
+- ✅ Función `cargar_datos()` modificada con nuevos inputs
+- ✅ Función `clasificar_publico()` actualizada para mantener todas las regiones separadas
+
+**Funcionalidades Implementadas:**
+- Dataset (3): Sin región - para gráficos generales  
+- Dataset (4): Con región - para análisis geográfico
+- Output informativo con emojis para claridad
+- Procesamiento de datos actualizado
+- **NUEVO**: Públicos separados por región (Advantage, Pucón, Concepción, Valdivia, Temuco)
+
+**URLs Dashboard:**
+- 🌐 Marketing: http://localhost:8056 (PID: 43044) ✅ ACTIVO
+
+**Cambios Recientes:**
+- ✅ Eliminada agrupación en "Otros" para públicos
+- ✅ Cada región/público mantiene su identidad separada
+- ✅ Dashboard reiniciado con nueva configuración
+
+**Estado:** ✅ COMPLETADO - Dashboard funcionando con regiones separadas
+
+---
 
 ## Tarea Completada: Ejecutor Múltiple de Dashboards ✅
 
