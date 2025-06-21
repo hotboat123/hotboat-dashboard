@@ -5,10 +5,12 @@
 🚤 EJECUTOR MÚLTIPLE DE DASHBOARDS HOTBOAT
 ==========================================
 
-Este script ejecuta simultáneamente los 3 dashboards de HotBoat:
+Este script ejecuta simultáneamente los 5 dashboards de HotBoat:
 - Dashboard de Reservas (Puerto 8050)
 - Dashboard de Utilidad Operativa (Puerto 8055)  
 - Dashboard de Marketing (Puerto 8056)
+- Dashboard de Gastos de Marketing (Puerto 8057)
+- Dashboard de Google Ads (Puerto 8058)
 
 Uso:
     python ejecutar_todos_dashboards.py
@@ -53,7 +55,7 @@ def ejecutar_dashboard(script_name: str, puerto: int, nombre: str):
 
 def verificar_archivos():
     """Verifica que todos los archivos necesarios existan"""
-    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py']
+    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py', 'dashboard_gastos_marketing.py', 'dashboard_google_ads.py']
     archivos_faltantes = []
     
     for archivo in archivos_requeridos:
@@ -96,6 +98,18 @@ def main():
             'puerto': 8056,
             'nombre': 'Dashboard de Marketing',
             'url': 'http://localhost:8056'
+        },
+        {
+            'script': 'dashboard_gastos_marketing.py',
+            'puerto': 8057,
+            'nombre': 'Dashboard de Gastos de Marketing',
+            'url': 'http://localhost:8057'
+        },
+        {
+            'script': 'dashboard_google_ads.py',
+            'puerto': 8058,
+            'nombre': 'Dashboard de Google Ads',
+            'url': 'http://localhost:8058'
         }
     ]
     

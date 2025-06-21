@@ -20,6 +20,18 @@
 - **Comando:** `python marketing.py`
 - **Contenido:** CPC, CTR, análisis regional, hook rates, conversiones
 
+### 4. Dashboard de Gastos de Marketing
+- **Puerto:** 8057
+- **URL:** http://localhost:8057
+- **Comando:** `python dashboard_gastos_marketing.py`
+- **Contenido:** Comparación Google Ads vs Meta, evolución temporal, distribución por días, heatmap
+
+### 5. Dashboard de Google Ads 🔥 NUEVO
+- **Puerto:** 8058
+- **URL:** http://localhost:8058
+- **Comando:** `python dashboard_google_ads.py`
+- **Contenido:** Análisis completo de campañas, palabras clave, dispositivos, demografía, series temporales
+
 ## 🔄 Navegación Entre Dashboards
 
 ### Características de Navegación:
@@ -31,7 +43,7 @@
 ### Barra de Navegación:
 ```
 🚤 HotBoat Dashboards:
-[Reservas] [Utilidad Operativa] [Marketing]
+[Reservas] [Utilidad Operativa] [Marketing] [Gastos Marketing] [Google Ads]
 ```
 
 - **Dashboard Activo:** Se muestra con fondo destacado y borde brillante
@@ -42,17 +54,17 @@
 
 ### Opción 1: Ejecutar Todos Simultáneamente (🔥 NUEVO - Recomendado)
 ```bash
-# Un solo comando que ejecuta los 3 dashboards
+# Un solo comando que ejecuta los 5 dashboards
 python ejecutar_todos_dashboards.py
 ```
 **✨ Características:**
-- ✅ Ejecuta los 3 dashboards automáticamente
+- ✅ Ejecuta los 5 dashboards automáticamente
 - ✅ Un solo terminal necesario
 - ✅ Detención fácil con Ctrl+C
 - ✅ Verificación automática de archivos
 - ✅ URLs mostradas al iniciar
 
-### Opción 2: Ejecutar Todos Manualmente (3 terminales)
+### Opción 2: Ejecutar Todos Manualmente (5 terminales)
 ```bash
 # Terminal 1 - Reservas
 python reservas.py
@@ -62,16 +74,26 @@ python utilidad.py
 
 # Terminal 3 - Marketing
 python marketing.py
+
+# Terminal 4 - Gastos de Marketing
+python dashboard_gastos_marketing.py
+
+# Terminal 5 - Google Ads
+python dashboard_google_ads.py
 ```
 
 ### Opción 3: Ejecutar Individual
 ```bash
 # Solo uno a la vez
-python reservas.py    # Ir a http://localhost:8050
+python reservas.py                    # Ir a http://localhost:8050
 # Ctrl+C para detener
-python utilidad.py    # Ir a http://localhost:8055  
+python utilidad.py                    # Ir a http://localhost:8055  
 # Ctrl+C para detener
-python marketing.py   # Ir a http://localhost:8056
+python marketing.py                   # Ir a http://localhost:8056
+# Ctrl+C para detener
+python dashboard_gastos_marketing.py  # Ir a http://localhost:8057
+# Ctrl+C para detener
+python dashboard_google_ads.py        # Ir a http://localhost:8058
 ```
 
 ## 🎨 Características de Diseño
@@ -106,6 +128,8 @@ python marketing.py   # Ir a http://localhost:8056
 Dashboard de Reservas:        http://localhost:8050
 Dashboard de Utilidad:        http://localhost:8055  
 Dashboard de Marketing:       http://localhost:8056
+Dashboard de Gastos:          http://localhost:8057
+Dashboard de Google Ads:      http://localhost:8058
 ```
 
 ## ⚡ Comandos Rápidos
@@ -120,13 +144,58 @@ netstat -ano | findstr :805
 # Detener todos los procesos Python
 taskkill /f /im python.exe
 
-# Alternativa: Ejecutar en 3 terminales separados
-python reservas.py & python utilidad.py & python marketing.py
+# Alternativa: Ejecutar en 5 terminales separados
+python reservas.py & python utilidad.py & python marketing.py & python dashboard_gastos_marketing.py & python dashboard_google_ads.py
 
 # Comandos individuales
-python reservas.py     # Puerto 8050
-python utilidad.py     # Puerto 8055  
-python marketing.py    # Puerto 8056
+python reservas.py                    # Puerto 8050
+python utilidad.py                    # Puerto 8055  
+python marketing.py                   # Puerto 8056
+python dashboard_gastos_marketing.py  # Puerto 8057
+python dashboard_google_ads.py        # Puerto 8058
+```
+
+## 🔥 Dashboard de Gastos de Marketing - Funcionalidades
+
+### Características Específicas:
+- **Comparación Google Ads vs Meta:** Análisis lado a lado de gastos
+- **Evolución Temporal:** Gráficos de tendencias por plataforma
+- **Distribución por Días:** Análisis de patrones semanales
+- **Heatmap de Gastos:** Visualización de gastos por día y mes
+- **Insights Automáticos:** Recomendaciones basadas en datos
+
+### Métricas Incluidas:
+- 💰 Gasto total por plataforma
+- 📊 Gasto promedio diario
+- 📱 Conversiones (Google Ads)
+- 💡 Costo por conversión
+- 📅 Análisis temporal detallado
+
+## 🔥 Dashboard de Google Ads - Nuevas Funcionalidades
+
+### Características Específicas:
+- **Series Temporales:** Evolución de métricas por semana
+- **Análisis de Campañas:** Rendimiento por campaña
+- **Palabras Clave:** Top palabras clave por costo y conversiones
+- **Dispositivos:** Distribución de gasto por dispositivo
+- **Datos Demográficos:** Análisis por género y edad
+- **Día y Hora:** Heatmap de impresiones por día y hora
+
+### Datos Incluidos:
+- 📈 Series temporales (13 semanas)
+- 🎯 1 campaña activa
+- 🔍 13 palabras clave
+- 📱 3 tipos de dispositivos
+- 👥 Datos demográficos por género y edad
+- 📅 Análisis temporal por día y hora
+
+### Preparación de Datos:
+```bash
+# Extraer archivos del ZIP de Google Ads
+python extraer_google_ads.py
+
+# Ejecutar dashboard
+python dashboard_google_ads.py
 ```
 
 ---
@@ -136,4 +205,6 @@ python marketing.py    # Puerto 8056
 - ✅ Estados activos visuales
 - ✅ Diseño professional
 - ✅ URLs independientes
-- ✅ Datos actualizados 
+- ✅ Datos actualizados
+- ✅ Nuevo dashboard de gastos
+- ✅ Nuevo dashboard de Google Ads 

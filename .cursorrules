@@ -93,7 +93,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - You have a python venv in ./venv. Use it.
 - Include info useful for debugging in the program output.
 - Read the file before you try to edit it.
-- Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
+- Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or `gh pr create --title "title" --body-file <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
 - **NUEVO**: Para ejecutar los dashboards, usar siempre `ejecutar_todos_dashboards.py` en lugar de ejecutar dashboards individuales.
 
 ## Cursor learned
@@ -103,10 +103,97 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
 - **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
+- **NUEVO**: Los archivos ZIP de Google Ads contienen múltiples CSV con diferentes tipos de datos (series temporales, campañas, palabras clave, etc.)
 
 # Scratchpad
 
-## Nueva Tarea: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
+## Nueva Tarea: Crear Dashboard de Google Ads ✅
+
+**Task:** Crear un nuevo dashboard específico para análisis de Google Ads usando los datos del ZIP extraído
+
+**Progreso:**
+[X] Explorar estructura de archivos de Google Ads
+[X] Crear script extractor `extraer_google_ads.py`
+[X] Extraer 13 archivos CSV del ZIP de Google Ads
+[X] Crear dashboard `dashboard_google_ads.py` con análisis completo
+[X] Actualizar ejecutor múltiple para incluir el nuevo dashboard
+[X] Actualizar documentación de navegación
+[X] Probar funcionamiento del dashboard
+
+**Plan:**
+1. ✅ Explorar contenido del ZIP de Google Ads
+2. ✅ Crear extractor automático de archivos
+3. ✅ Extraer y verificar archivos CSV
+4. ✅ Crear dashboard con análisis específicos de Google Ads
+5. ✅ Integrar con sistema de dashboards existente
+6. ✅ Actualizar documentación y ejecutor
+
+**Archivos Creados/Modificados:**
+- ✅ `extraer_google_ads.py` - Extractor automático de archivos ZIP
+- ✅ `dashboard_google_ads.py` - Dashboard completo de Google Ads
+- ✅ `ejecutar_todos_dashboards.py` - Actualizado para incluir puerto 8058
+- ✅ `NAVEGACION_DASHBOARDS.md` - Documentación actualizada
+
+**Funcionalidades del Dashboard de Google Ads:**
+- ✅ **Series Temporales:** Evolución de métricas por semana (13 semanas)
+- ✅ **Análisis de Campañas:** Rendimiento por campaña
+- ✅ **Palabras Clave:** Top 10 palabras clave por costo
+- ✅ **Dispositivos:** Distribución de gasto por dispositivo (gráfico dona)
+- ✅ **Datos Demográficos:** Análisis por género y edad
+- ✅ **Día y Hora:** Heatmap de impresiones por día y hora
+- ✅ **Insights Automáticos:** Recomendaciones basadas en datos
+
+**Datos Extraídos del ZIP:**
+- ✅ Series_temporales(2025.03.10-2025.06.20).csv
+- ✅ Campañas(2025.03.10-2025.06.20).csv
+- ✅ Grupos_de_anuncios(2025.03.10-2025.06.20).csv
+- ✅ Palabras_clave_de_la_Búsqueda(2025.03.10-2025.06.20).csv
+- ✅ Dispositivos(2025.03.10-2025.06.20).csv
+- ✅ Datos_demográficos(Género_Edad_2025.03.10-2025.06.20).csv
+- ✅ Día_y_hora(Día_Hora_2025.03.10-2025.06.20).csv
+- ✅ Y 6 archivos adicionales con datos específicos
+
+**URLs Dashboard:**
+- 🌐 Reservas: http://localhost:8050 ✅ ACTIVO
+- 🌐 Utilidad: http://localhost:8055 ✅ ACTIVO
+- 🌐 Marketing: http://localhost:8056 ✅ ACTIVO
+- 🌐 Gastos Marketing: http://localhost:8057 ✅ ACTIVO
+- 🌐 Google Ads: http://localhost:8058 ✅ ACTIVO
+
+**Estado:** ✅ COMPLETADO - Dashboard de Google Ads funcionando con análisis completo
+
+---
+
+## Tarea Completada: Restaurar Dashboard de Gastos de Marketing ✅
+
+**Task:** Restaurar dashboard separado para análisis de gastos de Google Ads y Meta
+
+**Progreso:**
+[X] Buscar archivos relacionados con gastos de marketing
+[X] Identificar `gastos_marketing.py` como fuente de datos
+[X] Crear `dashboard_gastos_marketing.py` con análisis completo
+[X] Actualizar ejecutor múltiple para incluir nuevo dashboard
+[X] Actualizar documentación de navegación
+[X] Probar funcionamiento
+
+**Archivos Creados/Modificados:**
+- ✅ `dashboard_gastos_marketing.py` - Dashboard completo de gastos
+- ✅ `ejecutar_todos_dashboards.py` - Actualizado para puerto 8057
+- ✅ `NAVEGACION_DASHBOARDS.md` - Documentación actualizada
+
+**Funcionalidades Implementadas:**
+- ✅ Comparación Google Ads vs Meta
+- ✅ Evolución temporal de gastos
+- ✅ Distribución por días de la semana
+- ✅ Heatmap de gastos por día y mes
+- ✅ Insights automáticos
+- ✅ Métricas de conversiones
+
+**Estado:** ✅ COMPLETADO - Dashboard de gastos funcionando
+
+---
+
+## Tarea Completada: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
 
 **Task:** Actualizar dashboard de marketing para usar nuevos archivos de input:
 - Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5) - CON región
