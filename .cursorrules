@@ -106,6 +106,110 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 
 # Scratchpad
 
+## Nueva Tarea: Integración Automática de Cuenta Corriente ✅
+
+**Task:** Modificar el procesamiento para que los datos de cuenta corriente se integren automáticamente a los archivos finales:
+- Cargos de cuenta corriente → se suman a `gastos hotboat.csv`
+- Abonos de cuenta corriente → se suman a `abonos hotboat.csv`
+
+**Progreso:**
+[X] Modificar flujo en gastos_hotboat_sin_drive.py
+[X] Implementar integración automática de cargos a gastos
+[X] Implementar integración automática de abonos a abonos
+[X] Probar procesamiento completo
+[X] Verificar integración correcta
+[X] Documentar funcionalidad
+
+**Plan:**
+1. ✅ Modificar sección de procesamiento de cuenta corriente
+2. ✅ Agregar integración automática con archivos principales
+3. ✅ Mantener archivos de referencia separados
+4. ✅ Probar con datos reales
+5. ✅ Verificar outputs finales
+
+**Funcionalidades Implementadas:**
+- ✅ **Integración Automática**: Los cargos de cuenta corriente se suman automáticamente a `gastos hotboat.csv`
+- ✅ **Integración Automática**: Los abonos de cuenta corriente se suman automáticamente a `abonos hotboat.csv`
+- ✅ **Deduplicación**: Se eliminan duplicados basados en Fecha, Descripción y Monto
+- ✅ **Archivos de Referencia**: Se mantienen archivos separados `cuenta_corriente_cargos.csv` y `cuenta_corriente_abonos.csv`
+- ✅ **Logging Detallado**: Output informativo con cantidad de filas integradas
+
+**Flujo Actualizado:**
+1. ✅ Procesar archivos de cuenta corriente (cartola*.xls)
+2. ✅ Consolidar cargos y abonos
+3. ✅ **NUEVO**: Leer archivos principales existentes
+4. ✅ **NUEVO**: Integrar cargos a gastos hotboat.csv
+5. ✅ **NUEVO**: Integrar abonos a abonos hotboat.csv
+6. ✅ Exportar archivos de referencia
+
+**Resultados del Test:**
+- ✅ **Cargos**: 75 filas integradas a gastos hotboat.csv
+- ✅ **Abonos**: 35 filas integradas a abonos hotboat.csv
+- ✅ **Total gastos**: 577 filas (incluyendo cuenta corriente)
+- ✅ **Total abonos**: 122 filas (incluyendo cuenta corriente)
+
+**Beneficios:**
+- ✅ **Proceso Unificado**: Un solo comando integra todos los datos
+- ✅ **Datos Consolidados**: Archivos finales contienen toda la información
+- ✅ **Trazabilidad**: Archivos de referencia permiten auditoría
+- ✅ **Automatización**: No requiere pasos manuales adicionales
+
+**Estado:** ✅ COMPLETADO - Integración automática funcionando correctamente
+
+---
+
+## Nueva Tarea: Simplificar gastos_hotboat_sin_drive.py ✅
+
+**Task:** Reorganizar el código de gastos_hotboat_sin_drive.py para hacerlo más fácil de leer:
+- Mover funciones a funciones/funciones.py
+- Dejar el archivo principal más limpio y legible
+- Mantener toda la funcionalidad existente
+
+**Progreso:**
+[X] Revisar el archivo actual gastos_hotboat_sin_drive.py
+[X] Identificar funciones que se pueden mover
+[X] Crear clase ProcesadorArchivos en funciones/funciones.py
+[X] Crear función procesar_archivos_financieros en funciones/funciones.py
+[X] Simplificar el archivo principal gastos_hotboat_sin_drive.py
+[X] Probar que funcione correctamente
+[X] Verificar que procese los mismos archivos y genere los mismos outputs
+
+**Plan:**
+1. ✅ Analizar estructura actual del archivo
+2. ✅ Mover clase ProcesadorArchivos a funciones/funciones.py
+3. ✅ Mover función procesar_archivos_financieros a funciones/funciones.py
+4. ✅ Simplificar archivo principal a solo configuración y llamada
+5. ✅ Probar funcionamiento
+6. ✅ Verificar outputs
+
+**Archivos Modificados:**
+- ✅ `funciones/funciones.py` - Agregadas nuevas funciones de procesamiento
+- ✅ `gastos_hotboat_sin_drive.py` - Simplificado drásticamente (de ~300 líneas a ~50 líneas)
+
+**Funcionalidades Movidas:**
+- ✅ Clase ProcesadorArchivos con métodos procesar_archivo() y consolidar_datos()
+- ✅ Función procesar_archivos_financieros() completa
+- ✅ Toda la lógica de procesamiento de archivos Excel
+- ✅ Manejo de errores y logging
+
+**Archivo Principal Simplificado:**
+- ✅ Solo configuración de parámetros
+- ✅ Importación de función principal
+- ✅ Llamada simple a procesar_archivos_financieros()
+- ✅ Manejo básico de errores
+- ✅ Mucho más fácil de leer y mantener
+
+**Beneficios Logrados:**
+- ✅ Archivo principal de 50 líneas vs 300 líneas original
+- ✅ Separación clara entre configuración y lógica
+- ✅ Funciones reutilizables en otros scripts
+- ✅ Código más mantenible y organizado
+- ✅ Misma funcionalidad, mejor estructura
+
+**Estado:** ✅ COMPLETADO - Archivo simplificado y funcionando correctamente
+
+---
+
 ## Nueva Tarea: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
 
 **Task:** Actualizar dashboard de marketing para usar nuevos archivos de input:

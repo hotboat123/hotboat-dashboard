@@ -6,7 +6,7 @@ diccionario_categorias = {
         "SUPERMERCADO", "UNIMARC", "LIDER.CL"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC"
+        "FERRETERIA", "SODIMAC", "kupfer"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -42,7 +42,7 @@ diccionario_categorias = {
         "CANVA", "LIBRERIA", "VIATOR"
     ],
     "Remuneraciones": [
-        "aguirre paillale"
+        "aguirre paillale", "Axel Aguirre"
     ],
     "Arriendo": [
         "quiroga toro"
@@ -54,12 +54,25 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha basti"
+        "munoz cucha basti, Javiera Rodriguez"
     ],
-    "pagos daniel": [
+    "Mano obra HotBoat daniel": [
         "inostroza canales"
-    ]
+    ],
+    "Mano obra HotBoat otros": [
+        "Guillermo Ulloasilva", 
+    ],
     
+    # Categorías para ABONOS (solo las que te interesan)
+    "Bencina Pathfinder": [
+        "Odette"
+    ],
+    "Ingresos HotBoat": [
+        "traspaso de:hotboat spa", "Nawrath", "Dutilh"
+    ],
+    "Inversión": [
+        "fintual", "dev Impuesto"
+    ]
 }
 
 diccionario_categoria_1 = {
@@ -69,16 +82,20 @@ diccionario_categoria_1 = {
     "Costos Variables": [
      "gas"
     ],
-    "Inversiones": [
+    "Inversion_activos": [
         "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "Compras Internacionales"
     ],
-    "Otros": [
-        "traspaso", "deuda", "abono", "transferencia"
+    "Inversión": [
+        "Inversión"
     ]
 }
 
 descripciones_a_eliminar = [
-    "traspaso deuda internacional", "pago pesos tef", ""
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio"
 ] 
 
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
+
+# Diccionario de categorías para cuenta corriente
+# Categorías específicas para los movimientos de cuenta corriente
+

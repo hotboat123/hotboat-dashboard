@@ -40,11 +40,11 @@ def cargar_datos():
     
     # Carga de datos financieros
     df_payments = pd.read_csv("archivos_output/abonos hotboat.csv")
-    df_payments["Fecha"] = pd.to_datetime(df_payments["Fecha"])
+    df_payments["Fecha"] = pd.to_datetime(df_payments["Fecha"], dayfirst=True, errors='coerce')
     df_payments["Monto"] = df_payments["Monto"].astype(float)
     
     df_expenses = pd.read_csv("archivos_output/gastos hotboat.csv")
-    df_expenses["Fecha"] = pd.to_datetime(df_expenses["Fecha"])
+    df_expenses["Fecha"] = pd.to_datetime(df_expenses["Fecha"], dayfirst=True, errors='coerce')
     df_expenses["Monto"] = df_expenses["Monto"].astype(float)
     
     # Extraer costos fijos desde gastos

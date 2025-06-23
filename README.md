@@ -1,13 +1,14 @@
 # Para actualizar data
 1. Descargar movimientos facturados bco chile nacional e internacional
-2. Descargar mov no facturados bco chile (opcional)
+2. Descargar mov no facturados bco chile (opcional) y cuenta corriente banco chile nacional
 3. Revisar ultima fila de abonos bco estado y descargar chequera histórica desde esa fecha (pueden ser varios archivos)
-4. Descargar info mercado pago --> Tu negocio - ventas - descargar Excel de ventas
+4. Descargar info mercado pago --> Tu negocio - ventas - descargar Excel de ventas #creo que no es necesario, info esta en cta cte bancho chile
 5. Descargar Appointments y Payments de Booknetic
-5. Subir toda esa info a carpeta "archivo_input" desde carpeta "descargas"
+5. Subir toda esa info a carpeta "archivo_input" desde carpeta "descargas" (eliminar appointments y payments antiguo)
 6. correr código "gastos_hotboat_sin_Drive.py"
 6. correr código "Informacion_reservas.py"
-7. correr código "analisis_gráficos.py"
+6. correr código "estimacion_utilidad__hotboat.py"
+7. correr código "ejecutar_todos_dashboards.py"
 8. abrir link 
 
 

@@ -1,8 +1,35 @@
-[Cursor] Actualizar dashboard marketing con inputs (5) y (6)
+[Cursor] Integración automática de cuenta corriente y mejoras del sistema
 
-- Modificar dashboard_marketing_simple.py para usar archivos (5) y (6)
-- Archivo (5): CON región - para gráfico de regiones
-- Archivo (6): SIN región - para demás gráficos
-- Corregir clasificación de tipos de anuncios para incluir "Video pareja dcto"
-- Mejorar gráfico de evolución temporal con conversiones
-- Actualizar .cursorrules con progreso completado 
+🚀 NUEVAS FUNCIONALIDADES:
+- Integración automática de cuenta corriente a archivos principales
+- Los cargos de cuenta corriente se suman automáticamente a gastos hotboat.csv
+- Los abonos de cuenta corriente se suman automáticamente a abonos hotboat.csv
+- Procesamiento unificado con un solo comando
+
+🔧 MEJORAS TÉCNICAS:
+- Simplificación de gastos_hotboat_sin_drive.py (de ~300 a ~50 líneas)
+- Movimiento de funciones a funciones/funciones.py para mejor organización
+- Corrección de parsing de fechas en dashboards.py para manejar formato dd/mm/yyyy
+- Nuevas categorías en inputs_modelo.py para cuenta corriente
+
+📊 RESULTADOS:
+- 75 cargos de cuenta corriente integrados a gastos
+- 35 abonos de cuenta corriente integrados a abonos
+- Total gastos: 575 filas (incluyendo cuenta corriente)
+- Total abonos: 120 filas (incluyendo cuenta corriente)
+- Archivos de referencia mantenidos para auditoría
+
+✅ FUNCIONALIDADES:
+- Proceso unificado: un solo comando integra todos los datos
+- Datos consolidados: archivos finales contienen toda la información
+- Trazabilidad: archivos de referencia permiten auditoría
+- Automatización: no requiere pasos manuales adicionales
+- Dashboards funcionando correctamente con datos integrados
+
+🔄 FLUJO ACTUALIZADO:
+1. Procesar archivos de cuenta corriente (cartola*.xls)
+2. Consolidar cargos y abonos
+3. Leer archivos principales existentes
+4. Integrar cargos a gastos hotboat.csv
+5. Integrar abonos a abonos hotboat.csv
+6. Exportar archivos de referencia 

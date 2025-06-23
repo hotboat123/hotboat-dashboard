@@ -1,93 +1,103 @@
-STAFF,Phone Number,METHOD,ID,TOTAL AMOUNT,Customer Email,hora_trip,fecha_creacion_reserva,hora_creacion_reserva,Service,DUE AMOUNT,Phone Number_2,PAID AMOUNT,DURATION,STATUS,Customer,PAYMENT,fecha_trip
-RUKAPILLAN,990184108,WooCommerce,56,55992,camirivasc137@gmail.com,13:00:00,2024-08-30,19:36:00,HotBoat Trip 2 people (69.990 pp),55992,56990184108,0,2h,Pending,Camila Rivas,55992,2024-08-31
-RUKAPILLAN,56956164078,WooCommerce,67,69990,Gmoscoso.crt@gmail.com,11:00:00,2024-09-09,00:18:00,HotBoat Trip 2 people (69.990 pp),0,56956164078,69990,2h,Paid,Gabriela Moscoso,69990,2024-09-17
-RUKAPILLAN,56986989840,Pay in Person,69,59990,barbara.zurita1527@gmail.com,11:00:00,2024-09-16,17:42:00,HotBoat Trip 2 people (69.990 pp),0,56986989840,59990,2h,Paid,Barbara Zurita,59990,2024-09-18
-RUKAPILLAN,995126032,WooCommerce,64,69990,mb.orellana@gmail.com,13:00:00,2024-09-06,01:41:00,HotBoat Trip 2 people (69.990 pp),0,56995126032,69990,2h,Paid,Belén Orellana orellana,69990,2024-09-25
-RUKAPILLAN,56947384670,WooCommerce,63,69990,ramosesparzapaulina@gmail.com,13:00:00,2024-09-04,16:03:00,HotBoat Trip 2 people (69.990 pp),0,56947384670,69990,2h,Paid,Paulina Ramos,69990,2024-09-29
-RUKAPILLAN,56965747945,WooCommerce,91,179960,abrahamaximiliano@gmail.com,19:00:00,2025-01-10,18:12:00,HotBoat Trip 4 people (44.990 pp),0,56965747945,179960,2h,Paid,Abraham Cañete,179960,2025-01-11
-RUKAPILLAN,56991002713,WooCommerce,93,164970,felnawrath@gmail.com,19:00:00,2025-01-11,16:59:00,HotBoat Trip 3 people (54.990 pp),0,56991002713,164970,2h,Paid,Felipe Nawrath,164970,2025-01-12
-RUKAPILLAN,56990862876,WooCommerce,94,197940,loreto.ahumadacamilo@gmail.com,19:00:00,2025-01-12,16:34:00,HotBoat Trip 6 people (32.990 pp),0,56990862876,197940,2h,Paid,Loreto Ahumada Camilo,197940,2025-01-14
-RUKAPILLAN,56998910613,WooCommerce,97,179960,adutilh@gmail.com,19:00:00,2025-01-14,09:52:00,HotBoat Trip 4 people (44.990 pp),0,56998910613,179960,2h,Paid,Andrés Dutilh,179960,2025-01-15
-RUKAPILLAN,56991002713,Pay in Person,100,194950,felnawrath@gmail.com,19:00:00,2025-01-16,22:40:00,HotBoat Trip 5 people (38.990 pp),0,56991002713,194950,2h,Paid,Felipe Nawrath,194950,2025-01-18
-RUKAPILLAN,56988193264,WooCommerce,79,139980,daiggu@gmail.com,18:00:00,2025-01-08,16:52:00,HotBoat Trip 2 people (69.990 pp),0,56988193264,139980,2h,Paid,David Gutierrez,139980,2025-01-19
-RUKAPILLAN,56993443176,WooCommerce,104,194950,franciscaserenocastro@gmail.com,19:00:00,2025-01-19,16:42:00,HotBoat Trip 5 people (38.990 pp),0,56993443176,194950,2h,Paid,Francisca Sereño,194950,2025-01-20
-RUKAPILLAN,56984997641,WooCommerce,109,139980,sepulvedagallardoc@gmail.com,09:00:00,2025-01-22,13:53:00,HotBoat Trip 2 people (69.990 pp),0,56984997641,139980,2h,Paid,Cristian Sepúlveda,139980,2025-01-23
-RUKAPILLAN,56999302975,WooCommerce,112,179960,jenny.anabalonc@gmail.com,19:00:00,2025-01-22,20:03:00,HotBoat Trip 4 people (44.990 pp),0,56999302975,179960,2h,Paid,Jenny Anabalon,179960,2025-01-24
-RUKAPILLAN,436505154363,WooCommerce,116,139980,kleinheinz2000@yahoo.de,19:00:00,2025-01-24,13:33:00,HotBoat Trip 2 people (69.990 pp),0,436505154363,139980,2h,Paid,Maria Kleinheinz,139980,2025-01-25
-RUKAPILLAN,56982191929,WooCommerce,115,179960,evelincofre@gmail.com,09:00:00,2025-01-23,21:31:00,HotBoat Trip 4 people (44.990 pp),0,56982191929,179960,2h,Paid,Evelin Wiemberg,179960,2025-01-25
-RUKAPILLAN,56991249612,WooCommerce,108,164970,caveschbelleza@gmail.com,19:00:00,2025-01-21,05:04:00,HotBoat Trip 3 people (54.990 pp),0,56991249612,164970,2h,Paid,Catherine Schürch Vega,164970,2025-01-26
-RUKAPILLAN,964699590,WooCommerce,119,194950,fulvia.pimienta@gmail.com,19:00:00,2025-01-27,00:00:00,HotBoat Trip 5 people (38.990 pp),0,56964699590,194950,2h,Paid,Fulvia Pimienta,194950,2025-01-28
-RUKAPILLAN,995039809,WooCommerce,102,179960,dayannavarretep@gmail.com,19:00:00,2025-01-18,19:05:00,HotBoat Trip 4 people (44.990 pp),0,56995039809,179960,2h,Paid,Dayanna Navarrete,179960,2025-01-30
-RUKAPILLAN,949108584,Pay in Person,120,179960,kabezon.kevin@gmail.com,19:00:00,2025-01-27,20:23:00,HotBoat Trip 4 people (44.990 pp),0,56949108584,179960,2h,Paid,kevin soto,179960,2025-01-31
-RUKAPILLAN,56974696667,Pay in Person,123,197940,Jaileinschomber99@gmail.com,19:00:00,2025-02-01,17:51:00,HotBoat Trip 6 people (32.990 pp),197940,56974696667,0,2h,Not paid,jailein schomber,197940,2025-02-01
-RUKAPILLAN,56988390647,WooCommerce,124,139980,Fro.ventas@gmail.com,19:00:00,2025-02-01,22:40:00,HotBoat Trip 2 people (69.990 pp),139980,56988390647,0,2h,Pending,Francisco Riquelme,139980,2025-02-02
-RUKAPILLAN,56972996057,WooCommerce,140,197940,katherinesilvacastro@gmail.com,14:00:00,2025-02-03,19:32:00,HotBoat Trip 6 people (32.990 pp),0,56972996057,197940,2h,Paid,Katherine Silva,197940,2025-02-04
-RUKAPILLAN,950015294,Pay in Person,136,197940,letty.amaza@gmail.com,18:00:00,2025-02-03,14:38:00,HotBoat Trip 6 people (32.990 pp),0,56950015294,197940,2h,Paid,leticia amaza,197940,2025-02-04
-RUKAPILLAN,56977690324,WooCommerce,92,194950,barbara.zeiser@gmail.com,19:00:00,2025-01-10,18:55:00,HotBoat Trip 5 people (38.990 pp),0,56977690324,194950,2h,Paid,Barbara Zeiser,194950,2025-02-05
-RUKAPILLAN,56962486328,WooCommerce,141,179960,victorgonzalezkine@gmail.com,13:00:00,2025-02-03,21:35:00,HotBoat Trip 4 people (44.990 pp),89980,56962486328,89980,2h,Paid (deposit),Victor Gonzalez,179960,2025-02-05
-RUKAPILLAN,994319456,Pay in Person,137,197940,pao.ingerborg@gmail.com,18:00:00,2025-02-03,18:32:00,HotBoat Trip 6 people (32.990 pp),197940,56994319456,0,2h,Pending,Paola Alvarez,197940,2025-02-06
-RUKAPILLAN,992832798,WooCommerce,143,139980,gus1988.gs10@gmail.com,18:00:00,2025-02-07,14:11:00,HotBoat Trip 2 people (69.990 pp),139980,56992832798,0,2h,Pending,Gustavo Salazar flores,139980,2025-02-09
-RUKAPILLAN,56987090666,Pay in Person,150,194950,mjosefa.sanchez7@gmail.com,18:00:00,2025-02-10,20:58:00,HotBoat Trip 5 people (38.990 pp),194950,56987090666,0,2h,Not paid,Josefa Sanchez,194950,2025-02-10
-RUKAPILLAN,56983369065,WooCommerce,147,197940,tesandov@gmail.com,13:00:00,2025-02-09,21:03:00,HotBoat Trip 6 people (32.990 pp),98970,56983369065,98970,2h,Paid (deposit),Tamara Sandoval Sanchez,197940,2025-02-10
-RUKAPILLAN,56996444406,WooCommerce,95,194950,carola_arteche@yahoo.com,19:00:00,2025-01-12,20:33:00,HotBoat Trip 5 people (38.990 pp),0,56996444406,194950,2h,Paid,Carola Arteche Fischer,194950,2025-02-11
-RUKAPILLAN,56974530460,WooCommerce,106,139980,carmach@live.com,19:00:00,2025-01-20,18:31:00,HotBoat Trip 2 people (69.990 pp),69990,56974530460,69990,2h,Paid (deposit),Alejandro Carmach,139980,2025-02-13
-Newen,56974530460,WooCommerce,105,15000,carmach@live.com,17:00:00,2025-01-20,18:31:00,Extras,0,56974530460,15000,1h,Paid,Alejandro Carmach,15000,2025-02-13
-RUKAPILLAN,977577307,Pay in Person,135,179960,ab@gmail.com,14:00:00,2025-02-02,23:11:00,HotBoat Trip 4 people (44.990 pp),179960,56977577307,0,2h,Not paid,Diego Sila,179960,2025-02-13
-RUKAPILLAN,56985229291,WooCommerce,149,194950,Cbquinones@udalba.cl,10:00:00,2025-02-10,13:34:00,HotBoat Trip 5 people (38.990 pp),97475,56985229291,97475,2h,Paid (deposit),constanza quiñones,194950,2025-02-14
-RUKAPILLAN,981680752,WooCommerce,151,194950,Brcisteroy@gmail.com,19:00:00,2025-02-11,15:17:00,HotBoat Trip 5 people (38.990 pp),194950,56981680752,0,2h,Pending,Braulio Cisternas,194950,2025-02-14
-RUKAPILLAN,56998443096,Pay in Person,142,197940,vivirc@gmail.com,14:00:00,2025-02-06,21:57:00,HotBoat Trip 6 people (32.990 pp),197940,56998443096,0,2h,Not paid,viviana ramirez,197940,2025-02-14
-RUKAPILLAN,56965433556,WooCommerce,162,179960,victorproboste@hotmail.com,18:00:00,2025-02-13,14:31:00,HotBoat Trip 4 people (44.990 pp),0,56965433556,179960,2h,Paid,Carolina Astudillo,179960,2025-02-15
-RUKAPILLAN,56993268957,Pay in Person,165,0,franjorqueraperiodista@gmail.com,10:00:00,2025-02-14,20:28:00,HotBoat Trip 6 people (32.990 pp),0,56993268957,0,2h,Paid,Francisca Jorquera,0,2025-02-15
-RUKAPILLAN,56982041645,WooCommerce,170,125982,ivaniaalara@gmail.com,14:00:00,2025-02-15,21:36:00,HotBoat Trip 2 people (69.990 pp),62991,56982041645,62991,2h,Paid (deposit),ivania lara oñate,125982,2025-02-16
-RUKAPILLAN,56990435780,WooCommerce,166,179960,Crisuber15@gmail.com,19:00:00,2025-02-15,17:00:00,HotBoat Trip 4 people (44.990 pp),179960,56990435780,0,2h,Pending,Christopher Veas,179960,2025-02-16
-RUKAPILLAN,56988932249,WooCommerce,177,179960,solsssandoval@gmail.com,19:00:00,2025-02-16,15:49:00,HotBoat Trip 4 people (44.990 pp),89980,56988932249,89980,2h,Paid (deposit),Soledad Sandoval,179960,2025-02-17
-RUKAPILLAN,56951541106,WooCommerce,179,164970,matiasleonpena@gmail.com,14:00:00,2025-02-17,00:27:00,HotBoat Trip 3 people (54.990 pp),164970,56951541106,0,2h,Pending,Matias Peña,164970,2025-02-17
-RUKAPILLAN,950021950,WooCommerce,174,169980,Victor.valenzuelamaturanaa@gmail.com,09:00:00,2025-02-16,04:13:00,HotBoat Trip 2 people (69.990 pp),169980,56950021950,0,2h,Pending,Victor Valenzuela,169980,2025-02-17
-RUKAPILLAN,949906203,WooCommerce,181,194950,fernandaantinao.ggh@gmail.com,19:00:00,2025-02-17,02:02:00,HotBoat Trip 5 people (38.990 pp),97475,56949906203,97475,2h,Paid (deposit),Sebastian Soto,194950,2025-02-18
-RUKAPILLAN,921644620,Pay in Person,171,194950,belenyessenia69@Gmail.com,14:00:00,2025-02-16,00:27:00,HotBoat Trip 5 people (38.990 pp),194950,56921644620,0,2h,Not paid,daisy obreque,194950,2025-02-19
-RUKAPILLAN,981887303,WooCommerce,183,125982,willykrusea@gmail.com,10:00:00,2025-02-18,01:58:00,HotBoat Trip 2 people (69.990 pp),62991,56981887303,62991,2h,Paid (deposit),Willy Kruse,125982,2025-02-19
-RUKAPILLAN,56971371707,WooCommerce,187,161964,javieranadiabarria@gmail.com,18:00:00,2025-02-19,01:33:00,HotBoat Trip 4 people (44.990 pp),0,56971371707,161964,2h,Paid,Javiera Nadia Barría Retamal,161964,2025-02-19
-RUKAPILLAN,56984288994,WooCommerce,176,194950,jesupellegrinim@gmail.com,19:00:00,2025-02-16,13:37:00,HotBoat Trip 5 people (38.990 pp),0,56984288994,194950,2h,Paid,Maria Jesus Pellegrini,194950,2025-02-20
-RUKAPILLAN,56957631827,WooCommerce,185,148473,valereyesmunoz2007@gmail.com,13:00:00,2025-02-18,15:54:00,HotBoat Trip 3 people (54.990 pp),0,56957631827,148473,2h,Paid,Valentina Reyes,148473,2025-02-20
-RUKAPILLAN,56991254282,Pay in Person,186,0,Maca.sanchez@gmail.com,19:00:00,2025-02-19,01:27:00,HotBoat Trip 5 people (38.990 pp),0,56991254282,0,2h,Paid,Macarena Sanchez Valdes,0,2025-02-21
-RUKAPILLAN,972057725,Pay in Person,196,139980,marceloergas@gmail.com,19:00:00,2025-02-22,18:05:00,HotBoat Trip 2 people (69.990 pp),139980,56972057725,0,2h,Not paid,marcelo ergas,139980,2025-02-22
-RUKAPILLAN,56940168306,WooCommerce,192,125982,Nmarin@devcoderx.com,10:00:00,2025-02-20,14:01:00,HotBoat Trip 2 people (69.990 pp),0,56940168306,125982,2h,Paid,Nathalie Marín,125982,2025-02-22
-RUKAPILLAN,932003908,WooCommerce,189,152982,bcalvo98@hotmail.com,13:00:00,2025-02-19,22:01:00,HotBoat Trip 2 people (69.990 pp),76491,56932003908,76491,2h,Paid (deposit),Benjamin Calvo,152982,2025-02-22
-RUKAPILLAN,954672214,WooCommerce,191,139980,nicole.galdames13@gmail.com,18:00:00,2025-02-20,03:08:00,HotBoat Trip 2 people (69.990 pp),0,56954672214,139980,2h,Paid,Nicole Galdames,139980,2025-02-23
-RUKAPILLAN,56989513187,WooCommerce,194,194950,Fmmir09@gmail.com,14:00:00,2025-02-21,23:19:00,HotBoat Trip 5 people (38.990 pp),97475,56989513187,97475,2h,Paid (deposit),Francisca Manzano Miranda,194950,2025-02-23
-RUKAPILLAN,56944013136,WooCommerce,188,194950,naboralejandroortizibarr@gmail.com,09:00:00,2025-02-19,19:41:00,HotBoat Trip 5 people (38.990 pp),194950,56944013136,0,2h,Pending,Nabor Alejandro Ortiz Ibarra,194950,2025-02-23
-RUKAPILLAN,56930551478,WooCommerce,195,178146,camili.fica@gmail.com,18:00:00,2025-02-22,03:55:00,HotBoat Trip 6 people (32.990 pp),89073,56930551478,89073,2h,Paid (deposit),Camila Victoria Fica Cueto,178146,2025-02-24
-RUKAPILLAN,981898085,Pay in Person,197,0,florenciamunozpa@gmail.com,14:00:00,2025-02-24,01:24:00,HotBoat Trip 2 people (69.990 pp),0,56981898085,0,2h,Paid,Florencia Muñoz,0,2025-02-25
-RUKAPILLAN,950617290,Pay in Person,198,194950,Michaelg8720@gmail.com,18:00:00,2025-02-25,19:17:00,HotBoat Trip 5 people (38.990 pp),194950,56950617290,0,2h,Not paid,Michael Gonzalez,194950,2025-02-25
-RUKAPILLAN,56932311272,WooCommerce,203,139980,cestibill@gmail.com,18:00:00,2025-02-27,00:55:00,HotBoat Trip 2 people (69.990 pp),0,56932311272,139980,2h,Paid,Cristobal Estibill,139980,2025-02-27
-RUKAPILLAN,950004755,Pay in Person,200,194950,Lalitosoto71@gmail.com,18:00:00,2025-02-26,02:47:00,HotBoat Trip 5 people (38.990 pp),194950,56950004755,0,2h,Not paid,Eduardo Soto,194950,2025-02-28
-RUKAPILLAN,952188691,WooCommerce,205,219950,melissachile87@gmail.com,14:00:00,2025-02-27,19:45:00,HotBoat Trip 5 people (38.990 pp),0,56952188691,219950,2h,Paid,Melissa Diaz,219950,2025-02-28
-RUKAPILLAN,962263102,Pay in Person,207,139980,nicolas.espinoza.carrasco@gmail.com,18:00:00,2025-03-05,18:23:00,HotBoat Trip 2 people (69.990 pp),0,56962263102,139980,2h,Paid,Nicolas Espinoza,139980,2025-03-05
-RUKAPILLAN,56964223152,WooCommerce,210,143968,karinmaragano@gmail.com,18:00:00,2025-03-08,04:27:00,HotBoat Trip 4 people (44.990 pp),0,56964223152,143968,2h,Paid,Karin Maragaño benner,143968,2025-03-08
-RUKAPILLAN,56992286875,WooCommerce,209,143968,jaimebueso@gmail.com,13:00:00,2025-03-07,23:55:00,HotBoat Trip 4 people (44.990 pp),0,56992286875,143968,2h,Paid,Jaime Buedo,143968,2025-03-09
-RUKAPILLAN,56940228701,WooCommerce,213,139980,Nestoritalocornejo@gmail.com,18:00:00,2025-03-11,21:10:00,HotBoat Trip 2 people (69.990 pp),0,56940228701,139980,2h,Paid,Nestor Cornejo,139980,2025-03-12
-RUKAPILLAN,56973702215,WooCommerce,212,159980,rodrigogundert@hotmail.com,18:00:00,2025-03-10,17:43:00,HotBoat Trip 2 people (69.990 pp),0,56973702215,159980,2h,Paid,Rodrigo Gundert,159980,2025-03-14
-RUKAPILLAN,56981355469,Pay in Person,216,139980,vnavarrojara97@gmail.com,18:00:00,2025-03-18,14:07:00,HotBoat Trip 2 people (69.990 pp),0,56981355469,139980,2h,Paid,valeria navarro,139980,2025-03-20
-RUKAPILLAN,12984313552,WooCommerce,214,164970,noelizabeth.fernandez@gmail.com,13:00:00,2025-03-18,00:00:00,HotBoat Trip 3 people (54.990 pp),0,12984313552,164970,2h,Paid,Noelia Fernandez,164970,2025-03-20
-RUKAPILLAN,56969654754,WooCommerce,224,159980,matssha.mv@gmail.com,18:00:00,2025-04-06,03:11:00,HotBoat Trip 2 people (69.990 pp),0,56969654754,159980,2h,Paid,Fernando Araos,159980,2025-04-09
-RUKAPILLAN,56998274713,WooCommerce,225,179960,Greghezza@gmail.com,18:00:00,2025-04-06,21:14:00,HotBoat Trip 4 people (44.990 pp),0,56998274713,179960,2h,Paid,Giannina Reghezza,179960,2025-04-11
-RUKAPILLAN,56983089227,WooCommerce,240,191970,gabriella21021983@gmail.com,16:00:00,2025-04-09,21:07:00,HotBoat Trip 3 people (54.990 pp),0,56983089227,191970,2h,Paid,Gabriela Ortega Valdes,191970,2025-04-12
-RUKAPILLAN,56966876370,WooCommerce,244,125982,conita_castillo@hotmail.com,16:00:00,2025-04-12,21:12:00,HotBoat Trip 2 people (69.990 pp),0,56966876370,125982,2h,Paid,Constanza Castillo,125982,2025-04-14
-RUKAPILLAN,56988992341,WooCommerce,247,125982,Jacqueline.leon@usach.cl,17:00:00,2025-04-14,23:38:00,HotBoat Trip 2 people (69.990 pp),0,56988992341,125982,2h,Paid,Jacqueline Leon,125982,2025-04-15
-RUKAPILLAN,56993390631,WooCommerce,234,97986,nathaliecifuentess.90@gmail.com,10:00:00,2025-04-08,14:41:00,HotBoat Trip 2 people (69.990 pp),0,56993390631,97986,2h,Paid,Nathalie Cifuentes,97986,2025-04-17
-RUKAPILLAN,56983154002,WooCommerce,245,148473,Karenquinterosoyarce@gmail.com,17:00:00,2025-04-13,20:29:00,HotBoat Trip 3 people (54.990 pp),0,56983154002,148473,2h,Paid,Karen Quinteros,148473,2025-04-17
-RUKAPILLAN,992292702,WooCommerce,221,159980,javieraignaciamb0217@gmail.com,18:00:00,2025-03-20,20:15:00,HotBoat Trip 2 people (69.990 pp),0,56992292702,159980,2h,Paid,javiera muñoz,159980,2025-04-18
-RUKAPILLAN,56957790454,WooCommerce,241,125982,catabarrastrobel@gmail.com,14:00:00,2025-04-11,18:40:00,HotBoat Trip 2 people (69.990 pp),0,56957790454,125982,2h,Paid,catalina barra,125982,2025-04-18
-RUKAPILLAN,56998622210,WooCommerce,243,159980,carlosdgonzalezbustos@gmail.com,16:00:00,2025-04-12,14:19:00,HotBoat Trip 2 people (69.990 pp),0,56998622210,159980,2h,Paid,Carlos Gonzalez Bustos,159980,2025-04-19
-RUKAPILLAN,56976716471,WooCommerce,246,194970,g.l.oyarce@gmail.com,12:00:00,2025-04-14,14:00:00,HotBoat Trip 3 people (54.990 pp),0,56976716471,194970,2h,Paid,Giannina Labbe Oyarce,194970,2025-04-19
-RUKAPILLAN,56958290613,WooCommerce,250,164970,Monserrat.masferrer9@gmail.com,13:00:00,2025-04-21,14:05:00,HotBoat Trip 3 people (54.990 pp),0,56958290613,164970,2h,Paid,Monserrat Masferrer,164970,2025-04-21
-RUKAPILLAN,954817242,Pay in Person,251,139980,fernandavaldiviaflores@gmail.com,17:00:00,2025-04-22,23:00:00,HotBoat Trip 2 people (69.990 pp),0,56954817242,139980,2h,Paid,tania fernanda valdivia flores,139980,2025-04-21
-RUKAPILLAN,994021302,Pay in Person,255,179980,Victoria.munozm@gmail.com,12:00:00,2025-04-28,02:05:00,HotBoat Trip 2 people (69.990 pp),0,56994021302,179980,2h,Paid,Victoria Muñoz,179980,2025-05-01
-RUKAPILLAN,966782568,Pay in Person,262,194950,koke1989_@hotmail.com,11:00:00,2025-05-02,22:38:00,HotBoat Trip 5 people (38.990 pp),0,56966782568,194950,2h,Paid,jorge romagnoli,194950,2025-05-02
-RUKAPILLAN,56968434887,WooCommerce,259,197964,gdinamarca@dnmk.cl,15:00:00,2025-05-01,00:45:00,HotBoat Trip 4 people (44.990 pp),0,56968434887,197964,2h,Paid,Gonzalo Dinamarca,197964,2025-05-02
-RUKAPILLAN,989050882,Pay in Person,261,138558,romaturana@hotmail.com,12:00:00,2025-05-02,20:33:00,HotBoat Trip 6 people (32.990 pp),0,56989050882,138558,2h,Paid,rodrigo maturana,138558,2025-05-04
-RUKAPILLAN,954550292,WooCommerce,264,168980,francisco.barriaparra@gmail.com,16:00:00,2025-05-03,15:48:00,HotBoat Trip 2 people (69.990 pp),0,56954550292,168980,2h,Paid,Francisco barria Barria,168980,2025-05-04
-RUKAPILLAN,958465988,Pay in Person,263,139980,Alisha.debouzy@gmail.com,16:00:00,2025-05-03,13:56:00,HotBoat Trip 2 people (69.990 pp),0,56958465988,139980,2h,Paid,Alisha Debouzy,139980,2025-05-11
-RUKAPILLAN,981404616,WooCommerce,265,209960,Sandoval_roberto@hotmail.com,10:00:00,2025-05-06,20:58:00,HotBoat Trip 4 people (44.990 pp),0,56981404616,209960,2h,Paid,Roberto Sandoval,209960,2025-05-11
-RUKAPILLAN,92138945,WooCommerce,253,139980,mmontoyal@me.com,12:00:00,2025-04-25,00:01:00,HotBoat Trip 2 people (69.990 pp),69990,56992138945,69990,2h,Paid (deposit),Michelle Montoya,139980,2025-05-16
-RUKAPILLAN,56945305519,WooCommerce,260,139980,kevin.rojasc.2310@gmail.com,15:00:00,2025-05-01,08:47:00,HotBoat Trip 2 people (69.990 pp),0,56945305519,139980,2h,Paid,Kevin Rojas,139980,2025-05-23
+ID,Phone Number,STATUS,DUE AMOUNT,Customer Email,Service,DURATION,fecha_creacion_reserva,hora_creacion_reserva,Customer,Phone Number_2,METHOD,fecha_trip,TOTAL AMOUNT,PAID AMOUNT,hora_trip,STAFF,PAYMENT
+56,990184108,Pending,55992,camirivasc137@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2024-08-30,19:36:00,Camila Rivas,56990184108,WooCommerce,2024-08-31,55992,0,13:00:00,RUKAPILLAN,55992
+67,56956164078,Paid,0,Gmoscoso.crt@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2024-09-09,00:18:00,Gabriela Moscoso,56956164078,WooCommerce,2024-09-17,69990,69990,11:00:00,RUKAPILLAN,69990
+69,56986989840,Paid,0,barbara.zurita1527@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2024-09-16,17:42:00,Barbara Zurita,56986989840,Pay in Person,2024-09-18,59990,59990,11:00:00,RUKAPILLAN,59990
+64,995126032,Paid,0,mb.orellana@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2024-09-06,01:41:00,Belén Orellana orellana,56995126032,WooCommerce,2024-09-25,69990,69990,13:00:00,RUKAPILLAN,69990
+63,56947384670,Paid,0,ramosesparzapaulina@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2024-09-04,16:03:00,Paulina Ramos,56947384670,WooCommerce,2024-09-29,69990,69990,13:00:00,RUKAPILLAN,69990
+91,56965747945,Paid,0,abrahamaximiliano@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-10,18:12:00,Abraham Cañete,56965747945,WooCommerce,2025-01-11,179960,179960,19:00:00,RUKAPILLAN,179960
+93,56991002713,Paid,0,felnawrath@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-01-11,16:59:00,Felipe Nawrath,56991002713,WooCommerce,2025-01-12,164970,164970,19:00:00,RUKAPILLAN,164970
+94,56990862876,Paid,0,loreto.ahumadacamilo@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-01-12,16:34:00,Loreto Ahumada Camilo,56990862876,WooCommerce,2025-01-14,197940,197940,19:00:00,RUKAPILLAN,197940
+97,56998910613,Paid,0,adutilh@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-14,09:52:00,Andrés Dutilh,56998910613,WooCommerce,2025-01-15,179960,179960,19:00:00,RUKAPILLAN,179960
+100,56991002713,Paid,0,felnawrath@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-01-16,22:40:00,Felipe Nawrath,56991002713,Pay in Person,2025-01-18,194950,194950,19:00:00,RUKAPILLAN,194950
+79,56988193264,Paid,0,daiggu@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-01-08,16:52:00,David Gutierrez,56988193264,WooCommerce,2025-01-19,139980,139980,18:00:00,RUKAPILLAN,139980
+104,56993443176,Paid,0,franciscaserenocastro@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-01-19,16:42:00,Francisca Sereño,56993443176,WooCommerce,2025-01-20,194950,194950,19:00:00,RUKAPILLAN,194950
+109,56984997641,Paid,0,sepulvedagallardoc@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-01-22,13:53:00,Cristian Sepúlveda,56984997641,WooCommerce,2025-01-23,139980,139980,09:00:00,RUKAPILLAN,139980
+112,56999302975,Paid,0,jenny.anabalonc@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-22,20:03:00,Jenny Anabalon,56999302975,WooCommerce,2025-01-24,179960,179960,19:00:00,RUKAPILLAN,179960
+116,436505154363,Paid,0,kleinheinz2000@yahoo.de,HotBoat Trip 2 people (69.990 pp),2h,2025-01-24,13:33:00,Maria Kleinheinz,436505154363,WooCommerce,2025-01-25,139980,139980,19:00:00,RUKAPILLAN,139980
+115,56982191929,Paid,0,evelincofre@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-23,21:31:00,Evelin Wiemberg,56982191929,WooCommerce,2025-01-25,179960,179960,09:00:00,RUKAPILLAN,179960
+108,56991249612,Paid,0,caveschbelleza@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-01-21,05:04:00,Catherine Schürch Vega,56991249612,WooCommerce,2025-01-26,164970,164970,19:00:00,RUKAPILLAN,164970
+119,964699590,Paid,0,fulvia.pimienta@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-01-27,00:00:00,Fulvia Pimienta,56964699590,WooCommerce,2025-01-28,194950,194950,19:00:00,RUKAPILLAN,194950
+102,995039809,Paid,0,dayannavarretep@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-18,19:05:00,Dayanna Navarrete,56995039809,WooCommerce,2025-01-30,179960,179960,19:00:00,RUKAPILLAN,179960
+120,949108584,Paid,0,kabezon.kevin@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-01-27,20:23:00,kevin soto,56949108584,Pay in Person,2025-01-31,179960,179960,19:00:00,RUKAPILLAN,179960
+123,56974696667,Not paid,197940,Jaileinschomber99@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-01,17:51:00,jailein schomber,56974696667,Pay in Person,2025-02-01,197940,0,19:00:00,RUKAPILLAN,197940
+124,56988390647,Pending,139980,Fro.ventas@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-01,22:40:00,Francisco Riquelme,56988390647,WooCommerce,2025-02-02,139980,0,19:00:00,RUKAPILLAN,139980
+140,56972996057,Paid,0,katherinesilvacastro@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-03,19:32:00,Katherine Silva,56972996057,WooCommerce,2025-02-04,197940,197940,14:00:00,RUKAPILLAN,197940
+136,950015294,Paid,0,letty.amaza@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-03,14:38:00,leticia amaza,56950015294,Pay in Person,2025-02-04,197940,197940,18:00:00,RUKAPILLAN,197940
+92,56977690324,Paid,0,barbara.zeiser@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-01-10,18:55:00,Barbara Zeiser,56977690324,WooCommerce,2025-02-05,194950,194950,19:00:00,RUKAPILLAN,194950
+141,56962486328,Paid (deposit),89980,victorgonzalezkine@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-03,21:35:00,Victor Gonzalez,56962486328,WooCommerce,2025-02-05,179960,89980,13:00:00,RUKAPILLAN,179960
+137,994319456,Pending,197940,pao.ingerborg@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-03,18:32:00,Paola Alvarez,56994319456,Pay in Person,2025-02-06,197940,0,18:00:00,RUKAPILLAN,197940
+143,992832798,Pending,139980,gus1988.gs10@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-07,14:11:00,Gustavo Salazar flores,56992832798,WooCommerce,2025-02-09,139980,0,18:00:00,RUKAPILLAN,139980
+150,56987090666,Not paid,194950,mjosefa.sanchez7@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-10,20:58:00,Josefa Sanchez,56987090666,Pay in Person,2025-02-10,194950,0,18:00:00,RUKAPILLAN,194950
+147,56983369065,Paid (deposit),98970,tesandov@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-09,21:03:00,Tamara Sandoval Sanchez,56983369065,WooCommerce,2025-02-10,197940,98970,13:00:00,RUKAPILLAN,197940
+95,56996444406,Paid,0,carola_arteche@yahoo.com,HotBoat Trip 5 people (38.990 pp),2h,2025-01-12,20:33:00,Carola Arteche Fischer,56996444406,WooCommerce,2025-02-11,194950,194950,19:00:00,RUKAPILLAN,194950
+106,56974530460,Paid (deposit),69990,carmach@live.com,HotBoat Trip 2 people (69.990 pp),2h,2025-01-20,18:31:00,Alejandro Carmach,56974530460,WooCommerce,2025-02-13,139980,69990,19:00:00,RUKAPILLAN,139980
+105,56974530460,Paid,0,carmach@live.com,Extras,1h,2025-01-20,18:31:00,Alejandro Carmach,56974530460,WooCommerce,2025-02-13,15000,15000,17:00:00,Newen,15000
+135,977577307,Not paid,179960,ab@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-02,23:11:00,Diego Sila,56977577307,Pay in Person,2025-02-13,179960,0,14:00:00,RUKAPILLAN,179960
+149,56985229291,Paid (deposit),97475,Cbquinones@udalba.cl,HotBoat Trip 5 people (38.990 pp),2h,2025-02-10,13:34:00,constanza quiñones,56985229291,WooCommerce,2025-02-14,194950,97475,10:00:00,RUKAPILLAN,194950
+151,981680752,Pending,194950,Brcisteroy@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-11,15:17:00,Braulio Cisternas,56981680752,WooCommerce,2025-02-14,194950,0,19:00:00,RUKAPILLAN,194950
+142,56998443096,Not paid,197940,vivirc@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-06,21:57:00,viviana ramirez,56998443096,Pay in Person,2025-02-14,197940,0,14:00:00,RUKAPILLAN,197940
+162,56965433556,Paid,0,victorproboste@hotmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-13,14:31:00,Carolina Astudillo,56965433556,WooCommerce,2025-02-15,179960,179960,18:00:00,RUKAPILLAN,179960
+165,56993268957,Paid,0,franjorqueraperiodista@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-14,20:28:00,Francisca Jorquera,56993268957,Pay in Person,2025-02-15,0,0,10:00:00,RUKAPILLAN,0
+170,56982041645,Paid (deposit),62991,ivaniaalara@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-15,21:36:00,ivania lara oñate,56982041645,WooCommerce,2025-02-16,125982,62991,14:00:00,RUKAPILLAN,125982
+166,56990435780,Pending,179960,Crisuber15@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-15,17:00:00,Christopher Veas,56990435780,WooCommerce,2025-02-16,179960,0,19:00:00,RUKAPILLAN,179960
+177,56988932249,Paid (deposit),89980,solsssandoval@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-16,15:49:00,Soledad Sandoval,56988932249,WooCommerce,2025-02-17,179960,89980,19:00:00,RUKAPILLAN,179960
+179,56951541106,Pending,164970,matiasleonpena@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-02-17,00:27:00,Matias Peña,56951541106,WooCommerce,2025-02-17,164970,0,14:00:00,RUKAPILLAN,164970
+174,950021950,Pending,169980,Victor.valenzuelamaturanaa@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-16,04:13:00,Victor Valenzuela,56950021950,WooCommerce,2025-02-17,169980,0,09:00:00,RUKAPILLAN,169980
+181,949906203,Paid (deposit),97475,fernandaantinao.ggh@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-17,02:02:00,Sebastian Soto,56949906203,WooCommerce,2025-02-18,194950,97475,19:00:00,RUKAPILLAN,194950
+171,921644620,Not paid,194950,belenyessenia69@Gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-16,00:27:00,daisy obreque,56921644620,Pay in Person,2025-02-19,194950,0,14:00:00,RUKAPILLAN,194950
+183,981887303,Paid (deposit),62991,willykrusea@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-18,01:58:00,Willy Kruse,56981887303,WooCommerce,2025-02-19,125982,62991,10:00:00,RUKAPILLAN,125982
+187,56971371707,Paid,0,javieranadiabarria@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-02-19,01:33:00,Javiera Nadia Barría Retamal,56971371707,WooCommerce,2025-02-19,161964,161964,18:00:00,RUKAPILLAN,161964
+176,56984288994,Paid,0,jesupellegrinim@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-16,13:37:00,Maria Jesus Pellegrini,56984288994,WooCommerce,2025-02-20,194950,194950,19:00:00,RUKAPILLAN,194950
+185,56957631827,Paid,0,valereyesmunoz2007@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-02-18,15:54:00,Valentina Reyes,56957631827,WooCommerce,2025-02-20,148473,148473,13:00:00,RUKAPILLAN,148473
+186,56991254282,Paid,0,Maca.sanchez@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-19,01:27:00,Macarena Sanchez Valdes,56991254282,Pay in Person,2025-02-21,0,0,19:00:00,RUKAPILLAN,0
+196,972057725,Not paid,139980,marceloergas@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-22,18:05:00,marcelo ergas,56972057725,Pay in Person,2025-02-22,139980,0,19:00:00,RUKAPILLAN,139980
+192,56940168306,Paid,0,Nmarin@devcoderx.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-20,14:01:00,Nathalie Marín,56940168306,WooCommerce,2025-02-22,125982,125982,10:00:00,RUKAPILLAN,125982
+189,932003908,Paid (deposit),76491,bcalvo98@hotmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-19,22:01:00,Benjamin Calvo,56932003908,WooCommerce,2025-02-22,152982,76491,13:00:00,RUKAPILLAN,152982
+191,954672214,Paid,0,nicole.galdames13@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-20,03:08:00,Nicole Galdames,56954672214,WooCommerce,2025-02-23,139980,139980,18:00:00,RUKAPILLAN,139980
+194,56989513187,Paid (deposit),97475,Fmmir09@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-21,23:19:00,Francisca Manzano Miranda,56989513187,WooCommerce,2025-02-23,194950,97475,14:00:00,RUKAPILLAN,194950
+188,56944013136,Pending,194950,naboralejandroortizibarr@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-19,19:41:00,Nabor Alejandro Ortiz Ibarra,56944013136,WooCommerce,2025-02-23,194950,0,09:00:00,RUKAPILLAN,194950
+195,56930551478,Paid (deposit),89073,camili.fica@gmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-02-22,03:55:00,Camila Victoria Fica Cueto,56930551478,WooCommerce,2025-02-24,178146,89073,18:00:00,RUKAPILLAN,178146
+197,981898085,Paid,0,florenciamunozpa@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-24,01:24:00,Florencia Muñoz,56981898085,Pay in Person,2025-02-25,0,0,14:00:00,RUKAPILLAN,0
+198,950617290,Not paid,194950,Michaelg8720@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-25,19:17:00,Michael Gonzalez,56950617290,Pay in Person,2025-02-25,194950,0,18:00:00,RUKAPILLAN,194950
+203,56932311272,Paid,0,cestibill@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-02-27,00:55:00,Cristobal Estibill,56932311272,WooCommerce,2025-02-27,139980,139980,18:00:00,RUKAPILLAN,139980
+200,950004755,Not paid,194950,Lalitosoto71@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-26,02:47:00,Eduardo Soto,56950004755,Pay in Person,2025-02-28,194950,0,18:00:00,RUKAPILLAN,194950
+205,952188691,Paid,0,melissachile87@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-02-27,19:45:00,Melissa Diaz,56952188691,WooCommerce,2025-02-28,219950,219950,14:00:00,RUKAPILLAN,219950
+207,962263102,Paid,0,nicolas.espinoza.carrasco@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-03-05,18:23:00,Nicolas Espinoza,56962263102,Pay in Person,2025-03-05,139980,139980,18:00:00,RUKAPILLAN,139980
+210,56964223152,Paid,0,karinmaragano@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-03-08,04:27:00,Karin Maragaño benner,56964223152,WooCommerce,2025-03-08,143968,143968,18:00:00,RUKAPILLAN,143968
+209,56992286875,Paid,0,jaimebueso@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-03-07,23:55:00,Jaime Buedo,56992286875,WooCommerce,2025-03-09,143968,143968,13:00:00,RUKAPILLAN,143968
+213,56940228701,Paid,0,Nestoritalocornejo@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-03-11,21:10:00,Nestor Cornejo,56940228701,WooCommerce,2025-03-12,139980,139980,18:00:00,RUKAPILLAN,139980
+212,56973702215,Paid,0,rodrigogundert@hotmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-03-10,17:43:00,Rodrigo Gundert,56973702215,WooCommerce,2025-03-14,159980,159980,18:00:00,RUKAPILLAN,159980
+216,56981355469,Paid,0,vnavarrojara97@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-03-18,14:07:00,valeria navarro,56981355469,Pay in Person,2025-03-20,139980,139980,18:00:00,RUKAPILLAN,139980
+214,12984313552,Paid,0,noelizabeth.fernandez@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-03-18,00:00:00,Noelia Fernandez,12984313552,WooCommerce,2025-03-20,164970,164970,13:00:00,RUKAPILLAN,164970
+224,56969654754,Paid,0,matssha.mv@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-06,03:11:00,Fernando Araos,56969654754,WooCommerce,2025-04-09,159980,159980,18:00:00,RUKAPILLAN,159980
+225,56998274713,Paid,0,Greghezza@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-04-06,21:14:00,Giannina Reghezza,56998274713,WooCommerce,2025-04-11,179960,179960,18:00:00,RUKAPILLAN,179960
+240,56983089227,Paid,0,gabriella21021983@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-04-09,21:07:00,Gabriela Ortega Valdes,56983089227,WooCommerce,2025-04-12,191970,191970,16:00:00,RUKAPILLAN,191970
+244,56966876370,Paid,0,conita_castillo@hotmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-12,21:12:00,Constanza Castillo,56966876370,WooCommerce,2025-04-14,125982,125982,16:00:00,RUKAPILLAN,125982
+247,56988992341,Paid,0,Jacqueline.leon@usach.cl,HotBoat Trip 2 people (69.990 pp),2h,2025-04-14,23:38:00,Jacqueline Leon,56988992341,WooCommerce,2025-04-15,125982,125982,17:00:00,RUKAPILLAN,125982
+234,56993390631,Paid,0,nathaliecifuentess.90@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-08,14:41:00,Nathalie Cifuentes,56993390631,WooCommerce,2025-04-17,97986,97986,10:00:00,RUKAPILLAN,97986
+245,56983154002,Paid,0,Karenquinterosoyarce@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-04-13,20:29:00,Karen Quinteros,56983154002,WooCommerce,2025-04-17,148473,148473,17:00:00,RUKAPILLAN,148473
+221,992292702,Paid,0,javieraignaciamb0217@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-03-20,20:15:00,javiera muñoz,56992292702,WooCommerce,2025-04-18,159980,159980,18:00:00,RUKAPILLAN,159980
+241,56957790454,Paid,0,catabarrastrobel@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-11,18:40:00,catalina barra,56957790454,WooCommerce,2025-04-18,125982,125982,14:00:00,RUKAPILLAN,125982
+243,56998622210,Paid,0,carlosdgonzalezbustos@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-12,14:19:00,Carlos Gonzalez Bustos,56998622210,WooCommerce,2025-04-19,159980,159980,16:00:00,RUKAPILLAN,159980
+246,56976716471,Paid,0,g.l.oyarce@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-04-14,14:00:00,Giannina Labbe Oyarce,56976716471,WooCommerce,2025-04-19,194970,194970,12:00:00,RUKAPILLAN,194970
+250,56958290613,Paid,0,Monserrat.masferrer9@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-04-21,14:05:00,Monserrat Masferrer,56958290613,WooCommerce,2025-04-21,164970,164970,13:00:00,RUKAPILLAN,164970
+251,954817242,Paid,0,fernandavaldiviaflores@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-22,23:00:00,tania fernanda valdivia flores,56954817242,Pay in Person,2025-04-21,139980,139980,17:00:00,RUKAPILLAN,139980
+255,994021302,Paid,0,Victoria.munozm@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-28,02:05:00,Victoria Muñoz,56994021302,Pay in Person,2025-05-01,179980,179980,12:00:00,RUKAPILLAN,179980
+262,966782568,Paid,0,koke1989_@hotmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-05-02,22:38:00,jorge romagnoli,56966782568,Pay in Person,2025-05-02,194950,194950,11:00:00,RUKAPILLAN,194950
+259,56968434887,Paid,0,gdinamarca@dnmk.cl,HotBoat Trip 4 people (44.990 pp),2h,2025-05-01,00:45:00,Gonzalo Dinamarca,56968434887,WooCommerce,2025-05-02,197964,197964,15:00:00,RUKAPILLAN,197964
+261,989050882,Paid,0,romaturana@hotmail.com,HotBoat Trip 6 people (32.990 pp),2h,2025-05-02,20:33:00,rodrigo maturana,56989050882,Pay in Person,2025-05-04,138558,138558,12:00:00,RUKAPILLAN,138558
+264,954550292,Paid,0,francisco.barriaparra@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-03,15:48:00,Francisco barria Barria,56954550292,WooCommerce,2025-05-04,168980,168980,16:00:00,RUKAPILLAN,168980
+263,958465988,Paid,0,Alisha.debouzy@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-03,13:56:00,Alisha Debouzy,56958465988,Pay in Person,2025-05-11,139980,139980,16:00:00,RUKAPILLAN,139980
+265,981404616,Paid,0,Sandoval_roberto@hotmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-05-06,20:58:00,Roberto Sandoval,56981404616,WooCommerce,2025-05-11,209960,209960,10:00:00,RUKAPILLAN,209960
+267,981361449,Paid,0,daniloantoniot@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-05-14,01:16:00,Danilo Tapia Tapia,56981361449,WooCommerce,2025-05-14,194950,194950,15:00:00,RUKAPILLAN,194950
+253,92138945,Paid (deposit),69990,mmontoyal@me.com,HotBoat Trip 2 people (69.990 pp),2h,2025-04-25,00:01:00,Michelle Montoya,56992138945,WooCommerce,2025-05-16,139980,69990,12:00:00,RUKAPILLAN,139980
+269,964735500,Paid,0,ervinbarria.eb@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-17,18:33:00,ervin Barria,56964735500,WooCommerce,2025-05-18,125982,125982,16:00:00,RUKAPILLAN,125982
+260,56945305519,Paid,0,kevin.rojasc.2310@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-01,08:47:00,Kevin Rojas,56945305519,WooCommerce,2025-05-23,139980,139980,15:00:00,RUKAPILLAN,139980
+268,998671000,Paid,0,natalytatiana.burgos@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-14,19:52:00,natalia burgos,56998671000,Pay in Person,2025-05-23,119000,119000,12:00:00,RUKAPILLAN,119000
+272,930387506,Paid,0,valeriatorres1991vt@gmail.com,HotBoat Trip 3 people (54.990 pp),2h,2025-05-24,14:11:00,valeria torres olivares,56930387506,Pay in Person,2025-05-24,164970,164970,14:00:00,RUKAPILLAN,164970
+273,56986350901,Paid,0,gloriaxupuqi@hotmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-26,20:42:00,gloria XU,56986350901,WooCommerce,2025-05-31,139980,139980,12:00:00,RUKAPILLAN,139980
+276,56981649845,Paid,0,cristhopfer.glausser180@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-06-04,19:18:00,Cristhopfer Glausser,56981649845,Pay in Person,2025-06-05,125982,125982,15:00:00,RUKAPILLAN,125982
+270,56950907218,Paid,0,Venegasu1@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-05-20,11:45:00,Ursula Venegas,56950907218,WooCommerce,2025-06-13,139980,139980,14:00:00,RUKAPILLAN,139980
+278,994705066,Paid,0,erickfeliperez@gmail.com,HotBoat Trip 4 people (44.990 pp),2h,2025-06-16,15:47:00,erick perez,56994705066,Pay in Person,2025-06-20,179960,179960,14:00:00,RUKAPILLAN,179960
+284,957582327,Paid,0,marcemartinez01@gmail.com,HotBoat Trip 5 people (38.990 pp),2h,2025-06-21,06:11:00,marcela martinez,56957582327,Pay in Person,2025-06-21,194950,194950,15:00:00,RUKAPILLAN,194950
+280,942142529,Paid (deposit),62991,yeseniaignaciamc@gmail.com,HotBoat Trip 2 people (69.990 pp),2h,2025-06-18,20:29:00,Yesenia Muñoz,56942142529,WooCommerce,2025-07-10,125982,62991,12:00:00,RUKAPILLAN,125982
