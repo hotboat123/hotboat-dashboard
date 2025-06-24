@@ -93,6 +93,7 @@ def cargar_datos():
                 lambda x: 'Video explicativo' if 'explicando servicio' in str(x).lower() else
                          'Video parejas amor' if 'parejas amor' in str(x).lower() else
                          'Video parejas dcto' if 'parejas dcto' in str(x).lower() or 'pareja dcto' in str(x).lower() else
+                         'Video Lluvia' if 'lluvia' in str(x).lower() else
                          'Otro'
             )
         
