@@ -16,7 +16,7 @@ def cargar_datos():
     """Carga los archivos CSV de marketing específicos: (5) CON región y (6) SIN región."""
     try:
         # Archivo CON región (5) - para gráfico de regiones
-        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5).csv"
+        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_con_region.csv"
         print(f"🔄 Cargando archivo CON región (5): {archivo_con_region}")
         
         if not os.path.exists(archivo_con_region):
@@ -27,7 +27,7 @@ def cargar_datos():
         print(f"✅ Archivo CON región (5) cargado. Dimensiones: {df_con_region.shape}")
         
         # Archivo SIN región (6) - para demás gráficos  
-        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6).csv"
+        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_sin_region.csv"
         print(f"🔄 Cargando archivo SIN región (6): {archivo_sin_region}")
         
         if not os.path.exists(archivo_sin_region):
@@ -93,7 +93,8 @@ def cargar_datos():
                 lambda x: 'Video explicativo' if 'explicando servicio' in str(x).lower() else
                          'Video parejas amor' if 'parejas amor' in str(x).lower() else
                          'Video parejas dcto' if 'parejas dcto' in str(x).lower() or 'pareja dcto' in str(x).lower() else
-                         'Otro'
+                         'Video Lluvia' if 'lluvia' in str(x).lower() else
+                         str(x)  # Mantener el nombre original si no coincide con ninguna categoría
             )
         
         print("🎉 Ambos archivos procesados exitosamente con nuevos inputs")

@@ -196,8 +196,8 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 ## Tarea Completada: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
 
 **Task:** Actualizar dashboard de marketing para usar nuevos archivos de input:
-- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5) - CON región
-- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6) - SIN región
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_con_region - CON región
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_sin_region - SIN región
 
 **Progreso:**
 [X] Revisar archivos de input disponibles (5) y (6)
@@ -252,8 +252,8 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 ## Tarea Completada: Dashboard Marketing con Inputs Específicos ✅
 
 **Task:** Ejecutar dashboard de marketing con inputs específicos:
-- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5)
-- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (6)
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_con_region
+- Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_sin_region
 
 **Progreso:**
 [X] Revisar estructura del dashboard de marketing
