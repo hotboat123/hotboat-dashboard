@@ -158,6 +158,17 @@ if df_con_region is not None and df_sin_region is not None:
         }),
         
         html.Div([
+            html.H3('Evolución de Conversiones por Público y Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='grafico-evolucion-conversiones')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        html.Div([
             html.H3('Gasto por Región', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-regiones')
         ], style={
@@ -225,6 +236,7 @@ if df_con_region is not None and df_sin_region is not None:
     @callback(
         [Output('metricas-principales', 'children'),
          Output('grafico-evolucion', 'figure'),
+         Output('grafico-evolucion-conversiones', 'figure'),
          Output('grafico-regiones', 'figure'),
          Output('grafico-publicos', 'figure'),
          Output('grafico-tipos-anuncios', 'figure'),
@@ -252,7 +264,7 @@ if df_con_region is not None and df_sin_region is not None:
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']}
                 )
-                return (html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
+                return (html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
             
             # Calcular métricas principales (usar archivo SIN región)
             total_gasto = df_filtrado_sin_region['Importe gastado (CLP)'].sum()
@@ -375,7 +387,97 @@ if df_con_region is not None and df_sin_region is not None:
                 hovermode='x unified'
             )
             
-            # 3. Gráfico por región con tema oscuro
+            # 3. Gráfico de evolución de conversiones por público y tipo de anuncio
+            if periodo == 'D':
+                df_conv_publico = df_filtrado_sin_region.groupby(['Día', 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_conv_tipo = df_filtrado_sin_region.groupby(['Día', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                titulo_conv = 'Evolución Diaria de Conversiones'
+            elif periodo == 'W':
+                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
+                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv = 'Evolución Semanal de Conversiones'
+            else:
+                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
+                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv = 'Evolución Mensual de Conversiones'
+            
+            fig_evolucion_conv = go.Figure()
+            
+            # Agregar líneas por público
+            for publico in df_conv_publico['Público'].unique():
+                df_publico = df_conv_publico[df_conv_publico['Público'] == publico]
+                fig_evolucion_conv.add_trace(go.Scatter(
+                    x=df_publico['Día'],
+                    y=df_publico['Artículos agregados al carrito'],
+                    mode='lines+markers',
+                    name=f'Público: {publico}',
+                    line=dict(width=2),
+                    marker=dict(size=6),
+                    hovertemplate=f'<b>{publico}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
+                ))
+            
+            # Agregar líneas por tipo de anuncio
+            for tipo in df_conv_tipo['Tipo_Anuncio'].unique():
+                df_tipo = df_conv_tipo[df_conv_tipo['Tipo_Anuncio'] == tipo]
+                fig_evolucion_conv.add_trace(go.Scatter(
+                    x=df_tipo['Día'],
+                    y=df_tipo['Artículos agregados al carrito'],
+                    mode='lines+markers',
+                    name=f'Tipo: {tipo}',
+                    line=dict(width=2, dash='dash'),
+                    marker=dict(size=6, symbol='diamond'),
+                    hovertemplate=f'<b>{tipo}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
+                ))
+            
+            fig_evolucion_conv.update_layout(
+                title=titulo_conv,
+                xaxis_title='Período',
+                yaxis_title='Conversiones',
+                height=500,
+                paper_bgcolor=COLORS['card_bg'],
+                plot_bgcolor=COLORS['card_bg'],
+                font={'color': COLORS['text']},
+                xaxis=dict(
+                    showgrid=True,
+                    gridcolor=COLORS['grid'],
+                    tickfont={'color': COLORS['text']},
+                    title_font={'color': COLORS['text']}
+                ),
+                yaxis=dict(
+                    title='Conversiones',
+                    titlefont=dict(color=COLORS['text']),
+                    tickfont=dict(color=COLORS['text']),
+                    showgrid=True,
+                    gridcolor=COLORS['grid']
+                ),
+                legend=dict(
+                    font=dict(color=COLORS['text']),
+                    orientation='h',
+                    yanchor='bottom',
+                    y=1.02,
+                    xanchor='right',
+                    x=1
+                ),
+                hovermode='x unified'
+            )
+            
+            # 4. Gráfico por región con tema oscuro
             if df_filtrado_con_region.empty:
                 fig_regiones = go.Figure()
                 fig_regiones.update_layout(
@@ -423,7 +525,7 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 )
             
-            # 4. Gráfico por públicos con tema oscuro
+            # 5. Gráfico por públicos con tema oscuro
             df_publicos = df_filtrado_sin_region.groupby('Público').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
@@ -461,7 +563,7 @@ if df_con_region is not None and df_sin_region is not None:
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
-            # 5. Gráfico por tipos de anuncios con tema oscuro
+            # 6. Gráfico por tipos de anuncios con tema oscuro
             df_tipos = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
@@ -499,7 +601,7 @@ if df_con_region is not None and df_sin_region is not None:
             # Rotar etiquetas del eje x para tipos de anuncios
             fig_tipos.update_xaxes(tickangle=45)
             
-            # 6. Gráfico de Hook Rates con tema oscuro
+            # 7. Gráfico de Hook Rates con tema oscuro
             df_hooks = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Hook_Rate_3s': 'mean',
                 'Hook_Rate_25': 'mean',
@@ -614,7 +716,7 @@ if df_con_region is not None and df_sin_region is not None:
                 margin=dict(l=200)
             )
             
-            # 7. Generar insights con estilo oscuro
+            # 8. Generar insights con estilo oscuro
             dias_analizados = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days + 1
             gasto_promedio_diario = total_gasto / dias_analizados if dias_analizados > 0 else 0
             
@@ -648,7 +750,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             insights_contenido = html.Div(insights)
             
-            return metricas, fig_evolucion, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
+            return metricas, fig_evolucion, fig_evolucion_conv, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
             
         except Exception as e:
             print(f"Error en callback: {str(e)}")
@@ -660,7 +762,7 @@ if df_con_region is not None and df_sin_region is not None:
                 plot_bgcolor=COLORS['card_bg'],
                 font={'color': COLORS['text']}
             )
-            return (html.Div("Error al cargar datos", style={'color': COLORS['text']}), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "Error en insights")
+            return (html.Div("Error al cargar datos", style={'color': COLORS['text']}), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "Error en insights")
 
 else:
     app.layout = html.Div([
