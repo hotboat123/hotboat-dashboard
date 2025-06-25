@@ -11,6 +11,20 @@ import numpy as np
 # Importar componentes comunes de navegación
 from funciones.componentes_dashboard import crear_header, crear_filtros, crear_selector_periodo, COLORS, CARD_STYLE
 
+# Paleta de colores diversa para combinaciones público-tipo de anuncio
+PALETA_COLORES = [
+    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',  # Azul, Naranja, Verde, Rojo, Púrpura
+    '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',  # Marrón, Rosa, Gris, Verde lima, Cian
+    '#a6cee3', '#fb9a99', '#fdbf6f', '#cab2d6', '#ff9896',  # Azul claro, Rosa claro, Naranja claro, Púrpura claro, Rosa claro 2
+    '#f0027f', '#386cb0', '#fdc086', '#beaed4', '#7fc97f',  # Magenta, Azul oscuro, Naranja oscuro, Púrpura oscuro, Verde oscuro
+    '#bf5b17', '#666666', '#fb8072', '#80b1d3', '#fdb462',  # Marrón oscuro, Gris oscuro, Rojo claro, Azul medio, Naranja medio
+    '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd', '#ccebc5'   # Verde lima claro, Rosa muy claro, Gris claro, Púrpura medio, Verde muy claro
+]
+
+def obtener_color_combinacion(indice):
+    """Asigna un color único a cada combinación público-tipo de anuncio"""
+    return PALETA_COLORES[indice % len(PALETA_COLORES)]
+
 # Función para cargar datos con más procesamiento
 def cargar_datos():
     """Carga los archivos CSV de marketing específicos: (5) CON región y (6) SIN región."""

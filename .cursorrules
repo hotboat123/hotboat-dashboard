@@ -41,7 +41,7 @@ screenshot_path = take_screenshot_sync('https://example.com', 'screenshot.png')
 
 response = query_llm(
     "What is the background color and title of this webpage?",
-    provider="openai",  # or "anthropic"
+    provider="openai", # or "anthropic"
     image_path=screenshot_path
 )
 print(response)
@@ -95,6 +95,8 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Read the file before you try to edit it.
 - Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
 - **NUEVO**: Para ejecutar los dashboards, usar siempre `ejecutar_todos_dashboards.py` en lugar de ejecutar dashboards individuales.
+- **NUEVO**: Siempre crear ramas para preservar trabajo importante, especialmente scripts de captura y funcionalidades complejas.
+- **NUEVO**: Cuando hagas actualizaciones del código de dashboards, NO ejecutes un nuevo proceso en background. En su lugar, informa al usuario que debe refrescar la página del dashboard existente o reiniciar el proceso manualmente. Esto evita tener múltiples procesos corriendo y problemas de puertos ocupados.
 
 ## Cursor learned
 
@@ -103,8 +105,124 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
 - **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
+- **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
 
 # Scratchpad
+
+## Nueva Tarea: Filtros de Métricas en Gráficos de Evolución ✅
+
+**Task:** Agregar filtros de métricas en los gráficos de evolución del dashboard detallado (8056):
+- Permitir elegir entre conversiones y gasto para cada eje Y
+- Permitir elegir entre CPC y costo por conversión para cada eje Y
+- Mantener la funcionalidad existente de filtros por público y tipo de anuncio
+
+**Progreso:**
+[X] Agregar filtros de métricas en el layout
+[X] Actualizar callback para incluir nuevos inputs
+[X] Implementar lógica dinámica para gráfico de conversiones
+[X] Implementar lógica dinámica para gráfico de costos
+[X] Actualizar títulos de ejes dinámicamente
+[X] Actualizar colores según métricas seleccionadas
+
+**Plan:**
+1. ✅ Agregar dropdowns de filtros de métricas en el layout
+2. ✅ Actualizar callback con nuevos parámetros
+3. ✅ Implementar lógica condicional para métricas
+4. ✅ Actualizar títulos y colores dinámicamente
+5. ✅ Probar funcionalidad
+
+**Funcionalidades Implementadas:**
+- ✅ **Filtros de Métricas Conversiones**: Eje Y izquierdo y derecho pueden mostrar conversiones o gasto
+- ✅ **Filtros de Métricas Costos**: Eje Y izquierdo y derecho pueden mostrar CPC o costo por conversión
+- ✅ **Títulos Dinámicos**: Los títulos de los ejes se actualizan según la métrica seleccionada
+- ✅ **Colores Dinámicos**: Los colores de las líneas y ejes cambian según la métrica
+- ✅ **Hover Templates**: Los tooltips se adaptan a la métrica mostrada
+- ✅ **Compatibilidad**: Mantiene todos los filtros existentes (público, tipo de anuncio)
+
+**Configuración de Filtros:**
+- ✅ **Gráfico Conversiones**: 
+  - Eje Y Izquierdo: Ninguno, Conversiones o Gasto
+  - Eje Y Derecho: Ninguno, Conversiones o Gasto
+- ✅ **Gráfico Costos**:
+  - Eje Y Izquierdo: Ninguno, CPC o Costo por Conversión
+  - Eje Y Derecho: Ninguno, CPC o Costo por Conversión
+
+**Colores Implementados:**
+- ✅ **Conversiones**: Verde (COLORS['income'])
+- ✅ **Gasto**: Rojo (COLORS['expense'])
+- ✅ **CPC**: Púrpura (#9b59b6)
+- ✅ **Costo por Conversión**: Naranja (#e67e22)
+
+**Funcionalidades Adicionales:**
+- ✅ **Opción "Ninguno"**: Permite ocultar completamente un eje Y
+- ✅ **Layout Dinámico**: Los ejes se configuran solo si están activos
+- ✅ **Flexibilidad Total**: Puedes mostrar 0, 1 o 2 métricas por gráfico
+
+**Estado:** ✅ COMPLETADO - Filtros de métricas funcionando correctamente
+
+---
+
+## Nueva Tarea: Recuperar Trabajo Completo - Scripts de Captura ✅
+
+**Task:** Recuperar todo el trabajo de scripts de captura de dashboards que se había perdido:
+- Recuperar desde commit 777a560 con integración de cuenta corriente
+- Recrear todos los scripts de captura de screenshots
+- Preservar trabajo de integración automática
+
+**Progreso:**
+[X] Identificar commit con trabajo perdido (777a560)
+[X] Crear rama recuperar-trabajo-completo desde ese commit
+[X] Recrear script principal capturar_dashboards.py
+[X] Recrear capturar_dashboards_simple.py
+[X] Recrear capturar_dashboards_con_filtros.py
+[X] Recrear capturar_dashboards_automatico.py
+[X] Recrear capturar_dashboards_basico.py
+[X] Commit y push de todo el trabajo recuperado
+[X] Actualizar documentación
+
+**Plan:**
+1. ✅ Recuperar desde commit 777a560
+2. ✅ Crear rama para preservar trabajo
+3. ✅ Recrear todos los scripts de captura
+4. ✅ Verificar funcionalidad
+5. ✅ Commit y push
+6. ✅ Documentar recuperación
+
+**Scripts Recreados:**
+- ✅ `capturar_dashboards.py`: Script principal con menú interactivo
+- ✅ `capturar_dashboards_simple.py`: Captura simple automática
+- ✅ `capturar_dashboards_con_filtros.py`: Captura con filtros de fecha
+- ✅ `capturar_dashboards_automatico.py`: Usa ejecutar_todos_dashboards.py
+- ✅ `capturar_dashboards_basico.py`: Captura manual
+
+**Funcionalidades Implementadas:**
+- ✅ Captura automática de screenshots con Playwright
+- ✅ Filtros de fecha: Día, Semana, Mes
+- ✅ Organización por carpetas con fecha
+- ✅ Inicio automático de dashboards
+- ✅ Captura manual para dashboards ya ejecutándose
+- ✅ Menú interactivo para elegir tipo de captura
+
+**Organización de Capturas:**
+- ✅ screenshots_YYYY-MM-DD/: Capturas simples
+- ✅ screenshots_YYYY-MM-DD/dia/: Filtro día
+- ✅ screenshots_YYYY-MM-DD/semana/: Filtro semana  
+- ✅ screenshots_YYYY-MM-DD/mes/: Filtro mes
+- ✅ screenshots_manual_YYYY-MM-DD/: Capturas manuales
+- ✅ screenshots_automatico_YYYY-MM-DD/: Capturas automáticas
+
+**Dashboards Soportados:**
+- ✅ Dashboard Reservas (puerto 8050)
+- ✅ Dashboard Utilidad (puerto 8055)
+- ✅ Dashboard Marketing (puerto 8056)
+
+**Rama Creada:**
+- ✅ `recuperar-trabajo-completo`: Rama con todo el trabajo recuperado
+- ✅ Push exitoso a origin/recuperar-trabajo-completo
+
+**Estado:** ✅ COMPLETADO - Trabajo completo recuperado y funcional
+
+---
 
 ## Nueva Tarea: Integración Automática de Cuenta Corriente ✅
 
@@ -199,14 +317,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - ✅ Manejo básico de errores
 - ✅ Mucho más fácil de leer y mantener
 
-**Beneficios Logrados:**
-- ✅ Archivo principal de 50 líneas vs 300 líneas original
-- ✅ Separación clara entre configuración y lógica
-- ✅ Funciones reutilizables en otros scripts
-- ✅ Código más mantenible y organizado
-- ✅ Misma funcionalidad, mejor estructura
-
-**Estado:** ✅ COMPLETADO - Archivo simplificado y funcionando correctamente
+**Estado:** ✅ COMPLETADO - Archivo simplificado y funcional
 
 ---
 
@@ -335,3 +446,57 @@ python ejecutar_todos_dashboards.py
 ```
 
 **Estado:** ✅ COMPLETADO - Listo para usar
+
+---
+
+## Nueva Tarea: Top Performers y Necesita Atención en Dashboard Detallado ✅
+
+**Task:** Agregar sección de "Top Performers" y "Necesita Atención" del dashboard simplificado (8057) al dashboard detallado (8056):
+- Top Performers: Basado en mejor costo por conversión (menor costo = mejor)
+- Necesita Atención: Combinaciones público-video sin conversiones pero con gasto
+
+**Progreso:**
+[X] Implementar lógica de Top Performers por costo por conversión
+[X] Implementar lógica de Necesita Atención para sin conversiones
+[X] Agregar sección al layout del dashboard detallado
+[X] Actualizar callback para incluir nueva sección
+[X] Agregar manejo de casos edge (sin datos)
+
+**Plan:**
+1. ✅ Implementar cálculo de métricas por combinación público-tipo
+2. ✅ Crear lógica de Top Performers (mejor costo por conversión)
+3. ✅ Crear lógica de Necesita Atención (sin conversiones + gasto)
+4. ✅ Agregar sección al layout
+5. ✅ Actualizar callback y outputs
+
+**Funcionalidades Implementadas:**
+- ✅ **Top Performers**: Top 3 combinaciones con mejor costo por conversión
+- ✅ **Necesita Atención**: Top 3 combinaciones sin conversiones pero con gasto
+- ✅ **Métricas Detalladas**: Muestra costo por conversión, conversiones, gasto, clics
+- ✅ **Manejo de Casos Edge**: Mensajes cuando no hay datos
+- ✅ **Diseño Responsivo**: Layout flexible que se adapta al contenido
+
+**Lógica de Selección:**
+- ✅ **Top Performers**: 
+  - Filtra solo combinaciones con conversiones > 0
+  - Ordena por menor costo por conversión
+  - Muestra top 3
+- ✅ **Necesita Atención**:
+  - Filtra combinaciones con conversiones = 0 y gasto > 0
+  - Ordena por mayor gasto (prioriza los que más dinero han gastado)
+  - Muestra top 3
+
+**Información Mostrada:**
+- ✅ **Top Performers**: Combinación, Costo/Conv, Conversiones, Gasto
+- ✅ **Necesita Atención**: Combinación, Gasto, Conversiones, Clics
+- ✅ **Colores**: Verde para top performers, rojo para necesita atención
+
+**Mensajes Especiales:**
+- ✅ "🎉 ¡Excelente! Todas las combinaciones han tenido conversiones" (cuando no hay que necesita atención)
+- ✅ "⚠️ No hay combinaciones con conversiones en este período" (cuando no hay top performers)
+
+**Estado:** ✅ COMPLETADO - Sección agregada al dashboard detallado
+
+---
+
+## Nueva Tarea: Filtros de Métricas en Gráficos de Evolución ✅
