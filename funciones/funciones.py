@@ -759,6 +759,10 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         cargos = cargos.drop(columns=['Cargos (CLP)'])
         cargos = cargos[pd.to_datetime(cargos['Fecha'], errors='coerce').notna()]
         cargos = cargos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        
+        # Estandarizar formato de fecha a YYYY-MM-DD
+        if not cargos.empty:
+            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce').dt.strftime('%Y-%m-%d')
     
     # Procesar abonos
     abonos = pd.DataFrame()
@@ -769,5 +773,9 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         abonos = abonos.drop(columns=['Abonos (CLP)'])
         abonos = abonos[pd.to_datetime(abonos['Fecha'], errors='coerce').notna()]
         abonos = abonos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        
+        # Estandarizar formato de fecha a YYYY-MM-DD
+        if not abonos.empty:
+            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce').dt.strftime('%Y-%m-%d')
     
     return cargos, abonos

@@ -654,8 +654,14 @@ def crear_app_reservas(datos=None):
     
     app = dash.Dash(__name__, suppress_callback_exceptions=True)
     
+    # Usar el rango de fechas de las reservas para el filtro inicial
+    crear_filtros(df['fecha_trip'].min(), df['fecha_trip'].max())
+    
     app.layout = html.Div([
+        # Header con navegación
         crear_header("Dashboard de Reservas HotBoat", 8050),
+        
+        # Título del dashboard
         html.Div([
             html.Div("DASHBOARD DE RESERVAS", style={
                 'color': COLORS['primary'], 
@@ -668,19 +674,79 @@ def crear_app_reservas(datos=None):
                 'borderRadius': '5px'
             })
         ]),
+        
+        # Filtros con el mismo estilo que otros dashboards
         crear_filtros(df['fecha_trip'].min(), df['fecha_trip'].max()),
-        crear_tarjetas_metricas(),
+        
+        # Métricas principales
+        html.Div(id='metricas-principales', style={'margin': '20px'}),
+        
+        # Selector de período con el mismo estilo
         crear_selector_periodo(),
-        crear_contenedor_grafico('reservas-tiempo'),
-        crear_contenedor_insights('insights-reservas'),
-        crear_contenedor_grafico('ingresos-tiempo'),
-        crear_contenedor_insights('insights-financieros'),
-        crear_contenedor_grafico('horas-populares', figura=crear_grafico_horas_populares(df)),
-        crear_contenedor_insights('insights-horas'),
+        
+        # Gráficos con contenedores oscuros
+        html.Div([
+            html.H3('Evolución Temporal de Ingresos y Gastos', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='grafico-evolucion')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        html.Div([
+            html.H3('Distribución de Ingresos por Mes', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='grafico-ingresos-mes')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        html.Div([
+            html.H3('Distribución de Gastos por Categoría', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='grafico-gastos-categoria')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        html.Div([
+            html.H3('Reservas por Estado', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='grafico-estado-reservas')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        # Insights con estilo oscuro
+        html.Div([
+            html.H3('💡 Conclusiones e Insights', style={
+                'color': COLORS['text'], 
+                'marginBottom': '15px'
+            }),
+            html.Div(id='insights-contenido')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        })
     ], style={
-        'padding': 20,
         'backgroundColor': COLORS['background'],
-        'minHeight': '100vh'
+        'minHeight': '100vh',
+        'padding': '20px'
     })
     
     @app.callback(
