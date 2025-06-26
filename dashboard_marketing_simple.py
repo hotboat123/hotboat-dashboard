@@ -186,7 +186,7 @@ if df_con_region is not None and df_sin_region is not None:
                         id='filtro-publico-conversiones',
                         options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
                         value='todos',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -195,7 +195,7 @@ if df_con_region is not None and df_sin_region is not None:
                         id='filtro-tipo-conversiones',
                         options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': t, 'value': t} for t in sorted(df_sin_region['Tipo_Anuncio'].unique())],
                         value='todos',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -208,7 +208,7 @@ if df_con_region is not None and df_sin_region is not None:
                             {'label': 'Gasto', 'value': 'gasto'}
                         ],
                         value='conversiones',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -221,7 +221,7 @@ if df_con_region is not None and df_sin_region is not None:
                             {'label': 'Gasto', 'value': 'gasto'}
                         ],
                         value='gasto',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'})
             ], style={'marginBottom': '20px'}),
@@ -244,7 +244,7 @@ if df_con_region is not None and df_sin_region is not None:
                         id='filtro-publico-costos',
                         options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
                         value='todos',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -253,7 +253,7 @@ if df_con_region is not None and df_sin_region is not None:
                         id='filtro-tipo-costos',
                         options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': t, 'value': t} for t in sorted(df_sin_region['Tipo_Anuncio'].unique())],
                         value='todos',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -266,7 +266,7 @@ if df_con_region is not None and df_sin_region is not None:
                             {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
                         ],
                         value='cpc',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
@@ -279,7 +279,7 @@ if df_con_region is not None and df_sin_region is not None:
                             {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
                         ],
                         value='costo_conversion',
-                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                        style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'})
             ], style={'marginBottom': '20px'}),
@@ -460,54 +460,54 @@ if df_con_region is not None and df_sin_region is not None:
             
             seccion_performance = html.Div([
                 html.Div([
-                    html.H3('🏆 Top Performers (Mejor Tasa de Conversión)', style={'color': COLORS['income'], 'marginBottom': '15px'}),
+                    html.H3('🏆 Top 5 Performers (Mejor Tasa de Conversión)', style={'color': COLORS['income'], 'marginBottom': '15px', 'textAlign': 'center'}),
                     html.Div([
                         html.Table([
                             html.Thead([
                                 html.Tr([
-                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Tasa Conv.', style={'color': COLORS['text'], 'padding': '8px'})
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Tasa Conv.', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'})
                                 ])
                             ]),
                             html.Tbody([
                                 html.Tr([
-                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(f"{row['Conversion_Rate']:.2f}%", style={'color': COLORS['income'], 'padding': '8px', 'fontWeight': 'bold'})
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Conversion_Rate']:.2f}%", style={'color': COLORS['income'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'})
                                 ]) for _, row in top_performers.iterrows()
                             ])
-                        ], style={'width': '100%', 'borderCollapse': 'collapse'})
+                        ], style={'width': '100%', 'borderCollapse': 'collapse', 'border': '1px solid #444'})
                     ])
                 ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px', 'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.H3('⚠️ Needs Attention (Sin Conversiones)', style={'color': COLORS['expense'], 'marginBottom': '15px'}),
+                    html.H3('⚠️ Top 5 Needs Attention (Sin Conversiones)', style={'color': COLORS['expense'], 'marginBottom': '15px', 'textAlign': 'center'}),
                     html.Div([
                         html.Table([
                             html.Thead([
                                 html.Tr([
-                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Clics', style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px'})
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Clics', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'})
                                 ])
                             ]),
                             html.Tbody([
                                 html.Tr([
-                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['expense'], 'padding': '8px', 'fontWeight': 'bold'}),
-                                    html.Td(f"{row['Clics en el enlace']:.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
-                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px'})
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['expense'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Clics en el enlace']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'})
                                 ]) for _, row in needs_attention.iterrows()
                             ])
-                        ], style={'width': '100%', 'borderCollapse': 'collapse'})
+                        ], style={'width': '100%', 'borderCollapse': 'collapse', 'border': '1px solid #444'})
                     ])
                 ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px'})
             ])
