@@ -115,6 +115,61 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 
 # Scratchpad
 
+## Nueva Tarea: Crear Tabla "Utilidad Operativa.csv" ✅
+
+**Task:** Crear una nueva tabla que combine datos de:
+- Gastos hotboat (filtrar por categoría 1 = "Costos de Marketing")
+- Costos operativos
+- Ingresos operativos
+
+**Estructura de la tabla:**
+- fecha, categoria, monto
+- Categorías: "costo operativo", "ingreso operativo", "Costos de Marketing"
+
+**Progreso:**
+[X] Analizar estructura de archivos existentes
+[X] Crear script para generar tabla consolidada
+[X] Filtrar gastos por categoría "Costos de Marketing"
+[X] Combinar con costos e ingresos operativos
+[X] Generar archivo "Utilidad operativa.csv"
+[X] Probar y verificar datos
+
+**Plan:**
+1. ✅ Revisar estructura de archivos de input
+2. ✅ Crear script utilidad_operativa.py
+3. ✅ Implementar filtrado de gastos de marketing
+4. ✅ Combinar datos de los tres archivos
+5. ✅ Generar tabla final con categorías unificadas
+6. ✅ Probar con datos reales
+
+**Archivos de Input:**
+- ✅ `gastos hotboat.csv` - Filtrar por "Categoría 1" = "Costos de Marketing"
+- ✅ `costos_operativos.csv` - Todos los costos operativos
+- ✅ `ingresos_operativos.csv` - Todos los ingresos operativos
+
+**Archivo de Output:**
+- ✅ `Utilidad operativa.csv` - Tabla consolidada con fecha, categoria, monto
+
+**Resultados del Script:**
+- ✅ **Total registros**: 247 registros
+- ✅ **Período**: 2024-08-31 a 2025-07-10
+- ✅ **Ingresos operativos**: 112 registros - $15,941,102
+- ✅ **Costos operativos**: 102 registros - $3,570,000
+- ✅ **Costos de Marketing**: 33 registros - $766,370
+- ✅ **Utilidad neta**: $11,604,732
+
+**Funcionalidades Implementadas:**
+- ✅ Filtrado automático de gastos por categoría "Costos de Marketing"
+- ✅ Combinación de datos de tres fuentes diferentes
+- ✅ Ordenamiento por fecha
+- ✅ Categorización unificada
+- ✅ Resumen estadístico completo
+- ✅ Manejo de errores y validaciones
+
+**Estado:** ✅ COMPLETADO - Tabla "Utilidad operativa.csv" generada exitosamente
+
+---
+
 ## Nueva Tarea: Crear Archivo "Actualizar Todo" ✅
 
 **Task:** Crear un archivo que ejecute todos los procesos en orden:
@@ -649,4 +704,64 @@ python ejecutar_todos_dashboards.py
 
 ---
 
-## Nueva Tarea: Filtros de Métricas en Gráficos de Evolución ✅
+## Nueva Tarea: Crear Dashboard de Utilidad Operativa ✅
+
+**Task:** Crear un nuevo dashboard que muestre:
+- Evolución temporal de costos operativos, ingresos operativos y marketing
+- Filtros por categoría y tiempo (día, semana, mes)
+- Tarjetas con valores promedio por categoría que cambien con filtros
+- Mantener formato consistente con otros dashboards
+
+**Progreso:**
+[X] Crear archivo dashboard_utilidad_operativa.py
+[X] Implementar carga de datos de Utilidad operativa.csv
+[X] Crear gráfico de evolución temporal
+[X] Implementar filtros por categoría y tiempo
+[X] Crear tarjetas de valores promedio
+[X] Integrar con ejecutar_todos_dashboards.py
+[X] Probar y verificar funcionamiento
+
+**Plan:**
+1. ✅ Crear estructura del dashboard con Dash
+2. ✅ Implementar función de carga de datos
+3. ✅ Crear gráfico de evolución con múltiples líneas
+4. ✅ Agregar filtros de categoría y tiempo
+5. ✅ Implementar tarjetas de métricas promedio
+6. ✅ Integrar con el sistema de dashboards existente
+
+**Archivo de Input:**
+- ✅ `Utilidad operativa.csv` - Datos consolidados de utilidad operativa
+
+**Funcionalidades Implementadas:**
+- ✅ Gráfico de evolución temporal con 3 líneas (costos, ingresos, marketing)
+- ✅ Filtro por categoría (todas, solo costos, solo ingresos, solo marketing)
+- ✅ Filtro de tiempo (día, semana, mes)
+- ✅ Tarjetas con promedio por categoría
+- ✅ Layout responsivo y consistente
+
+**Archivo Creado:**
+- ✅ `dashboard_utilidad_operativa.py` - Dashboard completo de utilidad operativa
+
+**Integración con Sistema:**
+- ✅ Actualizado `ejecutar_todos_dashboards.py` para incluir el nuevo dashboard
+- ✅ Puerto asignado: 8057
+- ✅ Verificación de archivos actualizada
+- ✅ Banner y mensajes actualizados para 4 dashboards
+
+**Características del Dashboard:**
+- ✅ **Tema Oscuro**: Consistente con otros dashboards
+- ✅ **Navegación**: Header con enlaces a otros dashboards
+- ✅ **Filtros de Fecha**: Rango de fechas personalizable
+- ✅ **Filtro de Categoría**: Dropdown para filtrar por categoría específica
+- ✅ **Selector de Período**: Día, semana, mes, todos
+- ✅ **Tarjetas de Métricas**: Total, promedio y cantidad de registros por categoría
+- ✅ **Gráfico de Evolución**: Líneas temporales con colores distintivos
+- ✅ **Colores Específicos**: Verde (ingresos), Rojo (costos), Turquesa (marketing)
+
+**URLs Dashboard:**
+- 🌐 Reservas: http://localhost:8050
+- 🌐 Utilidad: http://localhost:8055
+- 🌐 Marketing: http://localhost:8056
+- 🌐 **Utilidad Operativa (Nuevo)**: http://localhost:8057 ✅ ACTIVO
+
+**Estado:** ✅ COMPLETADO - Dashboard de utilidad operativa funcionando correctamente

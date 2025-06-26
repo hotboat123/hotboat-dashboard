@@ -5,10 +5,11 @@
 🚤 HOTBOAT DASHBOARDS - EJECUTOR MÚLTIPLE
 =========================================
 
-Este script ejecuta automáticamente los 3 dashboards de HotBoat:
+Este script ejecuta automáticamente los 4 dashboards de HotBoat:
 - Dashboard de Reservas (puerto 8050)
 - Dashboard de Utilidad Operativa (puerto 8055)  
 - Dashboard de Marketing (puerto 8056)
+- Dashboard de Utilidad Operativa (Nuevo) (puerto 8057)
 
 Características:
 - Ejecución simultánea usando multiprocessing
@@ -45,7 +46,7 @@ def print_banner():
     print("🚤 HOTBOAT DASHBOARDS - EJECUTOR MÚLTIPLE")
     print("🚤" * 20)
     print()
-    print("📊 Iniciando todos los dashboards simultáneamente...")
+    print("📊 Iniciando los 4 dashboards simultáneamente...")
     print("=" * 60)
 
 def ejecutar_dashboard(script_name: str, puerto: int, nombre: str):
@@ -68,7 +69,7 @@ def ejecutar_dashboard(script_name: str, puerto: int, nombre: str):
 
 def verificar_archivos():
     """Verifica que todos los archivos necesarios existan"""
-    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py']
+    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py', 'dashboard_utilidad_operativa.py']
     archivos_faltantes = []
     
     for archivo in archivos_requeridos:
@@ -111,6 +112,12 @@ def main():
             'puerto': 8056,
             'nombre': 'Dashboard de Marketing',
             'url': 'http://localhost:8056'
+        },
+        {
+            'script': 'dashboard_utilidad_operativa.py',
+            'puerto': 8057,
+            'nombre': 'Dashboard de Utilidad Operativa (Nuevo)',
+            'url': 'http://localhost:8057'
         }
     ]
     
