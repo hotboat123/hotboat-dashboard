@@ -38,9 +38,21 @@
 - **Otros Dashboards:** Se muestran como botones con hover effect
 - **Transiciones Suaves:** Cambios con efectos CSS suaves
 
-## 🚀 Inicio Rápido
+## �� Inicio Rápido
 
-### Opción 1: Ejecutar Todos Simultáneamente (🔥 NUEVO - Recomendado)
+### 🔄 **Opción 0: Actualización Completa (🆕 NUEVO - Recomendado para Actualización)**
+```bash
+# Ejecuta TODO el flujo: procesamiento + dashboards
+python actualizar_todo.py
+```
+**✨ Características:**
+- ✅ **Procesamiento Completo**: Gastos → Reservas → Utilidad → Dashboards
+- ✅ **Un solo comando**: Todo el flujo de trabajo automatizado
+- ✅ **Manejo de errores**: Continúa o pregunta si falla un paso
+- ✅ **Feedback detallado**: Muestra output de cada proceso
+- ✅ **Resumen final**: Estadísticas de éxito/fallo
+
+### Opción 1: Ejecutar Todos Simultáneamente (🔥 Recomendado para Visualización)
 ```bash
 # Un solo comando que ejecuta los 3 dashboards
 python ejecutar_todos_dashboards.py
@@ -73,6 +85,28 @@ python utilidad.py    # Ir a http://localhost:8055
 # Ctrl+C para detener
 python marketing.py   # Ir a http://localhost:8056
 ```
+
+## 🔄 **Flujo de Trabajo Completo**
+
+### **Cuándo usar cada opción:**
+
+#### 🆕 **`actualizar_todo.py`** - Para Actualización Completa
+- ✅ **Después de descargar nuevos datos** (bancarios, reservas, marketing)
+- ✅ **Configuración inicial** del sistema
+- ✅ **Mantenimiento** cuando se actualizan archivos de input
+- ✅ **Análisis completo** para obtener insights actualizados
+
+**Orden de ejecución:**
+1. 🏦 `gastos_hotboat_sin_drive.py` - Procesar gastos y costos
+2. 📅 `Informacion_reservas.py` - Procesar reservas
+3. 💰 `estimacion_utilidad_hotboat.py` - Calcular utilidad
+4. 📊 `ejecutar_todos_dashboards.py` - Ejecutar dashboards
+
+#### 🔥 **`ejecutar_todos_dashboards.py`** - Para Visualización Rápida
+- ✅ **Datos ya procesados** y actualizados
+- ✅ **Solo necesitas ver los dashboards**
+- ✅ **Análisis rápido** de datos existentes
+- ✅ **Presentación** a clientes o equipo
 
 ## 🎨 Características de Diseño
 
@@ -111,7 +145,10 @@ Dashboard de Marketing:       http://localhost:8056
 ## ⚡ Comandos Rápidos
 
 ```bash
-# 🔥 NUEVO: Ejecutar todos los dashboards (Recomendado)
+# 🔄 NUEVO: Actualización completa (procesamiento + dashboards)
+python actualizar_todo.py
+
+# 🔥 Ejecutar todos los dashboards (solo visualización)
 python ejecutar_todos_dashboards.py
 
 # Ver puertos ocupados

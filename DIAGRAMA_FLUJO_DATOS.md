@@ -59,8 +59,7 @@ graph LR
         BC1[Fecha]
         BC2[Descripción]
         BC3[Monto]
-        BC4[Categoría]
-        BC5[País]
+        BC4[País]
     end
     
     subgraph "💰 CUENTA CORRIENTE"
@@ -87,10 +86,12 @@ graph LR
 ### 📊 COLUMNAS DE SALIDA - GASTOS
 | Archivo Output | Columnas Principales | Fuente de Datos |
 |----------------|---------------------|-----------------|
-| `gastos hotboat.csv` | Fecha, Descripción, Monto, Categoría, Categoría_1 | Banco Estado + Banco Chile + Cuenta Corriente |
+| `gastos hotboat.csv` | Fecha, Descripción, Monto, Categoría_2, Categoría_1 | Banco Estado + Banco Chile + Cuenta Corriente |
 | `abonos hotboat.csv` | Fecha, Descripción, Monto | Banco Estado + Cuenta Corriente |
 | `cuenta_corriente_cargos.csv` | Fecha, Descripción, Monto | Cartola cuenta corriente |
 | `cuenta_corriente_abonos.csv` | Fecha, Descripción, Monto | Cartola cuenta corriente |
+
+**Nota:** La columna "Categoría" original del Banco Chile se eliminó. Las categorías se generan automáticamente basándose en la descripción.
 
 ---
 
@@ -181,11 +182,13 @@ graph LR
     CO2 --> CO1
     CO3 --> CO1
     
-    R2 --> I1[ingresos_operativos.csv]
-    R3 --> I1
+    R2 --> M1[INNER JOIN on fecha + email]
+    R3 --> M1
+    PE1 --> M1
+    PE2 --> M1
+    
+    M1 --> I1[ingresos_operativos.csv]
     R4 --> I1
-    PE1 --> I1
-    PE2 --> I1
     PE3 --> I1
 ```
 
@@ -193,7 +196,7 @@ graph LR
 | Archivo Output | Columnas Principales | Fuente de Datos |
 |----------------|---------------------|-----------------|
 | `costos_operativos.csv` | fecha, email, id_reserva, descripción, monto | Reservas + Costo fijo por reserva |
-| `ingresos_operativos.csv` | fecha, email, id_reserva, descripción, monto | Reservas + Pedidos extra |
+| `ingresos_operativos.csv` | fecha, email, id_reserva, descripción, monto | Reservas + Pedidos extra (cruce por fecha + email) |
 
 ---
 
@@ -319,7 +322,7 @@ graph TD
 |---------|----------------|-------------------|
 | **Reservas** | `ID` | payments.csv ↔ appointments.csv |
 | **Utilidad** | `ID` (reserva) | reservas_HotBoat.csv ↔ costos_operativos.csv |
-| **Utilidad** | `email` | reservas_HotBoat.csv ↔ pedidos_extra.csv |
+| **Utilidad** | `fecha + email` | reservas_HotBoat.csv ↔ pedidos_extra.csv |
 | **Gastos** | `Fecha + Descripción + Monto` | Múltiples archivos bancarios |
 | **Marketing** | `Día + Nombre del conjunto de anuncios` | Dataset (5) ↔ Dataset (6) |
 
@@ -329,7 +332,7 @@ graph TD
 
 | Archivo | Propósito | Columnas Clave |
 |---------|-----------|----------------|
-| `gastos hotboat.csv` | Gastos consolidados | Fecha, Descripción, Monto, Categoría |
+| `gastos hotboat.csv` | Gastos consolidados | Fecha, Descripción, Monto, Categoría_2, Categoría_1 |
 | `abonos hotboat.csv` | Ingresos bancarios | Fecha, Descripción, Monto |
 | `reservas_HotBoat.csv` | Reservas procesadas | ID, fecha_trip, Customer Email, Service, TOTAL AMOUNT, DUE AMOUNT, Phone Number_2 |
 | `costos_operativos.csv` | Costos por reserva | fecha, email, id_reserva, monto |

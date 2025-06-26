@@ -23,6 +23,14 @@ import sys
 import pandas as pd
 import os
 
+# Configurar UTF-8 para que los emojis funcionen siempre
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Para versiones de Python < 3.7
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+
 # Importar la función principal de procesamiento
 from funciones.funciones import procesar_archivos_financieros, leer_cartola_cuenta_corriente
 

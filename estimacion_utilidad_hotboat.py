@@ -42,6 +42,8 @@ def crear_costos_operativos(ruta_reservas):
 def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
     # Leer reservas
     df_reservas = pd.read_csv(ruta_reservas)
+    print(f"Leyendo archivo de reservas desde: {ruta_reservas}")
+    print(f"Se leyeron {len(df_reservas)} reservas")
     
     # Crear DataFrame base de ingresos de reservas
     df_ingresos = pd.DataFrame({
@@ -52,7 +54,6 @@ def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
         'email': df_reservas['Customer Email']
     })
     
-    
     # Renombrar columnas
     df_ingresos = df_ingresos.rename(columns={
         'fecha_trip': 'fecha',
@@ -61,24 +62,44 @@ def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
     
     # Leer pedidos extra
     df_pedidos = pd.read_csv(ruta_pedidos_extra)
+    print(f"Leyendo archivo de pedidos extra desde: {ruta_pedidos_extra}")
+    print(f"Se leyeron {len(df_pedidos)} pedidos extra")
+    
     # Aplicar la función para crear la columna de fecha
     df_pedidos = crear_columna_fecha(df_pedidos)
     
-    # Crear DataFrame de ingresos de pedidos extra
+    # Preparar datos para el cruce
+    # Convertir fechas a datetime para el cruce
+    df_ingresos['fecha'] = pd.to_datetime(df_ingresos['fecha'])
+    df_pedidos['fecha'] = pd.to_datetime(df_pedidos['fecha'])
+    
+    # Hacer cruce por fecha y email entre pedidos extra y reservas
+    df_pedidos_cruzados = df_pedidos.merge(
+        df_ingresos[['fecha', 'email', 'id_reserva']],
+        on=['fecha', 'email'],
+        how='inner'  # Solo pedidos extra que coincidan con una reserva
+    )
+    
+    print(f"Después del cruce por fecha y email: {len(df_pedidos_cruzados)} pedidos extra coinciden con reservas")
+    
+    # Crear DataFrame de ingresos de pedidos extra (solo los que coinciden)
     df_ingresos_extra = pd.DataFrame({
-        'fecha': df_pedidos['fecha'],
-        'email': df_pedidos['email'],
+        'fecha': df_pedidos_cruzados['fecha'],
+        'email': df_pedidos_cruzados['email'],
+        'id_reserva': df_pedidos_cruzados['id_reserva'],
         'descripcion': 'Ingreso por pedido extra',
-        'monto': df_pedidos['Total']
+        'monto': df_pedidos_cruzados['Total']
     })
     
-    # Combinar ingresos
+    # Combinar ingresos de reservas con pedidos extra que coinciden
     df_ingresos_combinado = pd.concat([df_ingresos, df_ingresos_extra], ignore_index=True)
     
     # Ordenar columnas y convertir fecha a datetime
     df_ingresos_combinado = df_ingresos_combinado[['fecha', 'email', 'id_reserva', 'descripcion', 'monto']]
     df_ingresos_combinado['fecha'] = pd.to_datetime(df_ingresos_combinado['fecha'])
     df_ingresos_combinado = df_ingresos_combinado.sort_values('fecha')
+    
+    print(f"Total de ingresos (reservas + pedidos extra coincidentes): {len(df_ingresos_combinado)}")
     
     return df_ingresos_combinado
 

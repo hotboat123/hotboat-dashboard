@@ -115,6 +115,66 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 
 # Scratchpad
 
+## Nueva Tarea: Crear Archivo "Actualizar Todo" ✅
+
+**Task:** Crear un archivo que ejecute todos los procesos en orden:
+1. gastos_hotboat_sin_drive.py
+2. Informacion_reservas.py  
+3. estimacion_utilidad_hotboat.py
+4. ejecutar_todos_dashboards.py
+
+**Progreso:**
+[X] Crear archivo actualizar_todo.py con ejecución secuencial
+[X] Implementar manejo de errores y logging detallado
+[X] Agregar verificación de archivos necesarios
+[X] Implementar pausas entre procesos
+[X] Agregar opción de continuar si falla un proceso
+[X] Crear resumen final con estadísticas
+
+**Plan:**
+1. ✅ Crear script principal con subprocess
+2. ✅ Implementar función ejecutar_comando() con manejo de errores
+3. ✅ Agregar verificación de directorio y archivos
+4. ✅ Implementar pausas y opciones de continuar
+5. ✅ Crear resumen final con estadísticas
+6. ✅ Documentar en .cursorrules
+
+**Archivo Creado:**
+- ✅ `actualizar_todo.py` - Script principal de actualización completa
+
+**Funcionalidades Implementadas:**
+- ✅ **Ejecución Secuencial**: Los 4 procesos se ejecutan en orden
+- ✅ **Manejo de Errores**: Captura y muestra errores detallados
+- ✅ **Verificación**: Confirma que estamos en el directorio correcto
+- ✅ **Pausas**: 2 segundos entre procesos para estabilidad
+- ✅ **Continuación**: Pregunta si continuar si falla un proceso
+- ✅ **Resumen Final**: Estadísticas de procesos exitosos/fallidos
+- ✅ **Output Detallado**: Muestra output de cada comando
+- ✅ **Interrupción Segura**: Maneja Ctrl+C correctamente
+
+**Comando Principal:**
+```bash
+python actualizar_todo.py
+```
+
+**Orden de Ejecución:**
+1. ✅ `python gastos_hotboat_sin_drive.py` - Procesar gastos y costos
+2. ✅ `python Informacion_reservas.py` - Procesar reservas
+3. ✅ `python estimacion_utilidad_hotboat.py` - Calcular utilidad
+4. ✅ `python ejecutar_todos_dashboards.py` - Ejecutar dashboards
+
+**Características del Script:**
+- ✅ **Banner Informativo**: Muestra el plan de ejecución
+- ✅ **Logging Detallado**: Output con emojis y separadores
+- ✅ **Manejo de Errores**: Captura subprocess.CalledProcessError
+- ✅ **Continuación Inteligente**: Pregunta antes de continuar si falla
+- ✅ **Resumen Final**: Estadísticas completas al final
+- ✅ **URLs Dashboard**: Muestra URLs si todo es exitoso
+
+**Estado:** ✅ COMPLETADO - Script de actualización completa creado y funcional
+
+---
+
 ## Nueva Tarea: Crear Diagrama de Flujo de Datos ✅
 
 **Task:** Crear un diagrama de flujo completo que muestre cómo se cruzan las tablas de input y qué columnas se utilizan para generar los archivos de output.

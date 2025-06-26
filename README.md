@@ -346,11 +346,129 @@ python ejecutar_todos_dashboards.py
 ============================================================
 ```
 
+## 🔄 **ACTUALIZAR TODO - Proceso Completo**
+
+### `actualizar_todo.py` - **NUEVO: Script de Actualización Completa**
+
+Este script ejecuta **TODOS** los procesos de HotBoat en el orden correcto:
+
+**Orden de Ejecución:**
+1. 🏦 **Procesar gastos y costos** (`gastos_hotboat_sin_drive.py`)
+2. 📅 **Procesar reservas** (`Informacion_reservas.py`)
+3. 💰 **Calcular utilidad** (`estimacion_utilidad_hotboat.py`)
+4. 📊 **Ejecutar dashboards** (`ejecutar_todos_dashboards.py`)
+
+**Características:**
+- ✅ **Ejecución Secuencial**: Los 4 procesos se ejecutan en orden
+- ✅ **Manejo de Errores**: Captura y muestra errores detallados
+- ✅ **Verificación**: Confirma que estamos en el directorio correcto
+- ✅ **Pausas**: 2 segundos entre procesos para estabilidad
+- ✅ **Continuación**: Pregunta si continuar si falla un proceso
+- ✅ **Resumen Final**: Estadísticas de procesos exitosos/fallidos
+- ✅ **Output Detallado**: Muestra output de cada comando
+- ✅ **Interrupción Segura**: Maneja Ctrl+C correctamente
+
+**Uso:**
+```bash
+python actualizar_todo.py
+```
+
+**Salida esperada:**
+```
+🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤
+🚤 ACTUALIZAR TODO - HOTBOAT
+🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤🚤
+
+📋 Este script ejecutará todos los procesos en el siguiente orden:
+   1. 🏦 Procesar gastos y costos (gastos_hotboat_sin_drive.py)
+   2. 📅 Procesar reservas (Informacion_reservas.py)
+   3. 💰 Calcular utilidad (estimacion_utilidad_hotboat.py)
+   4. 📊 Ejecutar dashboards (ejecutar_todos_dashboards.py)
+
+============================================================
+🔄 PROCESAR GASTOS Y COSTOS
+============================================================
+📋 Ejecutando: python gastos_hotboat_sin_drive.py
+
+✅ Output:
+[Output del procesamiento de gastos]
+
+✅ PROCESAR GASTOS Y COSTOS completado exitosamente
+
+⏳ Esperando 2 segundos antes del siguiente proceso...
+
+📋 Paso 2/4: PROCESAR RESERVAS
+============================================================
+🔄 PROCESAR RESERVAS
+============================================================
+📋 Ejecutando: python Informacion_reservas.py
+
+✅ Output:
+[Output del procesamiento de reservas]
+
+✅ PROCESAR RESERVAS completado exitosamente
+
+⏳ Esperando 2 segundos antes del siguiente proceso...
+
+📋 Paso 3/4: CALCULAR UTILIDAD
+============================================================
+🔄 CALCULAR UTILIDAD
+============================================================
+📋 Ejecutando: python estimacion_utilidad_hotboat.py
+
+✅ Output:
+[Output del cálculo de utilidad]
+
+✅ CALCULAR UTILIDAD completado exitosamente
+
+⏳ Esperando 2 segundos antes del siguiente proceso...
+
+📋 Paso 4/4: EJECUTAR DASHBOARDS
+============================================================
+🔄 EJECUTAR DASHBOARDS
+============================================================
+📋 Ejecutando: python ejecutar_todos_dashboards.py
+
+✅ Output:
+[Output de ejecución de dashboards]
+
+✅ EJECUTAR DASHBOARDS completado exitosamente
+
+============================================================
+📊 RESUMEN FINAL
+============================================================
+✅ Procesos exitosos: 4
+❌ Procesos fallidos: 0
+📈 Total de procesos: 4
+
+🎉 ¡Todos los procesos se completaron exitosamente!
+🌐 Los dashboards deberían estar ejecutándose en:
+   - Dashboard Reservas: http://localhost:8050
+   - Dashboard Utilidad: http://localhost:8055
+   - Dashboard Marketing: http://localhost:8056
+
+============================================================
+```
+
+**Ventajas:**
+- 🚀 **Un solo comando** para todo el flujo de trabajo
+- 🔄 **Proceso automatizado** sin intervención manual
+- ⚡ **Actualización completa** de datos y dashboards
+- 🛡️ **Manejo robusto de errores** con opción de continuar
+- 📊 **Feedback detallado** de cada paso del proceso
+
+**Casos de Uso:**
+- 🔄 **Actualización diaria**: Después de descargar nuevos datos
+- 🆕 **Configuración inicial**: Primera vez que se ejecuta el sistema
+- 🔧 **Mantenimiento**: Cuando se actualizan archivos de input
+- 📈 **Análisis completo**: Para obtener insights actualizados
+
 ## 📁 Estructura del Proyecto
 
 ```
 hotboat-dashboard/
 ├── 📁 Archivos Principales
+│   ├── actualizar_todo.py              # 🔄 NUEVO: Actualización completa
 │   ├── ejecutar_todos_dashboards.py    # 🚀 PRINCIPAL
 │   ├── Informacion_reservas.py         # 📊 Procesamiento reservas
 │   ├── inputs_modelo.py                # ⚙️ Configuraciones
@@ -385,6 +503,9 @@ hotboat-dashboard/
 3. `estimacion_utilidad_hotboat.py` - Cálculo utilidad
 4. `inputs_modelo.py` - Configuraciones
 
+### Para Actualización Completa:
+1. `actualizar_todo.py` - **NUEVO: Script de actualización completa**
+
 ### Para Desarrollo:
 - Carpeta `archivos_secundarios/` - Versiones anteriores y herramientas
-- Carpeta `funciones/` - Componentes reutilizables 
+- Carpeta `funciones/` - Componentes reutilizables

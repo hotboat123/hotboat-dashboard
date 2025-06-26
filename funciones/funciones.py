@@ -1,6 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import pandas as pd
 import os
+import sys
+from typing import Dict, List, Tuple, Optional
+import re
+from datetime import datetime, timedelta
 
+# Configurar UTF-8 para que los emojis funcionen siempre
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Para versiones de Python < 3.7
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 
 def ver_si_es_nacional_facturado(ruta_archivo):    
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
@@ -33,7 +47,7 @@ def leer_excel_mov_facturados_nacional(ruta_archivo):
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final["Monto"] = df_final["Monto ($)"]
-    df_final=df_final[["Fecha","Descripción","Monto","Cuotas","Categoría"]]
+    df_final=df_final[["Fecha","Descripción","Monto","Cuotas"]]  # Eliminada columna "Categoría"
   
     return df_final
 
@@ -191,7 +205,7 @@ def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
-    df_final=df_final[['Fecha', 'Descripción', 'Categoría', 'País', 'Monto', 'Monto (USD)']]
+    df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto', 'Monto (USD)']]  # Eliminada columna "Categoría"
     return df_final
 
 
