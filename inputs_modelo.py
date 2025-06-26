@@ -54,7 +54,7 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha basti, Javiera Rodriguez"
+        "munoz cucha basti", "Javiera Rodriguez"
     ],
     "Mano obra HotBoat daniel": [
         "inostroza canales"
@@ -75,27 +75,13 @@ diccionario_categorias = {
     ]
 }
 
-diccionario_categoria_1 = {
-    "Costos Fijos": [
-        "arriendo", "entel", "bice vida", "seguro", "plan", "luz", "electricidad"
-    ],
-    "Costos Variables": [
-     "gas"
-    ],
-    "Inversion_activos": [
-        "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "Compras Internacionales"
-    ],
-    "Inversión": [
-        "Inversión"
-    ]
-}
 
 diccionario_categoria_1 = {
     "Costos Fijos": [
         "arriendo", "entel", "bice vida", "seguro", "plan", "luz", "electricidad"
     ],
     "Costos Variables": [
-        "gas", # "mantención", "limpieza", "repuestos", "transportes", "comisiones"
+        "Gas", # "mantención", "limpieza", "repuestos", "transportes", "comisiones"
     ],
     "Costos de Marketing": [
         "Publicidad Meta", "Publicidad Google", # "marketing", "promoción", 

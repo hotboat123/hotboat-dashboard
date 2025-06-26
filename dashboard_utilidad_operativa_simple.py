@@ -12,7 +12,9 @@ COLORS = {
     'primary': '#007bff',
     'income': '#28a745',
     'expense': '#dc3545',
-    'marketing': '#ffc107'
+    'marketing': '#ffc107',
+    'costos_fijos': '#6f42c1',
+    'costos_variables': '#fd7e14'
 }
 
 def cargar_datos():
@@ -217,7 +219,9 @@ if df is not None:
         colores_categoria = {
             'ingreso operativo': COLORS['income'],      # Verde
             'costo operativo': COLORS['expense'],       # Rojo
-            'Costos de Marketing': COLORS['marketing']  # Amarillo
+            'Costos de Marketing': COLORS['marketing'],  # Amarillo
+            'Costos Fijos': COLORS['costos_fijos'],      # Morado
+            'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
         
         for cat in df_agrupado['categoria'].unique():
@@ -253,7 +257,9 @@ if df is not None:
         colores_categoria = {
             'ingreso operativo': COLORS['income'],      # Verde
             'costo operativo': COLORS['expense'],       # Rojo
-            'Costos de Marketing': COLORS['marketing']  # Amarillo
+            'Costos de Marketing': COLORS['marketing'],  # Amarillo
+            'Costos Fijos': COLORS['costos_fijos'],      # Morado
+            'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
         
         for cat in df_agrupado['categoria'].unique():

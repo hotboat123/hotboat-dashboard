@@ -43,6 +43,48 @@ def cargar_gastos_marketing():
         print(f"❌ Error cargando gastos de marketing: {e}")
         return pd.DataFrame()
 
+def cargar_costos_fijos():
+    """Cargar gastos filtrados por categoría 'Costos Fijos'"""
+    try:
+        print("📊 Cargando costos fijos...")
+        gastos = pd.read_csv('archivos_output/gastos hotboat.csv')
+        
+        # Filtrar por categoría 1 = "Costos Fijos"
+        costos_fijos = gastos[gastos['Categoría 1'] == 'Costos Fijos'].copy()
+        
+        # Seleccionar columnas necesarias y renombrar
+        costos_fijos = costos_fijos[['Fecha', 'Monto']].copy()
+        costos_fijos['categoria'] = 'costos fijos'
+        costos_fijos = costos_fijos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        print(f"✅ Costos fijos cargados: {len(costos_fijos)} registros")
+        return costos_fijos
+        
+    except Exception as e:
+        print(f"❌ Error cargando costos fijos: {e}")
+        return pd.DataFrame()
+
+def cargar_costos_variables():
+    """Cargar gastos filtrados por categoría 'Costos Variables'"""
+    try:
+        print("📊 Cargando costos variables...")
+        gastos = pd.read_csv('archivos_output/gastos hotboat.csv')
+        
+        # Filtrar por categoría 1 = "Costos Variables"
+        costos_variables = gastos[gastos['Categoría 1'] == 'Costos Variables'].copy()
+        
+        # Seleccionar columnas necesarias y renombrar
+        costos_variables = costos_variables[['Fecha', 'Monto']].copy()
+        costos_variables['categoria'] = 'costos variables'
+        costos_variables = costos_variables.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        print(f"✅ Costos variables cargados: {len(costos_variables)} registros")
+        return costos_variables
+        
+    except Exception as e:
+        print(f"❌ Error cargando costos variables: {e}")
+        return pd.DataFrame()
+
 def cargar_costos_operativos():
     """Cargar costos operativos"""
     try:
@@ -82,13 +124,15 @@ def generar_utilidad_operativa():
     print("🚀 Iniciando generación de tabla 'Utilidad operativa.csv'")
     print("=" * 60)
     
-    # Cargar datos de las tres fuentes
+    # Cargar datos de todas las fuentes
     gastos_marketing = cargar_gastos_marketing()
+    costos_fijos = cargar_costos_fijos()
+    costos_variables = cargar_costos_variables()
     costos_operativos = cargar_costos_operativos()
     ingresos_operativos = cargar_ingresos_operativos()
     
     # Verificar que todos los archivos se cargaron correctamente
-    if gastos_marketing.empty and costos_operativos.empty and ingresos_operativos.empty:
+    if gastos_marketing.empty and costos_fijos.empty and costos_variables.empty and costos_operativos.empty and ingresos_operativos.empty:
         print("❌ No se pudieron cargar datos de ninguna fuente")
         return False
     
@@ -96,6 +140,8 @@ def generar_utilidad_operativa():
     print("\n🔗 Combinando datos...")
     utilidad_operativa = pd.concat([
         gastos_marketing,
+        costos_fijos,
+        costos_variables,
         costos_operativos,
         ingresos_operativos
     ], ignore_index=True)
@@ -126,14 +172,21 @@ def generar_utilidad_operativa():
     
     # Totales generales
     total_ingresos = utilidad_operativa[utilidad_operativa['categoria'] == 'ingreso operativo']['monto'].sum()
-    total_costos = utilidad_operativa[utilidad_operativa['categoria'] == 'costo operativo']['monto'].sum()
+    total_costos_operativos = utilidad_operativa[utilidad_operativa['categoria'] == 'costo operativo']['monto'].sum()
     total_marketing = utilidad_operativa[utilidad_operativa['categoria'] == 'Costos de Marketing']['monto'].sum()
+    total_costos_fijos = utilidad_operativa[utilidad_operativa['categoria'] == 'costos fijos']['monto'].sum()
+    total_costos_variables = utilidad_operativa[utilidad_operativa['categoria'] == 'costos variables']['monto'].sum()
     
     print(f"\n💰 TOTALES:")
     print(f"  • Ingresos operativos: ${total_ingresos:,.0f}")
-    print(f"  • Costos operativos: ${total_costos:,.0f}")
+    print(f"  • Costos operativos: ${total_costos_operativos:,.0f}")
     print(f"  • Costos de marketing: ${total_marketing:,.0f}")
-    print(f"  • Utilidad neta: ${total_ingresos - total_costos - total_marketing:,.0f}")
+    print(f"  • Costos fijos: ${total_costos_fijos:,.0f}")
+    print(f"  • Costos variables: ${total_costos_variables:,.0f}")
+    
+    total_costos = total_costos_operativos + total_marketing + total_costos_fijos + total_costos_variables
+    print(f"  • Total costos: ${total_costos:,.0f}")
+    print(f"  • Utilidad neta: ${total_ingresos - total_costos:,.0f}")
     
     print(f"\n✅ Archivo generado: {output_file}")
     print(f"📁 Tamaño: {os.path.getsize(output_file):,} bytes")
