@@ -253,3 +253,6 @@ fecha,categoria,monto
 2025-06-21,ingreso operativo,194950.0
 2025-07-10,costo operativo,35000.0
 2025-07-10,ingreso operativo,125982.0
+,costos fijos,300000.0
+,costos fijos,500000.0
+,costos variables,45000.0
