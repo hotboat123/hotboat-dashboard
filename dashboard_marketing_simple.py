@@ -156,6 +156,9 @@ if df_con_region is not None and df_sin_region is not None:
         # Métricas principales
         html.Div(id='metricas-principales', style={'margin': '20px'}),
         
+        # Sección Top Performers y Necesita Atención
+        html.Div(id='seccion-performance', style={'margin': '20px'}),
+        
         # Selector de período con el mismo estilo
         crear_selector_periodo(),
         
@@ -174,6 +177,122 @@ if df_con_region is not None and df_sin_region is not None:
         html.Div([
             html.H3('Evolución de Conversiones por Público y Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-evolucion-conversiones')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        # Gráfico de evolución con filtros de métricas
+        html.Div([
+            html.H3('Evolución de Conversiones y Gasto por Combinación Público-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.Div([
+                html.Div([
+                    html.Label('Filtrar por Público:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-publico-conversiones',
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
+                        value='todos',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Filtrar por Tipo de Anuncio:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-tipo-conversiones',
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': t, 'value': t} for t in sorted(df_sin_region['Tipo_Anuncio'].unique())],
+                        value='todos',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Métrica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-metrica-eje-izq-conv',
+                        options=[
+                            {'label': 'Ninguno', 'value': 'ninguno'},
+                            {'label': 'Conversiones', 'value': 'conversiones'},
+                            {'label': 'Gasto', 'value': 'gasto'}
+                        ],
+                        value='conversiones',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Métrica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-metrica-eje-der-conv',
+                        options=[
+                            {'label': 'Ninguno', 'value': 'ninguno'},
+                            {'label': 'Conversiones', 'value': 'conversiones'},
+                            {'label': 'Gasto', 'value': 'gasto'}
+                        ],
+                        value='gasto',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'})
+            ], style={'marginBottom': '20px'}),
+            dcc.Graph(id='grafico-evolucion-conversiones-filtrado')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
+        # Gráfico de evolución de costos con filtros
+        html.Div([
+            html.H3('Evolución de CPC y Costo por Conversión por Combinación Público-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.Div([
+                html.Div([
+                    html.Label('Filtrar por Público:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-publico-costos',
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
+                        value='todos',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Filtrar por Tipo de Anuncio:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-tipo-costos',
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': t, 'value': t} for t in sorted(df_sin_region['Tipo_Anuncio'].unique())],
+                        value='todos',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Métrica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-metrica-eje-izq-costos',
+                        options=[
+                            {'label': 'Ninguno', 'value': 'ninguno'},
+                            {'label': 'CPC', 'value': 'cpc'},
+                            {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
+                        ],
+                        value='cpc',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
+                html.Div([
+                    html.Label('Métrica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    dcc.Dropdown(
+                        id='filtro-metrica-eje-der-costos',
+                        options=[
+                            {'label': 'Ninguno', 'value': 'ninguno'},
+                            {'label': 'CPC', 'value': 'cpc'},
+                            {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
+                        ],
+                        value='costo_conversion',
+                        style={'backgroundColor': COLORS['card_bg'], 'color': 'black'}
+                    )
+                ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'})
+            ], style={'marginBottom': '20px'}),
+            dcc.Graph(id='grafico-evolucion-costos')
         ], style={
             'backgroundColor': COLORS['card_bg'],
             'padding': '20px',
@@ -249,8 +368,11 @@ if df_con_region is not None and df_sin_region is not None:
     # Callback principal
     @callback(
         [Output('metricas-principales', 'children'),
+         Output('seccion-performance', 'children'),
          Output('grafico-evolucion', 'figure'),
          Output('grafico-evolucion-conversiones', 'figure'),
+         Output('grafico-evolucion-conversiones-filtrado', 'figure'),
+         Output('grafico-evolucion-costos', 'figure'),
          Output('grafico-regiones', 'figure'),
          Output('grafico-publicos', 'figure'),
          Output('grafico-tipos-anuncios', 'figure'),
@@ -258,9 +380,20 @@ if df_con_region is not None and df_sin_region is not None:
          Output('insights-contenido', 'children')],
         [Input('date-range-picker', 'start_date'),
          Input('date-range-picker', 'end_date'),
-         Input('periodo-selector', 'value')]
+         Input('periodo-selector', 'value'),
+         Input('filtro-publico-conversiones', 'value'),
+         Input('filtro-tipo-conversiones', 'value'),
+         Input('filtro-metrica-eje-izq-conv', 'value'),
+         Input('filtro-metrica-eje-der-conv', 'value'),
+         Input('filtro-publico-costos', 'value'),
+         Input('filtro-tipo-costos', 'value'),
+         Input('filtro-metrica-eje-izq-costos', 'value'),
+         Input('filtro-metrica-eje-der-costos', 'value')]
     )
-    def actualizar_dashboard(start_date, end_date, periodo):
+    def actualizar_dashboard(start_date, end_date, periodo, filtro_publico_conv, filtro_tipo_conv, 
+                           filtro_metric_izq_conv, filtro_metric_der_conv,
+                           filtro_publico_costos, filtro_tipo_costos, 
+                           filtro_metric_izq_costos, filtro_metric_der_costos):
         try:
             # Filtrar datos por fecha - USAR ARCHIVO SIN REGIÓN para métricas generales
             mask_sin_region = (df_sin_region['Día'] >= start_date) & (df_sin_region['Día'] <= end_date)
@@ -278,7 +411,7 @@ if df_con_region is not None and df_sin_region is not None:
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']}
                 )
-                return (html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
+                return (html.Div("No hay datos"), html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
             
             # Calcular métricas principales (usar archivo SIN región)
             total_gasto = df_filtrado_sin_region['Importe gastado (CLP)'].sum()
@@ -316,6 +449,78 @@ if df_con_region is not None and df_sin_region is not None:
                     html.P('Conversiones', style={'margin': '5px 0', 'fontWeight': 'bold', 'color': COLORS['text']})
                 ], style=CARD_STYLE)
             ], style={'display': 'flex', 'justifyContent': 'center', 'marginBottom': '30px', 'flexWrap': 'wrap'})
+            
+            # Sección Top Performers y Needs Attention
+            df_combinaciones = df_filtrado_sin_region.groupby(['Público', 'Tipo_Anuncio']).agg({
+                'Importe gastado (CLP)': 'sum',
+                'Artículos agregados al carrito': 'sum',
+                'Clics en el enlace': 'sum'
+            }).reset_index()
+            
+            # Calcular métricas adicionales
+            df_combinaciones['CPC'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Clics en el enlace']).fillna(0)
+            df_combinaciones['Costo_Por_Conversion'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Artículos agregados al carrito']).fillna(0)
+            df_combinaciones['Conversion_Rate'] = (df_combinaciones['Artículos agregados al carrito'] / df_combinaciones['Clics en el enlace'] * 100).fillna(0)
+            
+            # Top Performers (mejor costo por conversión)
+            top_performers = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] > 0].nlargest(5, 'Conversion_Rate')
+            
+            # Needs Attention (gasto sin conversiones)
+            needs_attention = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] == 0].nlargest(5, 'Importe gastado (CLP)')
+            
+            seccion_performance = html.Div([
+                html.Div([
+                    html.H3('🏆 Top Performers (Mejor Tasa de Conversión)', style={'color': COLORS['income'], 'marginBottom': '15px'}),
+                    html.Div([
+                        html.Table([
+                            html.Thead([
+                                html.Tr([
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Tasa Conv.', style={'color': COLORS['text'], 'padding': '8px'})
+                                ])
+                            ]),
+                            html.Tbody([
+                                html.Tr([
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(f"{row['Conversion_Rate']:.2f}%", style={'color': COLORS['income'], 'padding': '8px', 'fontWeight': 'bold'})
+                                ]) for _, row in top_performers.iterrows()
+                            ])
+                        ], style={'width': '100%', 'borderCollapse': 'collapse'})
+                    ])
+                ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px', 'marginBottom': '20px'}),
+                
+                html.Div([
+                    html.H3('⚠️ Needs Attention (Sin Conversiones)', style={'color': COLORS['expense'], 'marginBottom': '15px'}),
+                    html.Div([
+                        html.Table([
+                            html.Thead([
+                                html.Tr([
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Clics', style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px'})
+                                ])
+                            ]),
+                            html.Tbody([
+                                html.Tr([
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['expense'], 'padding': '8px', 'fontWeight': 'bold'}),
+                                    html.Td(f"{row['Clics en el enlace']:.0f}", style={'color': COLORS['text'], 'padding': '8px'}),
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px'})
+                                ]) for _, row in needs_attention.iterrows()
+                            ])
+                        ], style={'width': '100%', 'borderCollapse': 'collapse'})
+                    ])
+                ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px'})
+            ])
             
             # 2. Gráfico de evolución temporal con tema oscuro
             if periodo == 'D':
@@ -462,7 +667,6 @@ if df_con_region is not None and df_sin_region is not None:
             fig_evolucion_conv.update_layout(
                 title=titulo_conv,
                 xaxis_title='Período',
-                yaxis_title='Conversiones',
                 height=500,
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -475,10 +679,10 @@ if df_con_region is not None and df_sin_region is not None:
                 ),
                 yaxis=dict(
                     title='Conversiones',
-                    titlefont=dict(color=COLORS['text']),
-                    tickfont=dict(color=COLORS['text']),
                     showgrid=True,
-                    gridcolor=COLORS['grid']
+                    gridcolor=COLORS['grid'],
+                    tickfont={'color': COLORS['text']},
+                    title_font={'color': COLORS['text']}
                 ),
                 legend=dict(
                     font=dict(color=COLORS['text']),
@@ -491,7 +695,270 @@ if df_con_region is not None and df_sin_region is not None:
                 hovermode='x unified'
             )
             
-            # 4. Gráfico por región con tema oscuro
+            # 4. Gráfico de evolución de conversiones y gasto con filtros
+            if periodo == 'D':
+                df_conv_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
+                    'Importe gastado (CLP)': 'sum'
+                }).reset_index()
+                titulo_conv_filtrado = 'Evolución Diaria de Conversiones y Gasto por Combinación'
+            elif periodo == 'W':
+                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
+                    'Importe gastado (CLP)': 'sum'
+                }).reset_index()
+                df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv_filtrado = 'Evolución Semanal de Conversiones y Gasto por Combinación'
+            else:
+                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
+                    'Importe gastado (CLP)': 'sum'
+                }).reset_index()
+                df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv_filtrado = 'Evolución Mensual de Conversiones y Gasto por Combinación'
+            
+            # Aplicar filtros
+            if filtro_publico_conv != 'todos':
+                df_conv_combinado = df_conv_combinado[df_conv_combinado['Público'] == filtro_publico_conv]
+            if filtro_tipo_conv != 'todos':
+                df_conv_combinado = df_conv_combinado[df_conv_combinado['Tipo_Anuncio'] == filtro_tipo_conv]
+            
+            fig_evolucion_conv_filtrado = go.Figure()
+            
+            # Crear combinación única
+            df_conv_combinado['Combinacion'] = df_conv_combinado['Público'] + ' - ' + df_conv_combinado['Tipo_Anuncio']
+            
+            # Agregar líneas según métricas seleccionadas
+            combinaciones = df_conv_combinado['Combinacion'].unique()
+            
+            for i, combinacion in enumerate(combinaciones):
+                df_combinacion = df_conv_combinado[df_conv_combinado['Combinacion'] == combinacion]
+                color = obtener_color_combinacion(i)
+                
+                # Métrica eje izquierdo
+                if filtro_metric_izq_conv != 'ninguno':
+                    if filtro_metric_izq_conv == 'conversiones':
+                        y_data = df_combinacion['Artículos agregados al carrito']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
+                    else:  # gasto
+                        y_data = df_combinacion['Importe gastado (CLP)']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Gasto: $%{{y:,.0f}}<extra></extra>'
+                    
+                    fig_evolucion_conv_filtrado.add_trace(go.Scatter(
+                        x=df_combinacion['Día'],
+                        y=y_data,
+                        mode='lines+markers',
+                        name=f'{filtro_metric_izq_conv.title()}: {combinacion}',
+                        line=dict(color=color, width=2),
+                        marker=dict(size=6),
+                        yaxis='y',
+                        hovertemplate=hover_template
+                    ))
+                
+                # Métrica eje derecho
+                if filtro_metric_der_conv != 'ninguno':
+                    if filtro_metric_der_conv == 'conversiones':
+                        y_data = df_combinacion['Artículos agregados al carrito']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
+                    else:  # gasto
+                        y_data = df_combinacion['Importe gastado (CLP)']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Gasto: $%{{y:,.0f}}<extra></extra>'
+                    
+                    fig_evolucion_conv_filtrado.add_trace(go.Scatter(
+                        x=df_combinacion['Día'],
+                        y=y_data,
+                        mode='lines+markers',
+                        name=f'{filtro_metric_der_conv.title()}: {combinacion}',
+                        line=dict(color=color, width=2, dash='dash'),
+                        marker=dict(size=6, symbol='diamond'),
+                        yaxis='y2',
+                        hovertemplate=hover_template
+                    ))
+            
+            # Configurar layout
+            layout_yaxis = {}
+            layout_yaxis2 = {}
+            
+            if filtro_metric_izq_conv != 'ninguno':
+                titulo_eje_izq = 'Conversiones' if filtro_metric_izq_conv == 'conversiones' else 'Gasto (CLP)'
+                layout_yaxis = dict(
+                    title=titulo_eje_izq,
+                    showgrid=True,
+                    gridcolor=COLORS['grid'],
+                    side='left'
+                )
+            
+            if filtro_metric_der_conv != 'ninguno':
+                titulo_eje_der = 'Conversiones' if filtro_metric_der_conv == 'conversiones' else 'Gasto (CLP)'
+                layout_yaxis2 = dict(
+                    title=titulo_eje_der,
+                    showgrid=False,
+                    side='right',
+                    overlaying='y'
+                )
+            
+            fig_evolucion_conv_filtrado.update_layout(
+                title=titulo_conv_filtrado,
+                xaxis_title='Período',
+                height=500,
+                paper_bgcolor=COLORS['card_bg'],
+                plot_bgcolor=COLORS['card_bg'],
+                font={'color': COLORS['text']},
+                xaxis=dict(
+                    showgrid=True,
+                    gridcolor=COLORS['grid'],
+                    tickfont={'color': COLORS['text']},
+                    title_font={'color': COLORS['text']}
+                ),
+                yaxis=layout_yaxis,
+                yaxis2=layout_yaxis2,
+                legend=dict(
+                    font=dict(color=COLORS['text']),
+                    orientation='h',
+                    yanchor='bottom',
+                    y=1.02,
+                    xanchor='right',
+                    x=1
+                ),
+                hovermode='x unified'
+            )
+            
+            # 5. Gráfico de evolución de costos con filtros
+            if periodo == 'D':
+                df_costos_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Clics en el enlace': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                titulo_costos = 'Evolución Diaria de Costos por Combinación'
+            elif periodo == 'W':
+                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Clics en el enlace': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_costos = 'Evolución Semanal de Costos por Combinación'
+            else:
+                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Importe gastado (CLP)': 'sum',
+                    'Clics en el enlace': 'sum',
+                    'Artículos agregados al carrito': 'sum'
+                }).reset_index()
+                df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_costos = 'Evolución Mensual de Costos por Combinación'
+            
+            # Calcular CPC y costo por conversión
+            df_costos_combinado['CPC'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Clics en el enlace']).fillna(0)
+            df_costos_combinado['Costo_Por_Conversion'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Artículos agregados al carrito']).fillna(0)
+            
+            # Aplicar filtros
+            if filtro_publico_costos != 'todos':
+                df_costos_combinado = df_costos_combinado[df_costos_combinado['Público'] == filtro_publico_costos]
+            if filtro_tipo_costos != 'todos':
+                df_costos_combinado = df_costos_combinado[df_costos_combinado['Tipo_Anuncio'] == filtro_tipo_costos]
+            
+            fig_evolucion_costos = go.Figure()
+            
+            # Crear combinación única
+            df_costos_combinado['Combinacion'] = df_costos_combinado['Público'] + ' - ' + df_costos_combinado['Tipo_Anuncio']
+            
+            # Agregar líneas según métricas seleccionadas
+            combinaciones_costos = df_costos_combinado['Combinacion'].unique()
+            
+            for i, combinacion in enumerate(combinaciones_costos):
+                df_combinacion = df_costos_combinado[df_costos_combinado['Combinacion'] == combinacion]
+                color = obtener_color_combinacion(i)
+                
+                # Métrica eje izquierdo
+                if filtro_metric_izq_costos != 'ninguno':
+                    if filtro_metric_izq_costos == 'cpc':
+                        y_data = df_combinacion['CPC']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>CPC: $%{{y:,.0f}}<extra></extra>'
+                    else:  # costo_conversion
+                        y_data = df_combinacion['Costo_Por_Conversion']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por Conversión: $%{{y:,.0f}}<extra></extra>'
+                    
+                    fig_evolucion_costos.add_trace(go.Scatter(
+                        x=df_combinacion['Día'],
+                        y=y_data,
+                        mode='lines+markers',
+                        name=f'{filtro_metric_izq_costos.upper()}: {combinacion}',
+                        line=dict(color=color, width=2),
+                        marker=dict(size=6),
+                        yaxis='y',
+                        hovertemplate=hover_template
+                    ))
+                
+                # Métrica eje derecho
+                if filtro_metric_der_costos != 'ninguno':
+                    if filtro_metric_der_costos == 'cpc':
+                        y_data = df_combinacion['CPC']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>CPC: $%{{y:,.0f}}<extra></extra>'
+                    else:  # costo_conversion
+                        y_data = df_combinacion['Costo_Por_Conversion']
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por Conversión: $%{{y:,.0f}}<extra></extra>'
+                    
+                    fig_evolucion_costos.add_trace(go.Scatter(
+                        x=df_combinacion['Día'],
+                        y=y_data,
+                        mode='lines+markers',
+                        name=f'{filtro_metric_der_costos.upper()}: {combinacion}',
+                        line=dict(color=color, width=2, dash='dash'),
+                        marker=dict(size=6, symbol='diamond'),
+                        yaxis='y2',
+                        hovertemplate=hover_template
+                    ))
+            
+            # Configurar layout para costos
+            layout_yaxis_costos = {}
+            layout_yaxis2_costos = {}
+            
+            if filtro_metric_izq_costos != 'ninguno':
+                titulo_eje_izq_costos = 'CPC (CLP)' if filtro_metric_izq_costos == 'cpc' else 'Costo por Conversión (CLP)'
+                layout_yaxis_costos = dict(
+                    title=titulo_eje_izq_costos,
+                    showgrid=True,
+                    gridcolor=COLORS['grid'],
+                    side='left'
+                )
+            
+            if filtro_metric_der_costos != 'ninguno':
+                titulo_eje_der_costos = 'CPC (CLP)' if filtro_metric_der_costos == 'cpc' else 'Costo por Conversión (CLP)'
+                layout_yaxis2_costos = dict(
+                    title=titulo_eje_der_costos,
+                    showgrid=False,
+                    side='right',
+                    overlaying='y'
+                )
+            
+            fig_evolucion_costos.update_layout(
+                title=titulo_costos,
+                xaxis_title='Período',
+                height=500,
+                paper_bgcolor=COLORS['card_bg'],
+                plot_bgcolor=COLORS['card_bg'],
+                font={'color': COLORS['text']},
+                xaxis=dict(
+                    showgrid=True,
+                    gridcolor=COLORS['grid'],
+                    tickfont={'color': COLORS['text']},
+                    title_font={'color': COLORS['text']}
+                ),
+                yaxis=layout_yaxis_costos,
+                yaxis2=layout_yaxis2_costos,
+                legend=dict(
+                    font=dict(color=COLORS['text']),
+                    orientation='h',
+                    yanchor='bottom',
+                    y=1.02,
+                    xanchor='right',
+                    x=1
+                ),
+                hovermode='x unified'
+            )
+            
+            # 6. Gráfico por región con tema oscuro
             if df_filtrado_con_region.empty:
                 fig_regiones = go.Figure()
                 fig_regiones.update_layout(
@@ -518,10 +985,9 @@ if df_con_region is not None and df_sin_region is not None:
                 ))
                 
                 fig_regiones.update_layout(
-                    title='Gasto por Región (Top 10)',
+                    title='Gasto por Región',
                     xaxis_title='Gasto (CLP)',
-                    yaxis_title='',
-                    height=500,
+                    height=400,
                     paper_bgcolor=COLORS['card_bg'],
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']},
@@ -539,7 +1005,7 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 )
             
-            # 5. Gráfico por públicos con tema oscuro
+            # 7. Gráfico por públicos con tema oscuro
             df_publicos = df_filtrado_sin_region.groupby('Público').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
@@ -577,7 +1043,10 @@ if df_con_region is not None and df_sin_region is not None:
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
-            # 6. Gráfico por tipos de anuncios con tema oscuro
+            # Rotar etiquetas del eje x para públicos
+            fig_publicos.update_xaxes(tickangle=45)
+            
+            # 8. Gráfico por tipos de anuncios con tema oscuro
             df_tipos = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
@@ -615,7 +1084,7 @@ if df_con_region is not None and df_sin_region is not None:
             # Rotar etiquetas del eje x para tipos de anuncios
             fig_tipos.update_xaxes(tickangle=45)
             
-            # 7. Gráfico de Hook Rates con tema oscuro
+            # 9. Gráfico de Hook Rates con tema oscuro
             df_hooks = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Hook_Rate_3s': 'mean',
                 'Hook_Rate_25': 'mean',
@@ -685,7 +1154,7 @@ if df_con_region is not None and df_sin_region is not None:
             ))
             
             # Configurar todos los gráficos con tema oscuro
-            for fig in [fig_publicos, fig_tipos, fig_hooks]:
+            for fig in [fig_evolucion_conv_filtrado, fig_evolucion_costos, fig_hooks]:
                 fig.update_layout(
                     paper_bgcolor=COLORS['card_bg'],
                     plot_bgcolor=COLORS['card_bg'],
@@ -706,13 +1175,13 @@ if df_con_region is not None and df_sin_region is not None:
                 )
             
             # Configuraciones específicas
-            fig_publicos.update_layout(
-                title='Comparación entre Públicos',
+            fig_evolucion_conv_filtrado.update_layout(
+                title='Evolución de Conversiones y Gasto por Combinación',
                 height=800
             )
             
-            fig_tipos.update_layout(
-                title='Comparación de Métricas por Tipo de Anuncio',
+            fig_evolucion_costos.update_layout(
+                title='Evolución de Costos por Combinación',
                 height=800
             )
             
@@ -764,7 +1233,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             insights_contenido = html.Div(insights)
             
-            return metricas, fig_evolucion, fig_evolucion_conv, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
+            return metricas, seccion_performance, fig_evolucion, fig_evolucion_conv, fig_evolucion_conv_filtrado, fig_evolucion_costos, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
             
         except Exception as e:
             print(f"Error en callback: {str(e)}")
@@ -776,7 +1245,7 @@ if df_con_region is not None and df_sin_region is not None:
                 plot_bgcolor=COLORS['card_bg'],
                 font={'color': COLORS['text']}
             )
-            return (html.Div("Error al cargar datos", style={'color': COLORS['text']}), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "Error en insights")
+            return (html.Div("Error al cargar datos", style={'color': COLORS['text']}), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "Error en insights")
 
 else:
     app.layout = html.Div([
