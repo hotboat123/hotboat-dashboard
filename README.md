@@ -1,19 +1,4 @@
-# Para actualizar data
-1. Descargar movimientos facturados bco chile nacional e internacional
-2. Descargar mov no facturados bco chile (opcional) y cuenta corriente banco chile nacional
-3. Revisar ultima fila de abonos bco estado y descargar chequera histórica desde esa fecha (pueden ser varios archivos)
-4. Descargar info mercado pago --> Tu negocio - ventas - descargar Excel de ventas #creo que no es necesario, info esta en cta cte bancho chile
-5. Descargar Appointments y Payments de Booknetic
-5. Subir toda esa info a carpeta "archivo_input" desde carpeta "descargas" (eliminar appointments y payments antiguo)
-6. correr código "gastos_hotboat_sin_Drive.py"
-6. correr código "Informacion_reservas.py"
-6. correr código "estimacion_utilidad__hotboat.py"
-7. correr código "ejecutar_todos_dashboards.py"
-8. abrir link 
-
-
-
-# Dashboard HotBoat
+# HotBoat Dashboard System
 
 Sistema completo de análisis y visualización de datos para HotBoat, incluyendo 3 dashboards especializados.
 
@@ -24,17 +9,33 @@ Sistema completo de análisis y visualización de datos para HotBoat, incluyendo
 pip install -r requirements.txt
 ```
 
-### Estructura de Archivos
+### Estructura de Archivos (NUEVA ORGANIZACIÓN)
+
+#### 📁 Archivos Principales (Raíz del proyecto)
 ```
-├── dashboards.py                  # Módulo principal con funciones de dashboard
-├── dashboard_utilidad.py          # Dashboard específico de marketing/utilidad
-├── reservas.py                   # Ejecutor del dashboard de reservas
-├── utilidad.py                   # Ejecutor del dashboard de utilidad operativa  
-├── marketing.py                  # Ejecutor del dashboard de marketing
-├── ejecutar_todos_dashboards.py  # 🔥 NUEVO: Ejecutor múltiple de todos los dashboards
-├── funciones/                    # Componentes y utilidades
-├── archivos_output/              # Datos procesados (CSV)
-└── archivos_input/               # Datos fuente
+├── ejecutar_todos_dashboards.py    # 🔥 PRINCIPAL: Ejecutor múltiple de todos los dashboards
+├── Informacion_reservas.py         # Procesamiento de datos de reservas
+├── inputs_modelo.py                # Configuraciones y parámetros del modelo
+├── gastos_hotboat_sin_drive.py     # Procesamiento de gastos financieros
+├── estimacion_utilidad_hotboat.py  # Cálculo de utilidad operativa
+├── dashboards.py                   # Módulo principal con funciones de dashboard
+├── reservas.py                     # Ejecutor del dashboard de reservas
+├── utilidad.py                     # Ejecutor del dashboard de utilidad operativa  
+├── marketing.py                    # Ejecutor del dashboard de marketing
+├── funciones/                      # Componentes y utilidades
+├── archivos_output/                # Datos procesados (CSV)
+└── archivos_input/                 # Datos fuente
+```
+
+#### 📁 Archivos Secundarios (archivos_secundarios/)
+```
+├── dashboard_*.py                  # Versiones anteriores de dashboards
+├── capturar_dashboards_*.py        # Scripts de captura de screenshots
+├── analisis_graficos.py            # Análisis de gráficos independiente
+├── check_*.py                      # Scripts de verificación
+├── debug_*.py                      # Scripts de depuración
+├── test_*.py                       # Scripts de prueba
+└── gastos_hotboat_sin_drive antiguo.py  # Versión anterior del procesador
 ```
 
 ## 📊 Dashboards Disponibles
@@ -42,7 +43,6 @@ pip install -r requirements.txt
 ### 1. Dashboard de Reservas
 - **Puerto:** 8050
 - **URL:** http://localhost:8050
-- **Ejecutar:** `python reservas.py`
 - **Características:**
   - Análisis de reservas por periodo
   - Métricas de ocupación
@@ -52,7 +52,6 @@ pip install -r requirements.txt
 ### 2. Dashboard de Utilidad Operativa
 - **Puerto:** 8055  
 - **URL:** http://localhost:8055
-- **Ejecutar:** `python utilidad.py`
 - **Características:**
   - Cálculo de utilidad operativa
   - Análisis de ingresos vs costos
@@ -62,7 +61,6 @@ pip install -r requirements.txt
 ### 3. Dashboard de Marketing
 - **Puerto:** 8056
 - **URL:** http://localhost:8056  
-- **Ejecutar:** `python marketing.py`
 - **Características:**
   - Análisis detallado de gastos de marketing
   - ROI de campañas publicitarias
@@ -78,7 +76,7 @@ Todos los dashboards incluyen una barra de navegación superior que permite camb
 
 ## 🔧 Uso Rápido
 
-### 🔥 NUEVO: Ejecutar Todos Simultáneamente (Recomendado)
+### 🔥 PRINCIPAL: Ejecutar Todos Simultáneamente (Recomendado)
 ```bash
 # Un solo comando que ejecuta los 3 dashboards
 python ejecutar_todos_dashboards.py
@@ -96,6 +94,23 @@ python utilidad.py
 python marketing.py
 ```
 
+## 📈 Procesamiento de Datos
+
+### Flujo de Trabajo Completo
+1. **Descargar datos bancarios** (Banco Chile, Banco Estado, Mercado Pago)
+2. **Descargar datos de Booknetic** (Appointments y Payments)
+3. **Subir archivos a `archivos_input/`**
+4. **Ejecutar procesamiento:**
+   ```bash
+   python gastos_hotboat_sin_drive.py
+   python Informacion_reservas.py
+   python estimacion_utilidad_hotboat.py
+   ```
+5. **Ejecutar dashboards:**
+   ```bash
+   python ejecutar_todos_dashboards.py
+   ```
+
 ## 📈 Datos Requeridos
 
 Los dashboards requieren los siguientes archivos en `archivos_output/`:
@@ -112,46 +127,11 @@ Los dashboards requieren los siguientes archivos en `archivos_output/`:
 ✅ **NAVEGACIÓN** - Sistema de navegación integrado
 ✅ **DATOS** - Carga automática de todos los archivos CSV
 ✅ **VISUALIZACIÓN** - Gráficos interactivos con Plotly
-
-## Características
-
-- Visualización de reservas por día, semana y mes
-- Gráfico de horarios más populares
-- Interfaz moderna con tema oscuro
-- Métricas clave de reservas
-
-## Requisitos
-
-- Python 3.8+
-- Dependencias listadas en `requirements.txt`
-
-## Instalación
-
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/hotboat123/hotboat-dashboard.git
-cd hotboat-dashboard
-```
-
-2. Instalar dependencias:
-```bash
-pip install -r requirements.txt
-```
-
-## Uso
-
-1. Asegúrate de tener el archivo de datos `archivos/reservas_HotBoat.csv` en el directorio correcto.
-
-2. Ejecutar el dashboard:
-```bash
-python dashboard_reservas.py
-```
-
-3. Abrir el navegador en `http://localhost:8050`
+✅ **ORGANIZACIÓN** - Estructura limpia y organizada
 
 ## 🚀 Ejecutor Múltiple de Dashboards
 
-### Nuevo: `ejecutar_todos_dashboards.py`
+### `ejecutar_todos_dashboards.py`
 
 Este archivo ejecuta automáticamente los 3 dashboards simultáneamente usando multiprocessing:
 
@@ -196,17 +176,45 @@ python ejecutar_todos_dashboards.py
 ============================================================
 ```
 
-## Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 hotboat-dashboard/
-├── archivos/
-│   └── reservas_HotBoat.csv
-├── dashboard_reservas.py
-├── requirements.txt
-└── README.md
+├── 📁 Archivos Principales
+│   ├── ejecutar_todos_dashboards.py    # 🚀 PRINCIPAL
+│   ├── Informacion_reservas.py         # 📊 Procesamiento reservas
+│   ├── inputs_modelo.py                # ⚙️ Configuraciones
+│   ├── gastos_hotboat_sin_drive.py     # 💰 Procesamiento gastos
+│   ├── estimacion_utilidad_hotboat.py  # 📈 Cálculo utilidad
+│   ├── dashboards.py                   # 🏗️ Módulo principal
+│   ├── reservas.py                     # 🎯 Dashboard reservas
+│   ├── utilidad.py                     # 💼 Dashboard utilidad
+│   └── marketing.py                    # 📢 Dashboard marketing
+├── 📁 archivos_secundarios/            # 🔧 Archivos de desarrollo
+├── 📁 funciones/                       # 🛠️ Utilidades y componentes
+├── 📁 archivos_output/                 # 📊 Datos procesados
+├── 📁 archivos_input/                  # 📥 Datos fuente
+├── 📁 archivos_input_tst/              # 🧪 Datos de prueba
+├── 📁 tests/                           # 🧪 Pruebas
+├── 📁 graficos/                        # 📈 Gráficos exportados
+├── requirements.txt                    # 📦 Dependencias
+├── README.md                           # 📖 Documentación
+└── NAVEGACION_DASHBOARDS.md           # 🧭 Guía de navegación
 ```
 
-## Licencia
+## 🎯 Archivos Esenciales
 
-Este proyecto está bajo la Licencia MIT. 
+### Para Ejecutar Dashboards:
+1. `ejecutar_todos_dashboards.py` - **PRINCIPAL**
+2. `dashboards.py` - Módulo base
+3. `reservas.py`, `utilidad.py`, `marketing.py` - Ejecutores
+
+### Para Procesar Datos:
+1. `gastos_hotboat_sin_drive.py` - Procesamiento financiero
+2. `Informacion_reservas.py` - Procesamiento reservas
+3. `estimacion_utilidad_hotboat.py` - Cálculo utilidad
+4. `inputs_modelo.py` - Configuraciones
+
+### Para Desarrollo:
+- Carpeta `archivos_secundarios/` - Versiones anteriores y herramientas
+- Carpeta `funciones/` - Componentes reutilizables 
