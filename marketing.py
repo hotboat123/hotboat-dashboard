@@ -5,8 +5,13 @@
 print("📊 INICIANDO DASHBOARD DE MARKETING HOTBOAT...")
 print("=" * 60)
 
-# Ejecutar dashboard de marketing específico
-from dashboard_marketing_simple import app
+# Importar el dashboard de marketing
+try:
+    from dashboard_marketing_simple import app
+    print("✅ Dashboard importado desde archivo original")
+except ImportError as e:
+    print(f"❌ Error importando dashboard: {e}")
+    exit(1)
 
 if __name__ == '__main__':
     print("📈 Cargando datos de marketing...")

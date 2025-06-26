@@ -1,4 +1,4 @@
-﻿import dash
+import dash
 from dash import html, dcc, Input, Output, callback
 import pandas as pd
 import plotly.graph_objects as go
@@ -8,57 +8,57 @@ from datetime import datetime
 import os
 import numpy as np
 
-# Importar componentes comunes de navegaciÃ³n
+# Importar componentes comunes de navegación
 from funciones.componentes_dashboard import crear_header, crear_filtros, crear_selector_periodo, COLORS, CARD_STYLE
 
-# Paleta de colores diversa para combinaciones pÃºblico-tipo de anuncio
+# Paleta de colores diversa para combinaciones público-tipo de anuncio
 PALETA_COLORES = [
-    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',  # Azul, Naranja, Verde, Rojo, PÃºrpura
-    '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',  # MarrÃ³n, Rosa, Gris, Verde lima, Cian
-    '#a6cee3', '#fb9a99', '#fdbf6f', '#cab2d6', '#ff9896',  # Azul claro, Rosa claro, Naranja claro, PÃºrpura claro, Rosa claro 2
-    '#f0027f', '#386cb0', '#fdc086', '#beaed4', '#7fc97f',  # Magenta, Azul oscuro, Naranja oscuro, PÃºrpura oscuro, Verde oscuro
-    '#bf5b17', '#666666', '#fb8072', '#80b1d3', '#fdb462',  # MarrÃ³n oscuro, Gris oscuro, Rojo claro, Azul medio, Naranja medio
-    '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd', '#ccebc5'   # Verde lima claro, Rosa muy claro, Gris claro, PÃºrpura medio, Verde muy claro
+    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',  # Azul, Naranja, Verde, Rojo, Púrpura
+    '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',  # Marrón, Rosa, Gris, Verde lima, Cian
+    '#a6cee3', '#fb9a99', '#fdbf6f', '#cab2d6', '#ff9896',  # Azul claro, Rosa claro, Naranja claro, Púrpura claro, Rosa claro 2
+    '#f0027f', '#386cb0', '#fdc086', '#beaed4', '#7fc97f',  # Magenta, Azul oscuro, Naranja oscuro, Púrpura oscuro, Verde oscuro
+    '#bf5b17', '#666666', '#fb8072', '#80b1d3', '#fdb462',  # Marrón oscuro, Gris oscuro, Rojo claro, Azul medio, Naranja medio
+    '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd', '#ccebc5'   # Verde lima claro, Rosa muy claro, Gris claro, Púrpura medio, Verde muy claro
 ]
 
 def obtener_color_combinacion(indice):
-    """Asigna un color Ãºnico a cada combinaciÃ³n pÃºblico-tipo de anuncio"""
+    """Asigna un color único a cada combinación público-tipo de anuncio"""
     return PALETA_COLORES[indice % len(PALETA_COLORES)]
 
-# FunciÃ³n para cargar datos con mÃ¡s procesamiento
+# Función para cargar datos con más procesamiento
 def cargar_datos():
-    """Carga los archivos CSV de marketing especÃ­ficos: (5) CON regiÃ³n y (6) SIN regiÃ³n."""
+    """Carga los archivos CSV de marketing específicos: (5) CON región y (6) SIN región."""
     try:
-        # Archivo CON regiÃ³n (5) - para grÃ¡fico de regiones
-        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2CampaÃ±as-3-anuncios-por-dia_con_region.csv"
-        print(f"ðŸ”„ Cargando archivo CON regiÃ³n (5): {archivo_con_region}")
+        # Archivo CON región (5) - para gráfico de regiones
+        archivo_con_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_con_region.csv"
+        print(f"🔄 Cargando archivo CON región (5): {archivo_con_region}")
         
         if not os.path.exists(archivo_con_region):
-            print(f"âŒ ERROR: No se encuentra el archivo en: {archivo_con_region}")
+            print(f"❌ ERROR: No se encuentra el archivo en: {archivo_con_region}")
             return None, None
         
         df_con_region = pd.read_csv(archivo_con_region)
-        print(f"âœ… Archivo CON regiÃ³n (5) cargado. Dimensiones: {df_con_region.shape}")
+        print(f"✅ Archivo CON región (5) cargado. Dimensiones: {df_con_region.shape}")
         
-        # Archivo SIN regiÃ³n (6) - para demÃ¡s grÃ¡ficos  
-        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2CampaÃ±as-3-anuncios-por-dia_sin_region.csv"
-        print(f"ðŸ”„ Cargando archivo SIN regiÃ³n (6): {archivo_sin_region}")
+        # Archivo SIN región (6) - para demás gráficos  
+        archivo_sin_region = "archivos_input/archivos input marketing/Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia_sin_region.csv"
+        print(f"🔄 Cargando archivo SIN región (6): {archivo_sin_region}")
         
         if not os.path.exists(archivo_sin_region):
-            print(f"âŒ ERROR: No se encuentra el archivo en: {archivo_sin_region}")
+            print(f"❌ ERROR: No se encuentra el archivo en: {archivo_sin_region}")
             return None, None
             
         df_sin_region = pd.read_csv(archivo_sin_region)
-        print(f"âœ… Archivo SIN regiÃ³n (6) cargado. Dimensiones: {df_sin_region.shape}")
+        print(f"✅ Archivo SIN región (6) cargado. Dimensiones: {df_sin_region.shape}")
         
-        print("ðŸ“Š USANDO NUEVOS INPUTS ESPECÃFICOS:")
-        print(f"   ðŸ“ˆ Dataset (6): {len(df_sin_region)} filas - Sin regiÃ³n")
-        print(f"   ðŸ—ºï¸ Dataset (5): {len(df_con_region)} filas - Con regiÃ³n")
+        print("📊 USANDO NUEVOS INPUTS ESPECÍFICOS:")
+        print(f"   📈 Dataset (6): {len(df_sin_region)} filas - Sin región")
+        print(f"   🗺️ Dataset (5): {len(df_con_region)} filas - Con región")
         
         # Procesar archivos con datos actualizados
         numeric_columns = [
             "Importe gastado (CLP)", "Impresiones", "Clics en el enlace", 
-            "ArtÃ­culos agregados al carrito", "CTR (todos)", "CPC (todos)",
+            "Artículos agregados al carrito", "CTR (todos)", "CPC (todos)",
             "Reproducciones de video de 3 segundos", "Reproducciones de video hasta el 25%",
             "Reproducciones de video hasta el 50%", "Reproducciones de video hasta el 75%",
             "Reproducciones de video hasta el 100%"
@@ -70,7 +70,7 @@ def cargar_datos():
                     df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
             
             # Convertir fechas
-            df['DÃ­a'] = pd.to_datetime(df['DÃ­a'])
+            df['Día'] = pd.to_datetime(df['Día'])
             
             # Agregar columnas calculadas
             df['CTR_calc'] = (df['Clics en el enlace'] / df['Impresiones'] * 100).fillna(0)
@@ -80,27 +80,27 @@ def cargar_datos():
             df['Hook_Rate_50'] = (df['Reproducciones de video hasta el 50%'] / df['Impresiones'] * 100).fillna(0)
             df['Hook_Rate_75'] = (df['Reproducciones de video hasta el 75%'] / df['Impresiones'] * 100).fillna(0)
             df['Hook_Rate_100'] = (df['Reproducciones de video hasta el 100%'] / df['Impresiones'] * 100).fillna(0)
-            df['Conversion_Rate'] = (df['ArtÃ­culos agregados al carrito'] / df['Clics en el enlace'] * 100).fillna(0)
-            df['Cost_Per_Conversion'] = (df['Importe gastado (CLP)'] / df['ArtÃ­culos agregados al carrito']).fillna(0)
+            df['Conversion_Rate'] = (df['Artículos agregados al carrito'] / df['Clics en el enlace'] * 100).fillna(0)
+            df['Cost_Per_Conversion'] = (df['Importe gastado (CLP)'] / df['Artículos agregados al carrito']).fillna(0)
             
-            # Clasificar pÃºblicos - mantener todas las regiones/pÃºblicos separados
+            # Clasificar públicos - mantener todas las regiones/públicos separados
             def clasificar_publico(x):
                 nombre = str(x).lower()
                 if 'advantage' in nombre:
                     return 'Publico Advantage'
                 elif 'pucon' in nombre:
-                    return 'Publico PucÃ³n'
+                    return 'Publico Pucón'
                 elif 'concepcion' in nombre:
-                    return 'Publico ConcepciÃ³n'
+                    return 'Publico Concepción'
                 elif 'valdivia' in nombre:
                     return 'Publico Valdivia'
                 elif 'temuco' in nombre:
-                    return 'Test PÃºblicos Temuco'
+                    return 'Test Públicos Temuco'
                 else:
                     # Mantener el nombre original para otros casos
                     return str(x)
             
-            df['PÃºblico'] = df['Nombre del conjunto de anuncios'].apply(clasificar_publico)
+            df['Público'] = df['Nombre del conjunto de anuncios'].apply(clasificar_publico)
             
             # Clasificar tipos de anuncios
             df['Tipo_Anuncio'] = df['Nombre del anuncio'].apply(
@@ -111,9 +111,9 @@ def cargar_datos():
                          'Otro'
             )
         
-        print("ðŸŽ‰ Ambos archivos procesados exitosamente con nuevos inputs")
-        print(f"âœ… Dataset (5) CON regiÃ³n: {len(df_con_region)} filas")
-        print(f"âœ… Dataset (6) SIN regiÃ³n: {len(df_sin_region)} filas")
+        print("🎉 Ambos archivos procesados exitosamente con nuevos inputs")
+        print(f"✅ Dataset (5) CON región: {len(df_con_region)} filas")
+        print(f"✅ Dataset (6) SIN región: {len(df_sin_region)} filas")
         print("=" * 60)
         return df_con_region, df_sin_region
     
@@ -121,22 +121,22 @@ def cargar_datos():
         print(f"Error cargando datos: {str(e)}")
         return None, None
 
-# Crear aplicaciÃ³n
+# Crear aplicación
 app = dash.Dash(__name__)
 
 # Cargar datos
 df_con_region, df_sin_region = cargar_datos()
 
 if df_con_region is not None and df_sin_region is not None:
-    fecha_min = df_con_region['DÃ­a'].min()
-    fecha_max = df_con_region['DÃ­a'].max()
+    fecha_min = df_con_region['Día'].min()
+    fecha_max = df_con_region['Día'].max()
     
-    # Layout con tema oscuro idÃ©ntico a otros dashboards
+    # Layout con tema oscuro idéntico a otros dashboards
     app.layout = html.Div([
-        # Header con navegaciÃ³n
+        # Header con navegación
         crear_header("Dashboard de Marketing HotBoat", 8056),
         
-        # TÃ­tulo del dashboard
+        # Título del dashboard
         html.Div([
             html.Div("DASHBOARD DE MARKETING", style={
                 'color': COLORS['primary'], 
@@ -153,18 +153,18 @@ if df_con_region is not None and df_sin_region is not None:
         # Filtros con el mismo estilo que otros dashboards
         crear_filtros(fecha_min, fecha_max),
         
-        # MÃ©tricas principales
+        # Métricas principales
         html.Div(id='metricas-principales', style={'margin': '20px'}),
         
-        # SecciÃ³n Top Performers y Necesita AtenciÃ³n
+        # Sección Top Performers y Necesita Atención
         html.Div(id='seccion-performance', style={'margin': '20px'}),
         
-        # Selector de perÃ­odo con el mismo estilo
+        # Selector de período con el mismo estilo
         crear_selector_periodo(),
         
-        # GrÃ¡ficos con contenedores oscuros
+        # Gráficos con contenedores oscuros
         html.Div([
-            html.H3('EvoluciÃ³n Temporal del Gasto', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Evolución Temporal del Gasto', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-evolucion')
         ], style={
             'backgroundColor': COLORS['card_bg'],
@@ -174,17 +174,17 @@ if df_con_region is not None and df_sin_region is not None:
             'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
         }),
         
-        # GrÃ¡fico eliminado: EvoluciÃ³n de Conversiones por PÃºblico y Tipo de Anuncio
+        # Gráfico eliminado: Evolución de Conversiones por Público y Tipo de Anuncio
         
-        # GrÃ¡fico de evoluciÃ³n con filtros de mÃ©tricas
+        # Gráfico de evolución con filtros de métricas
         html.Div([
-            html.H3('EvoluciÃ³n de Conversiones y Gasto por CombinaciÃ³n PÃºblico-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Evolución de Conversiones y Gasto por Combinación Público-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             html.Div([
                 html.Div([
-                    html.Label('Filtrar por PÃºblico:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Filtrar por Público:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-publico-conversiones',
-                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['PÃºblico'].unique())],
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
                         value='todos',
                         style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
@@ -199,7 +199,7 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
-                    html.Label('MÃ©trica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Métrica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-metrica-eje-izq-conv',
                         options=[
@@ -212,7 +212,7 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
-                    html.Label('MÃ©trica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Métrica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-metrica-eje-der-conv',
                         options=[
@@ -234,15 +234,15 @@ if df_con_region is not None and df_sin_region is not None:
             'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
         }),
         
-        # GrÃ¡fico de evoluciÃ³n de costos con filtros
+        # Gráfico de evolución de costos con filtros
         html.Div([
-            html.H3('EvoluciÃ³n de CPC y Costo por ConversiÃ³n por CombinaciÃ³n PÃºblico-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Evolución de CPC y Costo por Conversión por Combinación Público-Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             html.Div([
                 html.Div([
-                    html.Label('Filtrar por PÃºblico:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Filtrar por Público:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-publico-costos',
-                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['PÃºblico'].unique())],
+                        options=[{'label': 'Todos', 'value': 'todos'}] + [{'label': p, 'value': p} for p in sorted(df_sin_region['Público'].unique())],
                         value='todos',
                         style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
@@ -257,26 +257,26 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
-                    html.Label('MÃ©trica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Métrica Eje Y Izquierdo:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-metrica-eje-izq-costos',
                         options=[
                             {'label': 'Ninguno', 'value': 'ninguno'},
                             {'label': 'CPC', 'value': 'cpc'},
-                            {'label': 'Costo por ConversiÃ³n', 'value': 'costo_conversion'}
+                            {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
                         ],
                         value='cpc',
                         style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
                     )
                 ], style={'display': 'inline-block', 'marginRight': '20px', 'width': '200px'}),
                 html.Div([
-                    html.Label('MÃ©trica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
+                    html.Label('Métrica Eje Y Derecho:', style={'color': COLORS['text'], 'marginRight': '10px'}),
                     dcc.Dropdown(
                         id='filtro-metrica-eje-der-costos',
                         options=[
                             {'label': 'Ninguno', 'value': 'ninguno'},
                             {'label': 'CPC', 'value': 'cpc'},
-                            {'label': 'Costo por ConversiÃ³n', 'value': 'costo_conversion'}
+                            {'label': 'Costo por Conversión', 'value': 'costo_conversion'}
                         ],
                         value='costo_conversion',
                         style={'backgroundColor': COLORS['card_bg'], 'color': '#87CEEB'}
@@ -293,7 +293,7 @@ if df_con_region is not None and df_sin_region is not None:
         }),
         
         html.Div([
-            html.H3('Gasto por RegiÃ³n', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Gasto por Región', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-regiones')
         ], style={
             'backgroundColor': COLORS['card_bg'],
@@ -304,7 +304,7 @@ if df_con_region is not None and df_sin_region is not None:
         }),
         
         html.Div([
-            html.H3('AnÃ¡lisis por PÃºblicos', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Análisis por Públicos', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-publicos')
         ], style={
             'backgroundColor': COLORS['card_bg'],
@@ -315,7 +315,7 @@ if df_con_region is not None and df_sin_region is not None:
         }),
         
         html.Div([
-            html.H3('AnÃ¡lisis por Tipos de Anuncios', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            html.H3('Análisis por Tipos de Anuncios', style={'color': COLORS['text'], 'marginBottom': '15px'}),
             dcc.Graph(id='grafico-tipos-anuncios')
         ], style={
             'backgroundColor': COLORS['card_bg'],
@@ -338,7 +338,7 @@ if df_con_region is not None and df_sin_region is not None:
         
         # Insights con estilo oscuro
         html.Div([
-            html.H3('ðŸ’¡ Conclusiones e Insights', style={
+            html.H3('💡 Conclusiones e Insights', style={
                 'color': COLORS['text'], 
                 'marginBottom': '15px'
             }),
@@ -385,34 +385,34 @@ if df_con_region is not None and df_sin_region is not None:
                            filtro_publico_costos, filtro_tipo_costos, 
                            filtro_metric_izq_costos, filtro_metric_der_costos):
         try:
-            # Filtrar datos por fecha - USAR ARCHIVO SIN REGIÃ“N para mÃ©tricas generales
-            mask_sin_region = (df_sin_region['DÃ­a'] >= start_date) & (df_sin_region['DÃ­a'] <= end_date)
+            # Filtrar datos por fecha - USAR ARCHIVO SIN REGIÓN para métricas generales
+            mask_sin_region = (df_sin_region['Día'] >= start_date) & (df_sin_region['Día'] <= end_date)
             df_filtrado_sin_region = df_sin_region[mask_sin_region]
             
-            # Filtrar datos por fecha - USAR ARCHIVO CON REGIÃ“N solo para grÃ¡fico regional
-            mask_con_region = (df_con_region['DÃ­a'] >= start_date) & (df_con_region['DÃ­a'] <= end_date)
+            # Filtrar datos por fecha - USAR ARCHIVO CON REGIÓN solo para gráfico regional
+            mask_con_region = (df_con_region['Día'] >= start_date) & (df_con_region['Día'] <= end_date)
             df_filtrado_con_region = df_con_region[mask_con_region]
             
             if df_filtrado_sin_region.empty:
                 empty_fig = go.Figure()
                 empty_fig.update_layout(
-                    title="No hay datos para el perÃ­odo seleccionado",
+                    title="No hay datos para el período seleccionado",
                     paper_bgcolor=COLORS['card_bg'],
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']}
                 )
                 return (html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
             
-            # Calcular mÃ©tricas principales (usar archivo SIN regiÃ³n)
+            # Calcular métricas principales (usar archivo SIN región)
             total_gasto = df_filtrado_sin_region['Importe gastado (CLP)'].sum()
             total_impresiones = df_filtrado_sin_region['Impresiones'].sum()
             total_clics = df_filtrado_sin_region['Clics en el enlace'].sum()
-            total_conversiones = df_filtrado_sin_region['ArtÃ­culos agregados al carrito'].sum()
+            total_conversiones = df_filtrado_sin_region['Artículos agregados al carrito'].sum()
             
             ctr = (total_clics / total_impresiones * 100) if total_impresiones > 0 else 0
             cpc = (total_gasto / total_clics) if total_clics > 0 else 0
             
-            # 1. Tarjetas de mÃ©tricas con estilo oscuro
+            # 1. Tarjetas de métricas con estilo oscuro
             metricas = html.Div([
                 html.Div([
                     html.H3(f'${total_gasto:,.0f}', style={'color': COLORS['expense'], 'margin': '0', 'fontSize': '2.5em'}),
@@ -440,32 +440,32 @@ if df_con_region is not None and df_sin_region is not None:
                 ], style=CARD_STYLE)
             ], style={'display': 'flex', 'justifyContent': 'center', 'marginBottom': '30px', 'flexWrap': 'wrap'})
             
-            # SecciÃ³n Top Performers y Needs Attention
-            df_combinaciones = df_filtrado_sin_region.groupby(['PÃºblico', 'Tipo_Anuncio']).agg({
+            # Sección Top Performers y Needs Attention
+            df_combinaciones = df_filtrado_sin_region.groupby(['Público', 'Tipo_Anuncio']).agg({
                 'Importe gastado (CLP)': 'sum',
-                'ArtÃ­culos agregados al carrito': 'sum',
+                'Artículos agregados al carrito': 'sum',
                 'Clics en el enlace': 'sum'
             }).reset_index()
             
-            # Calcular mÃ©tricas adicionales
+            # Calcular métricas adicionales
             df_combinaciones['CPC'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Clics en el enlace']).fillna(0)
-            df_combinaciones['Costo_Por_Conversion'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['ArtÃ­culos agregados al carrito']).fillna(0)
-            df_combinaciones['Conversion_Rate'] = (df_combinaciones['ArtÃ­culos agregados al carrito'] / df_combinaciones['Clics en el enlace'] * 100).fillna(0)
+            df_combinaciones['Costo_Por_Conversion'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Artículos agregados al carrito']).fillna(0)
+            df_combinaciones['Conversion_Rate'] = (df_combinaciones['Artículos agregados al carrito'] / df_combinaciones['Clics en el enlace'] * 100).fillna(0)
             
-            # Top Performers (mejor costo por conversiÃ³n)
-            top_performers = df_combinaciones[df_combinaciones['ArtÃ­culos agregados al carrito'] > 0].nlargest(5, 'Conversion_Rate')
+            # Top Performers (mejor costo por conversión)
+            top_performers = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] > 0].nlargest(5, 'Conversion_Rate')
             
             # Needs Attention (gasto sin conversiones)
-            needs_attention = df_combinaciones[df_combinaciones['ArtÃ­culos agregados al carrito'] == 0].nlargest(5, 'Importe gastado (CLP)')
+            needs_attention = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] == 0].nlargest(5, 'Importe gastado (CLP)')
             
             seccion_performance = html.Div([
                 html.Div([
-                    html.H3('ðŸ† Top 5 Performers (Mejor Tasa de ConversiÃ³n)', style={'color': COLORS['income'], 'marginBottom': '15px', 'textAlign': 'center'}),
+                    html.H3('🏆 Top 5 Performers (Mejor Tasa de Conversión)', style={'color': COLORS['income'], 'marginBottom': '15px', 'textAlign': 'center'}),
                     html.Div([
                         html.Table([
                             html.Thead([
                                 html.Tr([
-                                    html.Th('PÃºblico', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Conversiones', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
@@ -474,9 +474,9 @@ if df_con_region is not None and df_sin_region is not None:
                             ]),
                             html.Tbody([
                                 html.Tr([
-                                    html.Td(row['PÃºblico'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
-                                    html.Td(f"{row['ArtÃ­culos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"{row['Conversion_Rate']:.2f}%", style={'color': COLORS['income'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'})
                                 ]) for _, row in top_performers.iterrows()
@@ -486,12 +486,12 @@ if df_con_region is not None and df_sin_region is not None:
                 ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px', 'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.H3('âš ï¸ Top 5 Needs Attention (Sin Conversiones)', style={'color': COLORS['expense'], 'marginBottom': '15px', 'textAlign': 'center'}),
+                    html.H3('⚠️ Top 5 Needs Attention (Sin Conversiones)', style={'color': COLORS['expense'], 'marginBottom': '15px', 'textAlign': 'center'}),
                     html.Div([
                         html.Table([
                             html.Thead([
                                 html.Tr([
-                                    html.Th('PÃºblico', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
+                                    html.Th('Público', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Tipo Anuncio', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Gasto', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
                                     html.Th('Clics', style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center', 'fontWeight': 'bold'}),
@@ -500,11 +500,11 @@ if df_con_region is not None and df_sin_region is not None:
                             ]),
                             html.Tbody([
                                 html.Tr([
-                                    html.Td(row['PÃºblico'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['expense'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'}),
                                     html.Td(f"{row['Clics en el enlace']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
-                                    html.Td(f"{row['ArtÃ­culos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'})
+                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'})
                                 ]) for _, row in needs_attention.iterrows()
                             ])
                         ], style={'width': '100%', 'borderCollapse': 'collapse', 'border': '1px solid #444'})
@@ -512,31 +512,31 @@ if df_con_region is not None and df_sin_region is not None:
                 ], style={'backgroundColor': COLORS['card_bg'], 'padding': '20px', 'borderRadius': '5px'})
             ])
             
-            # 2. GrÃ¡fico de evoluciÃ³n temporal con tema oscuro
+            # 2. Gráfico de evolución temporal con tema oscuro
             if periodo == 'D':
-                df_temporal = df_filtrado_sin_region.groupby('DÃ­a').agg({
+                df_temporal = df_filtrado_sin_region.groupby('Día').agg({
                     'Importe gastado (CLP)': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                titulo_evolucion = 'EvoluciÃ³n Diaria del Gasto y Conversiones'
+                titulo_evolucion = 'Evolución Diaria del Gasto y Conversiones'
             elif periodo == 'W':
-                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['DÃ­a'].dt.to_period('W').dt.start_time).agg({
+                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time).agg({
                     'Importe gastado (CLP)': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                titulo_evolucion = 'EvoluciÃ³n Semanal del Gasto y Conversiones'
+                titulo_evolucion = 'Evolución Semanal del Gasto y Conversiones'
             else:
-                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['DÃ­a'].dt.to_period('M').dt.start_time).agg({
+                df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time).agg({
                     'Importe gastado (CLP)': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                titulo_evolucion = 'EvoluciÃ³n Mensual del Gasto y Conversiones'
+                titulo_evolucion = 'Evolución Mensual del Gasto y Conversiones'
             
             fig_evolucion = go.Figure()
             
-            # Agregar lÃ­nea de gasto (eje Y izquierdo)
+            # Agregar línea de gasto (eje Y izquierdo)
             fig_evolucion.add_trace(go.Scatter(
-                x=df_temporal['DÃ­a'],
+                x=df_temporal['Día'],
                 y=df_temporal['Importe gastado (CLP)'],
                 mode='lines+markers',
                 name='Gasto (CLP)',
@@ -545,10 +545,10 @@ if df_con_region is not None and df_sin_region is not None:
                 yaxis='y'
             ))
             
-            # Agregar lÃ­nea de conversiones (eje Y derecho)
+            # Agregar línea de conversiones (eje Y derecho)
             fig_evolucion.add_trace(go.Scatter(
-                x=df_temporal['DÃ­a'],
-                y=df_temporal['ArtÃ­culos agregados al carrito'],
+                x=df_temporal['Día'],
+                y=df_temporal['Artículos agregados al carrito'],
                 mode='lines+markers',
                 name='Conversiones',
                 line=dict(color=COLORS['income'], width=3),
@@ -558,7 +558,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             fig_evolucion.update_layout(
                 title=titulo_evolucion,
-                xaxis_title='PerÃ­odo',
+                xaxis_title='Período',
                 height=400,
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -596,91 +596,91 @@ if df_con_region is not None and df_sin_region is not None:
                 hovermode='x unified'
             )
             
-            # 3. GrÃ¡fico de evoluciÃ³n de conversiones por pÃºblico y tipo de anuncio
+            # 3. Gráfico de evolución de conversiones por público y tipo de anuncio
             if periodo == 'D':
-                df_conv_publico = df_filtrado_sin_region.groupby(['DÃ­a', 'PÃºblico']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_publico = df_filtrado_sin_region.groupby(['Día', 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_conv_tipo = df_filtrado_sin_region.groupby(['DÃ­a', 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_tipo = df_filtrado_sin_region.groupby(['Día', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                titulo_conv = 'EvoluciÃ³n Diaria de Conversiones'
+                titulo_conv = 'Evolución Diaria de Conversiones'
             elif periodo == 'W':
-                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('W').dt.start_time, 'PÃºblico']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_conv_publico.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('W').dt.start_time, 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
+                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_conv_tipo.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_conv = 'EvoluciÃ³n Semanal de Conversiones'
+                df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv = 'Evolución Semanal de Conversiones'
             else:
-                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('M').dt.start_time, 'PÃºblico']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_conv_publico.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('M').dt.start_time, 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
+                df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_conv_tipo.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_conv = 'EvoluciÃ³n Mensual de Conversiones'
+                df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv = 'Evolución Mensual de Conversiones'
             
             fig_evolucion_conv = go.Figure()
             
-            # GrÃ¡fico eliminado: EvoluciÃ³n de Conversiones por PÃºblico y Tipo de Anuncio
+            # Gráfico eliminado: Evolución de Conversiones por Público y Tipo de Anuncio
             
-            # 4. GrÃ¡fico de evoluciÃ³n de conversiones y gasto con filtros
+            # 4. Gráfico de evolución de conversiones y gasto con filtros
             if periodo == 'D':
-                df_conv_combinado = df_filtrado_sin_region.groupby(['DÃ­a', 'PÃºblico', 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum',
+                df_conv_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
-                titulo_conv_filtrado = 'EvoluciÃ³n Diaria de Conversiones y Gasto por CombinaciÃ³n'
+                titulo_conv_filtrado = 'Evolución Diaria de Conversiones y Gasto por Combinación'
             elif periodo == 'W':
-                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('W').dt.start_time, 'PÃºblico', 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum',
+                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
-                df_conv_combinado.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_conv_filtrado = 'EvoluciÃ³n Semanal de Conversiones y Gasto por CombinaciÃ³n'
+                df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv_filtrado = 'Evolución Semanal de Conversiones y Gasto por Combinación'
             else:
-                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('M').dt.start_time, 'PÃºblico', 'Tipo_Anuncio']).agg({
-                    'ArtÃ­culos agregados al carrito': 'sum',
+                df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
+                    'Artículos agregados al carrito': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
-                df_conv_combinado.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_conv_filtrado = 'EvoluciÃ³n Mensual de Conversiones y Gasto por CombinaciÃ³n'
+                df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_conv_filtrado = 'Evolución Mensual de Conversiones y Gasto por Combinación'
             
             # Aplicar filtros
             if filtro_publico_conv != 'todos':
-                df_conv_combinado = df_conv_combinado[df_conv_combinado['PÃºblico'] == filtro_publico_conv]
+                df_conv_combinado = df_conv_combinado[df_conv_combinado['Público'] == filtro_publico_conv]
             if filtro_tipo_conv != 'todos':
                 df_conv_combinado = df_conv_combinado[df_conv_combinado['Tipo_Anuncio'] == filtro_tipo_conv]
             
             fig_evolucion_conv_filtrado = go.Figure()
             
-            # Crear combinaciÃ³n Ãºnica
-            df_conv_combinado['Combinacion'] = df_conv_combinado['PÃºblico'] + ' - ' + df_conv_combinado['Tipo_Anuncio']
+            # Crear combinación única
+            df_conv_combinado['Combinacion'] = df_conv_combinado['Público'] + ' - ' + df_conv_combinado['Tipo_Anuncio']
             
-            # Agregar lÃ­neas segÃºn mÃ©tricas seleccionadas
+            # Agregar líneas según métricas seleccionadas
             combinaciones = df_conv_combinado['Combinacion'].unique()
             
             for i, combinacion in enumerate(combinaciones):
                 df_combinacion = df_conv_combinado[df_conv_combinado['Combinacion'] == combinacion]
                 color = obtener_color_combinacion(i)
                 
-                # MÃ©trica eje izquierdo
+                # Métrica eje izquierdo
                 if filtro_metric_izq_conv != 'ninguno':
                     if filtro_metric_izq_conv == 'conversiones':
-                        y_data = df_combinacion['ArtÃ­culos agregados al carrito']
+                        y_data = df_combinacion['Artículos agregados al carrito']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
                     else:  # gasto
                         y_data = df_combinacion['Importe gastado (CLP)']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Gasto: $%{{y:,.0f}}<extra></extra>'
                     
                     fig_evolucion_conv_filtrado.add_trace(go.Scatter(
-                        x=df_combinacion['DÃ­a'],
+                        x=df_combinacion['Día'],
                         y=y_data,
                         mode='lines+markers',
                         name=f'{filtro_metric_izq_conv.title()}: {combinacion}',
@@ -690,17 +690,17 @@ if df_con_region is not None and df_sin_region is not None:
                         hovertemplate=hover_template
                     ))
                 
-                # MÃ©trica eje derecho
+                # Métrica eje derecho
                 if filtro_metric_der_conv != 'ninguno':
                     if filtro_metric_der_conv == 'conversiones':
-                        y_data = df_combinacion['ArtÃ­culos agregados al carrito']
+                        y_data = df_combinacion['Artículos agregados al carrito']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
                     else:  # gasto
                         y_data = df_combinacion['Importe gastado (CLP)']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Gasto: $%{{y:,.0f}}<extra></extra>'
                     
                     fig_evolucion_conv_filtrado.add_trace(go.Scatter(
-                        x=df_combinacion['DÃ­a'],
+                        x=df_combinacion['Día'],
                         y=y_data,
                         mode='lines+markers',
                         name=f'{filtro_metric_der_conv.title()}: {combinacion}',
@@ -734,7 +734,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             fig_evolucion_conv_filtrado.update_layout(
                 title=titulo_conv_filtrado,
-                xaxis_title='PerÃ­odo',
+                xaxis_title='Período',
                 height=500,
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -758,64 +758,64 @@ if df_con_region is not None and df_sin_region is not None:
                 hovermode='x unified'
             )
             
-            # 5. GrÃ¡fico de evoluciÃ³n de costos con filtros
+            # 5. Gráfico de evolución de costos con filtros
             if periodo == 'D':
-                df_costos_combinado = df_filtrado_sin_region.groupby(['DÃ­a', 'PÃºblico', 'Tipo_Anuncio']).agg({
+                df_costos_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                titulo_costos = 'EvoluciÃ³n Diaria de Costos por CombinaciÃ³n'
+                titulo_costos = 'Evolución Diaria de Costos por Combinación'
             elif periodo == 'W':
-                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('W').dt.start_time, 'PÃºblico', 'Tipo_Anuncio']).agg({
+                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_costos_combinado.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_costos = 'EvoluciÃ³n Semanal de Costos por CombinaciÃ³n'
+                df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_costos = 'Evolución Semanal de Costos por Combinación'
             else:
-                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['DÃ­a'].dt.to_period('M').dt.start_time, 'PÃºblico', 'Tipo_Anuncio']).agg({
+                df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'ArtÃ­culos agregados al carrito': 'sum'
+                    'Artículos agregados al carrito': 'sum'
                 }).reset_index()
-                df_costos_combinado.rename(columns={'DÃ­a': 'DÃ­a'}, inplace=True)
-                titulo_costos = 'EvoluciÃ³n Mensual de Costos por CombinaciÃ³n'
+                df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
+                titulo_costos = 'Evolución Mensual de Costos por Combinación'
             
-            # Calcular CPC y costo por conversiÃ³n
+            # Calcular CPC y costo por conversión
             df_costos_combinado['CPC'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Clics en el enlace']).fillna(0)
-            df_costos_combinado['Costo_Por_Conversion'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['ArtÃ­culos agregados al carrito']).fillna(0)
+            df_costos_combinado['Costo_Por_Conversion'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Artículos agregados al carrito']).fillna(0)
             
             # Aplicar filtros
             if filtro_publico_costos != 'todos':
-                df_costos_combinado = df_costos_combinado[df_costos_combinado['PÃºblico'] == filtro_publico_costos]
+                df_costos_combinado = df_costos_combinado[df_costos_combinado['Público'] == filtro_publico_costos]
             if filtro_tipo_costos != 'todos':
                 df_costos_combinado = df_costos_combinado[df_costos_combinado['Tipo_Anuncio'] == filtro_tipo_costos]
             
             fig_evolucion_costos = go.Figure()
             
-            # Crear combinaciÃ³n Ãºnica
-            df_costos_combinado['Combinacion'] = df_costos_combinado['PÃºblico'] + ' - ' + df_costos_combinado['Tipo_Anuncio']
+            # Crear combinación única
+            df_costos_combinado['Combinacion'] = df_costos_combinado['Público'] + ' - ' + df_costos_combinado['Tipo_Anuncio']
             
-            # Agregar lÃ­neas segÃºn mÃ©tricas seleccionadas
+            # Agregar líneas según métricas seleccionadas
             combinaciones_costos = df_costos_combinado['Combinacion'].unique()
             
             for i, combinacion in enumerate(combinaciones_costos):
                 df_combinacion = df_costos_combinado[df_costos_combinado['Combinacion'] == combinacion]
                 color = obtener_color_combinacion(i)
                 
-                # MÃ©trica eje izquierdo
+                # Métrica eje izquierdo
                 if filtro_metric_izq_costos != 'ninguno':
                     if filtro_metric_izq_costos == 'cpc':
                         y_data = df_combinacion['CPC']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>CPC: $%{{y:,.0f}}<extra></extra>'
                     else:  # costo_conversion
                         y_data = df_combinacion['Costo_Por_Conversion']
-                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por ConversiÃ³n: $%{{y:,.0f}}<extra></extra>'
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por Conversión: $%{{y:,.0f}}<extra></extra>'
                     
                     fig_evolucion_costos.add_trace(go.Scatter(
-                        x=df_combinacion['DÃ­a'],
+                        x=df_combinacion['Día'],
                         y=y_data,
                         mode='lines+markers',
                         name=f'{filtro_metric_izq_costos.upper()}: {combinacion}',
@@ -825,17 +825,17 @@ if df_con_region is not None and df_sin_region is not None:
                         hovertemplate=hover_template
                     ))
                 
-                # MÃ©trica eje derecho
+                # Métrica eje derecho
                 if filtro_metric_der_costos != 'ninguno':
                     if filtro_metric_der_costos == 'cpc':
                         y_data = df_combinacion['CPC']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>CPC: $%{{y:,.0f}}<extra></extra>'
                     else:  # costo_conversion
                         y_data = df_combinacion['Costo_Por_Conversion']
-                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por ConversiÃ³n: $%{{y:,.0f}}<extra></extra>'
+                        hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Costo por Conversión: $%{{y:,.0f}}<extra></extra>'
                     
                     fig_evolucion_costos.add_trace(go.Scatter(
-                        x=df_combinacion['DÃ­a'],
+                        x=df_combinacion['Día'],
                         y=y_data,
                         mode='lines+markers',
                         name=f'{filtro_metric_der_costos.upper()}: {combinacion}',
@@ -850,7 +850,7 @@ if df_con_region is not None and df_sin_region is not None:
             layout_yaxis2_costos = {}
             
             if filtro_metric_izq_costos != 'ninguno':
-                titulo_eje_izq_costos = 'CPC (CLP)' if filtro_metric_izq_costos == 'cpc' else 'Costo por ConversiÃ³n (CLP)'
+                titulo_eje_izq_costos = 'CPC (CLP)' if filtro_metric_izq_costos == 'cpc' else 'Costo por Conversión (CLP)'
                 layout_yaxis_costos = dict(
                     title=titulo_eje_izq_costos,
                     showgrid=True,
@@ -859,7 +859,7 @@ if df_con_region is not None and df_sin_region is not None:
                 )
             
             if filtro_metric_der_costos != 'ninguno':
-                titulo_eje_der_costos = 'CPC (CLP)' if filtro_metric_der_costos == 'cpc' else 'Costo por ConversiÃ³n (CLP)'
+                titulo_eje_der_costos = 'CPC (CLP)' if filtro_metric_der_costos == 'cpc' else 'Costo por Conversión (CLP)'
                 layout_yaxis2_costos = dict(
                     title=titulo_eje_der_costos,
                     showgrid=False,
@@ -869,7 +869,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             fig_evolucion_costos.update_layout(
                 title=titulo_costos,
-                xaxis_title='PerÃ­odo',
+                xaxis_title='Período',
                 height=500,
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -893,17 +893,17 @@ if df_con_region is not None and df_sin_region is not None:
                 hovermode='x unified'
             )
             
-            # 6. GrÃ¡fico por regiÃ³n con tema oscuro
+            # 6. Gráfico por región con tema oscuro
             if df_filtrado_con_region.empty:
                 fig_regiones = go.Figure()
                 fig_regiones.update_layout(
-                    title="No hay datos regionales para el perÃ­odo seleccionado",
+                    title="No hay datos regionales para el período seleccionado",
                     paper_bgcolor=COLORS['card_bg'],
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']}
                 )
             else:
-                df_regiones = df_filtrado_con_region.groupby('RegiÃ³n').agg({
+                df_regiones = df_filtrado_con_region.groupby('Región').agg({
                     'Importe gastado (CLP)': 'sum',
                     'Impresiones': 'sum',
                     'Clics en el enlace': 'sum'
@@ -912,7 +912,7 @@ if df_con_region is not None and df_sin_region is not None:
                 
                 fig_regiones = go.Figure(go.Bar(
                     x=df_regiones['Importe gastado (CLP)'],
-                    y=df_regiones['RegiÃ³n'],
+                    y=df_regiones['Región'],
                     orientation='h',
                     marker_color=COLORS['primary'],
                     text=df_regiones['Importe gastado (CLP)'].apply(lambda x: f'${x:,.0f}'),
@@ -920,7 +920,7 @@ if df_con_region is not None and df_sin_region is not None:
                 ))
                 
                 fig_regiones.update_layout(
-                    title='Gasto por RegiÃ³n',
+                    title='Gasto por Región',
                     xaxis_title='Gasto (CLP)',
                     height=400,
                     paper_bgcolor=COLORS['card_bg'],
@@ -940,18 +940,18 @@ if df_con_region is not None and df_sin_region is not None:
                     )
                 )
             
-            # 7. GrÃ¡fico por pÃºblicos con tema oscuro
-            df_publicos = df_filtrado_sin_region.groupby('PÃºblico').agg({
+            # 7. Gráfico por públicos con tema oscuro
+            df_publicos = df_filtrado_sin_region.groupby('Público').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
                 'Clics en el enlace': 'sum',
-                'ArtÃ­culos agregados al carrito': 'sum'
+                'Artículos agregados al carrito': 'sum'
             }).reset_index()
             
             df_publicos['CTR (%)'] = (df_publicos['Clics en el enlace'] / df_publicos['Impresiones'] * 100).fillna(0)
             df_publicos['CPC (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['Clics en el enlace']).fillna(0)
-            df_publicos['ConversiÃ³n (%)'] = (df_publicos['ArtÃ­culos agregados al carrito'] / df_publicos['Clics en el enlace'] * 100).fillna(0)
-            df_publicos['Costo por ConversiÃ³n (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['ArtÃ­culos agregados al carrito']).fillna(0)
+            df_publicos['Conversión (%)'] = (df_publicos['Artículos agregados al carrito'] / df_publicos['Clics en el enlace'] * 100).fillna(0)
+            df_publicos['Costo por Conversión (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['Artículos agregados al carrito']).fillna(0)
             
             fig_publicos = make_subplots(
                 rows=3, cols=2,
@@ -959,29 +959,29 @@ if df_con_region is not None and df_sin_region is not None:
                     'Gasto Total (CLP)',
                     'CTR (%)',
                     'CPC (CLP)',
-                    'ConversiÃ³n (%)',
-                    'Costo por ConversiÃ³n (CLP)',
-                    'ArtÃ­culos agregados al carrito'
+                    'Conversión (%)',
+                    'Costo por Conversión (CLP)',
+                    'Artículos agregados al carrito'
                 ),
                 vertical_spacing=0.15,
                 horizontal_spacing=0.1
             )
             
-            # Colores para cada mÃ©trica
+            # Colores para cada métrica
             colors = [COLORS['expense'], COLORS['secondary'], '#9b59b6', COLORS['income'], '#e67e22', COLORS['primary']]
             
-            # AÃ±adir barras para cada mÃ©trica
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['Importe gastado (CLP)'], marker_color=colors[0], showlegend=False), row=1, col=1)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['CTR (%)'], marker_color=colors[1], showlegend=False), row=1, col=2)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['CPC (CLP)'], marker_color=colors[2], showlegend=False), row=2, col=1)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['ConversiÃ³n (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['Costo por ConversiÃ³n (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['PÃºblico'], y=df_publicos['ArtÃ­culos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
+            # Añadir barras para cada métrica
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Importe gastado (CLP)'], marker_color=colors[0], showlegend=False), row=1, col=1)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['CTR (%)'], marker_color=colors[1], showlegend=False), row=1, col=2)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['CPC (CLP)'], marker_color=colors[2], showlegend=False), row=2, col=1)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Conversión (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
-            # Rotar etiquetas del eje x para pÃºblicos
+            # Rotar etiquetas del eje x para públicos
             fig_publicos.update_xaxes(tickangle=45)
             
-            # Configurar grÃ¡fico de pÃºblicos con tema oscuro
+            # Configurar gráfico de públicos con tema oscuro
             fig_publicos.update_layout(
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -990,7 +990,7 @@ if df_con_region is not None and df_sin_region is not None:
                 showlegend=False
             )
             
-            # Configurar todos los ejes del subplot de pÃºblicos
+            # Configurar todos los ejes del subplot de públicos
             for i in range(1, 4):  # 3 filas
                 for j in range(1, 3):  # 2 columnas
                     fig_publicos.update_xaxes(
@@ -1008,18 +1008,18 @@ if df_con_region is not None and df_sin_region is not None:
                         row=i, col=j
                     )
             
-            # 8. GrÃ¡fico por tipos de anuncios con tema oscuro
+            # 8. Gráfico por tipos de anuncios con tema oscuro
             df_tipos = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
                 'Clics en el enlace': 'sum',
-                'ArtÃ­culos agregados al carrito': 'sum'
+                'Artículos agregados al carrito': 'sum'
             }).reset_index()
             
             df_tipos['CTR (%)'] = (df_tipos['Clics en el enlace'] / df_tipos['Impresiones'] * 100).fillna(0)
             df_tipos['CPC (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['Clics en el enlace']).fillna(0)
-            df_tipos['ConversiÃ³n (%)'] = (df_tipos['ArtÃ­culos agregados al carrito'] / df_tipos['Clics en el enlace'] * 100).fillna(0)
-            df_tipos['Costo por ConversiÃ³n (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['ArtÃ­culos agregados al carrito']).fillna(0)
+            df_tipos['Conversión (%)'] = (df_tipos['Artículos agregados al carrito'] / df_tipos['Clics en el enlace'] * 100).fillna(0)
+            df_tipos['Costo por Conversión (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['Artículos agregados al carrito']).fillna(0)
             
             fig_tipos = make_subplots(
                 rows=3, cols=2,
@@ -1027,26 +1027,26 @@ if df_con_region is not None and df_sin_region is not None:
                     'Gasto Total (CLP)',
                     'CTR (%)',
                     'CPC (CLP)',
-                    'ConversiÃ³n (%)',
-                    'Costo por ConversiÃ³n (CLP)',
-                    'ArtÃ­culos agregados al carrito'
+                    'Conversión (%)',
+                    'Costo por Conversión (CLP)',
+                    'Artículos agregados al carrito'
                 ),
                 vertical_spacing=0.15,
                 horizontal_spacing=0.1
             )
             
-            # AÃ±adir barras para cada mÃ©trica
+            # Añadir barras para cada métrica
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Importe gastado (CLP)'], marker_color=colors[0], showlegend=False), row=1, col=1)
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['CTR (%)'], marker_color=colors[1], showlegend=False), row=1, col=2)
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['CPC (CLP)'], marker_color=colors[2], showlegend=False), row=2, col=1)
-            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['ConversiÃ³n (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
-            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Costo por ConversiÃ³n (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
-            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['ArtÃ­culos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
+            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Conversión (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
+            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
+            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
             # Rotar etiquetas del eje x para tipos de anuncios
             fig_tipos.update_xaxes(tickangle=45)
             
-            # Configurar grÃ¡fico de tipos de anuncios con tema oscuro
+            # Configurar gráfico de tipos de anuncios con tema oscuro
             fig_tipos.update_layout(
                 paper_bgcolor=COLORS['card_bg'],
                 plot_bgcolor=COLORS['card_bg'],
@@ -1073,7 +1073,7 @@ if df_con_region is not None and df_sin_region is not None:
                         row=i, col=j
                     )
             
-            # 9. GrÃ¡fico de Hook Rates con tema oscuro
+            # 9. Gráfico de Hook Rates con tema oscuro
             df_hooks = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Hook_Rate_3s': 'mean',
                 'Hook_Rate_25': 'mean',
@@ -1085,7 +1085,7 @@ if df_con_region is not None and df_sin_region is not None:
             # Ordenar por Hook Rate 3s
             df_hooks = df_hooks.sort_values('Hook_Rate_3s', ascending=True)
             
-            # Colores especÃ­ficos para cada hook rate
+            # Colores específicos para cada hook rate
             colors_hooks = {
                 '3s': '#FF9999',
                 '25%': '#66B2FF', 
@@ -1096,7 +1096,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             fig_hooks = go.Figure()
             
-            # AÃ±adir cada hook rate como una barra horizontal separada
+            # Añadir cada hook rate como una barra horizontal separada
             fig_hooks.add_trace(go.Bar(
                 y=df_hooks['Tipo_Anuncio'],
                 x=df_hooks['Hook_Rate_3s'],
@@ -1142,7 +1142,7 @@ if df_con_region is not None and df_sin_region is not None:
                 hovertemplate='Hook Rate 100%: %{x:.2f}%<br><extra></extra>'
             ))
             
-            # Configurar todos los grÃ¡ficos con tema oscuro
+            # Configurar todos los gráficos con tema oscuro
             for fig in [fig_evolucion_conv_filtrado, fig_evolucion_costos, fig_hooks]:
                 fig.update_layout(
                     paper_bgcolor=COLORS['card_bg'],
@@ -1163,14 +1163,14 @@ if df_con_region is not None and df_sin_region is not None:
                     legend=dict(font=dict(color=COLORS['text']))
                 )
             
-            # Configuraciones especÃ­ficas
+            # Configuraciones específicas
             fig_evolucion_conv_filtrado.update_layout(
-                title='EvoluciÃ³n de Conversiones y Gasto por CombinaciÃ³n',
+                title='Evolución de Conversiones y Gasto por Combinación',
                 height=800
             )
             
             fig_evolucion_costos.update_layout(
-                title='EvoluciÃ³n de Costos por CombinaciÃ³n',
+                title='Evolución de Costos por Combinación',
                 height=800
             )
             
@@ -1192,33 +1192,33 @@ if df_con_region is not None and df_sin_region is not None:
             dias_analizados = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days + 1
             gasto_promedio_diario = total_gasto / dias_analizados if dias_analizados > 0 else 0
             
-            # Mejor regiÃ³n (de los datos con regiÃ³n)
+            # Mejor región (de los datos con región)
             mejor_region = None
             if not df_filtrado_con_region.empty:
-                df_regiones_insight = df_filtrado_con_region.groupby('RegiÃ³n')['Importe gastado (CLP)'].sum().reset_index()
+                df_regiones_insight = df_filtrado_con_region.groupby('Región')['Importe gastado (CLP)'].sum().reset_index()
                 if not df_regiones_insight.empty:
                     mejor_region = df_regiones_insight.loc[df_regiones_insight['Importe gastado (CLP)'].idxmax()]
             
-            # Mejor pÃºblico (de los datos sin regiÃ³n)
+            # Mejor público (de los datos sin región)
             mejor_publico = df_publicos.loc[df_publicos['Importe gastado (CLP)'].idxmax()] if not df_publicos.empty else None
             
             insights = [
-                html.P(f"ðŸ“Š AnÃ¡lisis del perÃ­odo: {dias_analizados} dÃ­as", style={
+                html.P(f"📊 Análisis del período: {dias_analizados} días", style={
                     'fontWeight': 'bold', 
                     'fontSize': '16px',
                     'color': COLORS['text']
                 }),
-                html.P(f"ðŸ’° Gasto promedio diario: ${gasto_promedio_diario:,.0f}", style={'color': COLORS['text']}),
-                html.P(f"ðŸ“ˆ CTR promedio: {ctr:.2f}%", style={'color': COLORS['text']}),
-                html.P(f"ðŸ’¸ CPC promedio: ${cpc:,.0f}", style={'color': COLORS['text']}),
-                html.P(f"ðŸ“‹ Datos procesados: {len(df_filtrado_sin_region)} registros principales, {len(df_filtrado_con_region)} registros regionales", style={'color': COLORS['text']}),
+                html.P(f"💰 Gasto promedio diario: ${gasto_promedio_diario:,.0f}", style={'color': COLORS['text']}),
+                html.P(f"📈 CTR promedio: {ctr:.2f}%", style={'color': COLORS['text']}),
+                html.P(f"💸 CPC promedio: ${cpc:,.0f}", style={'color': COLORS['text']}),
+                html.P(f"📋 Datos procesados: {len(df_filtrado_sin_region)} registros principales, {len(df_filtrado_con_region)} registros regionales", style={'color': COLORS['text']}),
             ]
             
             if mejor_region is not None:
-                insights.append(html.P(f"ðŸŽ¯ RegiÃ³n con mayor gasto: {mejor_region['RegiÃ³n']} (${mejor_region['Importe gastado (CLP)']:,.0f})", style={'color': COLORS['text']}))
+                insights.append(html.P(f"🎯 Región con mayor gasto: {mejor_region['Región']} (${mejor_region['Importe gastado (CLP)']:,.0f})", style={'color': COLORS['text']}))
             
             if mejor_publico is not None:
-                insights.append(html.P(f"ðŸ‘¥ PÃºblico con mejor rendimiento: {mejor_publico['PÃºblico']} (${mejor_publico['Importe gastado (CLP)']:,.0f})", style={'color': COLORS['text']}))
+                insights.append(html.P(f"👥 Público con mejor rendimiento: {mejor_publico['Público']} (${mejor_publico['Importe gastado (CLP)']:,.0f})", style={'color': COLORS['text']}))
             
             insights_contenido = html.Div(insights)
             
