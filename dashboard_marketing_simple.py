@@ -1046,6 +1046,33 @@ if df_con_region is not None and df_sin_region is not None:
             # Rotar etiquetas del eje x para públicos
             fig_publicos.update_xaxes(tickangle=45)
             
+            # Configurar gráfico de públicos con tema oscuro
+            fig_publicos.update_layout(
+                paper_bgcolor=COLORS['card_bg'],
+                plot_bgcolor=COLORS['card_bg'],
+                font={'color': COLORS['text']},
+                height=800,
+                showlegend=False
+            )
+            
+            # Configurar todos los ejes del subplot de públicos
+            for i in range(1, 4):  # 3 filas
+                for j in range(1, 3):  # 2 columnas
+                    fig_publicos.update_xaxes(
+                        showgrid=True,
+                        gridcolor=COLORS['grid'],
+                        tickfont={'color': COLORS['text']},
+                        title_font={'color': COLORS['text']},
+                        row=i, col=j
+                    )
+                    fig_publicos.update_yaxes(
+                        showgrid=True,
+                        gridcolor=COLORS['grid'],
+                        tickfont={'color': COLORS['text']},
+                        title_font={'color': COLORS['text']},
+                        row=i, col=j
+                    )
+            
             # 8. Gráfico por tipos de anuncios con tema oscuro
             df_tipos = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
                 'Importe gastado (CLP)': 'sum',
@@ -1083,6 +1110,33 @@ if df_con_region is not None and df_sin_region is not None:
             
             # Rotar etiquetas del eje x para tipos de anuncios
             fig_tipos.update_xaxes(tickangle=45)
+            
+            # Configurar gráfico de tipos de anuncios con tema oscuro
+            fig_tipos.update_layout(
+                paper_bgcolor=COLORS['card_bg'],
+                plot_bgcolor=COLORS['card_bg'],
+                font={'color': COLORS['text']},
+                height=800,
+                showlegend=False
+            )
+            
+            # Configurar todos los ejes del subplot de tipos de anuncios
+            for i in range(1, 4):  # 3 filas
+                for j in range(1, 3):  # 2 columnas
+                    fig_tipos.update_xaxes(
+                        showgrid=True,
+                        gridcolor=COLORS['grid'],
+                        tickfont={'color': COLORS['text']},
+                        title_font={'color': COLORS['text']},
+                        row=i, col=j
+                    )
+                    fig_tipos.update_yaxes(
+                        showgrid=True,
+                        gridcolor=COLORS['grid'],
+                        tickfont={'color': COLORS['text']},
+                        title_font={'color': COLORS['text']},
+                        row=i, col=j
+                    )
             
             # 9. Gráfico de Hook Rates con tema oscuro
             df_hooks = df_filtrado_sin_region.groupby('Tipo_Anuncio').agg({
