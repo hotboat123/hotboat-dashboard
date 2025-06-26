@@ -174,16 +174,7 @@ if df_con_region is not None and df_sin_region is not None:
             'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
         }),
         
-        html.Div([
-            html.H3('Evolución de Conversiones por Público y Tipo de Anuncio', style={'color': COLORS['text'], 'marginBottom': '15px'}),
-            dcc.Graph(id='grafico-evolucion-conversiones')
-        ], style={
-            'backgroundColor': COLORS['card_bg'],
-            'padding': '20px',
-            'borderRadius': '5px',
-            'marginBottom': '20px',
-            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
-        }),
+        # Gráfico eliminado: Evolución de Conversiones por Público y Tipo de Anuncio
         
         # Gráfico de evolución con filtros de métricas
         html.Div([
@@ -370,7 +361,6 @@ if df_con_region is not None and df_sin_region is not None:
         [Output('metricas-principales', 'children'),
          Output('seccion-performance', 'children'),
          Output('grafico-evolucion', 'figure'),
-         Output('grafico-evolucion-conversiones', 'figure'),
          Output('grafico-evolucion-conversiones-filtrado', 'figure'),
          Output('grafico-evolucion-costos', 'figure'),
          Output('grafico-regiones', 'figure'),
@@ -411,7 +401,7 @@ if df_con_region is not None and df_sin_region is not None:
                     plot_bgcolor=COLORS['card_bg'],
                     font={'color': COLORS['text']}
                 )
-                return (html.Div("No hay datos"), html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
+                return (html.Div("No hay datos"), empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, empty_fig, "No hay insights disponibles")
             
             # Calcular métricas principales (usar archivo SIN región)
             total_gasto = df_filtrado_sin_region['Importe gastado (CLP)'].sum()
@@ -638,62 +628,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             fig_evolucion_conv = go.Figure()
             
-            # Agregar líneas por público
-            for publico in df_conv_publico['Público'].unique():
-                df_publico = df_conv_publico[df_conv_publico['Público'] == publico]
-                fig_evolucion_conv.add_trace(go.Scatter(
-                    x=df_publico['Día'],
-                    y=df_publico['Artículos agregados al carrito'],
-                    mode='lines+markers',
-                    name=f'Público: {publico}',
-                    line=dict(width=2),
-                    marker=dict(size=6),
-                    hovertemplate=f'<b>{publico}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
-                ))
-            
-            # Agregar líneas por tipo de anuncio
-            for tipo in df_conv_tipo['Tipo_Anuncio'].unique():
-                df_tipo = df_conv_tipo[df_conv_tipo['Tipo_Anuncio'] == tipo]
-                fig_evolucion_conv.add_trace(go.Scatter(
-                    x=df_tipo['Día'],
-                    y=df_tipo['Artículos agregados al carrito'],
-                    mode='lines+markers',
-                    name=f'Tipo: {tipo}',
-                    line=dict(width=2, dash='dash'),
-                    marker=dict(size=6, symbol='diamond'),
-                    hovertemplate=f'<b>{tipo}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
-                ))
-            
-            fig_evolucion_conv.update_layout(
-                title=titulo_conv,
-                xaxis_title='Período',
-                height=500,
-                paper_bgcolor=COLORS['card_bg'],
-                plot_bgcolor=COLORS['card_bg'],
-                font={'color': COLORS['text']},
-                xaxis=dict(
-                    showgrid=True,
-                    gridcolor=COLORS['grid'],
-                    tickfont={'color': COLORS['text']},
-                    title_font={'color': COLORS['text']}
-                ),
-                yaxis=dict(
-                    title='Conversiones',
-                    showgrid=True,
-                    gridcolor=COLORS['grid'],
-                    tickfont={'color': COLORS['text']},
-                    title_font={'color': COLORS['text']}
-                ),
-                legend=dict(
-                    font=dict(color=COLORS['text']),
-                    orientation='h',
-                    yanchor='bottom',
-                    y=1.02,
-                    xanchor='right',
-                    x=1
-                ),
-                hovermode='x unified'
-            )
+            # Gráfico eliminado: Evolución de Conversiones por Público y Tipo de Anuncio
             
             # 4. Gráfico de evolución de conversiones y gasto con filtros
             if periodo == 'D':
@@ -1287,7 +1222,7 @@ if df_con_region is not None and df_sin_region is not None:
             
             insights_contenido = html.Div(insights)
             
-            return metricas, seccion_performance, fig_evolucion, fig_evolucion_conv, fig_evolucion_conv_filtrado, fig_evolucion_costos, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
+            return metricas, seccion_performance, fig_evolucion, fig_evolucion_conv_filtrado, fig_evolucion_costos, fig_regiones, fig_publicos, fig_tipos, fig_hooks, insights_contenido
             
         except Exception as e:
             print(f"Error en callback: {str(e)}")
