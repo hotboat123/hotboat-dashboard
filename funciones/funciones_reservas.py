@@ -75,6 +75,11 @@ def procesar_appointments(payments, appointments):
     # Aplicar la función a la columna 'telefono'
     df['Phone Number_2'] = df['Phone Number'].apply(formatear_telefono)
 
+    # 🔥 ELIMINAR COLUMNAS SOLICITADAS: PAID AMOUNT, Phone Number y PAYMENT
+    # NOTA: Phone Number_2 se mantiene porque es el número procesado y formateado
+    columnas_a_eliminar = ['PAID AMOUNT', 'Phone Number', 'PAYMENT']
+    df = df.drop(columns=[col for col in columnas_a_eliminar if col in df.columns])
+
     return df
 
     

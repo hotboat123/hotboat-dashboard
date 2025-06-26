@@ -25,7 +25,7 @@ venv/bin/python tools/screenshot_utils.py URL [--output OUTPUT] [--width WIDTH] 
 
 2. LLM Verification with Images:
 ```bash
-venv/bin/python tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic} --image path/to/screenshot.png
+venv/bin/python tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic}
 ```
 
 Example workflow:
@@ -114,6 +114,56 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
 
 # Scratchpad
+
+## Nueva Tarea: Crear Diagrama de Flujo de Datos ✅
+
+**Task:** Crear un diagrama de flujo completo que muestre cómo se cruzan las tablas de input y qué columnas se utilizan para generar los archivos de output.
+
+**Progreso:**
+[X] Analizar archivos de procesamiento principales
+[X] Identificar archivos de input y output
+[X] Mapear relaciones entre tablas
+[X] Identificar columnas clave de cruce
+[X] Crear diagrama de flujo completo con Mermaid
+[X] Documentar proceso de ejecución
+
+**Plan:**
+1. ✅ Analizar gastos_hotboat_sin_drive.py y funciones/funciones.py
+2. ✅ Analizar Informacion_reservas.py y funciones/funciones_reservas.py
+3. ✅ Analizar estimacion_utilidad_hotboat.py
+4. ✅ Analizar dashboard_marketing_simple.py
+5. ✅ Crear diagrama de flujo completo
+6. ✅ Documentar claves de cruce y columnas
+
+**Archivo Creado:**
+- ✅ `DIAGRAMA_FLUJO_DATOS.md` - Diagrama completo con Mermaid
+
+**Flujos Documentados:**
+- ✅ **Gastos y Costos**: Banco Estado + Banco Chile + Cuenta Corriente + Mercado Pago
+- ✅ **Reservas**: Payments + Appointments + Reservas existentes
+- ✅ **Utilidad**: Reservas + Pedidos extra + Costos operativos
+- ✅ **Marketing**: Dataset (5) CON región + Dataset (6) SIN región
+
+**Claves de Cruce Identificadas:**
+- ✅ **Reservas**: `ID` entre payments.csv y appointments.csv
+- ✅ **Utilidad**: `ID` (reserva) y `email` para pedidos extra
+- ✅ **Gastos**: `Fecha + Descripción + Monto` para deduplicación
+- ✅ **Marketing**: `Día + Nombre del conjunto de anuncios`
+
+**Archivos Output Documentados:**
+- ✅ `gastos hotboat.csv` - Gastos consolidados
+- ✅ `abonos hotboat.csv` - Ingresos bancarios
+- ✅ `reservas_HotBoat.csv` - Reservas procesadas
+- ✅ `costos_operativos.csv` - Costos por reserva
+- ✅ `ingresos_totales.csv` - Ingresos totales
+- ✅ `cuenta_corriente_*.csv` - Referencia cuenta corriente
+
+**Métricas Calculadas Marketing:**
+- ✅ CTR, CPC, Hook Rates, Conversion Rate, Cost Per Conversion
+
+**Estado:** ✅ COMPLETADO - Diagrama de flujo completo creado y documentado
+
+---
 
 ## Nueva Tarea: Resolver Problema de Importación Dashboard Marketing ✅
 

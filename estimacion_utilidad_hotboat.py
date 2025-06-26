@@ -47,7 +47,7 @@ def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
     df_ingresos = pd.DataFrame({
         'id_reserva': df_reservas['ID'],
         'descripcion': 'Ingreso por reserva',
-        'monto': df_reservas['PAID AMOUNT'],
+        'monto': df_reservas['TOTAL AMOUNT'],
         'fecha_trip': df_reservas['fecha_trip'],
         'email': df_reservas['Customer Email']
     })
@@ -87,7 +87,7 @@ def main():
     ruta_reservas = 'archivos_output/reservas_HotBoat.csv'
     ruta_pedidos_extra = 'archivos_input/Archivos input reservas/HotBoat - Pedidos Extras.csv'
     ruta_salida_costos = 'archivos_output/costos_operativos.csv'
-    ruta_salida_ingresos = 'archivos_output/ingresos_totales.csv'
+    ruta_salida_ingresos = 'archivos_output/ingresos_operativos.csv'
     
     # Procesar costos
     df_costos = crear_costos_operativos(ruta_reservas)

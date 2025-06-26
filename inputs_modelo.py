@@ -70,7 +70,7 @@ diccionario_categorias = {
     "Ingresos HotBoat": [
         "traspaso de:hotboat spa", "Nawrath", "Dutilh"
     ],
-    "Inversión": [
+    "Aportes de capital": [
         "fintual", "dev Impuesto"
     ]
 }
@@ -87,6 +87,27 @@ diccionario_categoria_1 = {
     ],
     "Inversión": [
         "Inversión"
+    ]
+}
+
+diccionario_categoria_1 = {
+    "Costos Fijos": [
+        "arriendo", "entel", "bice vida", "seguro", "plan", "luz", "electricidad"
+    ],
+    "Costos Variables": [
+        "gas", # "mantención", "limpieza", "repuestos", "transportes", "comisiones"
+    ],
+    "Costos de Marketing": [
+        "Publicidad Meta", "Publicidad Google", # "marketing", "promoción", 
+    ],
+    "Inversión en Activos": [
+        "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "compras internacionales", # "camara", "dron", "bateria", "motor"
+    ],
+    "Capital aportado": [
+        "Aportes de capital"
+    ],
+    "Inversión General": [
+        "branding", "logo", "sitio web", "diseño", "asesoría"
     ]
 }
 
