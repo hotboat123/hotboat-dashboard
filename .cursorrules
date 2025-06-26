@@ -765,3 +765,42 @@ python ejecutar_todos_dashboards.py
 - 🌐 **Utilidad Operativa (Nuevo)**: http://localhost:8057 ✅ ACTIVO
 
 **Estado:** ✅ COMPLETADO - Dashboard de utilidad operativa funcionando correctamente
+
+---
+
+## Nueva Tarea: Reorganizar Procesamiento de Cuenta Corriente ✅
+
+**Task:** Mover el procesamiento de cuenta corriente dentro de la función `procesar_archivos_financieros` para mejor organización del código.
+
+**Progreso:**
+[X] Mover lógica de cuenta corriente a funciones/funciones.py
+[X] Simplificar archivo principal gastos_hotboat_sin_drive.py
+[X] Verificar que los datos de cuenta corriente se integren automáticamente
+[X] Confirmar que utilidad_operativa.py funcione sin cambios
+
+**Plan:**
+1. ✅ Mover procesamiento de cuenta corriente a procesar_archivos_financieros()
+2. ✅ Simplificar gastos_hotboat_sin_drive.py eliminando código duplicado
+3. ✅ Verificar integración automática de datos
+4. ✅ Probar que utilidad_operativa.py funcione correctamente
+
+**Cambios Realizados:**
+- ✅ **funciones/funciones.py**: Agregado procesamiento de cuenta corriente dentro de procesar_archivos_financieros()
+- ✅ **gastos_hotboat_sin_drive.py**: Simplificado drásticamente (eliminadas ~80 líneas de código)
+- ✅ **Integración Automática**: Los datos de cuenta corriente se integran automáticamente a gastos/abonos hotboat.csv
+- ✅ **Archivos de Referencia**: Se mantienen cuenta_corriente_cargos.csv y cuenta_corriente_abonos.csv
+
+**Beneficios:**
+- ✅ **Código Más Limpio**: Archivo principal más fácil de leer y mantener
+- ✅ **Procesamiento Unificado**: Todo el procesamiento financiero en una sola función
+- ✅ **Integración Automática**: Los datos de cuenta corriente se incluyen automáticamente en los archivos finales
+- ✅ **Compatibilidad**: utilidad_operativa.py funciona sin cambios porque los datos ya están integrados
+
+**Resultados del Test:**
+- ✅ **254 registros totales** en Utilidad operativa.csv
+- ✅ **Datos integrados**: Los datos de cuenta corriente aparecen en las categorías correspondientes
+- ✅ **Utilidad neta**: $11,008,238 (incluyendo datos de cuenta corriente)
+
+**Estado:** ✅ COMPLETADO - Procesamiento de cuenta corriente reorganizado exitosamente
+
+---
