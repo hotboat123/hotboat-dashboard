@@ -16,10 +16,10 @@ def procesar_fechas_reservas(df):
         df = df.copy()
         
         # Convertir fechas y horas
-        df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
-        df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
-        df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
-        df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
+#        df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
+ #       df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
+  #      df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
+   #     df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
         
         return df
     except Exception as e:
@@ -132,10 +132,24 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
         df_reservas_original = df_reservas_original.reset_index(drop=True)
         df_reservas_nuevas = df_reservas_nuevas.reset_index(drop=True)
         
+        # Agregar flag para identificar origen de las reservas
+        df_reservas_original['origen'] = 'original'
+        df_reservas_nuevas['origen'] = 'nueva'
+        
         # Concatenar DataFrames
         df_concat = pd.concat([df_reservas_original, df_reservas_nuevas], axis=0, ignore_index=True)
-        # Eliminar duplicados, manteniendo la primera aparición
-        df_final = df_concat.drop_duplicates(subset="ID", keep="first")
+        
+        # Eliminar duplicados, manteniendo las reservas originales (no las nuevas)
+        df_final = df_concat.drop_duplicates(subset="ID", keep=False)  # Primero eliminar todos los duplicados
+        df_duplicados = df_concat[df_concat.duplicated(subset="ID", keep=False)]  # Obtener duplicados
+        
+        # Para los duplicados, mantener solo las originales
+        if not df_duplicados.empty:
+            df_originales_duplicados = df_duplicados[df_duplicados['origen'] == 'original']
+            df_final = pd.concat([df_final, df_originales_duplicados], ignore_index=True)
+        
+        # Eliminar la columna de origen
+        df_final = df_final.drop(columns=['origen'])
     else:
         # Si no hay reservas originales, usar solo las nuevas
         df_final = df_reservas_nuevas.reset_index(drop=True)
