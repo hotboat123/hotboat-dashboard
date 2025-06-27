@@ -135,7 +135,8 @@ if df is not None:
                     style={
                         'backgroundColor': COLORS['card_bg'],
                         'color': COLORS['text'],
-                        'border': '1px solid #444'
+                        'border': '1px solid #444',
+                        'width': '300px'
                     },
                     className='dropdown-dark'
                 )
@@ -155,6 +156,12 @@ if df is not None:
         
         # Tarjetas
         html.Div([
+            # Tarjeta especial de Utilidad Operativa
+            html.Div(id='tarjeta_utilidad', style={
+                'width': '100%',
+                'marginBottom': '30px'
+            }),
+            
             html.Div(id='tarjetas', style={
                 'display': 'flex',
                 'flexWrap': 'wrap',
@@ -180,7 +187,8 @@ if df is not None:
     })
     
     @callback(
-        [Output('tarjetas', 'children'),
+        [Output('tarjeta_utilidad', 'children'),
+         Output('tarjetas', 'children'),
          Output('grafico', 'figure')],
         [Input('date-range', 'start_date'),
          Input('date-range', 'end_date'),
@@ -215,7 +223,58 @@ if df is not None:
             df_agrupado = df_filtrado.groupby([df_filtrado['fecha'].dt.to_period('M').dt.start_time, 'categoria'])['monto'].sum().reset_index()
             df_agrupado['fecha'] = pd.to_datetime(df_agrupado['fecha'])
         
-        # Crear tarjetas
+        # Calcular utilidad operativa
+        ingresos = df_agrupado[df_agrupado['categoria'] == 'Ingreso Operativo']['monto'].sum()
+        costos = df_agrupado[df_agrupado['categoria'].isin(['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables'])]['monto'].sum()
+        utilidad_operativa = ingresos - costos
+        
+        # Crear tarjeta especial de utilidad operativa
+        color_utilidad = COLORS['income'] if utilidad_operativa >= 0 else COLORS['expense']
+        icono_utilidad = "📈" if utilidad_operativa >= 0 else "📉"
+        
+        tarjeta_utilidad = html.Div([
+            html.Div([
+                html.H2("💰 Utilidad Operativa", style={
+                    'color': COLORS['text'], 
+                    'marginBottom': '10px',
+                    'textAlign': 'center',
+                    'fontSize': '24px'
+                }),
+                html.H1(f"{icono_utilidad} ${utilidad_operativa:,.0f}", style={
+                    'color': color_utilidad, 
+                    'margin': '0', 
+                    'fontSize': '48px',
+                    'textAlign': 'center',
+                    'fontWeight': 'bold'
+                }),
+                html.P("Ingresos - Costos", style={
+                    'color': COLORS['text'], 
+                    'margin': '10px 0', 
+                    'fontSize': '16px',
+                    'textAlign': 'center'
+                }),
+                html.Div([
+                    html.Span(f"Ingresos: ${ingresos:,.0f}", style={
+                        'color': COLORS['income'], 
+                        'fontSize': '14px',
+                        'marginRight': '20px'
+                    }),
+                    html.Span(f"Costos: ${costos:,.0f}", style={
+                        'color': COLORS['expense'], 
+                        'fontSize': '14px'
+                    })
+                ], style={'textAlign': 'center', 'marginTop': '15px'})
+            ], style={
+                'backgroundColor': COLORS['card_bg'],
+                'padding': '30px',
+                'borderRadius': '15px',
+                'textAlign': 'center',
+                'border': f'3px solid {color_utilidad}',
+                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)'
+            })
+        ])
+        
+        # Crear tarjetas normales
         tarjetas = []
         
         # Colores específicos para cada categoría
@@ -326,7 +385,7 @@ if df is not None:
             font=dict(color=COLORS['text'])
         )
         
-        return tarjetas, fig
+        return tarjeta_utilidad, tarjetas, fig
 
 else:
     app.layout = html.Div([
