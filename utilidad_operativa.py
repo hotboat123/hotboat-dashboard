@@ -36,6 +36,9 @@ def cargar_gastos_marketing():
         gastos_marketing['categoria'] = 'Costos de Marketing'
         gastos_marketing = gastos_marketing.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
         
+        # Convertir fecha a datetime si no lo está
+        gastos_marketing['fecha'] = pd.to_datetime(gastos_marketing['fecha'])
+        
         print(f"✅ Gastos de marketing cargados: {len(gastos_marketing)} registros")
         return gastos_marketing
         
@@ -56,6 +59,9 @@ def cargar_costos_fijos():
         costos_fijos = costos_fijos[['Fecha', 'Monto']].copy()
         costos_fijos['categoria'] = 'costos fijos'
         costos_fijos = costos_fijos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        # Convertir fecha a datetime si no lo está
+        costos_fijos['fecha'] = pd.to_datetime(costos_fijos['fecha'])
         
         print(f"✅ Costos fijos cargados: {len(costos_fijos)} registros")
         return costos_fijos
@@ -78,6 +84,9 @@ def cargar_costos_variables():
         costos_variables['categoria'] = 'costos variables'
         costos_variables = costos_variables.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
         
+        # Convertir fecha a datetime si no lo está
+        costos_variables['fecha'] = pd.to_datetime(costos_variables['fecha'])
+        
         print(f"✅ Costos variables cargados: {len(costos_variables)} registros")
         return costos_variables
         
@@ -95,6 +104,9 @@ def cargar_costos_operativos():
         costos_operativos = costos[['fecha', 'monto']].copy()
         costos_operativos['categoria'] = 'costo operativo'
         
+        # Convertir fecha a datetime si no lo está
+        costos_operativos['fecha'] = pd.to_datetime(costos_operativos['fecha'])
+        
         print(f"✅ Costos operativos cargados: {len(costos_operativos)} registros")
         return costos_operativos
         
@@ -111,6 +123,9 @@ def cargar_ingresos_operativos():
         # Seleccionar columnas necesarias y renombrar
         ingresos_operativos = ingresos[['fecha', 'monto']].copy()
         ingresos_operativos['categoria'] = 'ingreso operativo'
+        
+        # Convertir fecha a datetime si no lo está
+        ingresos_operativos['fecha'] = pd.to_datetime(ingresos_operativos['fecha'])
         
         print(f"✅ Ingresos operativos cargados: {len(ingresos_operativos)} registros")
         return ingresos_operativos
@@ -146,8 +161,7 @@ def generar_utilidad_operativa():
         ingresos_operativos
     ], ignore_index=True)
     
-    # Ordenar por fecha
-    utilidad_operativa['fecha'] = pd.to_datetime(utilidad_operativa['fecha'])
+    # Ordenar por fecha (ya están en formato datetime)
     utilidad_operativa = utilidad_operativa.sort_values('fecha')
     
     # Reordenar columnas

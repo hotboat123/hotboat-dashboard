@@ -21,7 +21,7 @@ def crear_costos_operativos(ruta_reservas):
     
     # Cruzar con el DataFrame de reservas para obtener fecha y email
     df_costos = df_costos.merge(
-        df_reservas[['ID', 'fecha_trip', 'Customer Email']],
+        df_reservas[['ID', 'fecha_hora_trip', 'Customer Email']],
         left_on='id_reserva',
         right_on='ID',
         how='left'
@@ -29,7 +29,7 @@ def crear_costos_operativos(ruta_reservas):
     
     # Renombrar y ordenar columnas
     df_costos = df_costos.rename(columns={
-        'fecha_trip': 'fecha',
+        'fecha_hora_trip': 'fecha',
         'Customer Email': 'email'
     })
     
@@ -49,14 +49,14 @@ def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
     df_ingresos = pd.DataFrame({
         'id_reserva': df_reservas['ID'],
         'descripcion': 'Ingreso por reserva',
-        'monto': df_reservas['TOTAL AMOUNT'],
-        'fecha_trip': df_reservas['fecha_trip'],
+        'monto': df_reservas['PAID AMOUNT'],
+        'fecha_hora_trip': df_reservas['fecha_hora_trip'],
         'email': df_reservas['Customer Email']
     })
     
     # Renombrar columnas
     df_ingresos = df_ingresos.rename(columns={
-        'fecha_trip': 'fecha',
+        'fecha_hora_trip': 'fecha',
         'Customer Email': 'email'
     })
     
