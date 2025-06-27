@@ -99,9 +99,29 @@ def crear_ingresos(ruta_reservas, ruta_pedidos_extra):
     df_ingresos_combinado['fecha'] = pd.to_datetime(df_ingresos_combinado['fecha'])
     df_ingresos_combinado = df_ingresos_combinado.sort_values('fecha')
     
-    print(f"Total de ingresos (reservas + pedidos extra coincidentes): {len(df_ingresos_combinado)}")
+    # Crear DataFrame agrupado por fecha y email
+    df_ingresos_agrupado = df_ingresos_combinado.groupby(['fecha', 'email']).agg({
+        'monto': 'sum',
+        'id_reserva': 'first',  # Tomar el primer ID de reserva del grupo
+        'descripcion': lambda x: list(x)  # Mantener todas las descripciones para verificar si hay extras
+    }).reset_index()
     
-    return df_ingresos_combinado
+    # Crear descripción dinámica basada en si hay extras
+    def crear_descripcion_dinamica(descripciones):
+        if len(descripciones) > 1 or 'Ingreso por pedido extra' in descripciones:
+            return 'Ingreso por reserva + extras'
+        else:
+            return 'Ingreso por reserva'
+    
+    df_ingresos_agrupado['descripcion'] = df_ingresos_agrupado['descripcion'].apply(crear_descripcion_dinamica)
+    
+    # Reordenar columnas para mantener consistencia
+    df_ingresos_agrupado = df_ingresos_agrupado[['fecha', 'email', 'id_reserva', 'descripcion', 'monto']]
+    
+    print(f"Total de ingresos (reservas + pedidos extra coincidentes): {len(df_ingresos_combinado)}")
+    print(f"Total de ingresos agrupados por fecha y email: {len(df_ingresos_agrupado)}")
+    
+    return df_ingresos_agrupado
 
 def main():
 
