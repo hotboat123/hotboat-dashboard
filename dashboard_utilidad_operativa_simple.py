@@ -111,6 +111,23 @@ if df is not None:
             ], style={'marginBottom': '20px', 'textAlign': 'center'}),
             
             html.Div([
+                html.Label("Año:", style={'color': COLORS['text']}),
+                dcc.Dropdown(
+                    id='filtro_ano',
+                    options=[{'label': 'Todos los años', 'value': 'todos'}] + 
+                            [{'label': str(ano), 'value': ano} for ano in sorted(df['fecha'].dt.year.unique(), reverse=True)],
+                    value='todos',
+                    style={
+                        'backgroundColor': COLORS['card_bg'],
+                        'color': COLORS['text'],
+                        'border': '1px solid #444',
+                        'width': '200px'
+                    },
+                    className='dropdown-dark'
+                )
+            ], style={'marginBottom': '20px', 'textAlign': 'center'}),
+            
+            html.Div([
                 html.Label("Período:", style={'color': COLORS['text']}),
                 dcc.RadioItems(
                     id='periodo',
@@ -193,9 +210,10 @@ if df is not None:
         [Input('date-range', 'start_date'),
          Input('date-range', 'end_date'),
          Input('periodo', 'value'),
-         Input('categoria', 'value')]
+         Input('categoria', 'value'),
+         Input('filtro_ano', 'value')]
     )
-    def actualizar_dashboard(start_date, end_date, periodo, categoria):
+    def actualizar_dashboard(start_date, end_date, periodo, categoria, filtro_ano):
         # Filtrar por fecha
         df_filtrado = df.copy()
         
@@ -204,6 +222,10 @@ if df is not None:
                 (df_filtrado['fecha'] >= start_date) & 
                 (df_filtrado['fecha'] <= end_date)
             ]
+        
+        # Filtrar por año
+        if filtro_ano != 'todos':
+            df_filtrado = df_filtrado[df_filtrado['fecha'].dt.year == filtro_ano]
         
         # Filtrar por categoría
         if categoria != 'todas':
