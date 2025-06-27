@@ -253,7 +253,7 @@ if df is not None:
             })
             tarjetas.append(tarjeta)
         
-        # Crear gráfico
+        # Crear gráfico de evolución
         fig = go.Figure()
         
         # Colores específicos para cada categoría
@@ -265,6 +265,7 @@ if df is not None:
             'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
         
+        # Agregar líneas para cada categoría individual
         for cat in df_agrupado['categoria'].unique():
             df_cat = df_agrupado[df_agrupado['categoria'] == cat]
             color = colores_categoria.get(cat, COLORS['primary'])
@@ -276,6 +277,36 @@ if df is not None:
                 name=cat.title(),
                 line=dict(color=color, width=3),
                 marker=dict(size=6, color=color)
+            ))
+        
+        # Agregar línea de todos los costos juntos
+        categorias_costos = ['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables']
+        df_costos = df_agrupado[df_agrupado['categoria'].isin(categorias_costos)]
+        if not df_costos.empty:
+            df_costos_totales = df_costos.groupby('fecha')['monto'].sum().reset_index()
+            fig.add_trace(go.Scatter(
+                x=df_costos_totales['fecha'],
+                y=df_costos_totales['monto'],
+                mode='lines+markers',
+                name='Total Costos',
+                line=dict(color='#ff6b6b', width=4, dash='dash'),
+                marker=dict(size=8, color='#ff6b6b', symbol='diamond')
+            ))
+        # Agregar línea de utilidad operativa (ingresos - costos)
+        df_ingresos = df_agrupado[df_agrupado['categoria'] == 'Ingreso Operativo'][['fecha', 'monto']].rename(columns={'monto': 'ingresos'})
+        if not df_ingresos.empty and not df_costos.empty:
+            df_costos_totales = df_costos.groupby('fecha')['monto'].sum().reset_index().rename(columns={'monto': 'costos'})
+            # Unir ingresos y costos por fecha (outer para no perder fechas)
+            df_utilidad = pd.merge(df_ingresos, df_costos_totales, on='fecha', how='outer').fillna(0)
+            df_utilidad = df_utilidad.sort_values('fecha')
+            df_utilidad['utilidad'] = df_utilidad['ingresos'] - df_utilidad['costos']
+            fig.add_trace(go.Scatter(
+                x=df_utilidad['fecha'],
+                y=df_utilidad['utilidad'],
+                mode='lines+markers',
+                name='Utilidad Operativa',
+                line=dict(color='#00ff88', width=4, dash='dot'),
+                marker=dict(size=8, color='#00ff88', symbol='circle-open')
             ))
         
         # Título del gráfico según el período
