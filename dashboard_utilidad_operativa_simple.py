@@ -173,10 +173,13 @@ if df is not None:
         
         # Tarjetas
         html.Div([
-            # Tarjeta especial de Utilidad Operativa
-            html.Div(id='tarjeta_utilidad', style={
-                'width': '100%',
-                'marginBottom': '30px'
+            # Tarjetas principales (Utilidad Operativa + Valor Promedio de Venta)
+            html.Div(id='tarjetas_principales', style={
+                'display': 'flex',
+                'justifyContent': 'center',
+                'gap': '30px',
+                'marginBottom': '30px',
+                'flexWrap': 'wrap'
             }),
             
             html.Div(id='tarjetas', style={
@@ -204,7 +207,7 @@ if df is not None:
     })
     
     @callback(
-        [Output('tarjeta_utilidad', 'children'),
+        [Output('tarjetas_principales', 'children'),
          Output('tarjetas', 'children'),
          Output('grafico', 'figure')],
         [Input('date-range', 'start_date'),
@@ -245,10 +248,21 @@ if df is not None:
             df_agrupado = df_filtrado.groupby([df_filtrado['fecha'].dt.to_period('M').dt.start_time, 'categoria'])['monto'].sum().reset_index()
             df_agrupado['fecha'] = pd.to_datetime(df_agrupado['fecha'])
         
-        # Calcular utilidad operativa
-        ingresos = df_agrupado[df_agrupado['categoria'] == 'Ingreso Operativo']['monto'].sum()
-        costos = df_agrupado[df_agrupado['categoria'].isin(['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables'])]['monto'].sum()
+        # Calcular utilidad operativa (usando datos originales, no agrupados)
+        df_ingresos_original = df_filtrado[df_filtrado['categoria'] == 'Ingreso Operativo']
+        df_costos_original = df_filtrado[df_filtrado['categoria'].isin(['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables'])]
+        
+        ingresos = df_ingresos_original['monto'].sum()
+        costos = df_costos_original['monto'].sum()
         utilidad_operativa = ingresos - costos
+        
+        # Calcular valor promedio de venta (usando datos originales, no agrupados)
+        # Filtrar solo ventas mayores a $100,000 para el promedio
+        df_ingresos_filtrados = df_ingresos_original[df_ingresos_original['monto'] >= 100000]
+        valor_promedio_venta = df_ingresos_filtrados['monto'].mean() if not df_ingresos_filtrados.empty else 0
+        cantidad_ventas = len(df_ingresos_filtrados)  # Solo ventas >= $100,000
+        total_ingresos = df_ingresos_original['monto'].sum()  # Total de todos los ingresos
+        cantidad_total_ventas = len(df_ingresos_original)  # Total de todas las ventas
         
         # Crear tarjeta especial de utilidad operativa
         color_utilidad = COLORS['income'] if utilidad_operativa >= 0 else COLORS['expense']
@@ -292,9 +306,63 @@ if df is not None:
                 'borderRadius': '15px',
                 'textAlign': 'center',
                 'border': f'3px solid {color_utilidad}',
-                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)'
+                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)',
+                'minWidth': '350px'
             })
         ])
+        
+        # Crear tarjeta de valor promedio de venta
+        tarjeta_promedio_venta = html.Div([
+            html.Div([
+                html.H2("💎 Valor Promedio de Venta", style={
+                    'color': COLORS['text'], 
+                    'marginBottom': '10px',
+                    'textAlign': 'center',
+                    'fontSize': '24px'
+                }),
+                html.H1(f"${valor_promedio_venta:,.0f}", style={
+                    'color': COLORS['income'], 
+                    'margin': '0', 
+                    'fontSize': '48px',
+                    'textAlign': 'center',
+                    'fontWeight': 'bold'
+                }),
+                html.P("Promedio por transacción", style={
+                    'color': COLORS['text'], 
+                    'margin': '10px 0', 
+                    'fontSize': '16px',
+                    'textAlign': 'center'
+                }),
+                html.Div([
+                    html.Span(f"Ventas ≥$100k: {cantidad_ventas:,}", style={
+                        'color': COLORS['text'], 
+                        'fontSize': '14px',
+                        'marginRight': '20px'
+                    }),
+                    html.Span(f"Total: ${total_ingresos:,.0f}", style={
+                        'color': COLORS['income'], 
+                        'fontSize': '14px'
+                    }),
+                    html.Br(),
+                    html.Span(f"Total ventas: {cantidad_total_ventas:,}", style={
+                        'color': COLORS['text'], 
+                        'fontSize': '12px',
+                        'fontStyle': 'italic'
+                    })
+                ], style={'textAlign': 'center', 'marginTop': '15px'})
+            ], style={
+                'backgroundColor': COLORS['card_bg'],
+                'padding': '30px',
+                'borderRadius': '15px',
+                'textAlign': 'center',
+                'border': f'3px solid {COLORS["income"]}',
+                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)',
+                'minWidth': '350px'
+            })
+        ])
+        
+        # Combinar ambas tarjetas principales
+        tarjetas_principales = [tarjeta_utilidad, tarjeta_promedio_venta]
         
         # Crear tarjetas normales
         tarjetas = []
@@ -308,11 +376,14 @@ if df is not None:
             'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
         
-        for cat in df_agrupado['categoria'].unique():
-            df_cat = df_agrupado[df_agrupado['categoria'] == cat]
-            total = df_cat['monto'].sum()
-            promedio = df_cat['monto'].mean()
-            cantidad = len(df_cat)
+        # Usar datos originales para totales y conteos, pero agrupados para promedios
+        for cat in df_filtrado['categoria'].unique():
+            df_cat_original = df_filtrado[df_filtrado['categoria'] == cat]
+            df_cat_agrupado = df_agrupado[df_agrupado['categoria'] == cat]
+            
+            total = df_cat_original['monto'].sum()  # Total de datos originales
+            promedio = df_cat_agrupado['monto'].mean() if not df_cat_agrupado.empty else 0  # Promedio de períodos
+            cantidad = len(df_cat_original)  # Cantidad de registros originales
             
             color = colores_categoria.get(cat, COLORS['primary'])
             
@@ -321,7 +392,7 @@ if df is not None:
                 html.H2(f"${total:,.0f}", style={'color': color, 'margin': '0', 'fontSize': '28px'}),
                 html.P("Total", style={'color': COLORS['text'], 'margin': '5px 0', 'fontSize': '12px'}),
                 html.Div([
-                    html.Span(f"Promedio: ${promedio:,.0f}", style={'color': COLORS['text'], 'fontSize': '14px'}),
+                    html.Span(f"Promedio/Período: ${promedio:,.0f}", style={'color': COLORS['text'], 'fontSize': '14px'}),
                     html.Br(),
                     html.Span(f"Registros: {cantidad:,}", style={'color': COLORS['text'], 'fontSize': '14px'})
                 ], style={'marginTop': '10px'})
@@ -407,7 +478,7 @@ if df is not None:
             font=dict(color=COLORS['text'])
         )
         
-        return tarjeta_utilidad, tarjetas, fig
+        return tarjetas_principales, tarjetas, fig
 
 else:
     app.layout = html.Div([
