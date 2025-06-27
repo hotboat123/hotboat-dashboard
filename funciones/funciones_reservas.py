@@ -77,7 +77,7 @@ def procesar_appointments(payments, appointments):
 
     # 🔥 ELIMINAR COLUMNAS SOLICITADAS: PAID AMOUNT, Phone Number y PAYMENT
     # NOTA: Phone Number_2 se mantiene porque es el número procesado y formateado
-    columnas_a_eliminar = ['PAID AMOUNT', 'Phone Number', 'PAYMENT']
+    columnas_a_eliminar = ['Phone Number', 'PAYMENT']
     df = df.drop(columns=[col for col in columnas_a_eliminar if col in df.columns])
 
     return df
@@ -135,15 +135,43 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
         # Concatenar DataFrames
         df_concat = pd.concat([df_reservas_original, df_reservas_nuevas], axis=0, ignore_index=True)
         # Eliminar duplicados, manteniendo la primera aparición
-        df_final = df_concat.drop_duplicates(subset="ID", keep="first").sort_values(by="fecha_trip")
+        df_final = df_concat.drop_duplicates(subset="ID", keep="first")
     else:
         # Si no hay reservas originales, usar solo las nuevas
-        df_final = df_reservas_nuevas.reset_index(drop=True).sort_values(by="fecha_trip")
+        df_final = df_reservas_nuevas.reset_index(drop=True)
     
     # Procesar fechas y tipos de datos
-    df_final["fecha_trip"] = pd.to_datetime(df_final["fecha_trip"], format="%d/%m/%Y")
-    df_final["fecha_creacion_reserva"] = pd.to_datetime(df_final["fecha_creacion_reserva"], format="%d/%m/%Y")
-    df_final["ID"] = df_final["ID"].astype(int)
-    df_final = df_final.sort_values(by="fecha_trip")
+    if 'fecha_hora_trip' in df_final.columns:
+        df_final["fecha_hora_trip"] = pd.to_datetime(df_final["fecha_hora_trip"])
+        df_final = df_final.sort_values(by="fecha_hora_trip")
+    elif 'fecha_trip' in df_final.columns:
+        df_final["fecha_trip"] = pd.to_datetime(df_final["fecha_trip"], format="%d/%m/%Y")
+        df_final = df_final.sort_values(by="fecha_trip")
+    
+    if 'fecha_hora_creacion_reserva' in df_final.columns:
+        df_final["fecha_hora_creacion_reserva"] = pd.to_datetime(df_final["fecha_hora_creacion_reserva"])
+    elif 'fecha_creacion_reserva' in df_final.columns:
+        df_final["fecha_creacion_reserva"] = pd.to_datetime(df_final["fecha_creacion_reserva"], format="%d/%m/%Y")
+    
+    if 'ID' in df_final.columns:
+        df_final["ID"] = df_final["ID"].astype(int)
+    
+    # Reordenar columnas en el orden especificado después de juntar todas las reservas
+    columnas_ordenadas = [
+        'ID', 
+        'fecha_hora_trip', 
+        'fecha_hora_creacion_reserva', 
+        'Customer Email', 
+        'Service', 
+        'PAID AMOUNT', 
+        'TOTAL AMOUNT', 
+        'DUE AMOUNT', 
+        'Phone Number_2', 
+        'Customer'
+    ]
+    
+    # Solo incluir columnas que existen
+    columnas_finales = [col for col in columnas_ordenadas if col in df_final.columns]
+    df_final = df_final[columnas_finales]
     
     return df_final
