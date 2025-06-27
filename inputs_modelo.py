@@ -54,7 +54,7 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha basti", "Javiera Rodriguez"
+        "munoz cucha bast", "Javiera Rodriguez"
     ],
     "Mano obra HotBoat daniel": [
         "inostroza canales"

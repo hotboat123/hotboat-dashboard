@@ -438,7 +438,7 @@ def categorizar_por_diccionario(df, diccionario, nombre_columna):
     El resultado se guarda en la columna nombre_columna. La comparación es insensible a mayúsculas/minúsculas y espacios.
     """
     df = df.copy()
-    df[nombre_columna] = df['Descripción'].apply(obtener_categoria)
+    df[nombre_columna] = df['Descripción'].apply(lambda desc: obtener_categoria(desc, diccionario))
     return df
 
 def reordenar_columna_categoria_extra(df):
@@ -475,11 +475,14 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
         df_cuenta_corriente_cargos
     ], ignore_index=True, sort=False)
     df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
-    df_final['Fecha'] = pd.to_datetime(df_final['Fecha'], format='%d/%m/%Y', errors='coerce')
+    
+    # Convertir fechas a datetime usando la nueva función
+    df_final = convertir_fechas_a_datetime(df_final, 'Fecha')
+    
     df_final = df_final[df_final['Monto'] >= 0]
     df_final = df_final.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
     
-    # Primero categorizar por descripción para obtener Categoría_2
+    # Categorizar todos los datos usando el diccionario (incluyendo cuenta corriente)
     df_final = categorizar_por_descripcion(df_final, diccionario_categorias)
     
     # Luego categorizar Categoría 1 basándose en Categoría_2
@@ -629,6 +632,11 @@ class ProcesadorArchivos:
         
         # Consolidar Cuenta Corriente
         if self.df_cuenta_corriente_cargos:
+            # Asegurar que la columna se llame 'Fecha'
+            for i, df in enumerate(self.df_cuenta_corriente_cargos):
+                if 'fecha' in df.columns and 'Fecha' not in df.columns:
+                    self.df_cuenta_corriente_cargos[i] = df.rename(columns={'fecha': 'Fecha'})
+            
             datos_consolidados['cuenta_corriente_cargos'] = pd.concat(
                 self.df_cuenta_corriente_cargos, ignore_index=True
             )
@@ -639,6 +647,11 @@ class ProcesadorArchivos:
             print("⚠️  No se encontraron archivos de cargos cuenta corriente")
             
         if self.df_cuenta_corriente_abonos:
+            # Asegurar que la columna se llame 'Fecha'
+            for i, df in enumerate(self.df_cuenta_corriente_abonos):
+                if 'fecha' in df.columns and 'Fecha' not in df.columns:
+                    self.df_cuenta_corriente_abonos[i] = df.rename(columns={'fecha': 'Fecha'})
+            
             datos_consolidados['cuenta_corriente_abonos'] = pd.concat(
                 self.df_cuenta_corriente_abonos, ignore_index=True
             )
@@ -730,7 +743,7 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
     # Agregar abonos de cuenta corriente
     if not datos_consolidados['cuenta_corriente_abonos'].empty:
         df_abonos_cc = datos_consolidados['cuenta_corriente_abonos'].copy()
-        df_abonos_cc['Fecha'] = pd.to_datetime(df_abonos_cc['Fecha'], format='%Y-%m-%d', errors='coerce')
+        df_abonos_cc['Fecha'] = pd.to_datetime(df_abonos_cc['Fecha'], format='%d/%m/%Y', errors='coerce')
         df_abonos = pd.concat([df_abonos, df_abonos_cc], axis=0)
     
     print("=" * 60)
@@ -823,9 +836,10 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         cargos = cargos[pd.to_datetime(cargos['Fecha'], errors='coerce').notna()]
         cargos = cargos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
         
-        # Estandarizar formato de fecha a YYYY-MM-DD
+        # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
         if not cargos.empty:
-            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce').dt.strftime('%Y-%m-%d')
+            # Mantener como datetime en lugar de convertir a string
+            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce')
     
     # Procesar abonos
     abonos = pd.DataFrame()
@@ -837,8 +851,75 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         abonos = abonos[pd.to_datetime(abonos['Fecha'], errors='coerce').notna()]
         abonos = abonos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
         
-        # Estandarizar formato de fecha a YYYY-MM-DD
+        # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
         if not abonos.empty:
-            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce').dt.strftime('%Y-%m-%d')
+            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce')
     
     return cargos, abonos
+
+def convertir_fechas_a_datetime(df, columna_fecha='Fecha'):
+    """
+    Convierte fechas en formato string a datetime, manejando múltiples formatos.
+    
+    Args:
+        df: DataFrame con la columna de fechas
+        columna_fecha: Nombre de la columna de fechas (default: 'Fecha')
+    
+    Returns:
+        DataFrame con fechas convertidas a datetime
+    """
+    df = df.copy()
+    
+    # Solo procesar si la columna existe y no está vacía
+    if columna_fecha not in df.columns or df.empty:
+        return df
+    
+    # Si ya es datetime, no hacer nada
+    if pd.api.types.is_datetime64_any_dtype(df[columna_fecha]):
+        return df
+    
+    # Convertir a string si no lo es
+    if not pd.api.types.is_string_dtype(df[columna_fecha]):
+        df[columna_fecha] = df[columna_fecha].astype(str)
+    
+    # Función para convertir una fecha individual
+    def convertir_fecha(fecha_str):
+        if pd.isna(fecha_str) or fecha_str == '' or fecha_str == 'nan':
+            return pd.NaT
+        
+        fecha_str = str(fecha_str).strip()
+        
+        # Intentar formato ISO (2025-04-30 00:00:00)
+        try:
+            return pd.to_datetime(fecha_str, format='%Y-%m-%d %H:%M:%S')
+        except:
+            pass
+        
+        # Intentar formato ISO sin hora (2025-04-30)
+        try:
+            return pd.to_datetime(fecha_str, format='%Y-%m-%d')
+        except:
+            pass
+        
+        # Intentar formato dd/mm/yyyy (12/02/2025)
+        try:
+            return pd.to_datetime(fecha_str, format='%d/%m/%Y')
+        except:
+            pass
+        
+        # Intentar formato dd/mm/yy (12/02/25)
+        try:
+            return pd.to_datetime(fecha_str, format='%d/%m/%y')
+        except:
+            pass
+        
+        # Si nada funciona, intentar parse automático
+        try:
+            return pd.to_datetime(fecha_str)
+        except:
+            return pd.NaT
+    
+    # Aplicar la conversión
+    df[columna_fecha] = df[columna_fecha].apply(convertir_fecha)
+    
+    return df

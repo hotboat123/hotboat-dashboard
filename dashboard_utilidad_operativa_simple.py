@@ -22,7 +22,10 @@ def cargar_datos():
     try:
         df = pd.read_csv('archivos_output/Utilidad operativa.csv')
         df['fecha'] = pd.to_datetime(df['fecha'])
+        # Normalizar categorías a formato título
+        df['categoria'] = df['categoria'].astype(str).str.strip().str.title()
         print(f"✅ Datos cargados: {len(df)} registros")
+        print(f"Categorías detectadas: {sorted(df['categoria'].unique())}")
         return df
     except Exception as e:
         print(f"❌ Error cargando datos: {e}")
@@ -217,9 +220,9 @@ if df is not None:
         
         # Colores específicos para cada categoría
         colores_categoria = {
-            'ingreso operativo': COLORS['income'],      # Verde
-            'costo operativo': COLORS['expense'],       # Rojo
-            'Costos de Marketing': COLORS['marketing'],  # Amarillo
+            'Ingreso Operativo': COLORS['income'],      # Verde
+            'Costo Operativo': COLORS['expense'],       # Rojo
+            'Costos De Marketing': COLORS['marketing'],  # Amarillo
             'Costos Fijos': COLORS['costos_fijos'],      # Morado
             'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
@@ -233,7 +236,7 @@ if df is not None:
             color = colores_categoria.get(cat, COLORS['primary'])
             
             tarjeta = html.Div([
-                html.H3(cat.title(), style={'color': COLORS['text'], 'marginBottom': '10px'}),
+                html.H3(cat, style={'color': COLORS['text'], 'marginBottom': '10px'}),
                 html.H2(f"${total:,.0f}", style={'color': color, 'margin': '0', 'fontSize': '28px'}),
                 html.P("Total", style={'color': COLORS['text'], 'margin': '5px 0', 'fontSize': '12px'}),
                 html.Div([
@@ -255,9 +258,9 @@ if df is not None:
         
         # Colores específicos para cada categoría
         colores_categoria = {
-            'ingreso operativo': COLORS['income'],      # Verde
-            'costo operativo': COLORS['expense'],       # Rojo
-            'Costos de Marketing': COLORS['marketing'],  # Amarillo
+            'Ingreso Operativo': COLORS['income'],      # Verde
+            'Costo Operativo': COLORS['expense'],       # Rojo
+            'Costos De Marketing': COLORS['marketing'],  # Amarillo
             'Costos Fijos': COLORS['costos_fijos'],      # Morado
             'Costos Variables': COLORS['costos_variables'] # Naranjo
         }
