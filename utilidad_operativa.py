@@ -32,8 +32,15 @@ def cargar_gastos_marketing():
         gastos_marketing = gastos[gastos['Categoría 1'] == 'Costos de Marketing'].copy()
         
         # Seleccionar columnas necesarias y renombrar
-        gastos_marketing = gastos_marketing[['Fecha', 'Monto']].copy()
+        columnas_necesarias = ['Fecha', 'Monto', 'Descripción']
+        if 'Categoría_2' in gastos_marketing.columns:
+            columnas_necesarias.append('Categoría_2')
+        
+        gastos_marketing = gastos_marketing[columnas_necesarias].copy()
         gastos_marketing['categoria'] = 'Costos de Marketing'
+        gastos_marketing['categoria_1'] = 'Costos de Marketing'
+        gastos_marketing['categoria_2'] = gastos_marketing.get('Categoría_2', 'Sin subcategoría')
+        gastos_marketing['descripcion'] = gastos_marketing.get('Descripción', 'Gasto de marketing')
         gastos_marketing = gastos_marketing.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
         
         # Convertir fecha a datetime si no lo está
@@ -56,8 +63,15 @@ def cargar_costos_fijos():
         costos_fijos = gastos[gastos['Categoría 1'] == 'Costos Fijos'].copy()
         
         # Seleccionar columnas necesarias y renombrar
-        costos_fijos = costos_fijos[['Fecha', 'Monto']].copy()
+        columnas_necesarias = ['Fecha', 'Monto', 'Descripción']
+        if 'Categoría_2' in costos_fijos.columns:
+            columnas_necesarias.append('Categoría_2')
+        
+        costos_fijos = costos_fijos[columnas_necesarias].copy()
         costos_fijos['categoria'] = 'costos fijos'
+        costos_fijos['categoria_1'] = 'Costos Fijos'
+        costos_fijos['categoria_2'] = costos_fijos.get('Categoría_2', 'Sin subcategoría')
+        costos_fijos['descripcion'] = costos_fijos.get('Descripción', 'Costo fijo')
         costos_fijos = costos_fijos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
         
         # Convertir fecha a datetime si no lo está
@@ -80,8 +94,15 @@ def cargar_costos_variables():
         costos_variables = gastos[gastos['Categoría 1'] == 'Costos Variables'].copy()
         
         # Seleccionar columnas necesarias y renombrar
-        costos_variables = costos_variables[['Fecha', 'Monto']].copy()
+        columnas_necesarias = ['Fecha', 'Monto', 'Descripción']
+        if 'Categoría_2' in costos_variables.columns:
+            columnas_necesarias.append('Categoría_2')
+        
+        costos_variables = costos_variables[columnas_necesarias].copy()
         costos_variables['categoria'] = 'costos variables'
+        costos_variables['categoria_1'] = 'Costos Variables'
+        costos_variables['categoria_2'] = costos_variables.get('Categoría_2', 'Sin subcategoría')
+        costos_variables['descripcion'] = costos_variables.get('Descripción', 'Costo variable')
         costos_variables = costos_variables.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
         
         # Convertir fecha a datetime si no lo está
@@ -103,6 +124,9 @@ def cargar_costos_operativos():
         # Seleccionar columnas necesarias y renombrar
         costos_operativos = costos[['fecha', 'monto']].copy()
         costos_operativos['categoria'] = 'costo operativo'
+        costos_operativos['categoria_1'] = 'Costos Operativos'
+        costos_operativos['categoria_2'] = 'Por reserva'
+        costos_operativos['descripcion'] = 'Costo operativo por reserva'
         
         # Convertir fecha a datetime si no lo está
         costos_operativos['fecha'] = pd.to_datetime(costos_operativos['fecha'])
@@ -123,6 +147,9 @@ def cargar_ingresos_operativos():
         # Seleccionar columnas necesarias y renombrar
         ingresos_operativos = ingresos[['fecha', 'monto']].copy()
         ingresos_operativos['categoria'] = 'ingreso operativo'
+        ingresos_operativos['categoria_1'] = 'Ingresos Operativos'
+        ingresos_operativos['categoria_2'] = 'Reservas'
+        ingresos_operativos['descripcion'] = 'Ingreso por reserva'
         
         # Convertir fecha a datetime si no lo está
         ingresos_operativos['fecha'] = pd.to_datetime(ingresos_operativos['fecha'])
@@ -132,6 +159,60 @@ def cargar_ingresos_operativos():
         
     except Exception as e:
         print(f"❌ Error cargando ingresos operativos: {e}")
+        return pd.DataFrame()
+
+def cargar_todos_gastos():
+    """Cargar TODOS los gastos de gastos hotboat.csv preservando categorías originales"""
+    try:
+        print("📊 Cargando todos los gastos...")
+        gastos = pd.read_csv('archivos_output/gastos hotboat.csv')
+        
+        # Seleccionar columnas necesarias y renombrar
+        columnas_necesarias = ['Fecha', 'Monto', 'Descripción']
+        if 'Categoría_2' in gastos.columns:
+            columnas_necesarias.append('Categoría_2')
+        if 'Categoría 1' in gastos.columns:
+            columnas_necesarias.append('Categoría 1')
+        
+        gastos_todos = gastos[columnas_necesarias].copy()
+        gastos_todos['categoria'] = 'gastos'
+        gastos_todos['categoria_1'] = gastos_todos.get('Categoría 1', 'Sin categoría')
+        gastos_todos['categoria_2'] = gastos_todos.get('Categoría_2', 'Sin subcategoría')
+        gastos_todos['descripcion'] = gastos_todos.get('Descripción', 'Gasto')
+        gastos_todos = gastos_todos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        # Convertir fecha a datetime si no lo está
+        gastos_todos['fecha'] = pd.to_datetime(gastos_todos['fecha'])
+        
+        print(f"✅ Todos los gastos cargados: {len(gastos_todos)} registros")
+        return gastos_todos
+        
+    except Exception as e:
+        print(f"❌ Error cargando todos los gastos: {e}")
+        return pd.DataFrame()
+
+def cargar_todos_abonos():
+    """Cargar TODOS los abonos de abonos hotboat.csv"""
+    try:
+        print("📊 Cargando todos los abonos...")
+        abonos = pd.read_csv('archivos_output/abonos hotboat.csv')
+        
+        # Seleccionar columnas necesarias y renombrar
+        abonos_todos = abonos[['Fecha', 'Monto', 'Descripción']].copy()
+        abonos_todos['categoria'] = 'abonos'
+        abonos_todos['categoria_1'] = 'Ingresos'
+        abonos_todos['categoria_2'] = 'Abonos bancarios'
+        abonos_todos['descripcion'] = abonos_todos.get('Descripción', 'Abono')
+        abonos_todos = abonos_todos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        # Convertir fecha a datetime si no lo está
+        abonos_todos['fecha'] = pd.to_datetime(abonos_todos['fecha'])
+        
+        print(f"✅ Todos los abonos cargados: {len(abonos_todos)} registros")
+        return abonos_todos
+        
+    except Exception as e:
+        print(f"❌ Error cargando todos los abonos: {e}")
         return pd.DataFrame()
 
 def generar_utilidad_operativa():
@@ -145,9 +226,11 @@ def generar_utilidad_operativa():
     costos_variables = cargar_costos_variables()
     costos_operativos = cargar_costos_operativos()
     ingresos_operativos = cargar_ingresos_operativos()
+    gastos_todos = cargar_todos_gastos()
+    abonos_todos = cargar_todos_abonos()
     
     # Verificar que todos los archivos se cargaron correctamente
-    if gastos_marketing.empty and costos_fijos.empty and costos_variables.empty and costos_operativos.empty and ingresos_operativos.empty:
+    if gastos_marketing.empty and costos_fijos.empty and costos_variables.empty and costos_operativos.empty and ingresos_operativos.empty and gastos_todos.empty and abonos_todos.empty:
         print("❌ No se pudieron cargar datos de ninguna fuente")
         return False
     
@@ -158,14 +241,16 @@ def generar_utilidad_operativa():
         costos_fijos,
         costos_variables,
         costos_operativos,
-        ingresos_operativos
+        ingresos_operativos,
+        gastos_todos,
+        abonos_todos
     ], ignore_index=True)
     
     # Ordenar por fecha (ya están en formato datetime)
     utilidad_operativa = utilidad_operativa.sort_values('fecha')
     
     # Reordenar columnas
-    utilidad_operativa = utilidad_operativa[['fecha', 'categoria', 'monto']]
+    utilidad_operativa = utilidad_operativa[['fecha', 'categoria', 'categoria_1', 'categoria_2', 'descripcion', 'monto']]
     
     # Guardar archivo
     output_file = 'archivos_output/Utilidad operativa.csv'
@@ -177,12 +262,19 @@ def generar_utilidad_operativa():
     print(f"📅 Período: {utilidad_operativa['fecha'].min().strftime('%Y-%m-%d')} a {utilidad_operativa['fecha'].max().strftime('%Y-%m-%d')}")
     print(f"📊 Total registros: {len(utilidad_operativa):,}")
     
-    # Estadísticas por categoría
-    print("\n📋 Distribución por categoría:")
+    # Estadísticas por categoría principal
+    print("\n📋 Distribución por categoría principal:")
     for categoria in utilidad_operativa['categoria'].unique():
         count = len(utilidad_operativa[utilidad_operativa['categoria'] == categoria])
         total = utilidad_operativa[utilidad_operativa['categoria'] == categoria]['monto'].sum()
         print(f"  • {categoria}: {count:,} registros - ${total:,.0f}")
+    
+    # Estadísticas por categoría 1 (detallada)
+    print("\n📋 Distribución por categoría 1 (detallada):")
+    for categoria_1 in utilidad_operativa['categoria_1'].unique():
+        count = len(utilidad_operativa[utilidad_operativa['categoria_1'] == categoria_1])
+        total = utilidad_operativa[utilidad_operativa['categoria_1'] == categoria_1]['monto'].sum()
+        print(f"  • {categoria_1}: {count:,} registros - ${total:,.0f}")
     
     # Totales generales
     total_ingresos = utilidad_operativa[utilidad_operativa['categoria'] == 'ingreso operativo']['monto'].sum()
@@ -190,17 +282,23 @@ def generar_utilidad_operativa():
     total_marketing = utilidad_operativa[utilidad_operativa['categoria'] == 'Costos de Marketing']['monto'].sum()
     total_costos_fijos = utilidad_operativa[utilidad_operativa['categoria'] == 'costos fijos']['monto'].sum()
     total_costos_variables = utilidad_operativa[utilidad_operativa['categoria'] == 'costos variables']['monto'].sum()
+    total_gastos = utilidad_operativa[utilidad_operativa['categoria'] == 'gastos']['monto'].sum()
+    total_abonos = utilidad_operativa[utilidad_operativa['categoria'] == 'abonos']['monto'].sum()
     
     print(f"\n💰 TOTALES:")
     print(f"  • Ingresos operativos: ${total_ingresos:,.0f}")
+    print(f"  • Abonos bancarios: ${total_abonos:,.0f}")
+    print(f"  • Total ingresos: ${total_ingresos + total_abonos:,.0f}")
     print(f"  • Costos operativos: ${total_costos_operativos:,.0f}")
     print(f"  • Costos de marketing: ${total_marketing:,.0f}")
     print(f"  • Costos fijos: ${total_costos_fijos:,.0f}")
     print(f"  • Costos variables: ${total_costos_variables:,.0f}")
+    print(f"  • Gastos totales: ${total_gastos:,.0f}")
     
-    total_costos = total_costos_operativos + total_marketing + total_costos_fijos + total_costos_variables
+    total_costos = total_costos_operativos + total_marketing + total_costos_fijos + total_costos_variables + total_gastos
+    total_ingresos_totales = total_ingresos + total_abonos
     print(f"  • Total costos: ${total_costos:,.0f}")
-    print(f"  • Utilidad neta: ${total_ingresos - total_costos:,.0f}")
+    print(f"  • Utilidad neta: ${total_ingresos_totales - total_costos:,.0f}")
     
     print(f"\n✅ Archivo generado: {output_file}")
     print(f"📁 Tamaño: {os.path.getsize(output_file):,} bytes")

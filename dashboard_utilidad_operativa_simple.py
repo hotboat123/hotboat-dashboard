@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html, Input, Output, callback
+from dash import dcc, html, Input, Output, callback, dash_table
 import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime, timedelta
@@ -8,13 +8,14 @@ from datetime import datetime, timedelta
 COLORS = {
     'background': '#1a1a1a',
     'card_bg': '#2d2d2d',
+    'header_bg': '#3d3d3d',
     'text': '#ffffff',
     'primary': '#007bff',
-    'income': '#28a745',
-    'expense': '#dc3545',
-    'marketing': '#ffc107',
-    'costos_fijos': '#6f42c1',
-    'costos_variables': '#fd7e14'
+    'income': '#00ff88',
+    'expense': '#ff4444',
+    'marketing': '#00ffff',
+    'costos_fijos': '#ff8800',
+    'costos_variables': '#ff0088'
 }
 
 def cargar_datos():
@@ -198,6 +199,98 @@ if df is not None:
             'padding': '20px',
             'borderRadius': '10px',
             'marginTop': '20px'
+        }),
+        
+        # Tabla dinámica
+        html.Div([
+            html.H3("📊 Tabla de Datos", style={
+                'color': COLORS['text'],
+                'textAlign': 'center',
+                'marginBottom': '20px'
+            }),
+            dash_table.DataTable(
+                id='tabla-datos',
+                columns=[
+                    {'name': 'Fecha', 'id': 'fecha', 'type': 'datetime'},
+                    {'name': 'Categoría', 'id': 'categoria', 'type': 'text'},
+                    {'name': 'Categoría 1', 'id': 'categoria_1', 'type': 'text'},
+                    {'name': 'Categoría 2', 'id': 'categoria_2', 'type': 'text'},
+                    {'name': 'Descripción', 'id': 'descripcion', 'type': 'text'},
+                    {'name': 'Monto ($)', 'id': 'monto', 'type': 'numeric', 'format': {'specifier': ',.0f'}}
+                ],
+                data=[],
+                style_table={
+                    'backgroundColor': COLORS['card_bg'],
+                    'color': COLORS['text'],
+                    'borderRadius': '10px',
+                    'overflow': 'hidden'
+                },
+                style_header={
+                    'backgroundColor': COLORS['header_bg'],
+                    'color': COLORS['text'],
+                    'fontWeight': 'bold',
+                    'textAlign': 'center'
+                },
+                style_cell={
+                    'backgroundColor': COLORS['card_bg'],
+                    'color': COLORS['text'],
+                    'textAlign': 'left',
+                    'padding': '10px',
+                    'border': '1px solid #444'
+                },
+                style_data_conditional=[
+                    {
+                        'if': {'filter_query': '{categoria} = "ingreso operativo"'},
+                        'backgroundColor': '#2d5a2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costo operativo"'},
+                        'backgroundColor': '#5a2d2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "Costos de Marketing"'},
+                        'backgroundColor': '#5a5a2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costos fijos"'},
+                        'backgroundColor': '#4a2d5a',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costos variables"'},
+                        'backgroundColor': '#5a3d2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "gastos"'},
+                        'backgroundColor': '#3d3d5a',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "abonos"'},
+                        'backgroundColor': '#2d5a5a',
+                        'color': 'white'
+                    }
+                ],
+                filter_action='native',
+                sort_action='native',
+                sort_mode='multi',
+                page_action='native',
+                page_current=0,
+                page_size=20,
+                style_data={
+                    'whiteSpace': 'normal',
+                    'height': 'auto'
+                }
+            )
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '10px',
+            'marginTop': '20px'
         })
         
     ], style={
@@ -209,7 +302,8 @@ if df is not None:
     @callback(
         [Output('tarjetas_principales', 'children'),
          Output('tarjetas', 'children'),
-         Output('grafico', 'figure')],
+         Output('grafico', 'figure'),
+         Output('tabla-datos', 'data')],
         [Input('date-range', 'start_date'),
          Input('date-range', 'end_date'),
          Input('periodo', 'value'),
@@ -478,7 +572,12 @@ if df is not None:
             font=dict(color=COLORS['text'])
         )
         
-        return tarjetas_principales, tarjetas, fig
+        # Preparar datos para la tabla (usar datos originales filtrados, no agrupados)
+        df_tabla = df_filtrado.copy()
+        df_tabla['fecha'] = df_tabla['fecha'].dt.strftime('%Y-%m-%d %H:%M')
+        df_tabla['monto'] = df_tabla['monto'].round(0).astype(int)
+        
+        return tarjetas_principales, tarjetas, fig, df_tabla.to_dict('records')
 
 else:
     app.layout = html.Div([
