@@ -71,6 +71,84 @@ def cargar_datos():
     }
 
 # ======== FUNCIONES PARA GRÁFICOS INTERACTIVOS ========
+def crear_mapa_calor_reservas(df_reservas):
+    """Crea un mapa de calor que muestra las reservas por día de la semana y hora."""
+    
+    # Crear copia del DataFrame para no modificar el original
+    df = df_reservas.copy()
+    
+    # Extraer día de la semana y hora de la fecha del viaje
+    df['dia_semana'] = df['fecha_trip'].dt.day_name()
+    df['hora'] = df['fecha_trip'].dt.hour
+    
+    # Mapear nombres de días al español y ordenarlos correctamente
+    dias_orden = {
+        'Monday': 'Lunes',
+        'Tuesday': 'Martes', 
+        'Wednesday': 'Miércoles',
+        'Thursday': 'Jueves',
+        'Friday': 'Viernes',
+        'Saturday': 'Sábado',
+        'Sunday': 'Domingo'
+    }
+    
+    df['dia_semana_esp'] = df['dia_semana'].map(dias_orden)
+    
+    # Crear matriz de datos para el mapa de calor
+    # Filas: días de la semana, Columnas: horas (0-23)
+    dias_ordenados = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    horas = list(range(24))
+    
+    # Crear matriz de conteo
+    matriz_conteo = []
+    for dia in dias_ordenados:
+        fila = []
+        for hora in horas:
+            conteo = len(df[(df['dia_semana_esp'] == dia) & (df['hora'] == hora)])
+            fila.append(conteo)
+        matriz_conteo.append(fila)
+    
+    # Crear figura del mapa de calor
+    fig = go.Figure(data=go.Heatmap(
+        z=matriz_conteo,
+        x=[f'{h:02d}:00' for h in horas],  # Etiquetas de horas
+        y=dias_ordenados,
+        colorscale='Viridis',  # Escala de colores
+        hoverongaps=False,
+        hovertemplate='<b>%{y}</b><br>Hora: %{x}<br>Reservas: %{z}<extra></extra>',
+        colorbar=dict(
+            title='Cantidad de Reservas',
+            titleside='right',
+            titlefont=dict(color=COLORS['text']),
+            tickfont=dict(color=COLORS['text'])
+        )
+    ))
+    
+    # Configurar layout
+    fig.update_layout(
+        title='Mapa de Calor: Reservas por Día de la Semana y Hora',
+        xaxis_title='Hora del Día',
+        yaxis_title='Día de la Semana',
+        height=500,
+        paper_bgcolor=COLORS['card_bg'],
+        plot_bgcolor=COLORS['card_bg'],
+        font={'color': COLORS['text']},
+        xaxis=dict(
+            showgrid=True,
+            gridcolor=COLORS['grid'],
+            tickfont={'color': COLORS['text']},
+            title_font={'color': COLORS['text']}
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor=COLORS['grid'],
+            tickfont={'color': COLORS['text']},
+            title_font={'color': COLORS['text']}
+        )
+    )
+    
+    return fig
+
 def crear_grafico_interactivo(df_ingresos, df_costos_operativos, df_gastos_marketing, df_costos_fijos, periodo, variables_seleccionadas):
     """Crea un gráfico interactivo que muestra solo las variables seleccionadas."""
     
@@ -729,6 +807,17 @@ def crear_app_reservas(datos=None):
             'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
         }),
         
+        html.Div([
+            html.H3('Mapa de Calor: Reservas por Día y Hora', style={'color': COLORS['text'], 'marginBottom': '15px'}),
+            dcc.Graph(id='mapa-calor-reservas')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '5px',
+            'marginBottom': '20px',
+            'boxShadow': '0px 0px 10px rgba(255,255,255,0.1)'
+        }),
+        
         # Insights con estilo oscuro
         html.Div([
             html.H3('💡 Conclusiones e Insights', style={
@@ -757,6 +846,7 @@ def crear_app_reservas(datos=None):
          Output('total-gastos', 'children'),
          Output('balance', 'children'),
          Output('balance', 'style'),
+         Output('mapa-calor-reservas', 'figure'),
          # Nuevos outputs para los insights
          Output('insights-reservas', 'children'),
          Output('insights-financieros', 'children'),
@@ -780,6 +870,7 @@ def crear_app_reservas(datos=None):
         # Crear gráficos
         fig_reservas = crear_grafico_reservas(df_filtrado, periodo)
         fig_ingresos = crear_grafico_ingresos_gastos(df_payments_filtrado, df_expenses_filtrado, periodo)
+        fig_mapa_calor = crear_mapa_calor_reservas(df_filtrado)
 
         # Estilo del balance
         balance_style = {
@@ -801,6 +892,7 @@ def crear_app_reservas(datos=None):
             f'${total_gastos_filtrado:,.0f}',
             f'${balance_filtrado:,.0f}',
             balance_style,
+            fig_mapa_calor,
             insights_reservas,
             insights_financieros,
             insights_horas
