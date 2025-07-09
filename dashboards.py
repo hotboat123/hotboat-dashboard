@@ -36,7 +36,7 @@ def cargar_datos():
     
     # Carga de datos de reservas
     df = pd.read_csv("archivos_output/reservas_HotBoat.csv")
-    df["fecha_trip"] = pd.to_datetime(df["fecha_trip"])
+    df["fecha_trip"] = pd.to_datetime(df["fecha_hora_trip"])
     
     # Carga de datos financieros
     df_payments = pd.read_csv("archivos_output/abonos hotboat.csv")
