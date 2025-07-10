@@ -721,7 +721,8 @@ if df_con_region is not None and df_sin_region is not None:
                     title=titulo_eje_izq,
                     showgrid=True,
                     gridcolor=COLORS['grid'],
-                    side='left'
+                    side='left',
+                    rangemode='tozero'  # Forzar que comience desde 0
                 )
             
             if filtro_metric_der_conv != 'ninguno':
@@ -730,7 +731,8 @@ if df_con_region is not None and df_sin_region is not None:
                     title=titulo_eje_der,
                     showgrid=False,
                     side='right',
-                    overlaying='y'
+                    overlaying='y',
+                    rangemode='tozero'  # Forzar que comience desde 0
                 )
             
             fig_evolucion_conv_filtrado.update_layout(
@@ -856,7 +858,8 @@ if df_con_region is not None and df_sin_region is not None:
                     title=titulo_eje_izq_costos,
                     showgrid=True,
                     gridcolor=COLORS['grid'],
-                    side='left'
+                    side='left',
+                    rangemode='tozero'  # Forzar que comience desde 0
                 )
             
             if filtro_metric_der_costos != 'ninguno':
@@ -865,7 +868,8 @@ if df_con_region is not None and df_sin_region is not None:
                     title=titulo_eje_der_costos,
                     showgrid=False,
                     side='right',
-                    overlaying='y'
+                    overlaying='y',
+                    rangemode='tozero'  # Forzar que comience desde 0
                 )
             
             fig_evolucion_costos.update_layout(
