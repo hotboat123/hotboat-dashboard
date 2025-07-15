@@ -58,7 +58,7 @@ def cargar_datos():
         # Procesar archivos con datos actualizados
         numeric_columns = [
             "Importe gastado (CLP)", "Impresiones", "Clics en el enlace", 
-            "Artículos agregados al carrito", "CTR (todos)", "CPC (todos)",
+            "Compras", "CTR (todos)", "CPC (todos)",
             "Reproducciones de video de 3 segundos", "Reproducciones de video hasta el 25%",
             "Reproducciones de video hasta el 50%", "Reproducciones de video hasta el 75%",
             "Reproducciones de video hasta el 100%"
@@ -80,8 +80,8 @@ def cargar_datos():
             df['Hook_Rate_50'] = (df['Reproducciones de video hasta el 50%'] / df['Impresiones'] * 100).fillna(0)
             df['Hook_Rate_75'] = (df['Reproducciones de video hasta el 75%'] / df['Impresiones'] * 100).fillna(0)
             df['Hook_Rate_100'] = (df['Reproducciones de video hasta el 100%'] / df['Impresiones'] * 100).fillna(0)
-            df['Conversion_Rate'] = (df['Artículos agregados al carrito'] / df['Clics en el enlace'] * 100).fillna(0)
-            df['Cost_Per_Conversion'] = (df['Importe gastado (CLP)'] / df['Artículos agregados al carrito']).fillna(0)
+            df['Conversion_Rate'] = (df['Compras'] / df['Clics en el enlace'] * 100).fillna(0)
+            df['Cost_Per_Conversion'] = (df['Importe gastado (CLP)'] / df['Compras']).fillna(0)
             
             # Clasificar públicos - mantener todas las regiones/públicos separados
             def clasificar_publico(x):
@@ -408,7 +408,7 @@ if df_con_region is not None and df_sin_region is not None:
             total_gasto = df_filtrado_sin_region['Importe gastado (CLP)'].sum()
             total_impresiones = df_filtrado_sin_region['Impresiones'].sum()
             total_clics = df_filtrado_sin_region['Clics en el enlace'].sum()
-            total_conversiones = df_filtrado_sin_region['Artículos agregados al carrito'].sum()
+            total_conversiones = df_filtrado_sin_region['Compras'].sum()
             
             ctr = (total_clics / total_impresiones * 100) if total_impresiones > 0 else 0
             cpc = (total_gasto / total_clics) if total_clics > 0 else 0
@@ -444,20 +444,20 @@ if df_con_region is not None and df_sin_region is not None:
             # Sección Top Performers y Needs Attention
             df_combinaciones = df_filtrado_sin_region.groupby(['Público', 'Tipo_Anuncio']).agg({
                 'Importe gastado (CLP)': 'sum',
-                'Artículos agregados al carrito': 'sum',
+                'Compras': 'sum',
                 'Clics en el enlace': 'sum'
             }).reset_index()
             
             # Calcular métricas adicionales
             df_combinaciones['CPC'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Clics en el enlace']).fillna(0)
-            df_combinaciones['Costo_Por_Conversion'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Artículos agregados al carrito']).fillna(0)
-            df_combinaciones['Conversion_Rate'] = (df_combinaciones['Artículos agregados al carrito'] / df_combinaciones['Clics en el enlace'] * 100).fillna(0)
+            df_combinaciones['Costo_Por_Conversion'] = (df_combinaciones['Importe gastado (CLP)'] / df_combinaciones['Compras']).fillna(0)
+            df_combinaciones['Conversion_Rate'] = (df_combinaciones['Compras'] / df_combinaciones['Clics en el enlace'] * 100).fillna(0)
             
             # Top Performers (mejor costo por conversión)
-            top_performers = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] > 0].nlargest(5, 'Conversion_Rate')
+            top_performers = df_combinaciones[df_combinaciones['Compras'] > 0].nlargest(5, 'Conversion_Rate')
             
             # Needs Attention (gasto sin conversiones)
-            needs_attention = df_combinaciones[df_combinaciones['Artículos agregados al carrito'] == 0].nlargest(5, 'Importe gastado (CLP)')
+            needs_attention = df_combinaciones[df_combinaciones['Compras'] == 0].nlargest(5, 'Importe gastado (CLP)')
             
             seccion_performance = html.Div([
                 html.Div([
@@ -477,7 +477,7 @@ if df_con_region is not None and df_sin_region is not None:
                                 html.Tr([
                                     html.Td(row['Público'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
-                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
+                                    html.Td(f"{row['Compras']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"{row['Conversion_Rate']:.2f}%", style={'color': COLORS['income'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'})
                                 ]) for _, row in top_performers.iterrows()
@@ -505,7 +505,7 @@ if df_con_region is not None and df_sin_region is not None:
                                     html.Td(row['Tipo_Anuncio'], style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
                                     html.Td(f"${row['Importe gastado (CLP)']:,.0f}", style={'color': COLORS['expense'], 'padding': '8px', 'fontWeight': 'bold', 'textAlign': 'center'}),
                                     html.Td(f"{row['Clics en el enlace']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'}),
-                                    html.Td(f"{row['Artículos agregados al carrito']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'})
+                                    html.Td(f"{row['Compras']:.0f}", style={'color': COLORS['text'], 'padding': '8px', 'textAlign': 'center'})
                                 ]) for _, row in needs_attention.iterrows()
                             ])
                         ], style={'width': '100%', 'borderCollapse': 'collapse', 'border': '1px solid #444'})
@@ -517,19 +517,19 @@ if df_con_region is not None and df_sin_region is not None:
             if periodo == 'D':
                 df_temporal = df_filtrado_sin_region.groupby('Día').agg({
                     'Importe gastado (CLP)': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 titulo_evolucion = 'Evolución Diaria del Gasto y Conversiones'
             elif periodo == 'W':
                 df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time).agg({
                     'Importe gastado (CLP)': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 titulo_evolucion = 'Evolución Semanal del Gasto y Conversiones'
             else:
                 df_temporal = df_filtrado_sin_region.groupby(df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time).agg({
                     'Importe gastado (CLP)': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 titulo_evolucion = 'Evolución Mensual del Gasto y Conversiones'
             
@@ -549,7 +549,7 @@ if df_con_region is not None and df_sin_region is not None:
             # Agregar línea de conversiones (eje Y derecho)
             fig_evolucion.add_trace(go.Scatter(
                 x=df_temporal['Día'],
-                y=df_temporal['Artículos agregados al carrito'],
+                y=df_temporal['Compras'],
                 mode='lines+markers',
                 name='Conversiones',
                 line=dict(color=COLORS['income'], width=3),
@@ -600,29 +600,29 @@ if df_con_region is not None and df_sin_region is not None:
             # 3. Gráfico de evolución de conversiones por público y tipo de anuncio
             if periodo == 'D':
                 df_conv_publico = df_filtrado_sin_region.groupby(['Día', 'Público']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_conv_tipo = df_filtrado_sin_region.groupby(['Día', 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 titulo_conv = 'Evolución Diaria de Conversiones'
             elif periodo == 'W':
                 df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
                 df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
                 titulo_conv = 'Evolución Semanal de Conversiones'
             else:
                 df_conv_publico = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_conv_publico.rename(columns={'Día': 'Día'}, inplace=True)
                 df_conv_tipo = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_conv_tipo.rename(columns={'Día': 'Día'}, inplace=True)
                 titulo_conv = 'Evolución Mensual de Conversiones'
@@ -634,20 +634,20 @@ if df_con_region is not None and df_sin_region is not None:
             # 4. Gráfico de evolución de conversiones y gasto con filtros
             if periodo == 'D':
                 df_conv_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum',
+                    'Compras': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
                 titulo_conv_filtrado = 'Evolución Diaria de Conversiones y Gasto por Combinación'
             elif periodo == 'W':
                 df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum',
+                    'Compras': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
                 df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
                 titulo_conv_filtrado = 'Evolución Semanal de Conversiones y Gasto por Combinación'
             else:
                 df_conv_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
-                    'Artículos agregados al carrito': 'sum',
+                    'Compras': 'sum',
                     'Importe gastado (CLP)': 'sum'
                 }).reset_index()
                 df_conv_combinado.rename(columns={'Día': 'Día'}, inplace=True)
@@ -674,7 +674,7 @@ if df_con_region is not None and df_sin_region is not None:
                 # Métrica eje izquierdo
                 if filtro_metric_izq_conv != 'ninguno':
                     if filtro_metric_izq_conv == 'conversiones':
-                        y_data = df_combinacion['Artículos agregados al carrito']
+                        y_data = df_combinacion['Compras']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
                     else:  # gasto
                         y_data = df_combinacion['Importe gastado (CLP)']
@@ -694,7 +694,7 @@ if df_con_region is not None and df_sin_region is not None:
                 # Métrica eje derecho
                 if filtro_metric_der_conv != 'ninguno':
                     if filtro_metric_der_conv == 'conversiones':
-                        y_data = df_combinacion['Artículos agregados al carrito']
+                        y_data = df_combinacion['Compras']
                         hover_template = f'<b>{combinacion}</b><br>Fecha: %{{x}}<br>Conversiones: %{{y}}<extra></extra>'
                     else:  # gasto
                         y_data = df_combinacion['Importe gastado (CLP)']
@@ -766,14 +766,14 @@ if df_con_region is not None and df_sin_region is not None:
                 df_costos_combinado = df_filtrado_sin_region.groupby(['Día', 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 titulo_costos = 'Evolución Diaria de Costos por Combinación'
             elif periodo == 'W':
                 df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('W').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
                 titulo_costos = 'Evolución Semanal de Costos por Combinación'
@@ -781,14 +781,14 @@ if df_con_region is not None and df_sin_region is not None:
                 df_costos_combinado = df_filtrado_sin_region.groupby([df_filtrado_sin_region['Día'].dt.to_period('M').dt.start_time, 'Público', 'Tipo_Anuncio']).agg({
                     'Importe gastado (CLP)': 'sum',
                     'Clics en el enlace': 'sum',
-                    'Artículos agregados al carrito': 'sum'
+                    'Compras': 'sum'
                 }).reset_index()
                 df_costos_combinado.rename(columns={'Día': 'Día'}, inplace=True)
                 titulo_costos = 'Evolución Mensual de Costos por Combinación'
             
             # Calcular CPC y costo por conversión
             df_costos_combinado['CPC'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Clics en el enlace']).fillna(0)
-            df_costos_combinado['Costo_Por_Conversion'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Artículos agregados al carrito']).fillna(0)
+            df_costos_combinado['Costo_Por_Conversion'] = (df_costos_combinado['Importe gastado (CLP)'] / df_costos_combinado['Compras']).fillna(0)
             
             # Aplicar filtros
             if filtro_publico_costos != 'todos':
@@ -950,13 +950,13 @@ if df_con_region is not None and df_sin_region is not None:
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
                 'Clics en el enlace': 'sum',
-                'Artículos agregados al carrito': 'sum'
+                'Compras': 'sum'
             }).reset_index()
             
             df_publicos['CTR (%)'] = (df_publicos['Clics en el enlace'] / df_publicos['Impresiones'] * 100).fillna(0)
             df_publicos['CPC (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['Clics en el enlace']).fillna(0)
-            df_publicos['Conversión (%)'] = (df_publicos['Artículos agregados al carrito'] / df_publicos['Clics en el enlace'] * 100).fillna(0)
-            df_publicos['Costo por Conversión (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['Artículos agregados al carrito']).fillna(0)
+            df_publicos['Conversión (%)'] = (df_publicos['Compras'] / df_publicos['Clics en el enlace'] * 100).fillna(0)
+            df_publicos['Costo por Conversión (CLP)'] = (df_publicos['Importe gastado (CLP)'] / df_publicos['Compras']).fillna(0)
             
             fig_publicos = make_subplots(
                 rows=3, cols=2,
@@ -966,7 +966,7 @@ if df_con_region is not None and df_sin_region is not None:
                     'CPC (CLP)',
                     'Conversión (%)',
                     'Costo por Conversión (CLP)',
-                    'Artículos agregados al carrito'
+                    'Compras'
                 ),
                 vertical_spacing=0.15,
                 horizontal_spacing=0.1
@@ -981,7 +981,7 @@ if df_con_region is not None and df_sin_region is not None:
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['CPC (CLP)'], marker_color=colors[2], showlegend=False), row=2, col=1)
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Conversión (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
             fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
-            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
+            fig_publicos.add_trace(go.Bar(x=df_publicos['Público'], y=df_publicos['Compras'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
             # Rotar etiquetas del eje x para públicos
             fig_publicos.update_xaxes(tickangle=45)
@@ -1018,13 +1018,13 @@ if df_con_region is not None and df_sin_region is not None:
                 'Importe gastado (CLP)': 'sum',
                 'Impresiones': 'sum',
                 'Clics en el enlace': 'sum',
-                'Artículos agregados al carrito': 'sum'
+                'Compras': 'sum'
             }).reset_index()
             
             df_tipos['CTR (%)'] = (df_tipos['Clics en el enlace'] / df_tipos['Impresiones'] * 100).fillna(0)
             df_tipos['CPC (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['Clics en el enlace']).fillna(0)
-            df_tipos['Conversión (%)'] = (df_tipos['Artículos agregados al carrito'] / df_tipos['Clics en el enlace'] * 100).fillna(0)
-            df_tipos['Costo por Conversión (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['Artículos agregados al carrito']).fillna(0)
+            df_tipos['Conversión (%)'] = (df_tipos['Compras'] / df_tipos['Clics en el enlace'] * 100).fillna(0)
+            df_tipos['Costo por Conversión (CLP)'] = (df_tipos['Importe gastado (CLP)'] / df_tipos['Compras']).fillna(0)
             
             fig_tipos = make_subplots(
                 rows=3, cols=2,
@@ -1034,7 +1034,7 @@ if df_con_region is not None and df_sin_region is not None:
                     'CPC (CLP)',
                     'Conversión (%)',
                     'Costo por Conversión (CLP)',
-                    'Artículos agregados al carrito'
+                    'Compras'
                 ),
                 vertical_spacing=0.15,
                 horizontal_spacing=0.1
@@ -1046,7 +1046,7 @@ if df_con_region is not None and df_sin_region is not None:
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['CPC (CLP)'], marker_color=colors[2], showlegend=False), row=2, col=1)
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Conversión (%)'], marker_color=colors[3], showlegend=False), row=2, col=2)
             fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Costo por Conversión (CLP)'], marker_color=colors[4], showlegend=False), row=3, col=1)
-            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Artículos agregados al carrito'], marker_color=colors[5], showlegend=False), row=3, col=2)
+            fig_tipos.add_trace(go.Bar(x=df_tipos['Tipo_Anuncio'], y=df_tipos['Compras'], marker_color=colors[5], showlegend=False), row=3, col=2)
             
             # Rotar etiquetas del eje x para tipos de anuncios
             fig_tipos.update_xaxes(tickangle=45)

@@ -112,6 +112,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
 - **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
 - **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
+- **NUEVO**: En los archivos de marketing, usar columna "Compras" en lugar de "Artículos agregados al carrito" para métricas de conversión
 
 # Scratchpad
 
@@ -785,5 +786,48 @@ python ejecutar_todos_dashboards.py
 - 🌐 **Utilidad Operativa (Nuevo)**: http://localhost:8057 ✅ ACTIVO
 
 **Estado:** ✅ COMPLETADO - Dashboard de utilidad operativa funcionando correctamente
+
+---
+
+## Nueva Tarea: Actualizar Dashboard Marketing con Columna "Compras" ✅
+
+**Task:** Cambiar todas las referencias de "Artículos agregados al carrito" por "Compras" en el dashboard de marketing:
+- Actualizar nombres de columnas en el procesamiento de datos
+- Cambiar variables y cálculos de métricas
+- Actualizar textos mostrados al usuario
+- Mantener toda la funcionalidad existente
+
+**Progreso:**
+[X] Verificar existencia de columna "Compras" en archivos de marketing
+[X] Actualizar función cargar_datos() con nueva columna
+[X] Cambiar todas las referencias en cálculos de métricas
+[X] Actualizar textos en la interfaz de usuario
+[X] Verificar que el dashboard funcione correctamente
+[X] Documentar cambio en .cursorrules
+
+**Plan:**
+1. ✅ Buscar columna "Compras" en archivos de input
+2. ✅ Actualizar lista de columnas numéricas
+3. ✅ Cambiar cálculos de Conversion_Rate y Cost_Per_Conversion
+4. ✅ Actualizar todas las referencias en gráficos y tablas
+5. ✅ Probar funcionamiento del dashboard
+6. ✅ Documentar en lecciones aprendidas
+
+**Cambios Implementados:**
+- ✅ **Columna numérica**: "Artículos agregados al carrito" → "Compras"
+- ✅ **Cálculos de métricas**: Conversion_Rate y Cost_Per_Conversion actualizados
+- ✅ **Gráficos**: Todos los gráficos ahora usan columna "Compras"
+- ✅ **Tablas**: Top Performers y Needs Attention actualizados
+- ✅ **Textos**: Interfaz muestra "Conversiones" basado en "Compras"
+
+**Archivos Modificados:**
+- ✅ `dashboard_marketing_simple.py` - Todas las referencias actualizadas
+
+**Verificación:**
+- ✅ **Importación exitosa**: Archivo se importa sin errores
+- ✅ **Datos cargados**: 525 filas (sin región) + 1925 filas (con región)
+- ✅ **Procesamiento**: Métricas calculadas correctamente con nueva columna
+
+**Estado:** ✅ COMPLETADO - Dashboard actualizado para usar columna "Compras"
 
 ---
