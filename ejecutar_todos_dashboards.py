@@ -2,15 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-🚤 EJECUTOR MÚLTIPLE DE DASHBOARDS HOTBOAT
-==========================================
+🚤 HOTBOAT DASHBOARDS - EJECUTOR MÚLTIPLE
+=========================================
 
-Este script ejecuta simultáneamente los 5 dashboards de HotBoat:
-- Dashboard de Reservas (Puerto 8050)
-- Dashboard de Utilidad Operativa (Puerto 8055)  
-- Dashboard de Marketing (Puerto 8056)
-- Dashboard de Gastos de Marketing (Puerto 8057)
-- Dashboard de Google Ads (Puerto 8058)
+Este script ejecuta automáticamente los 4 dashboards de HotBoat:
+- Dashboard de Reservas (puerto 8050)
+- Dashboard de Utilidad Operativa (puerto 8055)  
+- Dashboard de Marketing (puerto 8056)
+- Dashboard de Utilidad Operativa (Nuevo) (puerto 8057)
+
+Características:
+- Ejecución simultánea usando multiprocessing
+- Verificación automática de archivos necesarios
+- Detención limpia con Ctrl+C
+- URLs de acceso mostradas automáticamente
 
 Uso:
     python ejecutar_todos_dashboards.py
@@ -21,10 +26,19 @@ Para detener:
 
 import multiprocessing
 import subprocess
-import time
 import sys
 import os
-from typing import List
+import time
+import signal
+from typing import List, Dict
+
+# Configurar UTF-8 para que los emojis funcionen siempre
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Para versiones de Python < 3.7
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 
 def print_banner():
     """Imprime el banner de inicio"""
@@ -32,7 +46,7 @@ def print_banner():
     print("🚤 HOTBOAT DASHBOARDS - EJECUTOR MÚLTIPLE")
     print("🚤" * 20)
     print()
-    print("📊 Iniciando todos los dashboards simultáneamente...")
+    print("📊 Iniciando los 4 dashboards simultáneamente...")
     print("=" * 60)
 
 def ejecutar_dashboard(script_name: str, puerto: int, nombre: str):
@@ -55,7 +69,7 @@ def ejecutar_dashboard(script_name: str, puerto: int, nombre: str):
 
 def verificar_archivos():
     """Verifica que todos los archivos necesarios existan"""
-    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py', 'dashboard_gastos_marketing.py', 'dashboard_google_ads.py']
+    archivos_requeridos = ['reservas.py', 'utilidad.py', 'marketing.py', 'dashboard_utilidad_operativa.py']
     archivos_faltantes = []
     
     for archivo in archivos_requeridos:
@@ -100,16 +114,10 @@ def main():
             'url': 'http://localhost:8056'
         },
         {
-            'script': 'dashboard_gastos_marketing.py',
+            'script': 'dashboard_utilidad_operativa.py',
             'puerto': 8057,
-            'nombre': 'Dashboard de Gastos de Marketing',
+            'nombre': 'Dashboard de Utilidad Operativa (Nuevo)',
             'url': 'http://localhost:8057'
-        },
-        {
-            'script': 'dashboard_google_ads.py',
-            'puerto': 8058,
-            'nombre': 'Dashboard de Google Ads',
-            'url': 'http://localhost:8058'
         }
     ]
     

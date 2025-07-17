@@ -1,0 +1,947 @@
+fecha,categoria,categoria_1,categoria_2,descripcion,monto
+2024-08-31 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2024-08-31 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+2024-09-04 00:00:00,gastos,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",24153.0
+2024-09-04 00:00:00,gastos,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",24148.0
+2024-09-06 00:00:00,gastos,Sin categoría,Pagos Digitales,"MERCADOPAGO*MERCADO TASA INT. 0,00%",5065.0
+2024-09-17 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2024-09-17 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
+2024-09-18 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,59990.0
+2024-09-18 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2024-09-25 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2024-09-25 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
+2024-09-29 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2024-09-29 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
+2024-12-26 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,7000.0
+2024-12-26 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,5920.0
+2024-12-27 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,4140.0
+2024-12-27 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,5000.0
+2024-12-28 00:00:00,gastos,Sin categoría,Otros,CANVA LAS CONDES,18000.0
+2024-12-29 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,6671.0
+2024-12-30 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,6550.0
+2024-12-30 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,85711.0
+2024-12-30 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,8178.0
+2024-12-31 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,2400.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Stephanie Concha,20950.0
+2025-01-02 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,141001.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Giussepe Orlando,2800.0
+2025-01-02 00:00:00,abonos,Ingresos,Abonos bancarios,Transferencia Desde Linea De Credito,38507.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Impuesto Linea De Credito,50.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Intereses Linea De Credito,381.0
+2025-01-02 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA NATO CURARREHUE,6820.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Fabian Campos,15000.0
+2025-01-02 00:00:00,gastos,Sin categoría,Sin categoría,Amortizacion A Linea De Credito,38507.0
+2025-01-03 00:00:00,gastos,Sin categoría,Ferretería,MERPAGO*FERRETERIA CURARREHUE,21000.0
+2025-01-03 00:00:00,gastos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19170.0
+2025-01-03 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19170.0
+2025-01-05 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,6110.0
+2025-01-05 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,57843.0
+2025-01-05 00:00:00,gastos,Inversión en Activos,Compras Internacionales,ALIEXPRESS.COM ALIE,30476.0
+2025-01-05 00:00:00,gastos,Inversión en Activos,Compras Internacionales,ALIEXPRESS.COM,40232.5
+2025-01-05 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,23607.5
+2025-01-06 00:00:00,gastos,Sin categoría,Sin categoría,SOCIEDAD INVERSIONE CAUTIN,3930.0
+2025-01-06 00:00:00,gastos,Sin categoría,Sin categoría,YANVAL PUCON,1500.0
+2025-01-06 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Guillermo Ulloa Silva,18000.0
+2025-01-06 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Nicole Barrientos,50000.0
+2025-01-06 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Nicole Barrientos,10000.0
+2025-01-07 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Diego Penailillo,18000.0
+2025-01-08 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,20490.0
+2025-01-08 00:00:00,gastos,Sin categoría,Pagos Digitales,SumUp * Luis Ignaci Pucon,13180.0
+2025-01-08 00:00:00,gastos,Sin categoría,Otros,LIBRERIA VERGARA CAUTIN,1000.0
+2025-01-08 00:00:00,gastos,Sin categoría,Importaciones,IMPORTADORA Y EXPOR CAUTIN,19580.0
+2025-01-08 00:00:00,gastos,Sin categoría,Sin categoría,SOCIEDAD INVERSIONE CAUTIN,37101.0
+2025-01-08 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,37361.0
+2025-01-08 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Fintual Administradora General De Fondos Sa,2000000.0
+2025-01-08 00:00:00,abonos,Ingresos,Abonos bancarios,Transferencia Desde Linea De Credito,1137.0
+2025-01-08 00:00:00,gastos,Sin categoría,Sin categoría,Amortizacion A Linea De Credito,1137.0
+2025-01-08 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Jaime Catricheo,7200.0
+2025-01-09 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO CATRIP CURARREHUE,5900.0
+2025-01-09 00:00:00,gastos,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,5000.0
+2025-01-09 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Sacha Damjanic,300000.0
+2025-01-09 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,1203240.0
+2025-01-09 00:00:00,gastos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-01-09 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-01-10 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,45889.0
+2025-01-10 00:00:00,gastos,Sin categoría,Sin categoría,FLOW *PORTALDISC SANTIAGO,22000.0
+2025-01-10 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*HOTBOATMERC LAS CONDES,500.0
+2025-01-10 00:00:00,gastos,Sin categoría,Supermercado,UNIMARC PUCON PUCON,103160.0
+2025-01-10 00:00:00,gastos,Sin categoría,Pagos Digitales,Pago:merpago*hotboatme,500.0
+2025-01-11 00:00:00,gastos,Sin categoría,Ferretería,MP *FERRETERIA SANTIAGO,92000.0
+2025-01-11 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*HOTBOAT LAS CONDES,5000.0
+2025-01-11 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-11 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-12 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,44621.5
+2025-01-12 00:00:00,gastos,Sin categoría,Sin categoría,EBEST SPA SANTIAGO,116991.0
+2025-01-12 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,2380.0
+2025-01-12 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,10060.5
+2025-01-12 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*TITANIO LAS CONDES,19882.0
+2025-01-12 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-01-12 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-13 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*MERPAGO,10800.0
+2025-01-13 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,10380.0
+2025-01-13 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3500.0
+2025-01-13 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,5250.0
+2025-01-13 00:00:00,gastos,Sin categoría,Ferretería,SODIMAC VILLARRICA VILLARRICA,71602.0
+2025-01-13 00:00:00,gastos,Sin categoría,Sin categoría,VILLARICA VILLARRICA,157204.0
+2025-01-13 00:00:00,gastos,Sin categoría,Alimentos,AFUNAYUN PUCON,10450.0
+2025-01-13 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,24190.0
+2025-01-14 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,4195.0
+2025-01-14 00:00:00,gastos,Inversión en Activos,Compras Internacionales,ALIEXPRESS.COM ALIE,73121.5
+2025-01-14 00:00:00,gastos,Sin categoría,Otros,COMPRA LIBRERIA VER CL,1850.0
+2025-01-14 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,7400.0
+2025-01-14 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,552351.0
+2025-01-14 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Tomas Andreas Damjanic,190000.0
+2025-01-14 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*MABEL ROXAN CHIGUAYANTE,16200.0
+2025-01-14 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-01-14 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-15 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,5560.0
+2025-01-15 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,35032.0
+2025-01-15 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,368709.0
+2025-01-15 00:00:00,gastos,Sin categoría,Sin categoría,LA CHACRA PUCON,7257.0
+2025-01-15 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-15 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-16 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Andres Dutilh Labbe,180000.0
+2025-01-17 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,TEF BANCOESTADO A INOSTROZA CANALES,200000.0
+2025-01-17 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,2850.0
+2025-01-18 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-18 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-18 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*2PRODUC LAS CONDES,97980.0
+2025-01-18 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,8721.0
+2025-01-18 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-01-18 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-19 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-19 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*SERVICIOS D PUCON,15000.0
+2025-01-19 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-19 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*SERVICIOS D PUCON,5500.0
+2025-01-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-01-20 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Felipe Ignacio Nawrath,194950.0
+2025-01-20 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Johanna Rivera,10000.0
+2025-01-20 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*MORIJAHOLDI SANTIAGO,17000.0
+2025-01-20 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-20 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,20415.5
+2025-01-20 00:00:00,gastos,Sin categoría,Otros,COMPRA LIBRERIA VER CL,13600.0
+2025-01-20 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,9248.0
+2025-01-20 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3000.0
+2025-01-20 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
+2025-01-20 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,17195.0
+2025-01-20 00:00:00,gastos,Sin categoría,Alimentos,AFUNAYUN PUCON,8250.0
+2025-01-20 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-01-20 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-21 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,178182.0
+2025-01-21 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,2200.0
+2025-01-21 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1938.0
+2025-01-21 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,56930.0
+2025-01-21 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,1780.0
+2025-01-21 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,68181.0
+2025-01-21 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,1938.0
+2025-01-21 00:00:00,gastos,Sin categoría,Combustible,COMPRA COPEC ASISTI CL,66857.0
+2025-01-21 00:00:00,gastos,Sin categoría,Sin categoría,KRAKEN PESCADOS Y M CAUTIN,8140.0
+2025-01-22 00:00:00,gastos,Sin categoría,Pagos Digitales,SumUp * Luis Ignaci Pucon,12790.0
+2025-01-22 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,42791.0
+2025-01-22 00:00:00,gastos,Sin categoría,Telefonía,ENTEL PCS PAGO EN L SANTIAGO,13192.0
+2025-01-22 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,2897.5
+2025-01-22 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Guillermo Ulloa Silva,10000.0
+2025-01-22 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Seguro Proteccion Bancaria,768.0
+2025-01-22 00:00:00,gastos,Sin categoría,Pagos Digitales,WEB MERPAGO*QUALITYRUB,177705.0
+2025-01-22 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE GUTIERREZ ESPANA DAVID IGNAC,20000.0
+2025-01-22 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE SCHURCH VEGA ROS,33000.0
+2025-01-22 00:00:00,gastos,Sin categoría,Sin categoría,TEF BANCOESTADO A OCAMPO BUENO CARL,30000.0
+2025-01-22 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA F CL,12250.0
+2025-01-22 00:00:00,gastos,Sin categoría,Ferretería,COMPRA SODIMAC VILL CL,17870.0
+2025-01-22 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,2897.5
+2025-01-23 00:00:00,gastos,Sin categoría,Sin categoría,SUELO NATIVO CURARREHUE,24750.0
+2025-01-23 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Alberto Eduardo Torres Zuniga,30000.0
+2025-01-23 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,2990.0
+2025-01-23 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,21100.0
+2025-01-23 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,4398.5
+2025-01-23 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,300838.0
+2025-01-23 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,4398.5
+2025-01-23 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-23 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-01-24 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA TUU*TRANSPOR CL,6500.0
+2025-01-24 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,8340.0
+2025-01-24 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-24 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-25 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-25 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-25 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-01-25 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,176312.0
+2025-01-26 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-26 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-01-27 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Johanna Rivera,10000.0
+2025-01-27 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,1900.0
+2025-01-27 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,7317.0
+2025-01-27 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,5950.0
+2025-01-27 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,TEF BANCOESTADO A INOSTROZA CANALES,20000.0
+2025-01-27 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA N CL,7500.0
+2025-01-27 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA AGROFOOD     CL,5000.0
+2025-01-27 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3450.0
+2025-01-28 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE SOTO SALAZAR KEV,70000.0
+2025-01-28 00:00:00,gastos,Sin categoría,Otros,CANVA LAS CONDES,18000.0
+2025-01-28 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MP     *FERR CL,92000.0
+2025-01-28 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,389684.0
+2025-01-28 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-01-28 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-29 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*FENELHOMME VILLARRICA,1200.0
+2025-01-29 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,56932.0
+2025-01-29 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,6583.5
+2025-01-29 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,6583.5
+2025-01-29 00:00:00,gastos,Sin categoría,Ferretería,COMPRA SODIMAC VILL CL,144440.0
+2025-01-29 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,10720.0
+2025-01-29 00:00:00,gastos,Sin categoría,Pagos Digitales,WEB MERPAGO*DISTRIBUID,19080.0
+2025-01-30 00:00:00,gastos,Sin categoría,Supermercado,COMPRA UNIMARC PUCO CL,167690.0
+2025-01-30 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MORA         CL,14960.0
+2025-01-30 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,9880.0
+2025-01-30 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,9880.0
+2025-01-30 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO,1375.0
+2025-01-30 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA SUMUP * SUSA CL,5900.0
+2025-01-30 00:00:00,gastos,Sin categoría,Sin categoría,TEF A QUIMICA ANDINA CHILE SA,144282.0
+2025-01-30 00:00:00,gastos,Sin categoría,Otros,COMPRA LIBRERIA VER CL,2500.0
+2025-01-30 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*CONS CL,725.0
+2025-01-30 00:00:00,gastos,Sin categoría,Combustible,COMPRA COPEC ASISTI CL,60605.0
+2025-01-30 00:00:00,gastos,Sin categoría,Sin categoría,TEF A MG DISENO LIMITADA,60000.0
+2025-01-30 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-30 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-01-31 00:00:00,gastos,Sin categoría,Importaciones,IMPORTADORA DRAGON PUCON,17700.0
+2025-01-31 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,4290.0
+2025-01-31 00:00:00,gastos,Sin categoría,Sin categoría,PASS LINE LTDA SANTIAGO,29900.0
+2025-01-31 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,14934.0
+2025-01-31 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,14934.0
+2025-01-31 00:00:00,gastos,Inversión en Activos,Compras Internacionales,ALIEXPRESS.COM,36651.0
+2025-01-31 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-01-31 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-01 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,1900.0
+2025-02-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,16463.5
+2025-02-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,18116.5
+2025-02-01 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,16463.5
+2025-02-01 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,18116.5
+2025-02-01 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,190000.0
+2025-02-01 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-02 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,19921.5
+2025-02-02 00:00:00,gastos,Sin categoría,Sin categoría,LOS PEQUES PUCON,5350.0
+2025-02-02 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,19921.5
+2025-02-02 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,150000.0
+2025-02-02 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-03 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE RIQUELME ONATE FRANCISCO JAV,50000.0
+2025-02-03 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE SOTO SALAZAR KEV,110000.0
+2025-02-03 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,1900.0
+2025-02-03 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3150.0
+2025-02-03 00:00:00,gastos,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,13000.0
+2025-02-03 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ALVAREZ JOFRE PAOLA INGERBOR,50000.0
+2025-02-03 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,1350.0
+2025-02-03 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*BAZO SPA BA SANTIAGO,4000.0
+2025-02-03 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE BRITO CONTRERAS,50000.0
+2025-02-03 00:00:00,costos variables,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,13000.0
+2025-02-03 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,185305.0
+2025-02-04 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19142.0
+2025-02-04 00:00:00,gastos,Sin categoría,Sin categoría,ENVATO *70023600,64362.5
+2025-02-04 00:00:00,gastos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19142.0
+2025-02-04 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,16320.0
+2025-02-04 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,4333.0
+2025-02-04 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA N CL,50800.0
+2025-02-04 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-04 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-02-04 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-04 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-02-05 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,22182.5
+2025-02-05 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,22182.5
+2025-02-05 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,125203.0
+2025-02-05 00:00:00,gastos,Sin categoría,Sin categoría,Impuesto Linea De Credito,2.0
+2025-02-05 00:00:00,gastos,Sin categoría,Sin categoría,Intereses Linea De Credito,17.0
+2025-02-05 00:00:00,gastos,Sin categoría,Sin categoría,Amortizacion A Linea De Credito,3175.0
+2025-02-05 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3800.0
+2025-02-05 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-02-05 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-05 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-05 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MEC-SUR SUCU CL,34000.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA DOBLE RR CON CL,62060.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA DOBLE RR CON CL,44779.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA COMERCIALIZA CL,2400.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA EXPRESS VILL CL,41773.0
+2025-02-06 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,185824.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,TEF A ROJAS PRADO RENT A CAR SPA,6500.0
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA SERVITECA DA CL,20000.0
+2025-02-06 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,95237.5
+2025-02-06 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Marcelo Araya,5000.0
+2025-02-06 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-02-06 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-07 00:00:00,gastos,Sin categoría,Pagos Digitales,WEB MERPAGO*MERCADOLIB,14950.0
+2025-02-07 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,1900.0
+2025-02-07 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ALVAREZ JOFRE PAOLA INGERBOR,147940.0
+2025-02-07 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE RAMIREZ CARRASCO VIVIANA,98970.0
+2025-02-08 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,24576.5
+2025-02-08 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,24576.5
+2025-02-09 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-09 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-02-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,2990.0
+2025-02-10 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Jaime Catricheo,7550.0
+2025-02-10 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE SALAZAR FLORES G,69990.0
+2025-02-10 00:00:00,gastos,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,87000.0
+2025-02-10 00:00:00,gastos,Sin categoría,Sin categoría,MATUCANA 25 SANTIAGO,365265.0
+2025-02-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,72157.0
+2025-02-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,1900.0
+2025-02-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,7750.0
+2025-02-10 00:00:00,costos variables,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,87000.0
+2025-02-10 00:00:00,gastos,Sin categoría,Sin categoría,TEF BANCOESTADO A  SAFE TRAVELER TI,196000.0
+2025-02-10 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*LUIS CL,29000.0
+2025-02-10 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA PUCON        CL,14600.0
+2025-02-10 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-02-10 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-10 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-10 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-11 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,27094.0
+2025-02-11 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,4475.0
+2025-02-11 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,18183.0
+2025-02-11 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,27094.0
+2025-02-11 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,96512.0
+2025-02-11 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-11 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-12 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,24896.0
+2025-02-12 00:00:00,gastos,Sin categoría,Sin categoría,Pago Tarjeta De Credito,167668.0
+2025-02-12 00:00:00,gastos,Sin categoría,Sin categoría,TEF A DAMJANIC SILVA TOMAS ANDREAS,600000.0
+2025-02-12 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO,2350.0
+2025-02-12 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,68351.0
+2025-02-12 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,24586.0
+2025-02-12 00:00:00,gastos,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",38833.0
+2025-02-12 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,45889.0
+2025-02-12 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,600000.0
+2025-02-13 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3800.0
+2025-02-13 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,96512.0
+2025-02-13 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA TURBUS   EGT CL,5780.0
+2025-02-13 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,12980.0
+2025-02-13 00:00:00,gastos,Sin categoría,Supermercado,COMPRA UNIMARC PUCO CL,29221.0
+2025-02-13 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Juan Otarola,10000.0
+2025-02-13 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,5000.0
+2025-02-13 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-13 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-13 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-13 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,15000.0
+2025-02-13 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-02-13 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,1134300.0
+2025-02-14 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,12900.0
+2025-02-14 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,459000.0
+2025-02-14 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,178182.0
+2025-02-14 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Tomas Andreas Damjanic Silva,160000.0
+2025-02-14 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,1180000.0
+2025-02-14 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE CARMACH ANANIAS ALEJANDRO JA,69000.0
+2025-02-14 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE QUINONES HUILLIN JUAN CARLOS,94475.0
+2025-02-14 00:00:00,gastos,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,792%",3691.0
+2025-02-14 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-14 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
+2025-02-14 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-14 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-15 00:00:00,gastos,Sin categoría,Sin categoría,MAGRITTE CIDER SANTIAGO,8000.0
+2025-02-15 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-15 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+2025-02-15 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-02-15 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-16 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,3990.0
+2025-02-16 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-16 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-02-16 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-02-16 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,8090.0
+2025-02-17 00:00:00,gastos,Sin categoría,Pagos Digitales,WEB MERPAGO*DISTRIBUID,34170.0
+2025-02-17 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MP     *FERR CL,94000.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ABDALA ABARZUA MARIANA GENOV,194950.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE RAMIREZ CARRASCO VIVIANA,98970.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE MENDEZ MARTINEZ,82485.0
+2025-02-17 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO ELTIT PUCON,73899.0
+2025-02-17 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO CATRIP CURARREHUE,5100.0
+2025-02-17 00:00:00,gastos,Sin categoría,Telefonía,ENTEL PCS PAGO EN L SANTIAGO,13873.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Lucas Andres Puebla Silva,17000.0
+2025-02-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,11960.5
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,DEPOSITO EN EFECTIVO CAJA VECINA,100000.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE VALENZUELA MATUR,84995.0
+2025-02-17 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,3800.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE VEAS ARRIAGADA CRISTOPHER BR,90000.0
+2025-02-17 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,81700.0
+2025-02-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,11960.5
+2025-02-17 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,TEF BANCOESTADO A INOSTROZA CANALES,200000.0
+2025-02-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ONATE BELTRAN SYLVIA PILAR,62991.0
+2025-02-17 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,169980.0
+2025-02-17 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-02-17 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-02-18 00:00:00,gastos,Sin categoría,Ferretería,TEF A KUPFER HERMANOS SA,35000.0
+2025-02-18 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,10450.0
+2025-02-18 00:00:00,gastos,Sin categoría,Sin categoría,TEF BANCOESTADO A ABARCA MUNOZ CAMI,42000.0
+2025-02-18 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*EMER CL,4500.0
+2025-02-18 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA HAULMER*MUFI CL,440.0
+2025-02-18 00:00:00,gastos,Sin categoría,Combustible,COMPRA COPEC ASISTI CL,76858.0
+2025-02-18 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA ELECTRO LED  CL,16990.0
+2025-02-18 00:00:00,gastos,Sin categoría,Ferretería,COMPRA SODIMAC VILL CL,45729.0
+2025-02-18 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,247972.0
+2025-02-18 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE PENA ESPINOZA CARLOS EDUARDO,92500.0
+2025-02-18 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*MARI CL,7900.0
+2025-02-18 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,75400.0
+2025-02-18 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-18 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-18 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-18 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 00:00:00,gastos,Sin categoría,Ferretería,Traspaso A:Kupfer Hermanos Da,208496.0
+2025-02-19 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*AUTOPLA LAS CONDES,29400.0
+2025-02-19 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,147007.0
+2025-02-19 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*FERR CL,29000.0
+2025-02-19 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA AGROFOOD     CL,3000.0
+2025-02-19 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-02-19 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,161964.0
+2025-02-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+2025-02-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-20 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,1824.0
+2025-02-20 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,13450.0
+2025-02-20 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE GALDAMES MARTINE,149980.0
+2025-02-20 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-20 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,148473.0
+2025-02-21 00:00:00,gastos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,500000.0
+2025-02-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE PELLEGRINI MARTINEZ MARIA JE,15000.0
+2025-02-21 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,500000.0
+2025-02-21 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,159285.0
+2025-02-21 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,14570.0
+2025-02-21 00:00:00,gastos,Sin categoría,Supermercado,COMPRA UNIMARC PUCO CL,40090.0
+2025-02-21 00:00:00,gastos,Sin categoría,Sin categoría,TEF A ROJAS PRADO LUIS ALEJANDRO,40000.0
+2025-02-21 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-21 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+2025-02-22 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-22 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-02-22 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-22 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,152982.0
+2025-02-22 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-02-22 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO CATRIP CURARREHUE,7250.0
+2025-02-23 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-23 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-02-23 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ERGAS KOHN MARCELO ANDRES,69990.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,390849.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE CALVO POBLETE BENJAMIN ANTON,49500.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE SILVA ROBERT DIEGO HERNAN,200000.0
+2025-02-24 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*SOCI CL,43000.0
+2025-02-24 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Seguro Proteccion Bancaria,772.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE MARIN TAPIA NATHALIE ESPERAN,49464.0
+2025-02-24 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE MUNOZ SILVA CAMILA FRANCISCA,97475.0
+2025-02-24 00:00:00,gastos,Sin categoría,Motores HotBoat,FLIPSKY.NET,499700.0
+2025-02-24 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,2500.0
+2025-02-24 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,178146.0
+2025-02-24 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-25 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,3000.0
+2025-02-25 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,22234.0
+2025-02-25 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,96512.0
+2025-02-25 00:00:00,gastos,Sin categoría,Sin categoría,FiverrEU,283033.5
+2025-02-25 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,7530.0
+2025-02-25 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MP     *FERR CL,98000.0
+2025-02-25 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-25 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+2025-02-25 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-25 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,97475.0
+2025-02-26 00:00:00,gastos,Sin categoría,Sin categoría,FiverrEU,13870.0
+2025-02-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*BLUEFOX SER SANTIAGO,775.0
+2025-02-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*BLUEFOX SER SANTIAGO,1300.0
+2025-02-26 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,146595.0
+2025-02-26 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE SOTO MORENO VICENTE EDUARDO,97475.0
+2025-02-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*R Y R SPA R PUCON,7550.0
+2025-02-26 00:00:00,gastos,Sin categoría,Sin categoría,BOULEVARD CENTRAL E PUCON,11800.0
+2025-02-26 00:00:00,gastos,Sin categoría,Pagos Digitales,SumUp * Luis Ignaci Pucon,6450.0
+2025-02-26 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE GONZALEZ VARGAS MICHAEL ANDR,97475.0
+2025-02-26 00:00:00,gastos,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066%",1015.0
+2025-02-26 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *QPTS7JLE42,33383.0
+2025-02-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,30352.5
+2025-02-26 00:00:00,gastos,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,98000.0
+2025-02-26 00:00:00,costos variables,Costos Variables,Gas,TEF BANCOESTADO A  MUNOZ CUCHA BAST,98000.0
+2025-02-26 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,30352.5
+2025-02-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QPTS7JLE42,33383.0
+2025-02-27 00:00:00,gastos,Sin categoría,Sin categoría,TEF A RUT 77725222-4,12000.0
+2025-02-27 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ESTIBILL SOTO CRISTOBAL NICO,80000.0
+2025-02-27 00:00:00,gastos,Sin categoría,Supermercado,LIDER.CL TIENDA WEB SANTIAGO,61480.0
+2025-02-27 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-02-27 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-28 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,36442.0
+2025-02-28 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,15000.0
+2025-02-28 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ESTIBILL SOTO CRISTOBAL NICO,80000.0
+2025-02-28 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE DIAZ RODRIGUEZ MELISSA DEL C,110000.0
+2025-02-28 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,36442.0
+2025-02-28 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,219950.0
+2025-02-28 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-28 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-02-28 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-03-03 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,39748.0
+2025-03-03 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Hector Zamorano,20000.0
+2025-03-03 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK*,39748.0
+2025-03-03 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,35000.0
+2025-03-03 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,230642.0
+2025-03-03 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,2500.0
+2025-03-03 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*BLUEFOX SER SANTIAGO,1825.0
+2025-03-03 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,15199.0
+2025-03-03 00:00:00,gastos,Sin categoría,Sin categoría,INVERSIONES LD SPA CAUTIN,4870.0
+2025-03-03 00:00:00,gastos,Sin categoría,Alimentos,AFUNAYUN PUCON,4400.0
+2025-03-03 00:00:00,gastos,Sin categoría,Supermercado,LIDER.CL TIENDA WEB SANTIAGO,77300.0
+2025-03-04 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,840.0
+2025-03-04 00:00:00,gastos,Sin categoría,Sin categoría,JOSE WILSON CAAMANO CAUTIN,8000.0
+2025-03-04 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,2094.0
+2025-03-05 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19285.0
+2025-03-05 00:00:00,costos fijos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-05 00:00:00,gastos,Sin categoría,Motores HotBoat,FLIPSKY.NET,28500.0
+2025-03-05 00:00:00,gastos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19285.0
+2025-03-05 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,TEF BANCOESTADO A INOSTROZA CANALES,500000.0
+2025-03-05 00:00:00,gastos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-05 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-03-05 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-06 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA MERCADO MARI CL,1400.0
+2025-03-06 00:00:00,gastos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-06 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,40000.0
+2025-03-06 00:00:00,gastos,Sin categoría,Sin categoría,TEF A COWORK PUCON SPA,30000.0
+2025-03-06 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *LXL4NJLE42,45058.5
+2025-03-06 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERCADOPAGO* CL,15673.0
+2025-03-06 00:00:00,costos fijos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-06 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE ESPINOZA CARRASCO NICOLAS SE,69980.0
+2025-03-06 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *LXL4NJLE42,45058.5
+2025-03-06 00:00:00,gastos,Sin categoría,Sin categoría,BPO ADVISORS SPA SANTIAGO,2690.0
+2025-03-07 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,15674.0
+2025-03-08 00:00:00,gastos,Sin categoría,Sin categoría,Kindle Svcs*UM6UP53,940.5
+2025-03-08 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,143968.0
+2025-03-08 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-09 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,143968.0
+2025-03-09 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,1350.0
+2025-03-10 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE MARAGANO BENNER KARIN LISELO,71984.0
+2025-03-10 00:00:00,gastos,Sin categoría,Sin categoría,COPROCK LIMITADA SANTIAGO,8950.0
+2025-03-10 00:00:00,gastos,Sin categoría,Sin categoría,PAPEL PRINT CHILE SANTIAGO,27500.0
+2025-03-10 00:00:00,gastos,Sin categoría,Motores HotBoat,FLIPSKY.NET,42750.0
+2025-03-10 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA GOLD LUK BAR CL,14000.0
+2025-03-10 00:00:00,gastos,Sin categoría,Otros,COMPRA LIBRERIA VER CL,3050.0
+2025-03-10 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,24559.0
+2025-03-10 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,9200.0
+2025-03-10 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,5000.0
+2025-03-10 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,5000.0
+2025-03-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,5700.0
+2025-03-10 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE BUESO CASTANEDA JAIME AUGUST,77984.0
+2025-03-10 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,38166.0
+2025-03-11 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,77581.0
+2025-03-11 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,15000.0
+2025-03-11 00:00:00,gastos,Sin categoría,Ferretería,COMPRA FERRETERIA E CL,3890.0
+2025-03-11 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA MERPAGO*SOC  CL,1525.0
+2025-03-11 00:00:00,gastos,Sin categoría,Pagos Digitales,COMPRA SUMUP * SUSA CL,3550.0
+2025-03-11 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,198623.0
+2025-03-11 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,6520.0
+2025-03-11 00:00:00,gastos,Sin categoría,Supermercado,COMPRA SUPERMERCADO CL,17103.0
+2025-03-12 00:00:00,gastos,Sin categoría,Sin categoría,TEF BANCOESTADO A  VERGARA SEGUEL M,38000.0
+2025-03-12 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,52000.0
+2025-03-12 00:00:00,gastos,Sin categoría,Sin categoría,MORA PUCON,41470.0
+2025-03-12 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *H4RFZLQE42,49362.0
+2025-03-12 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *H4RFZLQE42,49362.0
+2025-03-12 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE AGUIRRE CABALLER,70000.0
+2025-03-12 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,275472.0
+2025-03-12 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-12 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-03-13 00:00:00,gastos,Sin categoría,Sin categoría,FLOW *UPS DE CHIL SANTIAGO,90608.0
+2025-03-13 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0
+2025-03-13 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE AGUIRRE CABALLER,88000.0
+2025-03-13 00:00:00,gastos,Sin categoría,Sin categoría,TEF A CASTRO MARTINEZ MARTA NOEMI,17000.0
+2025-03-14 00:00:00,gastos,Sin categoría,Sin categoría,TEF A DAMJANIC SILVA TOMAS ANDREAS,1900000.0
+2025-03-14 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,1900000.0
+2025-03-14 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,673044.0
+2025-03-14 00:00:00,gastos,Sin categoría,Telefonía,ENTEL PCS PAGO EN L SANTIAGO,11893.0
+2025-03-14 00:00:00,gastos,Sin categoría,Sin categoría,TEF A ROJO SEPULVEDA DENISSE BELEN,35660.0
+2025-03-14 00:00:00,gastos,Sin categoría,Sin categoría,Pago Tarjeta De Credito,1173174.0
+2025-03-14 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-14 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
+2025-03-16 00:00:00,gastos,Sin categoría,Sin categoría,MOTELAZZO RECOLETA,54000.0
+2025-03-16 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,5309.0
+2025-03-16 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER EATS SANTIAGO,23070.0
+2025-03-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE NAVARRO JARA VALERIA CONSTAN,69990.0
+2025-03-17 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE GUNDERT MIRANDA,40000.0
+2025-03-17 00:00:00,gastos,Sin categoría,Sin categoría,SALCOBRAND AV.SANTA SANTIAGO,24422.0
+2025-03-17 00:00:00,gastos,Sin categoría,Sin categoría,RECORRIDO SANTIAGO,22430.0
+2025-03-17 00:00:00,gastos,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",89791.0
+2025-03-17 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,15384.0
+2025-03-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *YW4S9MQE42,2565.0
+2025-03-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *4M2MYJCF42,8464.5
+2025-03-17 00:00:00,gastos,Sin categoría,Pagos Digitales,00.ANULACION COMPRA: MERCADOPAGO*MARYC,31990.0
+2025-03-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *YW4S9MQE42,2565.0
+2025-03-17 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0
+2025-03-17 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Alejandro Calabrano,127000.0
+2025-03-17 00:00:00,gastos,Sin categoría,Sin categoría,Amortizacion A Linea De Credito,64394.0
+2025-03-17 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,57569.0
+2025-03-17 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,75858.0
+2025-03-17 00:00:00,abonos,Ingresos,Abonos bancarios,Transferencia Desde Linea De Credito,64394.0
+2025-03-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *4M2MYJCF42,8464.5
+2025-03-18 00:00:00,gastos,Sin categoría,Supermercado,UNIMARC PUCON PUCON,7440.0
+2025-03-18 00:00:00,gastos,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,396%",2133.0
+2025-03-19 00:00:00,gastos,Sin categoría,Sin categoría,LIME*2 VIAJES XZXS,3733.5
+2025-03-20 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,2948.0
+2025-03-20 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,10000.0
+2025-03-20 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,668649.0
+2025-03-20 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,5900.0
+2025-03-20 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,1500.0
+2025-03-20 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA NATO CURARREHUE,10000.0
+2025-03-20 00:00:00,gastos,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,10000.0
+2025-03-20 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,34399.5
+2025-03-20 00:00:00,gastos,Inversión en Activos,Compras Internacionales,ALIEXPRESS,111406.5
+2025-03-20 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,18696.0
+2025-03-20 00:00:00,gastos,Sin categoría,Sin categoría,VENTAS DE FRUTAS Y CAUTIN,1530.0
+2025-03-20 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,Traspaso A:Daniel Inostroza Canales,108860.0
+2025-03-20 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Brian Godoy Silva,198623.0
+2025-03-20 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-03-20 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-20 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-03-20 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-03-21 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,30000.0
+2025-03-22 00:00:00,gastos,Sin categoría,Sin categoría,CLUB DE PADEL LA PO CAUTIN,12000.0
+2025-03-22 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,117059.0
+2025-03-22 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,64664.0
+2025-03-22 00:00:00,gastos,Sin categoría,Pagos Digitales,SUMUP * LUIS IGNACI PUCON,6870.0
+2025-03-23 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,14009.0
+2025-03-24 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,10000.0
+2025-03-24 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Seguro Proteccion Bancaria,777.0
+2025-03-25 00:00:00,gastos,Sin categoría,Sin categoría,HAULMER*EXITO RS SANTIAGO,10900.0
+2025-03-25 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,5960.0
+2025-03-25 00:00:00,gastos,Sin categoría,Sin categoría,HAULMER*EXITO RS SANTIAGO,4350.0
+2025-03-25 00:00:00,gastos,Sin categoría,Sin categoría,EXPRESS MARKET VILLARRICA,13500.0
+2025-03-25 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,52368.0
+2025-03-26 00:00:00,gastos,Sin categoría,Pagos Digitales,SUMUP * LUIS IGNACI PUCON,1210.0
+2025-03-26 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,58994.0
+2025-03-27 00:00:00,gastos,Sin categoría,Sin categoría,INTERESES ROTATIVOS,32130.0
+2025-03-27 00:00:00,gastos,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066%",1289.0
+2025-03-29 00:00:00,gastos,Sin categoría,Sin categoría,LATAM.COM XP OTRAS SANTIAGO,45074.0
+2025-03-29 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *3APWXMQE42,53513.5
+2025-03-29 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *3APWXMQE42,53513.5
+2025-03-30 00:00:00,gastos,Sin categoría,Sin categoría,PASAJEBUS SANTIAGO,24100.0
+2025-03-30 00:00:00,gastos,Sin categoría,Sin categoría,PASAJEBUS SANTIAGO,36300.0
+2025-03-31 00:00:00,gastos,Sin categoría,Pagos Digitales,SUMUP * LUIS IGNACI PUCON,4600.0
+2025-03-31 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,48253.0
+2025-03-31 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,142245.0
+2025-03-31 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,26306.0
+2025-03-31 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,15000.0
+2025-03-31 00:00:00,gastos,Sin categoría,Sin categoría,TEF BANCOESTADO A OCAMPO BUENO CARL,50000.0
+2025-03-31 00:00:00,gastos,Sin categoría,Sin categoría,COMPRA PUCON        CL,3590.0
+2025-03-31 00:00:00,gastos,Sin categoría,Alimentos,AFUNAYUN PUCON,11000.0
+2025-04-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,29321.0
+2025-04-01 00:00:00,gastos,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,29321.0
+2025-04-02 00:00:00,gastos,Sin categoría,Sin categoría,LUBRICENTRO TRAPP PUCON,2800.0
+2025-04-02 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,3640.0
+2025-04-02 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,19152.0
+2025-04-02 00:00:00,gastos,Sin categoría,Otros,VIATOR LIMITED,27550.0
+2025-04-03 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19403.0
+2025-04-03 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,1970.0
+2025-04-03 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,19140.0
+2025-04-03 00:00:00,gastos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19403.0
+2025-04-04 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,12523.0
+2025-04-05 00:00:00,gastos,Sin categoría,Sin categoría,PALGUIN ADVENTURE P CAUTIN,7000.0
+2025-04-06 00:00:00,gastos,Sin categoría,Sin categoría,LA VIEJA ESCUELA PUCON,9500.0
+2025-04-06 00:00:00,gastos,Sin categoría,Sin categoría,LA VIEJA ESCUELA PUCON,6500.0
+2025-04-06 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,61143.0
+2025-04-06 00:00:00,gastos,Sin categoría,Sin categoría,ANDIAMO RISTORANTE PUCON,26400.0
+2025-04-08 00:00:00,abonos,Ingresos,Abonos bancarios,DEPOSITO EN EFECTIVO CAJA VECINA,50000.0
+2025-04-08 00:00:00,gastos,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,4800.0
+2025-04-08 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,47995.0
+2025-04-08 00:00:00,gastos,Sin categoría,Importaciones,IMPORTADORA SOL Y L CAUTIN,9000.0
+2025-04-08 00:00:00,gastos,Sin categoría,Sin categoría,TUU*mufin YUMBEL,100.0
+2025-04-08 00:00:00,gastos,Sin categoría,Sin categoría,TEF A QUIMICA ANDINA CHILE SA,87162.0
+2025-04-08 00:00:00,gastos,Sin categoría,Sin categoría,GIRO POR REDBANC 08/04 11:20,10000.0
+2025-04-09 00:00:00,gastos,Sin categoría,Importaciones,COMPRA IMPORTADORA  CL,6500.0
+2025-04-09 00:00:00,gastos,Sin categoría,Sin categoría,GIRO POR REDBANC 09/04 10:24,15000.0
+2025-04-09 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE MATURANA VILLARROEL RODRIGO,69279.0
+2025-04-09 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,35200.0
+2025-04-09 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-09 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
+2025-04-10 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,48217.0
+2025-04-10 00:00:00,gastos,Sin categoría,Sin categoría,NIU SUSHI ANTOFAGAS ANTOFAGASTA,59280.0
+2025-04-10 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,2216.0
+2025-04-10 00:00:00,gastos,Sin categoría,Sin categoría,C. VERDE AV GRECIA4 ANTOFAGASTA,16870.0
+2025-04-11 00:00:00,gastos,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,30000.0
+2025-04-11 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,9730.0
+2025-04-11 00:00:00,gastos,Sin categoría,Sin categoría,MINIMARKET Y BOTILL ANTOFAGASTA,27250.0
+2025-04-11 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,30000.0
+2025-04-11 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,176709.0
+2025-04-11 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-04-11 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-12 00:00:00,gastos,Sin categoría,Sin categoría,PETROBRAS JARDINES ANTOFAGASTA,2560.0
+2025-04-12 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,191970.0
+2025-04-12 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-13 00:00:00,gastos,Sin categoría,Sin categoría,TUU*HAULMER AGREGAD CURICO,10200.0
+2025-04-13 00:00:00,gastos,Sin categoría,Sin categoría,ANTOFAGASTA / AV GR ANTOFAGASTA,35128.0
+2025-04-13 00:00:00,gastos,Sin categoría,Sin categoría,DON POLLO ANTOFAGASTA,34000.0
+2025-04-14 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE QUINTEROS OYARCE KAREN SABIN,74236.0
+2025-04-14 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE DE RUT 77374338-K,13990.0
+2025-04-14 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE REGHEZZA CEA GIANNINA FABIOL,9000.0
+2025-04-14 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,28000.0
+2025-04-14 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,27000.0
+2025-04-14 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-14 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-04-15 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,20142.0
+2025-04-15 00:00:00,gastos,Sin categoría,Sin categoría,STARBUCKS PIE ANDIN SANTIAGO,3200.0
+2025-04-15 00:00:00,gastos,Sin categoría,Sin categoría,PAGO AUTOMATICO,81429.0
+2025-04-15 00:00:00,gastos,Sin categoría,Sin categoría,DOC POPCORN SANTIAGO,20280.0
+2025-04-15 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,155364.0
+2025-04-15 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0
+2025-04-15 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE CASTILLO SANCHEZ CONSTANZA C,49491.0
+2025-04-15 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-15 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-04-16 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0
+2025-04-16 00:00:00,gastos,Sin categoría,Sin categoría,TEF A DAMJANIC SILVA TOMAS ANDREAS,564180.0
+2025-04-16 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,117695.5
+2025-04-16 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,61994.0
+2025-04-16 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,11250.0
+2025-04-16 00:00:00,abonos,Ingresos,Abonos bancarios,DEPOSITO EN EFECTIVO CAJA VECINA,40000.0
+2025-04-16 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE LABBE OYARCE GIANNINA DEL CA,83000.0
+2025-04-16 00:00:00,gastos,Sin categoría,Supermercado,LIDER.CL TIENDA WEB SANTIAGO,104430.0
+2025-04-17 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,97000.0
+2025-04-17 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,3890.0
+2025-04-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *QBSV8L4F42,51528.0
+2025-04-17 00:00:00,gastos,Sin categoría,Sin categoría,PASAJEBUS SANTIAGO,22200.0
+2025-04-17 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,123988.0
+2025-04-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QBSV8L4F42,51528.0
+2025-04-17 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,7333.0
+2025-04-17 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-17 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,97986.0
+2025-04-17 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,148473.0
+2025-04-17 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-18 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,2790.0
+2025-04-18 00:00:00,gastos,Sin categoría,Sin categoría,PUCON EN FLOR CAUTIN,21000.0
+2025-04-18 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,49990.0
+2025-04-18 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,12679.0
+2025-04-18 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-18 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-04-18 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
+2025-04-18 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-19 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-19 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194970.0
+2025-04-19 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
+2025-04-19 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-20 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*NATIVO LAS CONDES,12890.0
+2025-04-21 00:00:00,gastos,Sin categoría,Sin categoría,TEF CAJA VECINA SOCIEDAD COMERCIAL,35230.0
+2025-04-21 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,30000.0
+2025-04-21 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,65000.0
+2025-04-21 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,63566.0
+2025-04-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE TORRES CADIZ RONALDO ADRIAN,11000.0
+2025-04-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE GONZALEZ BUSTOS,79990.0
+2025-04-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE MELLADO HUERTA PABLO ARIEL,129970.0
+2025-04-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE VALDIVIA FLORES TANIA FERNAN,69990.0
+2025-04-21 00:00:00,gastos,Sin categoría,Telefonía,ENTEL PCS PAGO EN L SANTIAGO,16990.0
+2025-04-21 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO CATRIP CURARREHUE,6550.0
+2025-04-21 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE QUINTEROS OYARCE KAREN SABIN,74236.0
+2025-04-21 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-04-21 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-21 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-04-21 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-04-22 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*FERRETE LAS CONDES,161000.0
+2025-04-22 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO CATRIP CURARREHUE,2900.0
+2025-04-23 00:00:00,gastos,Sin categoría,Sin categoría,RESTAURANT MIZAWUN CAUTIN,7000.0
+2025-04-23 00:00:00,gastos,Sin categoría,Poleras,TEF A RUT 77184211-9,250000.0
+2025-04-23 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,106488.0
+2025-04-23 00:00:00,gastos,Sin categoría,Sin categoría,TEF A VEGA MOLINA VICTOR MIGUEL,13585.0
+2025-04-23 00:00:00,gastos,Sin categoría,Sin categoría,TEF A PLASTIQUIMICA SOCIEDAD INDUST,36819.0
+2025-04-23 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,55272.0
+2025-04-23 00:00:00,gastos,Sin categoría,Importaciones,IMPORTADORA DRAGON PUCON,22600.0
+2025-04-23 00:00:00,gastos,Sin categoría,Poleras,TEF A RUT 77184211-9,62944.0
+2025-04-23 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0
+2025-04-24 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,10370.0
+2025-04-24 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*PAGOCAM LAS CONDES,54900.0
+2025-04-25 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,50540.0
+2025-04-25 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,11020.0
+2025-04-25 00:00:00,gastos,Sin categoría,Sin categoría,INVERSIONES LD SPA CAUTIN,13000.0
+2025-04-25 00:00:00,gastos,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066 %",1675.0
+2025-04-25 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,464.0
+2025-04-25 00:00:00,gastos,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,5400.0
+2025-04-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*PROVISI LAS CONDES,12420.0
+2025-04-27 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,3350.0
+2025-04-28 00:00:00,gastos,Sin categoría,Sin categoría,SOCIEDAD CAFE 2001 CAUTIN,15400.0
+2025-04-28 00:00:00,abonos,Ingresos,Abonos bancarios,TEF BANCOESTADO DE MUNOZ MUNOZ VICT,90000.0
+2025-04-29 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,11210.0
+2025-04-29 00:00:00,abonos,Ingresos,Abonos bancarios,ABONO TRANSBANK TARJETA DEBITO,68882.0
+2025-04-30 00:00:00,gastos,Sin categoría,Sin categoría,TEF A ROJO SEPULVEDA DENISSE BELEN,64060.0
+2025-04-30 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,TEF BANCOESTADO A INOSTROZA CANALES,20000.0
+2025-04-30 00:00:00,gastos,Sin categoría,Remuneraciones,TEF BANCOESTADO A  AGUIRRE PAILLALE,15000.0
+2025-05-01 00:00:00,gastos,Sin categoría,Supermercado,LIDER.CL TIENDA WEB SANTIAGO,100770.0
+2025-05-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,58145.0
+2025-05-01 00:00:00,gastos,Sin categoría,Sin categoría,INVERSIONES LD SPA CAUTIN,4790.0
+2025-05-01 00:00:00,gastos,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,58145.0
+2025-05-01 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,10620.0
+2025-05-01 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179980.0
+2025-05-01 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-02 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*FERRETE LAS CONDES,33000.0
+2025-05-02 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,7330.0
+2025-05-02 00:00:00,abonos,Ingresos,Abonos bancarios,TEF DE HERRERA CIFUENTES PAZ CAMILA,97475.0
+2025-05-02 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-02 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-05-02 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-02 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197964.0
+2025-05-04 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER EATS SANTIAGO,9962.0
+2025-05-04 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-04 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,138558.0
+2025-05-04 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-04 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,168980.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,PCV LOS VOLCANES VILLARRICA,30892.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,DEPORTES SALMO REY CAUTIN,19600.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,FARMACIA DERIVAL CAUTIN,900.0
+2025-05-05 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*CAROLINA AN VILLARRICA,3000.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,GRANDES TIENDAS HAI PUCON,22950.0
+2025-05-05 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,111014.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,TUU*mufin YUMBEL,2460.0
+2025-05-05 00:00:00,gastos,Sin categoría,Sin categoría,RECORRIDO SANTIAGO,22430.0
+2025-05-05 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*LAHUERT LAS CONDES,36970.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,SPID EL TRANQUE SANTIAGO,6592.0
+2025-05-06 00:00:00,gastos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19494.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,SHELL.PATAGONI 75.T SANTIAGO,5780.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,EASYCANCHA LAS CONDES,14000.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,CLUB VITACURA SANTIAGO,5000.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,STREET WRAP LO BARN SANTIAGO,9990.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,CLUB VITACURA SANTIAGO,3000.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,STA ISABEL EL GABIN SANTIAGO,5830.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,SALCOBRAND AVDA LA SANTIAGO,7651.0
+2025-05-06 00:00:00,gastos,Sin categoría,Sin categoría,NIU SUSHI SANTIAGO,4200.0
+2025-05-06 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19494.0
+2025-05-07 00:00:00,gastos,Sin categoría,Sin categoría,VINCENZO SPA SANTIAGO,2000.0
+2025-05-07 00:00:00,gastos,Sin categoría,Sin categoría,LBB LOS TRAPENSES S SANTIAGO,31100.0
+2025-05-07 00:00:00,gastos,Sin categoría,Sin categoría,LBB LOS TRAPENSES S SANTIAGO,8400.0
+2025-05-07 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER EATS SANTIAGO,6770.0
+2025-05-07 00:00:00,gastos,Sin categoría,Sin categoría,LBB LOS TRAPENSES S SANTIAGO,2200.0
+2025-05-08 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *6E2LPM4F42,59004.5
+2025-05-08 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,1991.0
+2025-05-08 00:00:00,gastos,Sin categoría,Sin categoría,CHILEXPRESS CAMINO SANTIAGO,17655.0
+2025-05-08 00:00:00,gastos,Sin categoría,Sin categoría,NUCLEO MAYOR APARTA SANTIAGO,94010.0
+2025-05-08 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,33133.0
+2025-05-08 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *6E2LPM4F42,59004.5
+2025-05-09 00:00:00,gastos,Sin categoría,Sin categoría,ARAMCO MANQUEHUE 41 SANTIAGO,10000.0
+2025-05-09 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,3997.0
+2025-05-09 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Pedro Antonio Damjanic,30000.0
+2025-05-09 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,3699.0
+2025-05-09 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,35000.0
+2025-05-09 00:00:00,gastos,Sin categoría,Sin categoría,COMERCIAL Y SERVICI LO BARNECHEA,31000.0
+2025-05-10 00:00:00,gastos,Sin categoría,Supermercado,UNIMARC PUCON PUCON,6405.0
+2025-05-10 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*FERRETE LAS CONDES,98000.0
+2025-05-11 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,209960.0
+2025-05-11 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-11 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-05-11 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-12 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,525588.0
+2025-05-12 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,638078.0
+2025-05-12 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Dinko Damjanic,10000.0
+2025-05-12 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*WINKLER LAS CONDES,25892.0
+2025-05-12 00:00:00,gastos,Sin categoría,Sin categoría,Prima Seguro Desgravamen  *,3503.0
+2025-05-12 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,178562.0
+2025-05-12 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,32220.0
+2025-05-12 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Vasti Madariaga,3000.0
+2025-05-13 00:00:00,gastos,Sin categoría,Mano obra HotBoat daniel,Traspaso A:Daniel Inostroza Canales,500000.0
+2025-05-13 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,44802.0
+2025-05-14 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Fintual Administradora General De Fondos Sa,1001000.0
+2025-05-14 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,65015.0
+2025-05-14 00:00:00,gastos,Sin categoría,Sin categoría,DEVOL. SOBREABONO,275395.5
+2025-05-14 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-05-14 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-15 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,29765.0
+2025-05-15 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,1570020.0
+2025-05-15 00:00:00,gastos,Sin categoría,Remuneraciones,Traspaso A:Axel Aguirre,20000.0
+2025-05-15 00:00:00,gastos,Sin categoría,Sin categoría,SOCIEDAD COMERCIAL CAUTIN,8490.0
+2025-05-15 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,68350.0
+2025-05-15 00:00:00,gastos,Sin categoría,Sin categoría,FARMACIA PUCON PUCON,1500.0
+2025-05-16 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Tomas Ramirez Rondon,34000.0
+2025-05-16 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Dinko Damjanic,29500.0
+2025-05-16 00:00:00,gastos,Sin categoría,Pagos Digitales,MERPAGO*JETSMART LAS CONDES,46447.0
+2025-05-16 00:00:00,gastos,Sin categoría,Sin categoría,TUR BUS 1205 MOD.AE SANTIAGO,2000.0
+2025-05-16 00:00:00,gastos,Sin categoría,Sin categoría,DRINK SANTIAGO ROTO SANTIAGO,6930.0
+2025-05-17 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*PANFERN LAS CONDES,2820.0
+2025-05-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *4LXG6PLE42,39738.5
+2025-05-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *C62DENGF42,3040.0
+2025-05-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *4LXG6PLE42,39738.5
+2025-05-17 00:00:00,gastos,Sin categoría,Sin categoría,SONRIE 2 SPA ANTOFAGASTA,2400.0
+2025-05-17 00:00:00,gastos,Costos de Marketing,Publicidad Meta,FACEBK *C62DENGF42,3040.0
+2025-05-18 00:00:00,gastos,Sin categoría,Sin categoría,PADDLE.NET* CHATBOT,18990.5
+2025-05-18 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-18 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-05-19 00:00:00,gastos,Sin categoría,Transporte,UBER LAS CONDES,3990.0
+2025-05-19 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER EATS SANTIAGO,28428.0
+2025-05-19 00:00:00,gastos,Sin categoría,Sin categoría,ANTHROPIC,5652.5
+2025-05-20 00:00:00,gastos,Sin categoría,Sin categoría,ESTADIO CROATA SANTIAGO,18333.0
+2025-05-20 00:00:00,gastos,Sin categoría,Supermercado,UNIMARC LOS TRAPENS SANTIAGO,13820.0
+2025-05-21 00:00:00,gastos,Sin categoría,Transporte,PAYU *UBER TRIP SANTIAGO,4798.0
+2025-05-22 00:00:00,gastos,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,4500.0
+2025-05-22 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,19500.0
+2025-05-22 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Seguro Proteccion Bancaria,783.0
+2025-05-22 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,6980.0
+2025-05-22 00:00:00,gastos,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,6500.0
+2025-05-22 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,8348.0
+2025-05-23 00:00:00,gastos,Sin categoría,Sin categoría,Recaudacion Y Pagos De Servicios   *,16990.0
+2025-05-23 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*ALIPAYS LAS CONDES,23833.0
+2025-05-23 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-23 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,119000.0
+2025-05-23 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-05-23 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-24 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,47405.0
+2025-05-24 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO PUCON PUCON,9274.0
+2025-05-24 00:00:00,gastos,Inversión en Activos,Compras Internacionales,www.aliexpress.com,8027.499999999999
+2025-05-24 00:00:00,gastos,Sin categoría,Supermercado,SUPERMERCADO IBACAC CURARREHUE,13020.0
+2025-05-24 00:00:00,gastos,Sin categoría,Ferretería,FERRETERIA ELTIT PUCON,2630.0
+2025-05-24 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
+2025-05-24 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-25 00:00:00,gastos,Sin categoría,Alimentos,FAMILIA UNIDA UYP S CAUTIN,3560.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Nicolas Vallejos,184000.0
+2025-05-26 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,170000.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,VILLARRICA VILLARRICA,11100.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,NEUMATICO CENTRO ME VILLARRICA,17700.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,Z PERFORMANCE REPUE VILLARRICA,1800.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,ESTUDIO BARAHONA LI CAUTIN,16500.0
+2025-05-26 00:00:00,gastos,Sin categoría,Pagos Digitales,MERCADOPAGO*EPULEF LAS CONDES,12900.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Luis Riquelme,4000.0
+2025-05-26 00:00:00,gastos,Sin categoría,Combustible,COPEC ASISTIDO LAS CONDES,16000.0
+2025-05-26 00:00:00,gastos,Sin categoría,Sin categoría,MORA PUCON,19635.0
+2025-05-27 00:00:00,gastos,Sin categoría,Supermercado,UNIMARC PUCON PUCON,15775.0
+2025-05-30 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Tomas Ramirez Rondon,34000.0
+2025-05-30 00:00:00,abonos,Ingresos,Abonos bancarios,Pago:dev Impuesto 0608050000,1723685.0
+2025-05-30 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
+2025-05-30 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-05-31 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-05-31 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-06-02 00:00:00,gastos,Sin categoría,Sin categoría,Impuesto Linea De Credito,2.0
+2025-06-02 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-06-02 00:00:00,gastos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-06-02 00:00:00,gastos,Sin categoría,Sin categoría,Intereses Linea De Credito,2.0
+2025-06-02 00:00:00,abonos,Ingresos,Abonos bancarios,Pago:proveedores 0762966190,30600.0
+2025-06-04 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Odette Leonor Silva Robert,178443.0
+2025-06-05 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,32930.0
+2025-06-05 00:00:00,gastos,Sin categoría,Sin categoría,Giro Cajero Automatico             *,20000.0
+2025-06-05 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Felipe Hidalgo Sanhuez,58250.0
+2025-06-05 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
+2025-06-05 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-06-06 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Tomas Ramirez Rondon,34000.0
+2025-06-09 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,282196.0
+2025-06-09 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Orlando Urrutia Giuseppe Ranieri,10000.0
+2025-06-09 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Sebastian Paredes,3000.0
+2025-06-10 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,21010.0
+2025-06-12 00:00:00,gastos,Sin categoría,Sin categoría,Pago Tarjeta De Credito,26056.0
+2025-06-12 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Por Pago Tc,1586227.0
+2025-06-13 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Tomas Ramirez Rondon,34000.0
+2025-06-13 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-06-13 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
+2025-06-16 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,32220.0
+2025-06-16 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Pedro Antonio Damjanic,93146.0
+2025-06-16 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Dominique Denise Damja,9400.0
+2025-06-16 00:00:00,abonos,Ingresos,Abonos bancarios,Traspaso De:Hotboat Spa,67330.0
+2025-06-16 00:00:00,gastos,Sin categoría,Remuneraciones,Traspaso A:Axel Aguirre,15000.0
+2025-06-17 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Guillermo Ulloa Silva,10000.0
+2025-06-18 00:00:00,costos variables,Costos Variables,Gas,Traspaso A:Javiera Rodriguez,45000.0
+2025-06-18 00:00:00,abonos,Ingresos,Abonos bancarios,Pago:proveedores 0762966190,61200.0
+2025-06-18 00:00:00,gastos,Costos Variables,Gas,Traspaso A:Javiera Rodriguez,45000.0
+2025-06-19 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Diego Luis Perez,16280.0
+2025-06-20 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
+2025-06-20 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-06-21 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-06-21 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
+2025-06-23 00:00:00,gastos,Sin categoría,Sin categoría,Cargo Seguro Proteccion Bancaria,785.0
+2025-07-04 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Javiera Hernandez,40000.0
+2025-07-10 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,62991.0
+2025-07-10 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
+2025-08-04 00:00:00,gastos,Sin categoría,Sin categoría,Traspaso A:Hector Llancao,190000.0

@@ -33,7 +33,8 @@ def crear_header(titulo_dashboard="Dashboard HotBoat", puerto_actual=None):
     dashboards = [
         {"nombre": "Reservas", "puerto": 8050, "url": "http://localhost:8050"},
         {"nombre": "Utilidad Operativa", "puerto": 8055, "url": "http://localhost:8055"},
-        {"nombre": "Marketing", "puerto": 8056, "url": "http://localhost:8056"}
+        {"nombre": "Marketing", "puerto": 8056, "url": "http://localhost:8056"},
+        {"nombre": "Utilidad Operativa (Nuevo)", "puerto": 8057, "url": "http://localhost:8057"}
     ]
     
     # Crear enlaces para cada dashboard

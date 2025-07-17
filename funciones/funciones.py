@@ -1,5 +1,20 @@
-import pandas as pd
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+import pandas as pd
+import os
+import sys
+from typing import Dict, List, Tuple, Optional
+import re
+from datetime import datetime, timedelta
+
+# Configurar UTF-8 para que los emojis funcionen siempre
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Para versiones de Python < 3.7
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 
 def ver_si_es_nacional_facturado(ruta_archivo):    
     # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
@@ -32,7 +47,7 @@ def leer_excel_mov_facturados_nacional(ruta_archivo):
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final["Monto"] = df_final["Monto ($)"]
-    df_final=df_final[["Fecha","Descripción","Monto","Cuotas","Categoría"]]
+    df_final=df_final[["Fecha","Descripción","Monto","Cuotas"]]  # Eliminada columna "Categoría"
   
     return df_final
 
@@ -190,7 +205,7 @@ def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
     df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
-    df_final=df_final[['Fecha', 'Descripción', 'Categoría', 'País', 'Monto', 'Monto (USD)']]
+    df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto', 'Monto (USD)']]  # Eliminada columna "Categoría"
     return df_final
 
 
@@ -423,7 +438,7 @@ def categorizar_por_diccionario(df, diccionario, nombre_columna):
     El resultado se guarda en la columna nombre_columna. La comparación es insensible a mayúsculas/minúsculas y espacios.
     """
     df = df.copy()
-    df[nombre_columna] = df['Descripción'].apply(obtener_categoria)
+    df[nombre_columna] = df['Descripción'].apply(lambda desc: obtener_categoria(desc, diccionario))
     return df
 
 def reordenar_columna_categoria_extra(df):
@@ -451,19 +466,23 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
     return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
 
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
 
     df_final = pd.concat([
         df_banco_estado_cargos,
         df_banco_chile_facturado_internacional,
-        df_banco_chile_facturado_nacional
+        df_banco_chile_facturado_nacional,
+        df_cuenta_corriente_cargos
     ], ignore_index=True, sort=False)
     df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
-    df_final['Fecha'] = pd.to_datetime(df_final['Fecha'], format='%d/%m/%Y', errors='coerce')
+    
+    # Convertir fechas a datetime usando la nueva función
+    df_final = convertir_fechas_a_datetime(df_final, 'Fecha')
+    
     df_final = df_final[df_final['Monto'] >= 0]
     df_final = df_final.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
     
-    # Primero categorizar por descripción para obtener Categoría_2
+    # Categorizar todos los datos usando el diccionario (incluyendo cuenta corriente)
     df_final = categorizar_por_descripcion(df_final, diccionario_categorias)
     
     # Luego categorizar Categoría 1 basándose en Categoría_2
@@ -480,4 +499,427 @@ def crear_columna_fecha(df):
         mes=df['mes'].astype(str).str.zfill(2),
         dia=df['dia'].astype(str).str.zfill(2)
     ).agg('-'.join, axis=1))
+    return df
+
+# ======== FUNCIONES PARA PROCESAMIENTO DE ARCHIVOS ========
+
+class ProcesadorArchivos:
+    """Clase para procesar archivos financieros de HotBoat"""
+    
+    def __init__(self):
+        self.df_banco_estado_abonos = []
+        self.df_banco_estado_cargos = []
+        self.df_banco_chile_facturado_nacional = []
+        self.df_banco_chile_facturado_internacional = []
+        self.df_cuenta_corriente_cargos = []
+        self.df_cuenta_corriente_abonos = []
+        
+    def procesar_archivo(self, ruta_archivo: str, nombre_archivo: str, valor_aproximado_dolar: float, año_para_fecha_banco_estado: str) -> bool:
+        """
+        Procesa un archivo Excel según su tipo
+        
+        Args:
+            ruta_archivo: Ruta completa del archivo
+            nombre_archivo: Nombre del archivo
+            valor_aproximado_dolar: Valor del dólar para conversiones
+            año_para_fecha_banco_estado: Año para fechas del banco estado
+            
+        Returns:
+            bool: True si se procesó correctamente, False en caso contrario
+        """
+        try:
+            print(f"📄 Procesando: {nombre_archivo}")
+            
+            # Procesar archivos de Chequera (Banco Estado)
+            if "Chequera" in nombre_archivo:
+                print(f"   ✅ Archivo de Chequera detectado")
+                df_cargos, df_abonos = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
+                self.df_banco_estado_abonos.append(df_abonos)
+                self.df_banco_estado_cargos.append(df_cargos)
+                return True
+                
+            # Procesar archivos de Cuenta Corriente (Cartola específica)
+            elif "cartola" in nombre_archivo.lower() and any(num in nombre_archivo for num in ["(4)", "(5)", "(6)", "(7)", "(8)"]):
+                print(f"   ✅ Archivo Cuenta Corriente detectado")
+                try:
+                    cargos, abonos = leer_cartola_cuenta_corriente(ruta_archivo)
+                    if not cargos.empty:
+                        self.df_cuenta_corriente_cargos.append(cargos)
+                        print(f"      💳 Cargos cuenta corriente: {len(cargos)} filas")
+                    if not abonos.empty:
+                        self.df_cuenta_corriente_abonos.append(abonos)
+                        print(f"      💳 Abonos cuenta corriente: {len(abonos)} filas")
+                    return True
+                except Exception as e:
+                    print(f"   ❌ Error procesando cuenta corriente: {str(e)}")
+                    return False
+                
+            # Procesar archivos Cartola (similar a Chequera)
+            elif "cartola" in nombre_archivo.lower():
+                print(f"   ✅ Archivo Cartola detectado")
+                df_cargos, df_abonos = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
+                self.df_banco_estado_abonos.append(df_abonos)
+                self.df_banco_estado_cargos.append(df_cargos)
+                return True
+                
+            # Procesar archivos de Movimientos Facturados (Banco Chile)
+            elif "Mov_Facturado" in nombre_archivo:
+                print(f"   ✅ Archivo Mov_Facturado detectado")
+                if ver_si_es_nacional_facturado(ruta_archivo):
+                    print(f"      📍 Tipo: Nacional")
+                    df = leer_excel_mov_facturados_nacional(ruta_archivo)
+                    self.df_banco_chile_facturado_nacional.append(df)
+                else:
+                    print(f"      🌍 Tipo: Internacional")
+                    df = leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar)
+                    self.df_banco_chile_facturado_internacional.append(df)
+                return True
+                
+            else:
+                print(f"   ⚠️  Archivo no reconocido: {nombre_archivo}")
+                print(f"      💡 Tipos soportados: Chequera, Mov_Facturado, cartola, cuenta corriente")
+                return False
+                
+        except Exception as e:
+            print(f"   ❌ Error procesando {nombre_archivo}: {str(e)}")
+            return False
+    
+    def consolidar_datos(self) -> dict:
+        """
+        Consolida todos los datos procesados
+        
+        Returns:
+            Dict con DataFrames consolidados
+        """
+        print("=" * 60)
+        print("🔄 CONSOLIDANDO DATOS...")
+        
+        datos_consolidados = {}
+        
+        # Consolidar Banco Estado
+        if self.df_banco_estado_abonos:
+            datos_consolidados['banco_estado_abonos'] = limpiar_y_ordenar_dataframe(self.df_banco_estado_abonos)
+            print(f"✅ Abonos Banco Estado: {len(datos_consolidados['banco_estado_abonos'])} registros")
+        else:
+            datos_consolidados['banco_estado_abonos'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de abonos Banco Estado")
+            
+        if self.df_banco_estado_cargos:
+            datos_consolidados['banco_estado_cargos'] = limpiar_y_ordenar_dataframe(self.df_banco_estado_cargos)
+            print(f"✅ Cargos Banco Estado: {len(datos_consolidados['banco_estado_cargos'])} registros")
+        else:
+            datos_consolidados['banco_estado_cargos'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de cargos Banco Estado")
+        
+        # Consolidar Banco Chile Facturado
+        if self.df_banco_chile_facturado_internacional:
+            datos_consolidados['banco_chile_facturado_internacional'] = pd.concat(
+                self.df_banco_chile_facturado_internacional, ignore_index=True
+            )
+            print(f"✅ Movimientos Facturados Internacional: {len(datos_consolidados['banco_chile_facturado_internacional'])} registros")
+        else:
+            datos_consolidados['banco_chile_facturado_internacional'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de movimientos facturados internacionales")
+            
+        if self.df_banco_chile_facturado_nacional:
+            datos_consolidados['banco_chile_facturado_nacional'] = pd.concat(
+                self.df_banco_chile_facturado_nacional, ignore_index=True
+            )
+            print(f"✅ Movimientos Facturados Nacional: {len(datos_consolidados['banco_chile_facturado_nacional'])} registros")
+        else:
+            datos_consolidados['banco_chile_facturado_nacional'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de movimientos facturados nacionales")
+        
+        # Consolidar Cuenta Corriente
+        if self.df_cuenta_corriente_cargos:
+            # Asegurar que la columna se llame 'Fecha'
+            for i, df in enumerate(self.df_cuenta_corriente_cargos):
+                if 'fecha' in df.columns and 'Fecha' not in df.columns:
+                    self.df_cuenta_corriente_cargos[i] = df.rename(columns={'fecha': 'Fecha'})
+            
+            datos_consolidados['cuenta_corriente_cargos'] = pd.concat(
+                self.df_cuenta_corriente_cargos, ignore_index=True
+            )
+            datos_consolidados['cuenta_corriente_cargos'] = datos_consolidados['cuenta_corriente_cargos'].drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+            print(f"✅ Cargos Cuenta Corriente: {len(datos_consolidados['cuenta_corriente_cargos'])} registros")
+        else:
+            datos_consolidados['cuenta_corriente_cargos'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de cargos cuenta corriente")
+            
+        if self.df_cuenta_corriente_abonos:
+            # Asegurar que la columna se llame 'Fecha'
+            for i, df in enumerate(self.df_cuenta_corriente_abonos):
+                if 'fecha' in df.columns and 'Fecha' not in df.columns:
+                    self.df_cuenta_corriente_abonos[i] = df.rename(columns={'fecha': 'Fecha'})
+            
+            datos_consolidados['cuenta_corriente_abonos'] = pd.concat(
+                self.df_cuenta_corriente_abonos, ignore_index=True
+            )
+            datos_consolidados['cuenta_corriente_abonos'] = datos_consolidados['cuenta_corriente_abonos'].drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+            print(f"✅ Abonos Cuenta Corriente: {len(datos_consolidados['cuenta_corriente_abonos'])} registros")
+        else:
+            datos_consolidados['cuenta_corriente_abonos'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de abonos cuenta corriente")
+        
+        return datos_consolidados
+
+def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archivos_input_costos', 
+                                 directorio_output: str = 'archivos_output',
+                                 valor_aproximado_dolar: float = 950,
+                                 año_para_fecha_banco_estado: str = '2025',
+                                 diccionario_categorias: dict = None,
+                                 descripciones_a_eliminar: list = None,
+                                 diccionario_categoria_1: dict = None) -> bool:
+    """
+    Función principal que procesa todos los archivos financieros
+    
+    Args:
+        directorio_input: Directorio con archivos de entrada
+        directorio_output: Directorio para archivos de salida
+        valor_aproximado_dolar: Valor del dólar para conversiones
+        año_para_fecha_banco_estado: Año para fechas del banco estado
+        diccionario_categorias: Diccionario de categorías
+        descripciones_a_eliminar: Lista de descripciones a eliminar
+        diccionario_categoria_1: Diccionario de categorías principales
+        
+    Returns:
+        bool: True si el procesamiento fue exitoso
+    """
+    print("🚤" * 20)
+    print("🚤 PROCESADOR DE GASTOS Y COSTOS HOTBOAT")
+    print("🚤" * 20)
+    print()
+    print("🔄 PROCESANDO ARCHIVOS DE COSTOS Y GASTOS...")
+    print("=" * 60)
+    
+    # Verificar que existe el directorio de entrada
+    if not os.path.exists(directorio_input):
+        print(f"❌ ERROR: No existe el directorio {directorio_input}")
+        print("💡 Asegúrate de tener los archivos en la carpeta correcta")
+        return False
+    
+    # Inicializar procesador
+    procesador = ProcesadorArchivos()
+    archivos_procesados = 0
+    archivos_con_error = 0
+    
+    # Procesar cada archivo en el directorio
+    for archivo in os.listdir(directorio_input):
+        ruta_archivo = os.path.join(directorio_input, archivo)
+        
+        # Procesar solo archivos Excel
+        if archivo.endswith((".xlsx", ".xls")):
+            if procesador.procesar_archivo(ruta_archivo, archivo, valor_aproximado_dolar, año_para_fecha_banco_estado):
+                archivos_procesados += 1
+            else:
+                archivos_con_error += 1
+        else:
+            print(f"⚠️  Archivo no soportado: {archivo}")
+    
+    # Consolidar datos
+    datos_consolidados = procesador.consolidar_datos()
+    
+    print("=" * 60)
+    print("🔄 PROCESANDO DATOS FINALES...")
+    
+    # Procesar DataFrame final con gastos
+    df_final = procesar_df_final(
+        datos_consolidados['banco_estado_cargos'],
+        datos_consolidados['banco_chile_facturado_internacional'],
+        datos_consolidados['banco_chile_facturado_nacional'],
+        datos_consolidados['cuenta_corriente_cargos'],
+        diccionario_categorias,
+        descripciones_a_eliminar,
+        diccionario_categoria_1
+    )
+    
+    # Procesar abonos
+    df_abonos = pd.DataFrame()
+    if not datos_consolidados['banco_estado_abonos'].empty:
+        df_banco_estado_abonos = datos_consolidados['banco_estado_abonos'].copy()
+        df_banco_estado_abonos['Fecha'] = pd.to_datetime(df_banco_estado_abonos['Fecha'], format='%d/%m/%Y', errors='coerce')
+        df_abonos = pd.concat([df_banco_estado_abonos], axis=0)
+    
+    # Agregar abonos de cuenta corriente
+    if not datos_consolidados['cuenta_corriente_abonos'].empty:
+        df_abonos_cc = datos_consolidados['cuenta_corriente_abonos'].copy()
+        df_abonos_cc['Fecha'] = pd.to_datetime(df_abonos_cc['Fecha'], format='%d/%m/%Y', errors='coerce')
+        df_abonos = pd.concat([df_abonos, df_abonos_cc], axis=0)
+    
+    print("=" * 60)
+    print("💾 EXPORTANDO ARCHIVOS...")
+    
+    # Exportar archivos
+    try:
+        exportar_archivos(df_final, df_abonos, directorio_output)
+        
+
+        print("✅ PROCESAMIENTO COMPLETADO EXITOSAMENTE")
+        print("=" * 60)
+        print(f"📊 RESUMEN:")
+        print(f"   ✅ Archivos procesados: {archivos_procesados}")
+        print(f"   ❌ Archivos con error: {archivos_con_error}")
+        print(f"   📈 Gastos totales: {len(df_final)} registros")
+        print(f"   💰 Abonos totales: {len(df_abonos)} registros")
+
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error exportando archivos: {str(e)}")
+        return False
+
+def leer_cartola_cuenta_corriente(ruta_archivo):
+    """
+    Lee una cartola de cuenta corriente buscando dinámicamente donde empieza la tabla
+    (donde aparecen "fecha" y "descripción"), y separa en cargos y abonos con columna 'Monto'.
+    Devuelve dos DataFrames: cargos y abonos.
+    """
+    # Leer la hoja principal sin encabezado
+    df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)
+    
+    # Buscar la fila donde aparecen "fecha" y "descripción"
+    fila_encabezados = None
+    for i, row in df.iterrows():
+        row_str = ' '.join(str(cell).lower() for cell in row if pd.notna(cell))
+        if 'fecha' in row_str and 'descrip' in row_str:
+            fila_encabezados = i
+            break
+    
+    if fila_encabezados is None:
+        print(f"⚠️ No se encontró la tabla con 'fecha' y 'descripción' en {ruta_archivo}")
+        return pd.DataFrame(), pd.DataFrame()
+    
+    # Tomar encabezados desde la fila encontrada
+    headers = df.iloc[fila_encabezados].tolist()
+    
+    # Leer la tabla de transacciones desde la siguiente fila
+    df_transacciones = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=fila_encabezados + 1, header=None)
+    df_transacciones.columns = headers
+    
+    # Limpiar filas vacías
+    df_transacciones = df_transacciones.dropna(how='all')
+    
+    # Estandarizar nombres de columnas
+    columnas_map = {}
+    for col in df_transacciones.columns:
+        col_str = str(col).strip().lower()
+        if 'fecha' in col_str:
+            columnas_map[col] = 'Fecha'
+        elif 'descrip' in col_str:
+            columnas_map[col] = 'Descripción'
+        elif 'cargo' in col_str and 'clp' in col_str:
+            columnas_map[col] = 'Cargos (CLP)'
+        elif 'abono' in col_str and 'clp' in col_str:
+            columnas_map[col] = 'Abonos (CLP)'
+        else:
+            columnas_map[col] = col
+    
+    df_transacciones = df_transacciones.rename(columns=columnas_map)
+    
+    # Verificar que tenemos las columnas necesarias
+    if 'Fecha' not in df_transacciones.columns or 'Descripción' not in df_transacciones.columns:
+        print(f"⚠️ Faltan columnas 'Fecha' o 'Descripción' en {ruta_archivo}")
+        print(f"   Columnas disponibles: {list(df_transacciones.columns)}")
+        return pd.DataFrame(), pd.DataFrame()
+    if 'Cargos (CLP)' not in df_transacciones.columns and 'Abonos (CLP)' not in df_transacciones.columns:
+        print(f"⚠️ No se encontraron columnas 'Cargos (CLP)' ni 'Abonos (CLP)' en {ruta_archivo}")
+        print(f"   Columnas disponibles: {list(df_transacciones.columns)}")
+        return pd.DataFrame(), pd.DataFrame()
+    
+    # Procesar cargos
+    cargos = pd.DataFrame()
+    if 'Cargos (CLP)' in df_transacciones.columns:
+        cargos = df_transacciones[['Fecha', 'Descripción', 'Cargos (CLP)']].copy()
+        cargos = cargos[pd.to_numeric(cargos['Cargos (CLP)'], errors='coerce').notna()]
+        cargos['Monto'] = abs(pd.to_numeric(cargos['Cargos (CLP)'], errors='coerce'))
+        cargos = cargos.drop(columns=['Cargos (CLP)'])
+        cargos = cargos[pd.to_datetime(cargos['Fecha'], errors='coerce').notna()]
+        cargos = cargos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        
+        # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
+        if not cargos.empty:
+            # Mantener como datetime en lugar de convertir a string
+            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce')
+    
+    # Procesar abonos
+    abonos = pd.DataFrame()
+    if 'Abonos (CLP)' in df_transacciones.columns:
+        abonos = df_transacciones[['Fecha', 'Descripción', 'Abonos (CLP)']].copy()
+        abonos = abonos[pd.to_numeric(abonos['Abonos (CLP)'], errors='coerce').notna()]
+        abonos['Monto'] = abs(pd.to_numeric(abonos['Abonos (CLP)'], errors='coerce'))
+        abonos = abonos.drop(columns=['Abonos (CLP)'])
+        abonos = abonos[pd.to_datetime(abonos['Fecha'], errors='coerce').notna()]
+        abonos = abonos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        
+        # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
+        if not abonos.empty:
+            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce')
+    
+    return cargos, abonos
+
+def convertir_fechas_a_datetime(df, columna_fecha='Fecha'):
+    """
+    Convierte fechas en formato string a datetime, manejando múltiples formatos.
+    
+    Args:
+        df: DataFrame con la columna de fechas
+        columna_fecha: Nombre de la columna de fechas (default: 'Fecha')
+    
+    Returns:
+        DataFrame con fechas convertidas a datetime
+    """
+    df = df.copy()
+    
+    # Solo procesar si la columna existe y no está vacía
+    if columna_fecha not in df.columns or df.empty:
+        return df
+    
+    # Si ya es datetime, no hacer nada
+    if pd.api.types.is_datetime64_any_dtype(df[columna_fecha]):
+        return df
+    
+    # Convertir a string si no lo es
+    if not pd.api.types.is_string_dtype(df[columna_fecha]):
+        df[columna_fecha] = df[columna_fecha].astype(str)
+    
+    # Función para convertir una fecha individual
+    def convertir_fecha(fecha_str):
+        if pd.isna(fecha_str) or fecha_str == '' or fecha_str == 'nan':
+            return pd.NaT
+        
+        fecha_str = str(fecha_str).strip()
+        
+        # Intentar formato ISO (2025-04-30 00:00:00)
+        try:
+            return pd.to_datetime(fecha_str, format='%Y-%m-%d %H:%M:%S')
+        except:
+            pass
+        
+        # Intentar formato ISO sin hora (2025-04-30)
+        try:
+            return pd.to_datetime(fecha_str, format='%Y-%m-%d')
+        except:
+            pass
+        
+        # Intentar formato dd/mm/yyyy (12/02/2025)
+        try:
+            return pd.to_datetime(fecha_str, format='%d/%m/%Y')
+        except:
+            pass
+        
+        # Intentar formato dd/mm/yy (12/02/25)
+        try:
+            return pd.to_datetime(fecha_str, format='%d/%m/%y')
+        except:
+            pass
+        
+        # Si nada funciona, intentar parse automático
+        try:
+            return pd.to_datetime(fecha_str)
+        except:
+            return pd.NaT
+    
+    # Aplicar la conversión
+    df[columna_fecha] = df[columna_fecha].apply(convertir_fecha)
+    
     return df

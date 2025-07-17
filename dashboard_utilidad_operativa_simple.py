@@ -1,0 +1,589 @@
+import dash
+from dash import dcc, html, Input, Output, callback, dash_table
+import plotly.graph_objects as go
+import pandas as pd
+from datetime import datetime, timedelta
+
+# Configuración de colores
+COLORS = {
+    'background': '#1a1a1a',
+    'card_bg': '#2d2d2d',
+    'header_bg': '#3d3d3d',
+    'text': '#ffffff',
+    'primary': '#007bff',
+    'income': '#00ff88',
+    'expense': '#ff4444',
+    'marketing': '#00ffff',
+    'costos_fijos': '#ff8800',
+    'costos_variables': '#ff0088'
+}
+
+def cargar_datos():
+    """Carga los datos de utilidad operativa."""
+    try:
+        df = pd.read_csv('archivos_output/Utilidad operativa.csv')
+        df['fecha'] = pd.to_datetime(df['fecha'])
+        # Normalizar categorías a formato título
+        df['categoria'] = df['categoria'].astype(str).str.strip().str.title()
+        print(f"✅ Datos cargados: {len(df)} registros")
+        print(f"Categorías detectadas: {sorted(df['categoria'].unique())}")
+        return df
+    except Exception as e:
+        print(f"❌ Error cargando datos: {e}")
+        return None
+
+# Crear aplicación
+app = dash.Dash(__name__)
+
+# Agregar estilos CSS personalizados
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>Dashboard Utilidad Operativa</title>
+        {%favicon%}
+        {%css%}
+        <style>
+            .Select-control {
+                background-color: #2d2d2d !important;
+                border-color: #444 !important;
+            }
+            .Select-menu-outer {
+                background-color: #2d2d2d !important;
+                border-color: #444 !important;
+            }
+            .Select-option {
+                background-color: #2d2d2d !important;
+                color: #ffffff !important;
+            }
+            .Select-option:hover {
+                background-color: #444 !important;
+            }
+            .Select-value-label {
+                color: #ffffff !important;
+            }
+            .Select-placeholder {
+                color: #cccccc !important;
+            }
+        </style>
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+'''
+
+# Cargar datos
+df = cargar_datos()
+
+if df is not None:
+    fecha_min = df['fecha'].min()
+    fecha_max = df['fecha'].max()
+    categorias = sorted(df['categoria'].unique())
+    
+    app.layout = html.Div([
+        # Header
+        html.Div([
+            html.H1("Dashboard Utilidad Operativa", style={
+                'color': COLORS['text'],
+                'textAlign': 'center',
+                'marginBottom': '30px'
+            })
+        ]),
+        
+        # Filtros
+        html.Div([
+            html.Div([
+                html.Label("Rango de Fechas:", style={'color': COLORS['text']}),
+                dcc.DatePickerRange(
+                    id='date-range',
+                    min_date_allowed=fecha_min,
+                    max_date_allowed=fecha_max,
+                    start_date=fecha_min,
+                    end_date=fecha_max,
+                    display_format='YYYY-MM-DD'
+                )
+            ], style={'marginBottom': '20px', 'textAlign': 'center'}),
+            
+            html.Div([
+                html.Label("Año:", style={'color': COLORS['text']}),
+                dcc.Dropdown(
+                    id='filtro_ano',
+                    options=[{'label': 'Todos los años', 'value': 'todos'}] + 
+                            [{'label': str(ano), 'value': ano} for ano in sorted(df['fecha'].dt.year.unique(), reverse=True)],
+                    value='todos',
+                    style={
+                        'backgroundColor': COLORS['card_bg'],
+                        'color': COLORS['text'],
+                        'border': '1px solid #444',
+                        'width': '200px'
+                    },
+                    className='dropdown-dark'
+                )
+            ], style={'marginBottom': '20px', 'textAlign': 'center'}),
+            
+            html.Div([
+                html.Label("Período:", style={'color': COLORS['text']}),
+                dcc.RadioItems(
+                    id='periodo',
+                    options=[
+                        {'label': 'Agrupar por día', 'value': 'dia'},
+                        {'label': 'Agrupar por semana', 'value': 'semana'},
+                        {'label': 'Agrupar por mes', 'value': 'mes'}
+                    ],
+                    value='dia',
+                    inline=True,
+                    style={'color': COLORS['text'], 'marginBottom': '20px'}
+                )
+            ], style={'marginBottom': '20px', 'textAlign': 'center'}),
+            
+            html.Div([
+                html.Label("Categoría:", style={'color': COLORS['text']}),
+                dcc.Dropdown(
+                    id='categoria',
+                    options=[{'label': 'Todas', 'value': 'todas'}] + 
+                            [{'label': cat.title(), 'value': cat} for cat in categorias],
+                    value='todas',
+                    style={
+                        'backgroundColor': COLORS['card_bg'],
+                        'color': COLORS['text'],
+                        'border': '1px solid #444',
+                        'width': '300px'
+                    },
+                    className='dropdown-dark'
+                )
+            ], style={'textAlign': 'center'})
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '10px',
+            'marginBottom': '20px',
+            'textAlign': 'center',
+            'maxWidth': '500px',
+            'margin': '0 auto 20px auto',
+            'display': 'flex',
+            'flexDirection': 'column',
+            'alignItems': 'center'
+        }),
+        
+        # Tarjetas
+        html.Div([
+            # Tarjetas principales (Utilidad Operativa + Valor Promedio de Venta)
+            html.Div(id='tarjetas_principales', style={
+                'display': 'flex',
+                'justifyContent': 'center',
+                'gap': '30px',
+                'marginBottom': '30px',
+                'flexWrap': 'wrap'
+            }),
+            
+            html.Div(id='tarjetas', style={
+                'display': 'flex',
+                'flexWrap': 'wrap',
+                'justifyContent': 'center',
+                'gap': '20px'
+            })
+        ]),
+        
+        # Gráfico
+        html.Div([
+            dcc.Graph(id='grafico')
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '10px',
+            'marginTop': '20px'
+        }),
+        
+        # Tabla dinámica
+        html.Div([
+            html.H3("📊 Tabla de Datos", style={
+                'color': COLORS['text'],
+                'textAlign': 'center',
+                'marginBottom': '20px'
+            }),
+            dash_table.DataTable(
+                id='tabla-datos',
+                columns=[
+                    {'name': 'Fecha', 'id': 'fecha', 'type': 'datetime'},
+                    {'name': 'Categoría', 'id': 'categoria', 'type': 'text'},
+                    {'name': 'Categoría 1', 'id': 'categoria_1', 'type': 'text'},
+                    {'name': 'Categoría 2', 'id': 'categoria_2', 'type': 'text'},
+                    {'name': 'Descripción', 'id': 'descripcion', 'type': 'text'},
+                    {'name': 'Monto ($)', 'id': 'monto', 'type': 'numeric', 'format': {'specifier': ',.0f'}}
+                ],
+                data=[],
+                style_table={
+                    'backgroundColor': COLORS['card_bg'],
+                    'color': COLORS['text'],
+                    'borderRadius': '10px',
+                    'overflow': 'hidden'
+                },
+                style_header={
+                    'backgroundColor': COLORS['header_bg'],
+                    'color': COLORS['text'],
+                    'fontWeight': 'bold',
+                    'textAlign': 'center'
+                },
+                style_cell={
+                    'backgroundColor': COLORS['card_bg'],
+                    'color': COLORS['text'],
+                    'textAlign': 'left',
+                    'padding': '10px',
+                    'border': '1px solid #444'
+                },
+                style_data_conditional=[
+                    {
+                        'if': {'filter_query': '{categoria} = "ingreso operativo"'},
+                        'backgroundColor': '#2d5a2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costo operativo"'},
+                        'backgroundColor': '#5a2d2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "Costos de Marketing"'},
+                        'backgroundColor': '#5a5a2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costos fijos"'},
+                        'backgroundColor': '#4a2d5a',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "costos variables"'},
+                        'backgroundColor': '#5a3d2d',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "gastos"'},
+                        'backgroundColor': '#3d3d5a',
+                        'color': 'white'
+                    },
+                    {
+                        'if': {'filter_query': '{categoria} = "abonos"'},
+                        'backgroundColor': '#2d5a5a',
+                        'color': 'white'
+                    }
+                ],
+                filter_action='native',
+                sort_action='native',
+                sort_mode='multi',
+                page_action='native',
+                page_current=0,
+                page_size=20,
+                style_data={
+                    'whiteSpace': 'normal',
+                    'height': 'auto'
+                }
+            )
+        ], style={
+            'backgroundColor': COLORS['card_bg'],
+            'padding': '20px',
+            'borderRadius': '10px',
+            'marginTop': '20px'
+        })
+        
+    ], style={
+        'backgroundColor': COLORS['background'],
+        'minHeight': '100vh',
+        'padding': '20px'
+    })
+    
+    @callback(
+        [Output('tarjetas_principales', 'children'),
+         Output('tarjetas', 'children'),
+         Output('grafico', 'figure'),
+         Output('tabla-datos', 'data')],
+        [Input('date-range', 'start_date'),
+         Input('date-range', 'end_date'),
+         Input('periodo', 'value'),
+         Input('categoria', 'value'),
+         Input('filtro_ano', 'value')]
+    )
+    def actualizar_dashboard(start_date, end_date, periodo, categoria, filtro_ano):
+        # Filtrar por fecha
+        df_filtrado = df.copy()
+        
+        if start_date and end_date:
+            df_filtrado = df_filtrado[
+                (df_filtrado['fecha'] >= start_date) & 
+                (df_filtrado['fecha'] <= end_date)
+            ]
+        
+        # Filtrar por año
+        if filtro_ano != 'todos':
+            df_filtrado = df_filtrado[df_filtrado['fecha'].dt.year == filtro_ano]
+        
+        # Filtrar por categoría
+        if categoria != 'todas':
+            df_filtrado = df_filtrado[df_filtrado['categoria'] == categoria]
+        
+        # Agrupar por período
+        if periodo == 'dia':
+            # Agrupar por día
+            df_agrupado = df_filtrado.groupby([df_filtrado['fecha'].dt.date, 'categoria'])['monto'].sum().reset_index()
+            df_agrupado['fecha'] = pd.to_datetime(df_agrupado['fecha'])
+        elif periodo == 'semana':
+            # Agrupar por semana
+            df_agrupado = df_filtrado.groupby([df_filtrado['fecha'].dt.to_period('W').dt.start_time, 'categoria'])['monto'].sum().reset_index()
+            df_agrupado['fecha'] = pd.to_datetime(df_agrupado['fecha'])
+        elif periodo == 'mes':
+            # Agrupar por mes
+            df_agrupado = df_filtrado.groupby([df_filtrado['fecha'].dt.to_period('M').dt.start_time, 'categoria'])['monto'].sum().reset_index()
+            df_agrupado['fecha'] = pd.to_datetime(df_agrupado['fecha'])
+        
+        # Calcular utilidad operativa (usando datos originales, no agrupados)
+        df_ingresos_original = df_filtrado[df_filtrado['categoria'] == 'Ingreso Operativo']
+        df_costos_original = df_filtrado[df_filtrado['categoria'].isin(['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables'])]
+        
+        ingresos = df_ingresos_original['monto'].sum()
+        costos = df_costos_original['monto'].sum()
+        utilidad_operativa = ingresos - costos
+        
+        # Calcular valor promedio de venta (usando datos originales, no agrupados)
+        # Filtrar solo ventas mayores a $100,000 para el promedio
+        df_ingresos_filtrados = df_ingresos_original[df_ingresos_original['monto'] >= 100000]
+        valor_promedio_venta = df_ingresos_filtrados['monto'].mean() if not df_ingresos_filtrados.empty else 0
+        cantidad_ventas = len(df_ingresos_filtrados)  # Solo ventas >= $100,000
+        total_ingresos = df_ingresos_original['monto'].sum()  # Total de todos los ingresos
+        cantidad_total_ventas = len(df_ingresos_original)  # Total de todas las ventas
+        
+        # Crear tarjeta especial de utilidad operativa
+        color_utilidad = COLORS['income'] if utilidad_operativa >= 0 else COLORS['expense']
+        icono_utilidad = "📈" if utilidad_operativa >= 0 else "📉"
+        
+        tarjeta_utilidad = html.Div([
+            html.Div([
+                html.H2("💰 Utilidad Operativa", style={
+                    'color': COLORS['text'], 
+                    'marginBottom': '10px',
+                    'textAlign': 'center',
+                    'fontSize': '24px'
+                }),
+                html.H1(f"{icono_utilidad} ${utilidad_operativa:,.0f}", style={
+                    'color': color_utilidad, 
+                    'margin': '0', 
+                    'fontSize': '48px',
+                    'textAlign': 'center',
+                    'fontWeight': 'bold'
+                }),
+                html.P("Ingresos - Costos", style={
+                    'color': COLORS['text'], 
+                    'margin': '10px 0', 
+                    'fontSize': '16px',
+                    'textAlign': 'center'
+                }),
+                html.Div([
+                    html.Span(f"Ingresos: ${ingresos:,.0f}", style={
+                        'color': COLORS['income'], 
+                        'fontSize': '14px',
+                        'marginRight': '20px'
+                    }),
+                    html.Span(f"Costos: ${costos:,.0f}", style={
+                        'color': COLORS['expense'], 
+                        'fontSize': '14px'
+                    })
+                ], style={'textAlign': 'center', 'marginTop': '15px'})
+            ], style={
+                'backgroundColor': COLORS['card_bg'],
+                'padding': '30px',
+                'borderRadius': '15px',
+                'textAlign': 'center',
+                'border': f'3px solid {color_utilidad}',
+                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)',
+                'minWidth': '350px'
+            })
+        ])
+        
+        # Crear tarjeta de valor promedio de venta
+        tarjeta_promedio_venta = html.Div([
+            html.Div([
+                html.H2("💎 Valor Promedio de Venta", style={
+                    'color': COLORS['text'], 
+                    'marginBottom': '10px',
+                    'textAlign': 'center',
+                    'fontSize': '24px'
+                }),
+                html.H1(f"${valor_promedio_venta:,.0f}", style={
+                    'color': COLORS['income'], 
+                    'margin': '0', 
+                    'fontSize': '48px',
+                    'textAlign': 'center',
+                    'fontWeight': 'bold'
+                }),
+                html.P("Promedio por transacción", style={
+                    'color': COLORS['text'], 
+                    'margin': '10px 0', 
+                    'fontSize': '16px',
+                    'textAlign': 'center'
+                }),
+                html.Div([
+                    html.Span(f"Ventas ≥$100k: {cantidad_ventas:,}", style={
+                        'color': COLORS['text'], 
+                        'fontSize': '14px',
+                        'marginRight': '20px'
+                    }),
+                    html.Span(f"Total: ${total_ingresos:,.0f}", style={
+                        'color': COLORS['income'], 
+                        'fontSize': '14px'
+                    }),
+                    html.Br(),
+                    html.Span(f"Total ventas: {cantidad_total_ventas:,}", style={
+                        'color': COLORS['text'], 
+                        'fontSize': '12px',
+                        'fontStyle': 'italic'
+                    })
+                ], style={'textAlign': 'center', 'marginTop': '15px'})
+            ], style={
+                'backgroundColor': COLORS['card_bg'],
+                'padding': '30px',
+                'borderRadius': '15px',
+                'textAlign': 'center',
+                'border': f'3px solid {COLORS["income"]}',
+                'boxShadow': f'0 4px 8px rgba(0,0,0,0.3)',
+                'minWidth': '350px'
+            })
+        ])
+        
+        # Combinar ambas tarjetas principales
+        tarjetas_principales = [tarjeta_utilidad, tarjeta_promedio_venta]
+        
+        # Crear tarjetas normales
+        tarjetas = []
+        
+        # Colores específicos para cada categoría
+        colores_categoria = {
+            'Ingreso Operativo': COLORS['income'],      # Verde
+            'Costo Operativo': COLORS['expense'],       # Rojo
+            'Costos De Marketing': COLORS['marketing'],  # Amarillo
+            'Costos Fijos': COLORS['costos_fijos'],      # Morado
+            'Costos Variables': COLORS['costos_variables'] # Naranjo
+        }
+        
+        # Usar datos originales para totales y conteos, pero agrupados para promedios
+        for cat in df_filtrado['categoria'].unique():
+            df_cat_original = df_filtrado[df_filtrado['categoria'] == cat]
+            df_cat_agrupado = df_agrupado[df_agrupado['categoria'] == cat]
+            
+            total = df_cat_original['monto'].sum()  # Total de datos originales
+            promedio = df_cat_agrupado['monto'].mean() if not df_cat_agrupado.empty else 0  # Promedio de períodos
+            cantidad = len(df_cat_original)  # Cantidad de registros originales
+            
+            color = colores_categoria.get(cat, COLORS['primary'])
+            
+            tarjeta = html.Div([
+                html.H3(cat, style={'color': COLORS['text'], 'marginBottom': '10px'}),
+                html.H2(f"${total:,.0f}", style={'color': color, 'margin': '0', 'fontSize': '28px'}),
+                html.P("Total", style={'color': COLORS['text'], 'margin': '5px 0', 'fontSize': '12px'}),
+                html.Div([
+                    html.Span(f"Promedio/Período: ${promedio:,.0f}", style={'color': COLORS['text'], 'fontSize': '14px'}),
+                    html.Br(),
+                    html.Span(f"Registros: {cantidad:,}", style={'color': COLORS['text'], 'fontSize': '14px'})
+                ], style={'marginTop': '10px'})
+            ], style={
+                'backgroundColor': COLORS['card_bg'],
+                'padding': '20px',
+                'borderRadius': '10px',
+                'textAlign': 'center',
+                'minWidth': '250px'
+            })
+            tarjetas.append(tarjeta)
+        
+        # Crear gráfico de evolución
+        fig = go.Figure()
+        
+        # Colores específicos para cada categoría
+        colores_categoria = {
+            'Ingreso Operativo': COLORS['income'],      # Verde
+            'Costo Operativo': COLORS['expense'],       # Rojo
+            'Costos De Marketing': COLORS['marketing'],  # Amarillo
+            'Costos Fijos': COLORS['costos_fijos'],      # Morado
+            'Costos Variables': COLORS['costos_variables'] # Naranjo
+        }
+        
+        # Agregar líneas para cada categoría individual
+        for cat in df_agrupado['categoria'].unique():
+            df_cat = df_agrupado[df_agrupado['categoria'] == cat]
+            color = colores_categoria.get(cat, COLORS['primary'])
+            
+            fig.add_trace(go.Scatter(
+                x=df_cat['fecha'],
+                y=df_cat['monto'],
+                mode='lines+markers',
+                name=cat.title(),
+                line=dict(color=color, width=3),
+                marker=dict(size=6, color=color)
+            ))
+        
+        # Agregar línea de todos los costos juntos
+        categorias_costos = ['Costo Operativo', 'Costos De Marketing', 'Costos Fijos', 'Costos Variables']
+        df_costos = df_agrupado[df_agrupado['categoria'].isin(categorias_costos)]
+        if not df_costos.empty:
+            df_costos_totales = df_costos.groupby('fecha')['monto'].sum().reset_index()
+            fig.add_trace(go.Scatter(
+                x=df_costos_totales['fecha'],
+                y=df_costos_totales['monto'],
+                mode='lines+markers',
+                name='Total Costos',
+                line=dict(color='#ff6b6b', width=4, dash='dash'),
+                marker=dict(size=8, color='#ff6b6b', symbol='diamond')
+            ))
+        # Agregar línea de utilidad operativa (ingresos - costos)
+        df_ingresos = df_agrupado[df_agrupado['categoria'] == 'Ingreso Operativo'][['fecha', 'monto']].rename(columns={'monto': 'ingresos'})
+        if not df_ingresos.empty and not df_costos.empty:
+            df_costos_totales = df_costos.groupby('fecha')['monto'].sum().reset_index().rename(columns={'monto': 'costos'})
+            # Unir ingresos y costos por fecha (outer para no perder fechas)
+            df_utilidad = pd.merge(df_ingresos, df_costos_totales, on='fecha', how='outer').fillna(0)
+            df_utilidad = df_utilidad.sort_values('fecha')
+            df_utilidad['utilidad'] = df_utilidad['ingresos'] - df_utilidad['costos']
+            fig.add_trace(go.Scatter(
+                x=df_utilidad['fecha'],
+                y=df_utilidad['utilidad'],
+                mode='lines+markers',
+                name='Utilidad Operativa',
+                line=dict(color='#00ff88', width=4, dash='dot'),
+                marker=dict(size=8, color='#00ff88', symbol='circle-open')
+            ))
+        
+        # Título del gráfico según el período
+        titulo_periodo = {
+            'dia': 'Evolución por Día',
+            'semana': 'Evolución por Semana',
+            'mes': 'Evolución por Mes'
+        }.get(periodo, 'Evolución Temporal')
+        
+        fig.update_layout(
+            title=titulo_periodo,
+            xaxis_title='Fecha',
+            yaxis_title='Monto ($)',
+            template='plotly_dark',
+            plot_bgcolor=COLORS['card_bg'],
+            paper_bgcolor=COLORS['card_bg'],
+            font=dict(color=COLORS['text'])
+        )
+        
+        # Preparar datos para la tabla (usar datos originales filtrados, no agrupados)
+        df_tabla = df_filtrado.copy()
+        df_tabla['fecha'] = df_tabla['fecha'].dt.strftime('%Y-%m-%d %H:%M')
+        df_tabla['monto'] = df_tabla['monto'].round(0).astype(int)
+        
+        return tarjetas_principales, tarjetas, fig, df_tabla.to_dict('records')
+
+else:
+    app.layout = html.Div([
+        html.H1("Error al cargar datos", style={'color': 'red', 'textAlign': 'center'})
+    ])
+
+if __name__ == '__main__':
+    print("🚀 Dashboard iniciado en http://localhost:8057")
+    app.run(debug=True, host='localhost', port=8057) 

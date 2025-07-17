@@ -25,7 +25,7 @@ venv/bin/python tools/screenshot_utils.py URL [--output OUTPUT] [--width WIDTH] 
 
 2. LLM Verification with Images:
 ```bash
-venv/bin/python tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic} --image path/to/screenshot.png
+venv/bin/python tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic}
 ```
 
 Example workflow:
@@ -41,7 +41,7 @@ screenshot_path = take_screenshot_sync('https://example.com', 'screenshot.png')
 
 response = query_llm(
     "What is the background color and title of this webpage?",
-    provider="openai",  # or "anthropic"
+    provider="openai", # or "anthropic"
     image_path=screenshot_path
 )
 print(response)
@@ -95,6 +95,14 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Read the file before you try to edit it.
 - Due to Cursor's limit, when you use `git` and `gh` and need to submit a multiline commit message, first write the message in a file, and then use `git commit -F <filename>` or `gh pr create --title "title" --body-file <filename>` or similar command to commit. And then remove the file. Include "[Cursor] " in the commit message and PR title.
 - **NUEVO**: Para ejecutar los dashboards, usar siempre `ejecutar_todos_dashboards.py` en lugar de ejecutar dashboards individuales.
+- **NUEVO**: Siempre crear ramas para preservar trabajo importante, especialmente scripts de captura y funcionalidades complejas.
+- **NUEVO**: Cuando hagas actualizaciones del código de dashboards, NO ejecutes un nuevo proceso en background. En su lugar, informa al usuario que debe refrescar la página del dashboard existente o reiniciar el proceso manualmente. Esto evita tener múltiples procesos corriendo y problemas de puertos ocupados.
+- **NUEVO**: NUNCA cambiar de rama sin autorización explícita del usuario. Siempre preguntar antes de hacer git checkout o crear nuevas ramas.
+- **NUEVO**: Entender la estructura del proyecto HotBoat - Patrón de Separación de Responsabilidades:
+  - **Ejecutores** (archivos simples ~50-100 líneas): reservas.py, utilidad.py, marketing.py
+  - **Implementaciones** (archivos complejos 1000+ líneas): dashboards.py, dashboard_marketing_simple.py
+  - **Flujo**: ejecutar_todos_dashboards.py → ejecutores → implementaciones → dashboards
+  - **Procesamiento**: gastos_hotboat_sin_drive.py → Informacion_reservas.py → estimacion_utilidad_hotboat.py → archivos_output/
 
 ## Cursor learned
 
@@ -103,97 +111,443 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
 - **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
-- **NUEVO**: Los archivos ZIP de Google Ads contienen múltiples CSV con diferentes tipos de datos (series temporales, campañas, palabras clave, etc.)
+- **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
+- **NUEVO**: En los archivos de marketing, usar columna "Compras" en lugar de "Artículos agregados al carrito" para métricas de conversión
 
 # Scratchpad
 
-## Nueva Tarea: Crear Dashboard de Google Ads ✅
+## Nueva Tarea: Crear Tabla "Utilidad Operativa.csv" ✅
 
-**Task:** Crear un nuevo dashboard específico para análisis de Google Ads usando los datos del ZIP extraído
+**Task:** Crear una nueva tabla que combine datos de:
+- Gastos hotboat (filtrar por categoría 1 = "Costos de Marketing")
+- Costos operativos
+- Ingresos operativos
+
+**Estructura de la tabla:**
+- fecha, categoria, monto
+- Categorías: "costo operativo", "ingreso operativo", "Costos de Marketing"
 
 **Progreso:**
-[X] Explorar estructura de archivos de Google Ads
-[X] Crear script extractor `extraer_google_ads.py`
-[X] Extraer 13 archivos CSV del ZIP de Google Ads
-[X] Crear dashboard `dashboard_google_ads.py` con análisis completo
-[X] Actualizar ejecutor múltiple para incluir el nuevo dashboard
-[X] Actualizar documentación de navegación
-[X] Probar funcionamiento del dashboard
+[X] Analizar estructura de archivos existentes
+[X] Crear script para generar tabla consolidada
+[X] Filtrar gastos por categoría "Costos de Marketing"
+[X] Combinar con costos e ingresos operativos
+[X] Generar archivo "Utilidad operativa.csv"
+[X] Probar y verificar datos
 
 **Plan:**
-1. ✅ Explorar contenido del ZIP de Google Ads
-2. ✅ Crear extractor automático de archivos
-3. ✅ Extraer y verificar archivos CSV
-4. ✅ Crear dashboard con análisis específicos de Google Ads
-5. ✅ Integrar con sistema de dashboards existente
-6. ✅ Actualizar documentación y ejecutor
+1. ✅ Revisar estructura de archivos de input
+2. ✅ Crear script utilidad_operativa.py
+3. ✅ Implementar filtrado de gastos de marketing
+4. ✅ Combinar datos de los tres archivos
+5. ✅ Generar tabla final con categorías unificadas
+6. ✅ Probar con datos reales
 
-**Archivos Creados/Modificados:**
-- ✅ `extraer_google_ads.py` - Extractor automático de archivos ZIP
-- ✅ `dashboard_google_ads.py` - Dashboard completo de Google Ads
-- ✅ `ejecutar_todos_dashboards.py` - Actualizado para incluir puerto 8058
-- ✅ `NAVEGACION_DASHBOARDS.md` - Documentación actualizada
+**Archivos de Input:**
+- ✅ `gastos hotboat.csv` - Filtrar por "Categoría 1" = "Costos de Marketing"
+- ✅ `costos_operativos.csv` - Todos los costos operativos
+- ✅ `ingresos_operativos.csv` - Todos los ingresos operativos
 
-**Funcionalidades del Dashboard de Google Ads:**
-- ✅ **Series Temporales:** Evolución de métricas por semana (13 semanas)
-- ✅ **Análisis de Campañas:** Rendimiento por campaña
-- ✅ **Palabras Clave:** Top 10 palabras clave por costo
-- ✅ **Dispositivos:** Distribución de gasto por dispositivo (gráfico dona)
-- ✅ **Datos Demográficos:** Análisis por género y edad
-- ✅ **Día y Hora:** Heatmap de impresiones por día y hora
-- ✅ **Insights Automáticos:** Recomendaciones basadas en datos
+**Archivo de Output:**
+- ✅ `Utilidad operativa.csv` - Tabla consolidada con fecha, categoria, monto
 
-**Datos Extraídos del ZIP:**
-- ✅ Series_temporales(2025.03.10-2025.06.20).csv
-- ✅ Campañas(2025.03.10-2025.06.20).csv
-- ✅ Grupos_de_anuncios(2025.03.10-2025.06.20).csv
-- ✅ Palabras_clave_de_la_Búsqueda(2025.03.10-2025.06.20).csv
-- ✅ Dispositivos(2025.03.10-2025.06.20).csv
-- ✅ Datos_demográficos(Género_Edad_2025.03.10-2025.06.20).csv
-- ✅ Día_y_hora(Día_Hora_2025.03.10-2025.06.20).csv
-- ✅ Y 6 archivos adicionales con datos específicos
-
-**URLs Dashboard:**
-- 🌐 Reservas: http://localhost:8050 ✅ ACTIVO
-- 🌐 Utilidad: http://localhost:8055 ✅ ACTIVO
-- 🌐 Marketing: http://localhost:8056 ✅ ACTIVO
-- 🌐 Gastos Marketing: http://localhost:8057 ✅ ACTIVO
-- 🌐 Google Ads: http://localhost:8058 ✅ ACTIVO
-
-**Estado:** ✅ COMPLETADO - Dashboard de Google Ads funcionando con análisis completo
-
----
-
-## Tarea Completada: Restaurar Dashboard de Gastos de Marketing ✅
-
-**Task:** Restaurar dashboard separado para análisis de gastos de Google Ads y Meta
-
-**Progreso:**
-[X] Buscar archivos relacionados con gastos de marketing
-[X] Identificar `gastos_marketing.py` como fuente de datos
-[X] Crear `dashboard_gastos_marketing.py` con análisis completo
-[X] Actualizar ejecutor múltiple para incluir nuevo dashboard
-[X] Actualizar documentación de navegación
-[X] Probar funcionamiento
-
-**Archivos Creados/Modificados:**
-- ✅ `dashboard_gastos_marketing.py` - Dashboard completo de gastos
-- ✅ `ejecutar_todos_dashboards.py` - Actualizado para puerto 8057
-- ✅ `NAVEGACION_DASHBOARDS.md` - Documentación actualizada
+**Resultados del Script:**
+- ✅ **Total registros**: 247 registros
+- ✅ **Período**: 2024-08-31 a 2025-07-10
+- ✅ **Ingresos operativos**: 112 registros - $15,941,102
+- ✅ **Costos operativos**: 102 registros - $3,570,000
+- ✅ **Costos de Marketing**: 33 registros - $766,370
+- ✅ **Utilidad neta**: $11,604,732
 
 **Funcionalidades Implementadas:**
-- ✅ Comparación Google Ads vs Meta
-- ✅ Evolución temporal de gastos
-- ✅ Distribución por días de la semana
-- ✅ Heatmap de gastos por día y mes
-- ✅ Insights automáticos
-- ✅ Métricas de conversiones
+- ✅ Filtrado automático de gastos por categoría "Costos de Marketing"
+- ✅ Combinación de datos de tres fuentes diferentes
+- ✅ Ordenamiento por fecha
+- ✅ Categorización unificada
+- ✅ Resumen estadístico completo
+- ✅ Manejo de errores y validaciones
 
-**Estado:** ✅ COMPLETADO - Dashboard de gastos funcionando
+**Estado:** ✅ COMPLETADO - Tabla "Utilidad operativa.csv" generada exitosamente
 
 ---
 
-## Tarea Completada: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
+## Nueva Tarea: Crear Archivo "Actualizar Todo" ✅
+
+**Task:** Crear un archivo que ejecute todos los procesos en orden:
+1. gastos_hotboat_sin_drive.py
+2. Informacion_reservas.py  
+3. estimacion_utilidad_hotboat.py
+4. ejecutar_todos_dashboards.py
+
+**Progreso:**
+[X] Crear archivo actualizar_todo.py con ejecución secuencial
+[X] Implementar manejo de errores y logging detallado
+[X] Agregar verificación de archivos necesarios
+[X] Implementar pausas entre procesos
+[X] Agregar opción de continuar si falla un proceso
+[X] Crear resumen final con estadísticas
+
+**Plan:**
+1. ✅ Crear script principal con subprocess
+2. ✅ Implementar función ejecutar_comando() con manejo de errores
+3. ✅ Agregar verificación de directorio y archivos
+4. ✅ Implementar pausas y opciones de continuar
+5. ✅ Crear resumen final con estadísticas
+6. ✅ Documentar en .cursorrules
+
+**Archivo Creado:**
+- ✅ `actualizar_todo.py` - Script principal de actualización completa
+
+**Funcionalidades Implementadas:**
+- ✅ **Ejecución Secuencial**: Los 4 procesos se ejecutan en orden
+- ✅ **Manejo de Errores**: Captura y muestra errores detallados
+- ✅ **Verificación**: Confirma que estamos en el directorio correcto
+- ✅ **Pausas**: 2 segundos entre procesos para estabilidad
+- ✅ **Continuación**: Pregunta si continuar si falla un proceso
+- ✅ **Resumen Final**: Estadísticas de procesos exitosos/fallidos
+- ✅ **Output Detallado**: Muestra output de cada comando
+- ✅ **Interrupción Segura**: Maneja Ctrl+C correctamente
+
+**Comando Principal:**
+```bash
+python actualizar_todo.py
+```
+
+**Orden de Ejecución:**
+1. ✅ `python gastos_hotboat_sin_drive.py` - Procesar gastos y costos
+2. ✅ `python Informacion_reservas.py` - Procesar reservas
+3. ✅ `python estimacion_utilidad_hotboat.py` - Calcular utilidad
+4. ✅ `python ejecutar_todos_dashboards.py` - Ejecutar dashboards
+
+**Características del Script:**
+- ✅ **Banner Informativo**: Muestra el plan de ejecución
+- ✅ **Logging Detallado**: Output con emojis y separadores
+- ✅ **Manejo de Errores**: Captura subprocess.CalledProcessError
+- ✅ **Continuación Inteligente**: Pregunta antes de continuar si falla
+- ✅ **Resumen Final**: Estadísticas completas al final
+- ✅ **URLs Dashboard**: Muestra URLs si todo es exitoso
+
+**Estado:** ✅ COMPLETADO - Script de actualización completa creado y funcional
+
+---
+
+## Nueva Tarea: Crear Diagrama de Flujo de Datos ✅
+
+**Task:** Crear un diagrama de flujo completo que muestre cómo se cruzan las tablas de input y qué columnas se utilizan para generar los archivos de output.
+
+**Progreso:**
+[X] Analizar archivos de procesamiento principales
+[X] Identificar archivos de input y output
+[X] Mapear relaciones entre tablas
+[X] Identificar columnas clave de cruce
+[X] Crear diagrama de flujo completo con Mermaid
+[X] Documentar proceso de ejecución
+
+**Plan:**
+1. ✅ Analizar gastos_hotboat_sin_drive.py y funciones/funciones.py
+2. ✅ Analizar Informacion_reservas.py y funciones/funciones_reservas.py
+3. ✅ Analizar estimacion_utilidad_hotboat.py
+4. ✅ Analizar dashboard_marketing_simple.py
+5. ✅ Crear diagrama de flujo completo
+6. ✅ Documentar claves de cruce y columnas
+
+**Archivo Creado:**
+- ✅ `DIAGRAMA_FLUJO_DATOS.md` - Diagrama completo con Mermaid
+
+**Flujos Documentados:**
+- ✅ **Gastos y Costos**: Banco Estado + Banco Chile + Cuenta Corriente + Mercado Pago
+- ✅ **Reservas**: Payments + Appointments + Reservas existentes
+- ✅ **Utilidad**: Reservas + Pedidos extra + Costos operativos
+- ✅ **Marketing**: Dataset (5) CON región + Dataset (6) SIN región
+
+**Claves de Cruce Identificadas:**
+- ✅ **Reservas**: `ID` entre payments.csv y appointments.csv
+- ✅ **Utilidad**: `ID` (reserva) y `email` para pedidos extra
+- ✅ **Gastos**: `Fecha + Descripción + Monto` para deduplicación
+- ✅ **Marketing**: `Día + Nombre del conjunto de anuncios`
+
+**Archivos Output Documentados:**
+- ✅ `gastos hotboat.csv` - Gastos consolidados
+- ✅ `abonos hotboat.csv` - Ingresos bancarios
+- ✅ `reservas_HotBoat.csv` - Reservas procesadas
+- ✅ `costos_operativos.csv` - Costos por reserva
+- ✅ `ingresos_totales.csv` - Ingresos totales
+- ✅ `cuenta_corriente_*.csv` - Referencia cuenta corriente
+
+**Métricas Calculadas Marketing:**
+- ✅ CTR, CPC, Hook Rates, Conversion Rate, Cost Per Conversion
+
+**Estado:** ✅ COMPLETADO - Diagrama de flujo completo creado y documentado
+
+---
+
+## Nueva Tarea: Resolver Problema de Importación Dashboard Marketing ✅
+
+**Task:** Resolver el problema de importación después de mover dashboard_marketing_simple.py a archivos_secundarios:
+- El archivo marketing.py no podía importar desde la nueva ubicación
+- Necesitaba actualizar la importación y crear __init__.py
+
+**Progreso:**
+[X] Identificar problema de importación
+[X] Actualizar marketing.py para importar desde archivos_secundarios
+[X] Crear __init__.py en archivos_secundarios
+[X] Probar importación exitosamente
+[X] Verificar que el dashboard funcione correctamente
+
+**Plan:**
+1. ✅ Actualizar importación en marketing.py
+2. ✅ Crear __init__.py para hacer archivos_secundarios un paquete
+3. ✅ Probar la importación
+4. ✅ Verificar funcionamiento del dashboard
+
+**Solución Implementada:**
+- ✅ **Importación Actualizada**: `from archivos_secundarios.dashboard_marketing_simple import app`
+- ✅ **Paquete Creado**: `archivos_secundarios/__init__.py` creado
+- ✅ **Funcionamiento Verificado**: Dashboard ejecutándose en puerto 8056
+- ✅ **Estructura Mantenida**: Patrón de separación de responsabilidades preservado
+
+**Estado:** ✅ COMPLETADO - Dashboard de marketing funcionando correctamente
+
+**URLs Dashboard:**
+- 🌐 Marketing: http://localhost:8056 ✅ ACTIVO
+- 🌐 Reservas: http://localhost:8050 ✅ ACTIVO  
+- 🌐 Utilidad: http://localhost:8055 ✅ ACTIVO
+
+---
+
+## Nueva Tarea: Filtros de Métricas en Gráficos de Evolución ✅
+
+**Task:** Agregar filtros de métricas en los gráficos de evolución del dashboard detallado (8056):
+- Permitir elegir entre conversiones y gasto para cada eje Y
+- Permitir elegir entre CPC y costo por conversión para cada eje Y
+- Mantener la funcionalidad existente de filtros por público y tipo de anuncio
+
+**Progreso:**
+[X] Agregar filtros de métricas en el layout
+[X] Actualizar callback para incluir nuevos inputs
+[X] Implementar lógica dinámica para gráfico de conversiones
+[X] Implementar lógica dinámica para gráfico de costos
+[X] Actualizar títulos de ejes dinámicamente
+[X] Actualizar colores según métricas seleccionadas
+
+**Plan:**
+1. ✅ Agregar dropdowns de filtros de métricas en el layout
+2. ✅ Actualizar callback con nuevos parámetros
+3. ✅ Implementar lógica condicional para métricas
+4. ✅ Actualizar títulos y colores dinámicamente
+5. ✅ Probar funcionalidad
+
+**Funcionalidades Implementadas:**
+- ✅ **Filtros de Métricas Conversiones**: Eje Y izquierdo y derecho pueden mostrar conversiones o gasto
+- ✅ **Filtros de Métricas Costos**: Eje Y izquierdo y derecho pueden mostrar CPC o costo por conversión
+- ✅ **Títulos Dinámicos**: Los títulos de los ejes se actualizan según la métrica seleccionada
+- ✅ **Colores Dinámicos**: Los colores de las líneas y ejes cambian según la métrica
+- ✅ **Hover Templates**: Los tooltips se adaptan a la métrica mostrada
+- ✅ **Compatibilidad**: Mantiene todos los filtros existentes (público, tipo de anuncio)
+
+**Configuración de Filtros:**
+- ✅ **Gráfico Conversiones**: 
+  - Eje Y Izquierdo: Ninguno, Conversiones o Gasto
+  - Eje Y Derecho: Ninguno, Conversiones o Gasto
+- ✅ **Gráfico Costos**:
+  - Eje Y Izquierdo: Ninguno, CPC o Costo por Conversión
+  - Eje Y Derecho: Ninguno, CPC o Costo por Conversión
+
+**Colores Implementados:**
+- ✅ **Conversiones**: Verde (COLORS['income'])
+- ✅ **Gasto**: Rojo (COLORS['expense'])
+- ✅ **CPC**: Púrpura (#9b59b6)
+- ✅ **Costo por Conversión**: Naranja (#e67e22)
+
+**Funcionalidades Adicionales:**
+- ✅ **Opción "Ninguno"**: Permite ocultar completamente un eje Y
+- ✅ **Layout Dinámico**: Los ejes se configuran solo si están activos
+- ✅ **Flexibilidad Total**: Puedes mostrar 0, 1 o 2 métricas por gráfico
+
+**Estado:** ✅ COMPLETADO - Filtros de métricas funcionando correctamente
+
+---
+
+## Nueva Tarea: Recuperar Trabajo Completo - Scripts de Captura ✅
+
+**Task:** Recuperar todo el trabajo de scripts de captura de dashboards que se había perdido:
+- Recuperar desde commit 777a560 con integración de cuenta corriente
+- Recrear todos los scripts de captura de screenshots
+- Preservar trabajo de integración automática
+
+**Progreso:**
+[X] Identificar commit con trabajo perdido (777a560)
+[X] Crear rama recuperar-trabajo-completo desde ese commit
+[X] Recrear script principal capturar_dashboards.py
+[X] Recrear capturar_dashboards_simple.py
+[X] Recrear capturar_dashboards_con_filtros.py
+[X] Recrear capturar_dashboards_automatico.py
+[X] Recrear capturar_dashboards_basico.py
+[X] Commit y push de todo el trabajo recuperado
+[X] Actualizar documentación
+
+**Plan:**
+1. ✅ Recuperar desde commit 777a560
+2. ✅ Crear rama para preservar trabajo
+3. ✅ Recrear todos los scripts de captura
+4. ✅ Verificar funcionalidad
+5. ✅ Commit y push
+6. ✅ Documentar recuperación
+
+**Scripts Recreados:**
+- ✅ `capturar_dashboards.py`: Script principal con menú interactivo
+- ✅ `capturar_dashboards_simple.py`: Captura simple automática
+- ✅ `capturar_dashboards_con_filtros.py`: Captura con filtros de fecha
+- ✅ `capturar_dashboards_automatico.py`: Usa ejecutar_todos_dashboards.py
+- ✅ `capturar_dashboards_basico.py`: Captura manual
+
+**Funcionalidades Implementadas:**
+- ✅ Captura automática de screenshots con Playwright
+- ✅ Filtros de fecha: Día, Semana, Mes
+- ✅ Organización por carpetas con fecha
+- ✅ Inicio automático de dashboards
+- ✅ Captura manual para dashboards ya ejecutándose
+- ✅ Menú interactivo para elegir tipo de captura
+
+**Organización de Capturas:**
+- ✅ screenshots_YYYY-MM-DD/: Capturas simples
+- ✅ screenshots_YYYY-MM-DD/dia/: Filtro día
+- ✅ screenshots_YYYY-MM-DD/semana/: Filtro semana  
+- ✅ screenshots_YYYY-MM-DD/mes/: Filtro mes
+- ✅ screenshots_manual_YYYY-MM-DD/: Capturas manuales
+- ✅ screenshots_automatico_YYYY-MM-DD/: Capturas automáticas
+
+**Dashboards Soportados:**
+- ✅ Dashboard Reservas (puerto 8050)
+- ✅ Dashboard Utilidad (puerto 8055)
+- ✅ Dashboard Marketing (puerto 8056)
+
+**Rama Creada:**
+- ✅ `recuperar-trabajo-completo`: Rama con todo el trabajo recuperado
+- ✅ Push exitoso a origin/recuperar-trabajo-completo
+
+**Estado:** ✅ COMPLETADO - Trabajo completo recuperado y funcional
+
+---
+
+## Nueva Tarea: Integración Automática de Cuenta Corriente ✅
+
+**Task:** Modificar el procesamiento para que los datos de cuenta corriente se integren automáticamente a los archivos finales:
+- Cargos de cuenta corriente → se suman a `gastos hotboat.csv`
+- Abonos de cuenta corriente → se suman a `abonos hotboat.csv`
+
+**Progreso:**
+[X] Modificar flujo en gastos_hotboat_sin_drive.py
+[X] Implementar integración automática de cargos a gastos
+[X] Implementar integración automática de abonos a abonos
+[X] Probar procesamiento completo
+[X] Verificar integración correcta
+[X] Documentar funcionalidad
+
+**Plan:**
+1. ✅ Modificar sección de procesamiento de cuenta corriente
+2. ✅ Agregar integración automática con archivos principales
+3. ✅ Mantener archivos de referencia separados
+4. ✅ Probar con datos reales
+5. ✅ Verificar outputs finales
+
+**Funcionalidades Implementadas:**
+- ✅ **Integración Automática**: Los cargos de cuenta corriente se suman automáticamente a `gastos hotboat.csv`
+- ✅ **Integración Automática**: Los abonos de cuenta corriente se suman automáticamente a `abonos hotboat.csv`
+- ✅ **Deduplicación**: Se eliminan duplicados basados en Fecha, Descripción y Monto
+- ✅ **Archivos de Referencia**: Se mantienen archivos separados `cuenta_corriente_cargos.csv` y `cuenta_corriente_abonos.csv`
+- ✅ **Logging Detallado**: Output informativo con cantidad de filas integradas
+
+**Flujo Actualizado:**
+1. ✅ Procesar archivos de cuenta corriente (cartola*.xls)
+2. ✅ Consolidar cargos y abonos
+3. ✅ **NUEVO**: Leer archivos principales existentes
+4. ✅ **NUEVO**: Integrar cargos a gastos hotboat.csv
+5. ✅ **NUEVO**: Integrar abonos a abonos hotboat.csv
+6. ✅ Exportar archivos de referencia
+
+**Resultados del Test:**
+- ✅ **Cargos**: 75 filas integradas a gastos hotboat.csv
+- ✅ **Abonos**: 35 filas integradas a abonos hotboat.csv
+- ✅ **Total gastos**: 577 filas (incluyendo cuenta corriente)
+- ✅ **Total abonos**: 122 filas (incluyendo cuenta corriente)
+
+**Beneficios:**
+- ✅ **Proceso Unificado**: Un solo comando integra todos los datos
+- ✅ **Datos Consolidados**: Archivos finales contienen toda la información
+- ✅ **Trazabilidad**: Archivos de referencia permiten auditoría
+- ✅ **Automatización**: No requiere pasos manuales adicionales
+
+**Estado:** ✅ COMPLETADO - Procesamiento de cuenta corriente reorganizado exitosamente
+
+**Mejoras Finales Implementadas:**
+- ✅ **Función procesar_df_final actualizada**: Ahora incluye datos de cuenta corriente desde datos_consolidados
+- ✅ **Procesamiento unificado**: Los datos de cuenta corriente se procesan junto con todos los demás archivos
+- ✅ **Eliminación de duplicación**: Se eliminó el procesamiento separado de cuenta corriente en la función principal
+- ✅ **Integración directa**: Los cargos de cuenta corriente se incluyen directamente en df_final
+- ✅ **Abonos unificados**: Los abonos de cuenta corriente se incluyen directamente en df_abonos
+
+**Resultados Finales:**
+- ✅ **567 registros de gastos** (incluyendo 75 de cuenta corriente)
+- ✅ **120 registros de abonos** (incluyendo 35 de cuenta corriente)
+- ✅ **257 registros en utilidad operativa** (datos integrados correctamente)
+- ✅ **Utilidad neta: $10,163,238** (cálculo correcto con todos los datos)
+
+**Flujo Final Optimizado:**
+1. ✅ Procesamiento unificado de todos los archivos en un solo bucle
+2. ✅ Consolidación de datos en datos_consolidados
+3. ✅ Procesamiento directo en procesar_df_final con todos los datos
+4. ✅ Exportación unificada sin pasos adicionales
+5. ✅ Archivos de referencia generados automáticamente
+
+---
+
+## Nueva Tarea: Simplificar gastos_hotboat_sin_drive.py ✅
+
+**Task:** Reorganizar el código de gastos_hotboat_sin_drive.py para hacerlo más fácil de leer:
+- Mover funciones a funciones/funciones.py
+- Dejar el archivo principal más limpio y legible
+- Mantener toda la funcionalidad existente
+
+**Progreso:**
+[X] Revisar el archivo actual gastos_hotboat_sin_drive.py
+[X] Identificar funciones que se pueden mover
+[X] Crear clase ProcesadorArchivos en funciones/funciones.py
+[X] Crear función procesar_archivos_financieros en funciones/funciones.py
+[X] Simplificar el archivo principal gastos_hotboat_sin_drive.py
+[X] Probar que funcione correctamente
+[X] Verificar que procese los mismos archivos y genere los mismos outputs
+
+**Plan:**
+1. ✅ Analizar estructura actual del archivo
+2. ✅ Mover clase ProcesadorArchivos a funciones/funciones.py
+3. ✅ Mover función procesar_archivos_financieros a funciones/funciones.py
+4. ✅ Simplificar archivo principal a solo configuración y llamada
+5. ✅ Probar funcionamiento
+6. ✅ Verificar outputs
+
+**Archivos Modificados:**
+- ✅ `funciones/funciones.py` - Agregadas nuevas funciones de procesamiento
+- ✅ `gastos_hotboat_sin_drive.py` - Simplificado drásticamente (de ~300 líneas a ~50 líneas)
+
+**Funcionalidades Movidas:**
+- ✅ Clase ProcesadorArchivos con métodos procesar_archivo() y consolidar_datos()
+- ✅ Función procesar_archivos_financieros() completa
+- ✅ Toda la lógica de procesamiento de archivos Excel
+- ✅ Manejo de errores y logging
+
+**Archivo Principal Simplificado:**
+- ✅ Solo configuración de parámetros
+- ✅ Importación de función principal
+- ✅ Llamada simple a procesar_archivos_financieros()
+- ✅ Manejo básico de errores
+- ✅ Mucho más fácil de leer y mantener
+
+**Estado:** ✅ COMPLETADO - Archivo simplificado y funcional
+
+---
+
+## Nueva Tarea: Actualizar Dashboard Marketing con Inputs (5) y (6) ✅
 
 **Task:** Actualizar dashboard de marketing para usar nuevos archivos de input:
 - Comp-1-Conjunto-Anuncios-2Campañas-3-anuncios-por-dia (5) - CON región
@@ -318,3 +672,162 @@ python ejecutar_todos_dashboards.py
 ```
 
 **Estado:** ✅ COMPLETADO - Listo para usar
+
+---
+
+## Nueva Tarea: Top Performers y Necesita Atención en Dashboard Detallado ✅
+
+**Task:** Agregar sección de "Top Performers" y "Necesita Atención" del dashboard simplificado (8057) al dashboard detallado (8056):
+- Top Performers: Basado en mejor costo por conversión (menor costo = mejor)
+- Necesita Atención: Combinaciones público-video sin conversiones pero con gasto
+
+**Progreso:**
+[X] Implementar lógica de Top Performers por costo por conversión
+[X] Implementar lógica de Necesita Atención para sin conversiones
+[X] Agregar sección al layout del dashboard detallado
+[X] Actualizar callback para incluir nueva sección
+[X] Agregar manejo de casos edge (sin datos)
+
+**Plan:**
+1. ✅ Implementar cálculo de métricas por combinación público-tipo
+2. ✅ Crear lógica de Top Performers (mejor costo por conversión)
+3. ✅ Crear lógica de Necesita Atención (sin conversiones + gasto)
+4. ✅ Agregar sección al layout
+5. ✅ Actualizar callback y outputs
+
+**Funcionalidades Implementadas:**
+- ✅ **Top Performers**: Top 3 combinaciones con mejor costo por conversión
+- ✅ **Necesita Atención**: Top 3 combinaciones sin conversiones pero con gasto
+- ✅ **Métricas Detalladas**: Muestra costo por conversión, conversiones, gasto, clics
+- ✅ **Manejo de Casos Edge**: Mensajes cuando no hay datos
+- ✅ **Diseño Responsivo**: Layout flexible que se adapta al contenido
+
+**Lógica de Selección:**
+- ✅ **Top Performers**: 
+  - Filtra solo combinaciones con conversiones > 0
+  - Ordena por menor costo por conversión
+  - Muestra top 3
+- ✅ **Necesita Atención**:
+  - Filtra combinaciones con conversiones = 0 y gasto > 0
+  - Ordena por mayor gasto (prioriza los que más dinero han gastado)
+  - Muestra top 3
+
+**Información Mostrada:**
+- ✅ **Top Performers**: Combinación, Costo/Conv, Conversiones, Gasto
+- ✅ **Necesita Atención**: Combinación, Gasto, Conversiones, Clics
+- ✅ **Colores**: Verde para top performers, rojo para necesita atención
+
+**Mensajes Especiales:**
+- ✅ "🎉 ¡Excelente! Todas las combinaciones han tenido conversiones" (cuando no hay que necesita atención)
+- ✅ "⚠️ No hay combinaciones con conversiones en este período" (cuando no hay top performers)
+
+**Estado:** ✅ COMPLETADO - Sección agregada al dashboard detallado
+
+---
+
+## Nueva Tarea: Crear Dashboard de Utilidad Operativa ✅
+
+**Task:** Crear un nuevo dashboard que muestre:
+- Evolución temporal de costos operativos, ingresos operativos y marketing
+- Filtros por categoría y tiempo (día, semana, mes)
+- Tarjetas con valores promedio por categoría que cambien con filtros
+- Mantener formato consistente con otros dashboards
+
+**Progreso:**
+[X] Crear archivo dashboard_utilidad_operativa.py
+[X] Implementar carga de datos de Utilidad operativa.csv
+[X] Crear gráfico de evolución temporal
+[X] Implementar filtros por categoría y tiempo
+[X] Crear tarjetas de valores promedio
+[X] Integrar con ejecutar_todos_dashboards.py
+[X] Probar y verificar funcionamiento
+
+**Plan:**
+1. ✅ Crear estructura del dashboard con Dash
+2. ✅ Implementar función de carga de datos
+3. ✅ Crear gráfico de evolución con múltiples líneas
+4. ✅ Agregar filtros de categoría y tiempo
+5. ✅ Implementar tarjetas de métricas promedio
+6. ✅ Integrar con el sistema de dashboards existente
+
+**Archivo de Input:**
+- ✅ `Utilidad operativa.csv` - Datos consolidados de utilidad operativa
+
+**Funcionalidades Implementadas:**
+- ✅ Gráfico de evolución temporal con 3 líneas (costos, ingresos, marketing)
+- ✅ Filtro por categoría (todas, solo costos, solo ingresos, solo marketing)
+- ✅ Filtro de tiempo (día, semana, mes)
+- ✅ Tarjetas con promedio por categoría
+- ✅ Layout responsivo y consistente
+
+**Archivo Creado:**
+- ✅ `dashboard_utilidad_operativa.py` - Dashboard completo de utilidad operativa
+
+**Integración con Sistema:**
+- ✅ Actualizado `ejecutar_todos_dashboards.py` para incluir el nuevo dashboard
+- ✅ Puerto asignado: 8057
+- ✅ Verificación de archivos actualizada
+- ✅ Banner y mensajes actualizados para 4 dashboards
+
+**Características del Dashboard:**
+- ✅ **Tema Oscuro**: Consistente con otros dashboards
+- ✅ **Navegación**: Header con enlaces a otros dashboards
+- ✅ **Filtros de Fecha**: Rango de fechas personalizable
+- ✅ **Filtro de Categoría**: Dropdown para filtrar por categoría específica
+- ✅ **Selector de Período**: Día, semana, mes, todos
+- ✅ **Tarjetas de Métricas**: Total, promedio y cantidad de registros por categoría
+- ✅ **Gráfico de Evolución**: Líneas temporales con colores distintivos
+- ✅ **Colores Específicos**: Verde (ingresos), Rojo (costos), Turquesa (marketing)
+
+**URLs Dashboard:**
+- 🌐 Reservas: http://localhost:8050
+- 🌐 Utilidad: http://localhost:8055
+- 🌐 Marketing: http://localhost:8056
+- 🌐 **Utilidad Operativa (Nuevo)**: http://localhost:8057 ✅ ACTIVO
+
+**Estado:** ✅ COMPLETADO - Dashboard de utilidad operativa funcionando correctamente
+
+---
+
+## Nueva Tarea: Actualizar Dashboard Marketing con Columna "Compras" ✅
+
+**Task:** Cambiar todas las referencias de "Artículos agregados al carrito" por "Compras" en el dashboard de marketing:
+- Actualizar nombres de columnas en el procesamiento de datos
+- Cambiar variables y cálculos de métricas
+- Actualizar textos mostrados al usuario
+- Mantener toda la funcionalidad existente
+
+**Progreso:**
+[X] Verificar existencia de columna "Compras" en archivos de marketing
+[X] Actualizar función cargar_datos() con nueva columna
+[X] Cambiar todas las referencias en cálculos de métricas
+[X] Actualizar textos en la interfaz de usuario
+[X] Verificar que el dashboard funcione correctamente
+[X] Documentar cambio en .cursorrules
+
+**Plan:**
+1. ✅ Buscar columna "Compras" en archivos de input
+2. ✅ Actualizar lista de columnas numéricas
+3. ✅ Cambiar cálculos de Conversion_Rate y Cost_Per_Conversion
+4. ✅ Actualizar todas las referencias en gráficos y tablas
+5. ✅ Probar funcionamiento del dashboard
+6. ✅ Documentar en lecciones aprendidas
+
+**Cambios Implementados:**
+- ✅ **Columna numérica**: "Artículos agregados al carrito" → "Compras"
+- ✅ **Cálculos de métricas**: Conversion_Rate y Cost_Per_Conversion actualizados
+- ✅ **Gráficos**: Todos los gráficos ahora usan columna "Compras"
+- ✅ **Tablas**: Top Performers y Needs Attention actualizados
+- ✅ **Textos**: Interfaz muestra "Conversiones" basado en "Compras"
+
+**Archivos Modificados:**
+- ✅ `dashboard_marketing_simple.py` - Todas las referencias actualizadas
+
+**Verificación:**
+- ✅ **Importación exitosa**: Archivo se importa sin errores
+- ✅ **Datos cargados**: 525 filas (sin región) + 1925 filas (con región)
+- ✅ **Procesamiento**: Métricas calculadas correctamente con nueva columna
+
+**Estado:** ✅ COMPLETADO - Dashboard actualizado para usar columna "Compras"
+
+---

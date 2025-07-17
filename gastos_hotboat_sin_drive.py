@@ -1,78 +1,74 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+🚤 PROCESADOR DE GASTOS Y COSTOS HOTBOAT
+========================================
+
+Este script procesa los archivos financieros principales de HotBoat:
+- Archivos de Banco Estado (Chequera)
+- Archivos de Banco Chile (Movimientos Facturados)
+- Archivos de Cuenta Corriente (Cartolas)
+
+Funciones:
+1. Lee y procesa archivos Excel
+2. Categoriza gastos automáticamente
+3. Consolida datos de múltiples fuentes
+4. Integra datos de cuenta corriente automáticamente
+5. Exporta archivos procesados para dashboards
+
+Uso:
+    python gastos_hotboat_sin_drive.py
+"""
+
+import sys
 import pandas as pd
 import os
-from funciones.funciones import leer_excel_banco_estado, ver_si_es_nacional_facturado, ver_si_es_nacional_no_facturado, leer_excel_mov_facturados_nacional, leer_excel_mov_no_facturados_nacional, leer_excel_mov_facturados_internacional, leer_excel_mov_no_facturados_internacional, leer_pdf, leer_excel_mercado_pago, limpiar_y_ordenar_dataframe, exportar_archivos, procesar_df_final, categorizar_por_descripcion
+
+# Configurar UTF-8 para que los emojis funcionen siempre
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except AttributeError:
+    # Para versiones de Python < 3.7
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+
+# Importar la función principal de procesamiento
+from funciones.funciones import procesar_archivos_financieros
+
+# Importar configuraciones
 from inputs_modelo import diccionario_categorias, descripciones_a_eliminar, diccionario_categoria_1
 
-valor_aproximado_dolar = 950
-año_para_fecha_banco_estado = '2025'
+# ======== CONFIGURACIÓN ========
+VALOR_APROXIMADO_DOLAR = 950
+AÑO_PARA_FECHA_BANCO_ESTADO = '2025'
+DIRECTORIO_INPUT = 'archivos_input/archivos_input_costos'
+DIRECTORIO_OUTPUT = 'archivos_output'
 
-# Diccionario de categorías para gastos
-# Puedes modificar las palabras clave y categorías según tus necesidades
-
-df_banco_estado_abonos = []
-df_banco_estado_cargos = []
-df_banco_chile_facturado_nacional = []
-df_banco_chile_facturado_internacional = []
-
-
-for archivo in os.listdir('archivos_input'):
-    ruta_archivo = os.path.join('archivos_input', archivo)
-    
-    # Determinar el tipo de archivo
-    if archivo.endswith(".xlsx") or archivo.endswith(".xls"):
-        df = pd.read_excel(ruta_archivo)
-        if "Chequera" in archivo:
-            df_cargos, df_abonos = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
-            df_banco_estado_abonos.append(df_abonos)
-            df_banco_estado_cargos.append(df_cargos)
-        elif "Mov_Facturado" in archivo:
-            if ver_si_es_nacional_facturado(ruta_archivo):
-                df = leer_excel_mov_facturados_nacional(ruta_archivo)
-                df_banco_chile_facturado_nacional.append(df)
-            else: #es internacional
-                df = leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar)
-                df_banco_chile_facturado_internacional.append(df)
+# ======== EJECUCIÓN PRINCIPAL ========
+if __name__ == '__main__':
+    try:
+        # Ejecutar el procesamiento principal (incluye cuenta corriente)
+        success = procesar_archivos_financieros(
+            directorio_input=DIRECTORIO_INPUT,
+            directorio_output=DIRECTORIO_OUTPUT,
+            valor_aproximado_dolar=VALOR_APROXIMADO_DOLAR,
+            año_para_fecha_banco_estado=AÑO_PARA_FECHA_BANCO_ESTADO,
+            diccionario_categorias=diccionario_categorias,
+            descripciones_a_eliminar=descripciones_a_eliminar,
+            diccionario_categoria_1=diccionario_categoria_1
+        )
+        
+        if success:
+            print("🎉 ¡Procesamiento completado exitosamente!")
         else:
-            print('archivo no procesado:', archivo) 
-
-
-#    elif archivo.endswith(".pdf"):
-#        print(f"Procesando archivo PDF: {archivo}")
-#        df = leer_pdf(ruta_archivo)
-#        if df is not None:
-#            # Aquí deberías implementar la lógica específica para procesar el PDF
-#            # basado en su contenido y estructura
-#            print(f"Contenido del PDF {archivo}:")
-#            print(df.head())
-            # Por ahora solo mostramos el contenido, pero deberías agregar la lógica
-            # para clasificar y procesar el contenido según tus necesidades
-
-
-# Limpiar y ordenar los DataFrames de banco estado
-df_banco_estado_abonos = limpiar_y_ordenar_dataframe(df_banco_estado_abonos)
-df_banco_estado_cargos = limpiar_y_ordenar_dataframe(df_banco_estado_cargos)
-
-
-df_banco_chile_facturado_internacional = pd.concat(df_banco_chile_facturado_internacional, ignore_index=True) 
-df_banco_chile_facturado_nacional = pd.concat(df_banco_chile_facturado_nacional, ignore_index=True) 
-
-
-# Procesar los DataFrames finales
-
-df_final = procesar_df_final(
-    df_banco_estado_cargos,
-    df_banco_chile_facturado_internacional,
-    df_banco_chile_facturado_nacional,
-    diccionario_categorias,
-    descripciones_a_eliminar,
-    diccionario_categoria_1
-)
-
-
-
-df_banco_estado_abonos['Fecha'] = pd.to_datetime(df_banco_estado_abonos['Fecha'], format='%d/%m/%Y', errors='coerce')
-df_abonos = pd.concat([df_banco_estado_abonos], axis=0)
-
-# Exportar los archivos usando la nueva función
-exportar_archivos(df_final, df_abonos)
+            print("❌ Error en el procesamiento")
+            sys.exit(1)
+            
+    except KeyboardInterrupt:
+        print("\n🛑 Procesamiento interrumpido por el usuario")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ Error inesperado: {str(e)}")
+        sys.exit(1)
 

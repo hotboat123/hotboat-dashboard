@@ -15,12 +15,12 @@ def procesar_fechas_reservas(df):
         # Crear una copia para no modificar el original
         df = df.copy()
         
-        # Convertir fechas y horas
-        df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
-        df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
-        df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
-        df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
-        
+        if "fecha_hora_trip" not in df.columns:
+            # Convertir fechas y horas
+            df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
+            df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
+            df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
+            df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
         return df
     except Exception as e:
         print(f"Error procesando las fechas: {str(e)}")
@@ -75,6 +75,11 @@ def procesar_appointments(payments, appointments):
     # Aplicar la función a la columna 'telefono'
     df['Phone Number_2'] = df['Phone Number'].apply(formatear_telefono)
 
+    # 🔥 ELIMINAR COLUMNAS SOLICITADAS: PAID AMOUNT, Phone Number y PAYMENT
+    # NOTA: Phone Number_2 se mantiene porque es el número procesado y formateado
+    columnas_a_eliminar = ['Phone Number', 'PAYMENT']
+    df = df.drop(columns=[col for col in columnas_a_eliminar if col in df.columns])
+
     return df
 
     
@@ -98,7 +103,26 @@ def formatear_telefono(telefono):
     else:
         return telefono  # Si no cumple ninguna de las condiciones, lo dejamos como está
     
-# Función para asegurar el formato chileno de 11 dígitos
+def asegurar_columnas_fechas_combinadas(df):
+    """
+    Asegura que el DataFrame tenga las columnas 'fecha_hora_trip' y 'fecha_hora_creacion_reserva' combinadas.
+    Si existen las columnas separadas, las combina y elimina las originales.
+    Si ya existen las combinadas, solo las convierte a datetime.
+    """
+    df = df.copy()
+    if 'fecha_hora_trip' not in df.columns and 'fecha_trip' in df.columns and 'hora_trip' in df.columns:
+        df['fecha_hora_trip'] = pd.to_datetime(df['fecha_trip'].astype(str) + ' ' + df['hora_trip'].astype(str))
+        df = df.drop(columns=['fecha_trip', 'hora_trip'])
+    elif 'fecha_hora_trip' in df.columns:
+        df['fecha_hora_trip'] = pd.to_datetime(df['fecha_hora_trip'])
+    
+    if 'fecha_hora_creacion_reserva' not in df.columns and 'fecha_creacion_reserva' in df.columns and 'hora_creacion_reserva' in df.columns:
+        df['fecha_hora_creacion_reserva'] = pd.to_datetime(df['fecha_creacion_reserva'].astype(str) + ' ' + df['hora_creacion_reserva'].astype(str))
+        df = df.drop(columns=['fecha_creacion_reserva', 'hora_creacion_reserva'])
+    elif 'fecha_hora_creacion_reserva' in df.columns:
+        df['fecha_hora_creacion_reserva'] = pd.to_datetime(df['fecha_hora_creacion_reserva'])
+    return df
+
 def procesar_reservas(df_reservas_original, df_reservas_nuevas):
     """
     Procesa las reservas, combinando las reservas originales con las nuevas si existen,
@@ -119,6 +143,11 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
         })
         
         # Asegurar que ambos DataFrames tengan las mismas columnas
+        # Primero, procesar las fechas en las nuevas reservas para que tengan el mismo formato
+        df_reservas_nuevas = asegurar_columnas_fechas_combinadas(df_reservas_nuevas)
+        df_reservas_original = asegurar_columnas_fechas_combinadas(df_reservas_original)
+        
+        # Ahora obtener las columnas comunes
         columnas_comunes = list(set(df_reservas_original.columns) & set(df_reservas_nuevas.columns))
         df_reservas_original = df_reservas_original[columnas_comunes]
         df_reservas_nuevas = df_reservas_nuevas[columnas_comunes]
@@ -127,18 +156,57 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
         df_reservas_original = df_reservas_original.reset_index(drop=True)
         df_reservas_nuevas = df_reservas_nuevas.reset_index(drop=True)
         
+        # Agregar flag para identificar origen de las reservas
+        df_reservas_original['origen'] = 'original'
+        df_reservas_nuevas['origen'] = 'nueva'
+        
         # Concatenar DataFrames
         df_concat = pd.concat([df_reservas_original, df_reservas_nuevas], axis=0, ignore_index=True)
-        # Eliminar duplicados, manteniendo la primera aparición
-        df_final = df_concat.drop_duplicates(subset="ID", keep="first").sort_values(by="fecha_trip")
+        
+        # Eliminar duplicados, manteniendo las reservas originales (no las nuevas)
+        df_final = df_concat.drop_duplicates(subset="ID", keep=False)  # Primero eliminar todos los duplicados
+        df_duplicados = df_concat[df_concat.duplicated(subset="ID", keep=False)]  # Obtener duplicados
+        
+        # Para los duplicados, mantener solo las originales
+        if not df_duplicados.empty:
+            df_originales_duplicados = df_duplicados[df_duplicados['origen'] == 'original']
+            df_final = pd.concat([df_final, df_originales_duplicados], ignore_index=True)
+        
+        # Eliminar la columna de origen
+        df_final = df_final.drop(columns=['origen'])
     else:
         # Si no hay reservas originales, usar solo las nuevas
-        df_final = df_reservas_nuevas.reset_index(drop=True).sort_values(by="fecha_trip")
+        df_final = asegurar_columnas_fechas_combinadas(df_reservas_nuevas.reset_index(drop=True))
     
-    # Procesar fechas y tipos de datos
-    df_final["fecha_trip"] = pd.to_datetime(df_final["fecha_trip"], format="%d/%m/%Y")
-    df_final["fecha_creacion_reserva"] = pd.to_datetime(df_final["fecha_creacion_reserva"], format="%d/%m/%Y")
-    df_final["ID"] = df_final["ID"].astype(int)
-    df_final = df_final.sort_values(by="fecha_trip")
+    # Procesar fechas y tipos de datos en el df_final
+    df_final = asegurar_columnas_fechas_combinadas(df_final)
+    
+    # Ordenar por fecha de viaje
+    if 'fecha_hora_trip' in df_final.columns:
+        df_final = df_final.sort_values(by="fecha_hora_trip")
+    elif 'fecha_trip' in df_final.columns:
+        df_final["fecha_trip"] = pd.to_datetime(df_final["fecha_trip"], format="%d/%m/%Y")
+        df_final = df_final.sort_values(by="fecha_trip")
+    
+    if 'ID' in df_final.columns:
+        df_final["ID"] = df_final["ID"].astype(int)
+    
+    # Reordenar columnas en el orden especificado después de juntar todas las reservas
+    columnas_ordenadas = [
+        'ID', 
+        'fecha_hora_trip', 
+        'fecha_hora_creacion_reserva', 
+        'Customer Email', 
+        'Service', 
+        'PAID AMOUNT', 
+        'TOTAL AMOUNT', 
+        'DUE AMOUNT', 
+        'Phone Number_2', 
+        'Customer'
+    ]
+    
+    # Solo incluir columnas que existen
+    columnas_finales = [col for col in columnas_ordenadas if col in df_final.columns]
+    df_final = df_final[columnas_finales]
     
     return df_final

@@ -6,7 +6,7 @@ diccionario_categorias = {
         "SUPERMERCADO", "UNIMARC", "LIDER.CL"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC"
+        "FERRETERIA", "SODIMAC", "kupfer"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -42,7 +42,7 @@ diccionario_categorias = {
         "CANVA", "LIBRERIA", "VIATOR"
     ],
     "Remuneraciones": [
-        "aguirre paillale"
+        "aguirre paillale", "Axel Aguirre"
     ],
     "Arriendo": [
         "quiroga toro"
@@ -54,31 +54,55 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha basti"
+        "munoz cucha bast", "Javiera Rodriguez"
     ],
-    "pagos daniel": [
+    "Mano obra HotBoat daniel": [
         "inostroza canales"
-    ]
+    ],
+    "Mano obra HotBoat otros": [
+        "Guillermo Ulloasilva", 
+    ],
     
+    # Categorías para ABONOS (solo las que te interesan)
+    "Bencina Pathfinder": [
+        "Odette"
+    ],
+    "Ingresos HotBoat": [
+        "traspaso de:hotboat spa", "Nawrath", "Dutilh"
+    ],
+    "Aportes de capital": [
+        "fintual", "dev Impuesto"
+    ]
 }
+
 
 diccionario_categoria_1 = {
     "Costos Fijos": [
         "arriendo", "entel", "bice vida", "seguro", "plan", "luz", "electricidad"
     ],
     "Costos Variables": [
-     "gas"
+        "Gas", # "mantención", "limpieza", "repuestos", "transportes", "comisiones"
     ],
-    "Inversiones": [
-        "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "Compras Internacionales"
+    "Costos de Marketing": [
+        "Publicidad Meta", "Publicidad Google", # "marketing", "promoción", 
     ],
-    "Otros": [
-        "traspaso", "deuda", "abono", "transferencia"
+    "Inversión en Activos": [
+        "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "compras internacionales", # "camara", "dron", "bateria", "motor"
+    ],
+    "Capital aportado": [
+        "Aportes de capital"
+    ],
+    "Inversión General": [
+        "branding", "logo", "sitio web", "diseño", "asesoría"
     ]
 }
 
 descripciones_a_eliminar = [
-    "traspaso deuda internacional", "pago pesos tef", ""
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio"
 ] 
 
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
+
+# Diccionario de categorías para cuenta corriente
+# Categorías específicas para los movimientos de cuenta corriente
+
