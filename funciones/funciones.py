@@ -542,9 +542,9 @@ class ProcesadorArchivos:
                 self.df_banco_estado_cargos.append(df_cargos)
                 return True
                 
-            # Procesar archivos de Cuenta Corriente (Cartola específica)
-            elif "cartola" in nombre_archivo.lower() and any(num in nombre_archivo for num in ["(4)", "(5)", "(6)", "(7)", "(8)"]):
-                print(f"   ✅ Archivo Cuenta Corriente detectado")
+            # Procesar archivos de Cartola (Cuenta Corriente)
+            elif "cartola" in nombre_archivo.lower():
+                print(f"   ✅ Archivo Cartola (Cuenta Corriente) detectado")
                 try:
                     cargos, abonos = leer_cartola_cuenta_corriente(ruta_archivo)
                     if not cargos.empty:
@@ -555,16 +555,8 @@ class ProcesadorArchivos:
                         print(f"      💳 Abonos cuenta corriente: {len(abonos)} filas")
                     return True
                 except Exception as e:
-                    print(f"   ❌ Error procesando cuenta corriente: {str(e)}")
+                    print(f"   ❌ Error procesando cartola: {str(e)}")
                     return False
-                
-            # Procesar archivos Cartola (similar a Chequera)
-            elif "cartola" in nombre_archivo.lower():
-                print(f"   ✅ Archivo Cartola detectado")
-                df_cargos, df_abonos = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
-                self.df_banco_estado_abonos.append(df_abonos)
-                self.df_banco_estado_cargos.append(df_cargos)
-                return True
                 
             # Procesar archivos de Movimientos Facturados (Banco Chile)
             elif "Mov_Facturado" in nombre_archivo:
@@ -594,7 +586,7 @@ class ProcesadorArchivos:
                 
             else:
                 print(f"   ⚠️  Archivo no reconocido: {nombre_archivo}")
-                print(f"      💡 Tipos soportados: Chequera, Mov_Facturado, Saldo_y_Mov_No_Facturado, cartola, cuenta corriente")
+                print(f"      💡 Tipos soportados: Chequera, Mov_Facturado, Saldo_y_Mov_No_Facturado, cartola")
                 return False
                 
         except Exception as e:

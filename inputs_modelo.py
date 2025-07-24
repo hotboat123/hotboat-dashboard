@@ -54,7 +54,7 @@ diccionario_categorias = {
         "CANVA", "LIBRERIA", "VIATOR"
     ],
     "Remuneraciones": [
-        "aguirre paillale", "Axel Aguirre"
+        "aguirre paillale", "Axel Aguirre", "Nestor"
     ],
     "Arriendo": [
         "quiroga toro"
@@ -75,7 +75,7 @@ diccionario_categorias = {
         "inostroza canales"
     ],
     "Mano obra HotBoat otros": [
-        "Guillermo Ulloasilva", 
+        "Guillermo Ulloa", 
     ],
     
     # Categorías para ABONOS (solo las que te interesan)
@@ -108,7 +108,7 @@ diccionario_categoria_1 = {
         "Aportes de capital"
     ],
     "Inversión General": [
-        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo"
+        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel"
     ]
 }
 
