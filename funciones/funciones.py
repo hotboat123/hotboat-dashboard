@@ -466,12 +466,14 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
     return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
 
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
 
     df_final = pd.concat([
         df_banco_estado_cargos,
         df_banco_chile_facturado_internacional,
         df_banco_chile_facturado_nacional,
+        df_banco_chile_no_facturado_internacional,
+        df_banco_chile_no_facturado_nacional,
         df_cuenta_corriente_cargos
     ], ignore_index=True, sort=False)
     df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
@@ -511,6 +513,8 @@ class ProcesadorArchivos:
         self.df_banco_estado_cargos = []
         self.df_banco_chile_facturado_nacional = []
         self.df_banco_chile_facturado_internacional = []
+        self.df_banco_chile_no_facturado_nacional = []
+        self.df_banco_chile_no_facturado_internacional = []
         self.df_cuenta_corriente_cargos = []
         self.df_cuenta_corriente_abonos = []
         
@@ -575,9 +579,22 @@ class ProcesadorArchivos:
                     self.df_banco_chile_facturado_internacional.append(df)
                 return True
                 
+            # Procesar archivos de Movimientos No Facturados (Banco Chile)
+            elif "Saldo_y_Mov_No_Facturado" in nombre_archivo:
+                print(f"   ✅ Archivo Saldo_y_Mov_No_Facturado detectado")
+                if ver_si_es_nacional_no_facturado(ruta_archivo):
+                    print(f"      📍 Tipo: Nacional")
+                    df = leer_excel_mov_no_facturados_nacional(ruta_archivo)
+                    self.df_banco_chile_no_facturado_nacional.append(df)
+                else:
+                    print(f"      🌍 Tipo: Internacional")
+                    df = leer_excel_mov_no_facturados_internacional(ruta_archivo, valor_aproximado_dolar)
+                    self.df_banco_chile_no_facturado_internacional.append(df)
+                return True
+                
             else:
                 print(f"   ⚠️  Archivo no reconocido: {nombre_archivo}")
-                print(f"      💡 Tipos soportados: Chequera, Mov_Facturado, cartola, cuenta corriente")
+                print(f"      💡 Tipos soportados: Chequera, Mov_Facturado, Saldo_y_Mov_No_Facturado, cartola, cuenta corriente")
                 return False
                 
         except Exception as e:
@@ -629,6 +646,25 @@ class ProcesadorArchivos:
         else:
             datos_consolidados['banco_chile_facturado_nacional'] = pd.DataFrame()
             print("⚠️  No se encontraron archivos de movimientos facturados nacionales")
+        
+        # Consolidar Banco Chile No Facturado
+        if self.df_banco_chile_no_facturado_internacional:
+            datos_consolidados['banco_chile_no_facturado_internacional'] = pd.concat(
+                self.df_banco_chile_no_facturado_internacional, ignore_index=True
+            )
+            print(f"✅ Movimientos No Facturados Internacional: {len(datos_consolidados['banco_chile_no_facturado_internacional'])} registros")
+        else:
+            datos_consolidados['banco_chile_no_facturado_internacional'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de movimientos no facturados internacionales")
+            
+        if self.df_banco_chile_no_facturado_nacional:
+            datos_consolidados['banco_chile_no_facturado_nacional'] = pd.concat(
+                self.df_banco_chile_no_facturado_nacional, ignore_index=True
+            )
+            print(f"✅ Movimientos No Facturados Nacional: {len(datos_consolidados['banco_chile_no_facturado_nacional'])} registros")
+        else:
+            datos_consolidados['banco_chile_no_facturado_nacional'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos de movimientos no facturados nacionales")
         
         # Consolidar Cuenta Corriente
         if self.df_cuenta_corriente_cargos:
@@ -727,6 +763,8 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
         datos_consolidados['banco_estado_cargos'],
         datos_consolidados['banco_chile_facturado_internacional'],
         datos_consolidados['banco_chile_facturado_nacional'],
+        datos_consolidados['banco_chile_no_facturado_internacional'],
+        datos_consolidados['banco_chile_no_facturado_nacional'],
         datos_consolidados['cuenta_corriente_cargos'],
         diccionario_categorias,
         descripciones_a_eliminar,

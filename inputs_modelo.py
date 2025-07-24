@@ -2,11 +2,11 @@
 # Puedes modificar las palabras clave y categorías según tus necesidades
 
 diccionario_categorias = {
-    "Supermercado": [
-        "SUPERMERCADO", "UNIMARC", "LIDER.CL"
+    "Stock_tablas y bebidas": [
+        "LIDER.CL"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC", "kupfer"
+        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "mundo pintura", "librer"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -14,20 +14,32 @@ diccionario_categorias = {
     "Publicidad Google": [
         "google", "facebook"
     ],
+    "Sitio Web": [
+        "hostinger", "facebook"
+    ],
+    "Herramientas de marketing": [
+        "CURSOR", "chatbot"
+    ],
     "Compras Internacionales": [
-        "aliexpress"
+        "aliexpress", "alipays"
     ],
     "Pagos Digitales": [
-        "MERCADOPAGO", "MERPAGO", "SumUp", "SUMUP"
+        "MERCADOPAGO", "MERPAGO", "SumUp", "SUMUP",
     ],
     "Transporte": [
         "UBER", "PAYU *UBER"
     ],
-    "Telefonía": [
-        "ENTEL"
+    "Internet": [
+        "ENTEL", "STARLINK"
     ],
     "Combustible": [
-        "COPEC"
+        "COPEC", "combustible"
+    ],
+    "Mantención Vehículo": [
+        "Diconor", "santa eli"
+    ],
+    "edicion videos": [
+        "Fiverr"
     ],
     "Alimentos": [
         "FAMILIA UNIDA", "AFUNAYUN"
@@ -50,6 +62,9 @@ diccionario_categorias = {
     "Motores HotBoat": [
         "flipsky"
     ],
+    "Calefonts": [
+        "CEM compras"
+    ],    
     "Poleras": [
         "77184211"
     ],
@@ -78,22 +93,22 @@ diccionario_categorias = {
 
 diccionario_categoria_1 = {
     "Costos Fijos": [
-        "arriendo", "entel", "bice vida", "seguro", "plan", "luz", "electricidad"
+        "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", 
     ],
     "Costos Variables": [
-        "Gas", # "mantención", "limpieza", "repuestos", "transportes", "comisiones"
+        "Gas", "Combustible", "Edicion videos", # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
     ],
     "Costos de Marketing": [
-        "Publicidad Meta", "Publicidad Google", # "marketing", "promoción", 
+        "Publicidad Meta", "Publicidad Google", "Herramientas de marketing" # "marketing", "promoción",
     ],
     "Inversión en Activos": [
-        "maquina", "herramienta", "inversion", "flipsky", "ferreteria", "compras internacionales", # "camara", "dron", "bateria", "motor"
+        "Maquina", "Herramienta", "Inversion", "Flipsky", "Calefonts" # "camara", "dron", "bateria", "motor"
     ],
     "Capital aportado": [
         "Aportes de capital"
     ],
     "Inversión General": [
-        "branding", "logo", "sitio web", "diseño", "asesoría"
+        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo"
     ]
 }
 
