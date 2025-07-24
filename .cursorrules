@@ -164,6 +164,65 @@ tabla_correcciones = [
 
 ---
 
+## Nueva Tarea: Sistema de Eliminación de Filas por Fecha y Monto ✅
+
+**Task:** Implementar funcionalidad para eliminar filas específicas del DataFrame final basándose en fecha y monto:
+- Nueva función que permita eliminar registros específicos
+- Configuración mediante lista en inputs_modelo.py
+- Integración en el flujo de procesamiento
+
+**Progreso:**
+[X] Crear función eliminar_filas_por_fecha_monto()
+[X] Integrar en procesar_df_final()
+[X] Actualizar procesar_archivos_financieros()
+[X] Crear lista eliminaciones_fecha_monto en inputs_modelo.py
+[X] Actualizar gastos_hotboat_sin_drive.py
+
+**Plan:**
+1. ✅ Crear función para eliminar filas específicas por fecha y monto
+2. ✅ Integrar función en el flujo de procesamiento
+3. ✅ Agregar configuración en inputs_modelo.py
+4. ✅ Actualizar archivo principal para usar nueva funcionalidad
+5. ✅ Documentar uso y formato
+
+**Funcionalidades Implementadas:**
+- ✅ **eliminar_filas_por_fecha_monto()**: Elimina registros específicos por fecha y monto
+- ✅ **Formatos flexibles**: Acepta fechas en formato 'YYYY-MM-DD' o 'DD/MM/YYYY'
+- ✅ **Validación**: Convierte fechas a datetime y valida formatos
+- ✅ **Output informativo**: Muestra qué registros se marcaron para eliminar
+- ✅ **Integración completa**: Funciona dentro del flujo de procesamiento
+
+**Formato de eliminaciones_fecha_monto:**
+```python
+eliminaciones_fecha_monto = [
+    ['2025-07-15', 50000],    # Eliminar registro del 15 de julio 2025 por $50,000
+    ['15/07/2025', 25000],    # Eliminar registro del 15 de julio 2025 por $25,000
+    ['2025-06-01', 100000],   # Eliminar registro del 1 de junio 2025 por $100,000
+]
+```
+
+**Archivos Modificados:**
+- ✅ `funciones/funciones.py` - Nueva función eliminar_filas_por_fecha_monto()
+- ✅ `funciones/funciones.py` - Actualizada procesar_df_final() y procesar_archivos_financieros()
+- ✅ `inputs_modelo.py` - Lista eliminaciones_fecha_monto configurada
+- ✅ `gastos_hotboat_sin_drive.py` - Integración completa
+
+**Características:**
+- ✅ **Búsqueda por coincidencia exacta**: Fecha (día) y monto deben coincidir exactamente
+- ✅ **Múltiples formatos de fecha**: Detecta automáticamente el formato
+- ✅ **Manejo de errores**: Reporta fechas que no se pueden convertir
+- ✅ **Logging detallado**: Muestra cuántos registros se eliminaron
+- ✅ **No destructivo**: Trabaja con copia del DataFrame
+
+**Uso:**
+1. Agregar registros a eliminar en `inputs_modelo.py` en la lista `eliminaciones_fecha_monto`
+2. Ejecutar `python gastos_hotboat_sin_drive.py`
+3. Los registros especificados se eliminarán automáticamente del procesamiento
+
+**Estado:** ✅ COMPLETADO - Sistema de eliminación por fecha y monto implementado y funcional
+
+---
+
 ## Tarea Completada: Crear Tabla "Utilidad Operativa.csv" ✅
 
 **Task:** Crear una nueva tabla que combine datos de:

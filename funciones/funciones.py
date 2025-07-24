@@ -476,6 +476,91 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
     return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
 
 
+def eliminar_filas_por_fecha_monto(df, lista_fecha_monto):
+    """
+    Elimina filas específicas del DataFrame basándose en combinaciones de fecha y monto.
+    
+    Args:
+        df (pd.DataFrame): DataFrame a procesar. Debe contener las columnas 'Fecha' y 'Monto'.
+        lista_fecha_monto (List[List]): Lista de listas con formato [fecha, monto] a eliminar.
+                                       Fecha puede ser string 'YYYY-MM-DD' o 'DD/MM/YYYY'
+                                       Monto debe ser numérico
+    
+    Returns:
+        pd.DataFrame: DataFrame sin las filas especificadas
+        
+    Ejemplo:
+        lista_eliminaciones = [
+            ['2025-07-15', 50000],
+            ['15/07/2025', 25000],
+            ['2025-06-01', 100000]
+        ]
+    """
+    if not lista_fecha_monto or df.empty:
+        return df
+    
+    print(f"🗑️ Eliminando {len(lista_fecha_monto)} registros específicos por fecha y monto...")
+    
+    # Asegurar que la columna Fecha sea datetime
+    df_copia = df.copy()
+    if 'Fecha' in df_copia.columns:
+        df_copia = convertir_fechas_a_datetime(df_copia, 'Fecha')
+    
+    filas_iniciales = len(df_copia)
+    
+    # Crear máscara para identificar filas a eliminar
+    mask_eliminar = pd.Series([False] * len(df_copia), index=df_copia.index)
+    
+    for fecha_str, monto in lista_fecha_monto:
+        try:
+            # Convertir fecha string a datetime
+            if isinstance(fecha_str, str):
+                # Intentar diferentes formatos
+                fecha_dt = None
+                formatos = ['%Y-%m-%d', '%d/%m/%Y', '%d/%m/%y']
+                for formato in formatos:
+                    try:
+                        fecha_dt = pd.to_datetime(fecha_str, format=formato)
+                        break
+                    except:
+                        continue
+                
+                if fecha_dt is None:
+                    # Último intento con parse automático
+                    try:
+                        fecha_dt = pd.to_datetime(fecha_str)
+                    except:
+                        print(f"   ⚠️  No se pudo convertir fecha: {fecha_str}")
+                        continue
+            else:
+                fecha_dt = pd.to_datetime(fecha_str)
+            
+            # Buscar filas que coincidan en fecha y monto
+            mask_fecha = df_copia['Fecha'].dt.date == fecha_dt.date()
+            mask_monto = df_copia['Monto'] == monto
+            mask_coincidencia = mask_fecha & mask_monto
+            
+            if mask_coincidencia.any():
+                mask_eliminar = mask_eliminar | mask_coincidencia
+                print(f"   ✅ Marcados para eliminar: {mask_coincidencia.sum()} registros con fecha {fecha_dt.date()} y monto ${monto:,.0f}")
+            else:
+                print(f"   ⚠️  No se encontraron registros con fecha {fecha_dt.date()} y monto ${monto:,.0f}")
+                
+        except Exception as e:
+            print(f"   ❌ Error procesando eliminación {fecha_str}, {monto}: {str(e)}")
+    
+    # Eliminar las filas marcadas
+    df_resultado = df_copia[~mask_eliminar]
+    filas_eliminadas = filas_iniciales - len(df_resultado)
+    
+    if filas_eliminadas > 0:
+        print(f"✅ Se eliminaron {filas_eliminadas} filas específicas")
+    else:
+        print("ℹ️  No se eliminaron filas")
+    
+    return df_resultado
+
+
 def agregar_columnas_origen(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos):
     """
     Agrega la columna 'Origen' a cada DataFrame y los recopila en una lista.
@@ -601,7 +686,7 @@ def aplicar_correcciones_categorias(df_final, tabla_correcciones_lista):
     
     return df_merged
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None):
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None):
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
     dataframes_con_origen = agregar_columnas_origen(
@@ -616,12 +701,14 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
     # Concatenar todos los DataFrames con la columna "Origen"
     df_final = pd.concat(dataframes_con_origen, ignore_index=True, sort=False) if dataframes_con_origen else pd.DataFrame()
     df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
+    df_final = eliminar_filas_por_fecha_monto(df_final, eliminaciones_fecha_monto)
     
     # Convertir fechas a datetime usando la nueva función
     df_final = convertir_fechas_a_datetime(df_final, 'Fecha')
     
+    #Eliminar duplicados y negativos
     df_final = df_final[df_final['Monto'] >= 0]
-    df_final = df_final.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+    df_final = df_final.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto', 'Cuotas'], keep='first')
     
     # Categorizar todos los datos usando el diccionario (incluyendo cuenta corriente)
     df_final = categorizar_por_descripcion(df_final, diccionario_categorias)
@@ -842,7 +929,8 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
                                  diccionario_categorias: dict = None,
                                  descripciones_a_eliminar: list = None,
                                  diccionario_categoria_1: dict = None,
-                                 tabla_correcciones: list = None) -> bool:
+                                 tabla_correcciones: list = None,
+                                 eliminaciones_fecha_monto: list = None) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -855,6 +943,7 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
         descripciones_a_eliminar: Lista de descripciones a eliminar
         diccionario_categoria_1: Diccionario de categorías principales
         tabla_correcciones: Lista de listas con correcciones de categorías
+        eliminaciones_fecha_monto: Lista de listas con [fecha, monto] a eliminar
         
     Returns:
         bool: True si el procesamiento fue exitoso
@@ -907,7 +996,8 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
         diccionario_categorias,
         descripciones_a_eliminar,
         diccionario_categoria_1,
-        tabla_correcciones
+        tabla_correcciones,
+        eliminaciones_fecha_monto
     )
     
     # Procesar abonos

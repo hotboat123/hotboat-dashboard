@@ -5,6 +5,9 @@ diccionario_categorias = {
     "Stock_tablas y bebidas": [
         "LIDER.CL"
     ],
+    "leña": [
+        "Jaime Catricheo"
+    ],
     "Ferretería": [
         "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "mundo pintura", "librer"
     ],
@@ -18,7 +21,7 @@ diccionario_categorias = {
         "hostinger", "facebook"
     ],
     "Herramientas de marketing": [
-        "CURSOR", "chatbot"
+        "CURSOR", "chatbot", "safe traveler"
     ],
     "Compras Internacionales": [
         "aliexpress", "alipays"
@@ -99,16 +102,16 @@ diccionario_categorias = {
 
 diccionario_categoria_1 = {
     "Costos Fijos": [
-        "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet" 
+        "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", "Sueldo Tom"
     ],
     "Costos Variables": [
-        "Gas", "Combustible", "Edicion videos","remuneraciones" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
+        "Gas", "Combustible", "Edicion videos","remuneraciones", "leña" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
     ],
     "Costos de Marketing": [
         "Publicidad Meta", "Publicidad Google", "Herramientas de marketing" # "marketing", "promoción",
     ],
     "Inversión en Activos": [
-        "Maquina", "Herramienta", "Inversion", "Flipsky", "Calefonts" # "camara", "dron", "bateria", "motor"
+        "Herramientas", "Calefonts", "Poleras", "Motores HotBoat", "Infraestructura" , "Estanques", "camara", "dron", "bateria", 
     ],
     "Capital aportado": [
         "Aportes de capital"
@@ -119,7 +122,18 @@ diccionario_categoria_1 = {
 }
 
 descripciones_a_eliminar = [
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso"
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas"
+] 
+
+# Lista de registros específicos a eliminar por fecha y monto
+# Formato: [fecha, monto]
+# La fecha puede ser en formato 'YYYY-MM-DD' o 'DD/MM/YYYY'
+eliminaciones_fecha_monto = [
+    # Ejemplo de eliminaciones:
+    ['2025-04-21', 1400000],    # Eliminar registro del 15 de julio 2025 por $50,000
+    ['2025-01-09', 300000],
+    # ['15/07/2025', 25000],    # Eliminar registro del 15 de julio 2025 por $25,000
+    # ['2025-06-01', 100000],   # Eliminar registro del 1 de junio 2025 por $100,000
 ] 
 
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
@@ -134,8 +148,9 @@ tabla_correcciones = [
     ['2025-07-04','','500000','Inversión en Activos','HotBoat matriz','Pago a daniel para hacer matriz'],
     ['2025-07-14','','437135','Inversión General','Mantención','Pintura Marathon 550'],
     ['2025-07-01','','302310','Inversión en Activos','HotBoat 1','Caldera inox, mano de obra'],
-    ['2025-07-21','','200000','Inversión en Activos','Herramienta','Bajada Lancha'],
+    ['2025-07-21','','200000','Inversión en Activos','Infraestructura','Bajada Lancha'],
     ['2025-07-07','','179000','Inversión en Activos','Balones de gas','Balon de gas'],
+    ['2025-05-26','','184000','Inversión en Activos','Balones de gas','Balon de gas'],
     ['2025-07-07','','173847','Inversión en Activos','Dispositivos','Llaves de paso y temperatura'],
     ['2025-07-05','','150613','Inversión en Activos','Bombas','Bombas seaflo'],
     ['2025-07-16','','119609','Inversión en Activos','Infraestructura','Materiales invernadero'],
@@ -143,7 +158,15 @@ tabla_correcciones = [
     ['2025-07-07','','110000','Inversión General','mantención','mano de obra'],
     ['2025-07-14','','93500','Inversión General','Mantención','mano de obra'],
     ['2025-07-07','','100000','Inversión en Activos','sistema calentamiento','aislamiento'],
-    ['2025-07-07','','70000','Inversión en Activos','HotBoat 2','Leñera HB2'],
+    ['2025-07-07','','70000','Costos Variables','Remuneraciones','pago nestor(algo caballo)'],
+    ['2025-06-27','','27500','Inversión en Activos','HotBoat 2','Leñera HB2'],
+    ['2025-02-25','','283033.5','Costos de Marketing','Externalizacion Marketing','Pago a Arbi'],
+    ['2025-02-10','','365265','Inversión en Activos','Calefonts','Calefont 2'],
+    ['2025-03-20','','198623','Devolucion a cliente','Devolucion a cliente','Devolucion a cliente'],
+    ['2025-04-08','','190000','Inversión en Activos','Infraestructura' ,'Bajada Lancha'],
+    ['2025-01-22','','177705','Inversión en Activos','Herramientas' ,'Lija Orbital'],
+    ['2025-01-13','','157204','Inversión en Activos','Estanques' ,'Estanque 1400L'],
+    ['2025-01-30','','144282','Inversión en Activos','Materiales HotBoat 3' ,'Monomero Estireno'],
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
 ]
 
