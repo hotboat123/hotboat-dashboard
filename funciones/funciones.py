@@ -515,7 +515,83 @@ def agregar_columnas_origen(df_banco_estado_cargos, df_banco_chile_facturado_int
     
     return dataframes_con_origen
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+def crear_tabla_correcciones(lista_correcciones):
+    """
+    Convierte una lista de listas en un DataFrame para correcciones de categorías.
+    
+    Args:
+        lista_correcciones (List[List]): Lista de listas con formato:
+            [fecha, descripcion, monto, categoria_2, categoria_1, observacion]
+            
+    Returns:
+        pd.DataFrame: DataFrame con las correcciones a aplicar
+    """
+    if not lista_correcciones:
+        return pd.DataFrame()
+    
+    columnas = ['Fecha', 'Descripción', 'Monto', 'Categoría_2', 'Categoría 1', 'Observación']
+    df_correcciones = pd.DataFrame(lista_correcciones, columns=columnas)
+    
+    # Convertir fechas a datetime
+    df_correcciones = convertir_fechas_a_datetime(df_correcciones, 'Fecha')
+    
+    # Asegurar que el monto sea numérico
+    df_correcciones['Monto'] = pd.to_numeric(df_correcciones['Monto'], errors='coerce')
+    
+    return df_correcciones
+
+def aplicar_correcciones_categorias(df_final, tabla_correcciones_lista):
+    """
+    Aplica correcciones de categorías desde una tabla externa al DataFrame final.
+    
+    Args:
+        df_final (pd.DataFrame): DataFrame con los datos procesados
+        tabla_correcciones_lista (List[List]): Lista de listas con correcciones
+        
+    Returns:
+        pd.DataFrame: DataFrame con correcciones aplicadas
+    """
+    if not tabla_correcciones_lista:
+        return df_final
+    
+    # Crear DataFrame de correcciones
+    df_correcciones = crear_tabla_correcciones(tabla_correcciones_lista)
+    
+    if df_correcciones.empty:
+        return df_final
+    
+    print(f"📝 Aplicando {len(df_correcciones)} correcciones de categorías...")
+    
+    # Crear columna Observación si no existe
+    if 'Observación' not in df_final.columns:
+        df_final['Observación'] = ''
+    
+    # Hacer merge para identificar las filas a corregir
+    df_merged = df_final.merge(
+        df_correcciones[['Fecha', 'Descripción', 'Monto', 'Categoría_2', 'Categoría 1', 'Observación']], 
+        on=['Fecha', 'Descripción', 'Monto'], 
+        how='left', 
+        suffixes=('', '_corr')
+    )
+    
+    # Aplicar correcciones donde existan
+    correcciones_aplicadas = 0
+    for col in ['Categoría_2', 'Categoría 1', 'Observación']:
+        col_corr = f"{col}_corr"
+        if col_corr in df_merged.columns:
+            mask = df_merged[col_corr].notna()
+            df_merged.loc[mask, col] = df_merged.loc[mask, col_corr]
+            correcciones_aplicadas += mask.sum()
+    
+    # Eliminar columnas temporales
+    cols_to_drop = [col for col in df_merged.columns if col.endswith('_corr')]
+    df_merged = df_merged.drop(columns=cols_to_drop)
+    
+    print(f"✅ Se aplicaron correcciones a {correcciones_aplicadas} registros")
+    
+    return df_merged
+
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None):
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
     dataframes_con_origen = agregar_columnas_origen(
@@ -545,6 +621,11 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
         df_final['Categoría 1'] = df_final['Categoría_2'].apply(lambda cat2: obtener_categoria(cat2, diccionario_categoria_1))
     
     df_final = reordenar_columna_categoria_extra(df_final)
+    
+    # Aplicar correcciones de categorías si se proporcionaron
+    if tabla_correcciones:
+        df_final = aplicar_correcciones_categorias(df_final, tabla_correcciones)
+    
     return df_final
 
 # Función para crear la columna de fecha
@@ -750,7 +831,8 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
                                  año_para_fecha_banco_estado: str = '2025',
                                  diccionario_categorias: dict = None,
                                  descripciones_a_eliminar: list = None,
-                                 diccionario_categoria_1: dict = None) -> bool:
+                                 diccionario_categoria_1: dict = None,
+                                 tabla_correcciones: list = None) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -762,6 +844,7 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
         diccionario_categorias: Diccionario de categorías
         descripciones_a_eliminar: Lista de descripciones a eliminar
         diccionario_categoria_1: Diccionario de categorías principales
+        tabla_correcciones: Lista de listas con correcciones de categorías
         
     Returns:
         bool: True si el procesamiento fue exitoso
@@ -813,7 +896,8 @@ def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archiv
         datos_consolidados['cuenta_corriente_cargos'],
         diccionario_categorias,
         descripciones_a_eliminar,
-        diccionario_categoria_1
+        diccionario_categoria_1,
+        tabla_correcciones
     )
     
     # Procesar abonos

@@ -113,10 +113,58 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - **NUEVO**: Archivo (5) tiene columna región, archivo (6) NO tiene columna región
 - **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
 - **NUEVO**: En los archivos de marketing, usar columna "Compras" en lugar de "Artículos agregados al carrito" para métricas de conversión
+- **NUEVO**: Sistema de correcciones de categorías implementado: permite sobrescribir categorías automáticas usando tabla_correcciones en inputs_modelo.py con formato [fecha, descripcion, monto, categoría_2, categoría_1, observacion]
 
 # Scratchpad
 
-## Nueva Tarea: Crear Tabla "Utilidad Operativa.csv" ✅
+## Nueva Tarea: Sistema de Correcciones de Categorías ✅
+
+**Task:** Implementar un sistema que permita sobrescribir categorías automáticas mediante una tabla externa:
+- Merge por fecha, descripción y monto
+- Reemplazar Categoría_2, Categoría 1 y agregar Observación
+- Tabla externa como lista de listas en inputs_modelo.py
+
+**Progreso:**
+[X] Crear función crear_tabla_correcciones()
+[X] Crear función aplicar_correcciones_categorias()
+[X] Modificar procesar_df_final() para incluir correcciones
+[X] Actualizar procesar_archivos_financieros() con nuevo parámetro
+[X] Modificar gastos_hotboat_sin_drive.py para usar correcciones
+[X] Agregar tabla_correcciones en inputs_modelo.py
+[X] Documentar funcionalidad
+
+**Plan:**
+1. ✅ Crear funciones de merge y corrección en funciones/funciones.py
+2. ✅ Integrar correcciones en el flujo principal de procesamiento
+3. ✅ Actualizar archivos principales para usar nueva funcionalidad
+4. ✅ Configurar tabla_correcciones en inputs_modelo.py
+
+**Funcionalidades Implementadas:**
+- ✅ **crear_tabla_correcciones()**: Convierte lista de listas en DataFrame
+- ✅ **aplicar_correcciones_categorias()**: Hace merge y aplica correcciones
+- ✅ **Integración completa**: Nueva funcionalidad integrada en todo el flujo
+- ✅ **Columna Observación**: Se agrega automáticamente si no existe
+- ✅ **Merge inteligente**: Por fecha, descripción y monto
+- ✅ **Output informativo**: Muestra cantidad de correcciones aplicadas
+
+**Formato de tabla_correcciones:**
+```python
+tabla_correcciones = [
+    [fecha, descripcion, monto, categoría_2, categoría_1, observacion],
+    ['2025-01-15', 'FACEBK ads campaign', 50000, 'Publicidad Meta', 'Costos de Marketing', 'Campaña navideña'],
+]
+```
+
+**Archivos Modificados:**
+- ✅ `funciones/funciones.py` - Nuevas funciones de corrección
+- ✅ `gastos_hotboat_sin_drive.py` - Integración de correcciones
+- ✅ `inputs_modelo.py` - Configuración de tabla_correcciones
+
+**Estado:** ✅ COMPLETADO - Sistema de correcciones implementado y funcional
+
+---
+
+## Tarea Completada: Crear Tabla "Utilidad Operativa.csv" ✅
 
 **Task:** Crear una nueva tabla que combine datos de:
 - Gastos hotboat (filtrar por categoría 1 = "Costos de Marketing")

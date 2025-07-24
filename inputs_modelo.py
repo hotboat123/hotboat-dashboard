@@ -118,6 +118,15 @@ descripciones_a_eliminar = [
 
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
 
+# Tabla de correcciones para categorías específicas
+# Formato: [fecha, descripcion, monto, categoría_2, categoría_1, observacion]
+# Esta tabla permite sobrescribir categorías automáticas y agregar observaciones
+tabla_correcciones = [
+    # Ejemplo de corrección:
+    ['2025-07-17', 'Traspaso A:Daniel Inostroza Canales', 1000000, 'HotBoat matriz', 'Inversión en Activos', 'Pago a daniel para hacer matriz'],
+    # ['2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención'],
+]
+
 # Diccionario de categorías para cuenta corriente
 # Categorías específicas para los movimientos de cuenta corriente
 

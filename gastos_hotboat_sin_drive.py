@@ -37,7 +37,7 @@ except AttributeError:
 from funciones.funciones import procesar_archivos_financieros
 
 # Importar configuraciones
-from inputs_modelo import diccionario_categorias, descripciones_a_eliminar, diccionario_categoria_1
+from inputs_modelo import diccionario_categorias, descripciones_a_eliminar, diccionario_categoria_1, tabla_correcciones
 
 # ======== CONFIGURACIÓN ========
 VALOR_APROXIMADO_DOLAR = 950
@@ -56,7 +56,8 @@ if __name__ == '__main__':
             año_para_fecha_banco_estado=AÑO_PARA_FECHA_BANCO_ESTADO,
             diccionario_categorias=diccionario_categorias,
             descripciones_a_eliminar=descripciones_a_eliminar,
-            diccionario_categoria_1=diccionario_categoria_1
+            diccionario_categoria_1=diccionario_categoria_1,
+            tabla_correcciones=tabla_correcciones
         )
         
         if success:
