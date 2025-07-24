@@ -45,7 +45,7 @@ diccionario_categorias = {
         "FAMILIA UNIDA", "AFUNAYUN"
     ],
     "Seguros": [
-        "BICE VIDA"
+        "BICE VIDA", "cargo seguro proteccion bancaria"
     ],
     "Importaciones": [
         "IMPORTADORA"
@@ -54,7 +54,7 @@ diccionario_categorias = {
         "CANVA", "LIBRERIA", "VIATOR"
     ],
     "Remuneraciones": [
-        "aguirre paillale", "Axel Aguirre", "Nestor"
+        "aguirre paillale", "Axel Aguirre", "Nestor", "Tomas"
     ],
     "Arriendo": [
         "quiroga toro"
@@ -96,7 +96,7 @@ diccionario_categoria_1 = {
         "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", 
     ],
     "Costos Variables": [
-        "Gas", "Combustible", "Edicion videos", # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
+        "Gas", "Combustible", "Edicion videos","remuneraciones" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
     ],
     "Costos de Marketing": [
         "Publicidad Meta", "Publicidad Google", "Herramientas de marketing" # "marketing", "promoción",

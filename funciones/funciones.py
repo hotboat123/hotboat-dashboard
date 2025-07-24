@@ -468,14 +468,41 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
 
 def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
 
-    df_final = pd.concat([
-        df_banco_estado_cargos,
-        df_banco_chile_facturado_internacional,
-        df_banco_chile_facturado_nacional,
-        df_banco_chile_no_facturado_internacional,
-        df_banco_chile_no_facturado_nacional,
-        df_cuenta_corriente_cargos
-    ], ignore_index=True, sort=False)
+    # Agregar columna "Origen" a cada DataFrame antes de concatenar
+    dataframes_con_origen = []
+    
+    if not df_banco_estado_cargos.empty:
+        df_banco_estado_cargos = df_banco_estado_cargos.copy()
+        df_banco_estado_cargos['Origen'] = 'Banco Estado'
+        dataframes_con_origen.append(df_banco_estado_cargos)
+    
+    if not df_banco_chile_facturado_internacional.empty:
+        df_banco_chile_facturado_internacional = df_banco_chile_facturado_internacional.copy()
+        df_banco_chile_facturado_internacional['Origen'] = 'Mov. Facturado Internacional'
+        dataframes_con_origen.append(df_banco_chile_facturado_internacional)
+    
+    if not df_banco_chile_facturado_nacional.empty:
+        df_banco_chile_facturado_nacional = df_banco_chile_facturado_nacional.copy()
+        df_banco_chile_facturado_nacional['Origen'] = 'Mov. Facturado Nacional'
+        dataframes_con_origen.append(df_banco_chile_facturado_nacional)
+    
+    if not df_banco_chile_no_facturado_internacional.empty:
+        df_banco_chile_no_facturado_internacional = df_banco_chile_no_facturado_internacional.copy()
+        df_banco_chile_no_facturado_internacional['Origen'] = 'Mov. No Facturado Internacional'
+        dataframes_con_origen.append(df_banco_chile_no_facturado_internacional)
+    
+    if not df_banco_chile_no_facturado_nacional.empty:
+        df_banco_chile_no_facturado_nacional = df_banco_chile_no_facturado_nacional.copy()
+        df_banco_chile_no_facturado_nacional['Origen'] = 'Mov. No Facturado Nacional'
+        dataframes_con_origen.append(df_banco_chile_no_facturado_nacional)
+    
+    if not df_cuenta_corriente_cargos.empty:
+        df_cuenta_corriente_cargos = df_cuenta_corriente_cargos.copy()
+        df_cuenta_corriente_cargos['Origen'] = 'Cuenta Corriente'
+        dataframes_con_origen.append(df_cuenta_corriente_cargos)
+    
+    # Concatenar todos los DataFrames con la columna "Origen"
+    df_final = pd.concat(dataframes_con_origen, ignore_index=True, sort=False) if dataframes_con_origen else pd.DataFrame()
     df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
     
     # Convertir fechas a datetime usando la nueva función
