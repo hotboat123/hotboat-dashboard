@@ -466,9 +466,21 @@ def eliminar_filas_por_descripcion(df, lista_descripciones):
     return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
 
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
-
-    # Agregar columna "Origen" a cada DataFrame antes de concatenar
+def agregar_columnas_origen(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos):
+    """
+    Agrega la columna 'Origen' a cada DataFrame y los recopila en una lista.
+    
+    Args:
+        df_banco_estado_cargos: DataFrame de cargos del Banco Estado
+        df_banco_chile_facturado_internacional: DataFrame de movimientos facturados internacionales
+        df_banco_chile_facturado_nacional: DataFrame de movimientos facturados nacionales
+        df_banco_chile_no_facturado_internacional: DataFrame de movimientos no facturados internacionales
+        df_banco_chile_no_facturado_nacional: DataFrame de movimientos no facturados nacionales
+        df_cuenta_corriente_cargos: DataFrame de cargos de cuenta corriente
+        
+    Returns:
+        List[pd.DataFrame]: Lista de DataFrames con columna 'Origen' agregada
+    """
     dataframes_con_origen = []
     
     if not df_banco_estado_cargos.empty:
@@ -500,6 +512,20 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
         df_cuenta_corriente_cargos = df_cuenta_corriente_cargos.copy()
         df_cuenta_corriente_cargos['Origen'] = 'Cuenta Corriente'
         dataframes_con_origen.append(df_cuenta_corriente_cargos)
+    
+    return dataframes_con_origen
+
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None):
+
+    # Agregar columna "Origen" a cada DataFrame antes de concatenar
+    dataframes_con_origen = agregar_columnas_origen(
+        df_banco_estado_cargos, 
+        df_banco_chile_facturado_internacional, 
+        df_banco_chile_facturado_nacional, 
+        df_banco_chile_no_facturado_internacional, 
+        df_banco_chile_no_facturado_nacional, 
+        df_cuenta_corriente_cargos
+    )
     
     # Concatenar todos los DataFrames con la columna "Origen"
     df_final = pd.concat(dataframes_con_origen, ignore_index=True, sort=False) if dataframes_con_origen else pd.DataFrame()
