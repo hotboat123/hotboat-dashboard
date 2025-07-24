@@ -443,17 +443,27 @@ def categorizar_por_diccionario(df, diccionario, nombre_columna):
 
 def reordenar_columna_categoria_extra(df):
     """
-    Mueve la columna 'Categoría_2' a la cuarta posición y 'Categoría 1' a la quinta posición si existen.
+    Reordena las columnas en el orden deseado: Fecha, Monto, Categoría 1, Categoría_2, Observación, Descripción, resto de columnas.
     """
     cols = list(df.columns)
-    # Mover 'Categoría_2' a la cuarta posición
-    if 'Categoría_2' in cols:
-        cols.insert(3, cols.pop(cols.index('Categoría_2')))
-    # Mover 'Categoría 1' a la quinta posición (después de 'Categoría_2')
-    if 'Categoría 1' in cols:
-        idx_cat2 = cols.index('Categoría_2') if 'Categoría_2' in cols else 2
-        cols.insert(idx_cat2 + 1, cols.pop(cols.index('Categoría 1')))
-    df = df[cols]
+    
+    # Definir el orden deseado para las columnas principales
+    orden_principal = ['Fecha', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación', 'Descripción']
+    
+    # Crear lista final de columnas
+    cols_ordenadas = []
+    
+    # Agregar columnas principales en el orden deseado (solo si existen)
+    for col in orden_principal:
+        if col in cols:
+            cols_ordenadas.append(col)
+            cols.remove(col)  # Remover de la lista original
+    
+    # Agregar las columnas restantes al final
+    cols_ordenadas.extend(cols)
+    
+    # Reordenar el DataFrame
+    df = df[cols_ordenadas]
     return df
 
 def eliminar_filas_por_descripcion(df, lista_descripciones):
@@ -521,7 +531,7 @@ def crear_tabla_correcciones(lista_correcciones):
     
     Args:
         lista_correcciones (List[List]): Lista de listas con formato:
-            [fecha, descripcion, monto, categoria_2, categoria_1, observacion]
+            [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
             
     Returns:
         pd.DataFrame: DataFrame con las correcciones a aplicar
@@ -529,7 +539,7 @@ def crear_tabla_correcciones(lista_correcciones):
     if not lista_correcciones:
         return pd.DataFrame()
     
-    columnas = ['Fecha', 'Descripción', 'Monto', 'Categoría_2', 'Categoría 1', 'Observación']
+    columnas = ['Fecha', 'Descripción', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación']
     df_correcciones = pd.DataFrame(lista_correcciones, columns=columnas)
     
     # Convertir fechas a datetime
@@ -566,10 +576,10 @@ def aplicar_correcciones_categorias(df_final, tabla_correcciones_lista):
     if 'Observación' not in df_final.columns:
         df_final['Observación'] = ''
     
-    # Hacer merge para identificar las filas a corregir
+    # Hacer merge para identificar las filas a corregir (solo por fecha y monto)
     df_merged = df_final.merge(
-        df_correcciones[['Fecha', 'Descripción', 'Monto', 'Categoría_2', 'Categoría 1', 'Observación']], 
-        on=['Fecha', 'Descripción', 'Monto'], 
+        df_correcciones[['Fecha', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación']], 
+        on=['Fecha', 'Monto'], 
         how='left', 
         suffixes=('', '_corr')
     )
@@ -1000,13 +1010,13 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         cargos = cargos[pd.to_numeric(cargos['Cargos (CLP)'], errors='coerce').notna()]
         cargos['Monto'] = abs(pd.to_numeric(cargos['Cargos (CLP)'], errors='coerce'))
         cargos = cargos.drop(columns=['Cargos (CLP)'])
-        cargos = cargos[pd.to_datetime(cargos['Fecha'], errors='coerce').notna()]
+        cargos = cargos[pd.to_datetime(cargos['Fecha'], errors='coerce', dayfirst=True).notna()]
         cargos = cargos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
         
         # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
         if not cargos.empty:
             # Mantener como datetime en lugar de convertir a string
-            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce')
+            cargos['Fecha'] = pd.to_datetime(cargos['Fecha'], errors='coerce', dayfirst=True)
     
     # Procesar abonos
     abonos = pd.DataFrame()
@@ -1015,12 +1025,12 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         abonos = abonos[pd.to_numeric(abonos['Abonos (CLP)'], errors='coerce').notna()]
         abonos['Monto'] = abs(pd.to_numeric(abonos['Abonos (CLP)'], errors='coerce'))
         abonos = abonos.drop(columns=['Abonos (CLP)'])
-        abonos = abonos[pd.to_datetime(abonos['Fecha'], errors='coerce').notna()]
+        abonos = abonos[pd.to_datetime(abonos['Fecha'], errors='coerce', dayfirst=True).notna()]
         abonos = abonos.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
         
         # Estandarizar formato de fecha a dd/mm/YYYY (consistente con otros datos)
         if not abonos.empty:
-            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce')
+            abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce', dayfirst=True)
     
     return cargos, abonos
 

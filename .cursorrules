@@ -120,8 +120,8 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 ## Nueva Tarea: Sistema de Correcciones de Categorías ✅
 
 **Task:** Implementar un sistema que permita sobrescribir categorías automáticas mediante una tabla externa:
-- Merge por fecha, descripción y monto
-- Reemplazar Categoría_2, Categoría 1 y agregar Observación
+- Merge por fecha y monto (sin descripción)
+- Reemplazar Categoría 1, Categoría_2 y agregar Observación
 - Tabla externa como lista de listas en inputs_modelo.py
 
 **Progreso:**
@@ -144,14 +144,14 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - ✅ **aplicar_correcciones_categorias()**: Hace merge y aplica correcciones
 - ✅ **Integración completa**: Nueva funcionalidad integrada en todo el flujo
 - ✅ **Columna Observación**: Se agrega automáticamente si no existe
-- ✅ **Merge inteligente**: Por fecha, descripción y monto
+- ✅ **Merge inteligente**: Por fecha y monto (sin descripción)
 - ✅ **Output informativo**: Muestra cantidad de correcciones aplicadas
 
 **Formato de tabla_correcciones:**
 ```python
 tabla_correcciones = [
-    [fecha, descripcion, monto, categoría_2, categoría_1, observacion],
-    ['2025-01-15', 'FACEBK ads campaign', 50000, 'Publicidad Meta', 'Costos de Marketing', 'Campaña navideña'],
+    [fecha, descripcion, monto, categoría_1, categoría_2, observacion],
+    ['2025-01-15', 'FACEBK ads campaign', 50000, 'Costos de Marketing', 'Publicidad Meta', 'Campaña navideña'],
 ]
 ```
 
