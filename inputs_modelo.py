@@ -2,14 +2,14 @@
 # Puedes modificar las palabras clave y categorías según tus necesidades
 
 diccionario_categorias = {
-    "Stock_tablas y bebidas": [
+    "Stock tablas y bebidas": [
         "LIDER.CL"
     ],
     "leña": [
         "Jaime Catricheo"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "mundo pintura", "librer"
+        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "mundo pintura", "librer", "doble rr"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -25,9 +25,6 @@ diccionario_categorias = {
     ],
     "Compras Internacionales": [
         "aliexpress", "alipays"
-    ],
-    "Pagos Digitales": [
-        "MERCADOPAGO", "MERPAGO", "SumUp", "SUMUP",
     ],
     "Transporte": [
         "UBER", "PAYU *UBER"
@@ -78,14 +75,18 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha bast", "Javiera Rodriguez"
+        "munoz cucha bast", "Javiera Rodriguez", "ferrete las condes", "ferr cl", "ferrete com"
     ],
     "Mano obra HotBoat daniel": [
         "inostroza canales"
     ],
     "Mano obra HotBoat otros": [
-        "Guillermo Ulloa", 
+        "Guillermo Ulloa"
     ],
+    "Intereses": [
+        "Pago automatico tarjeta de credito", "amortizacion linea de credito" 
+    ],
+
     
     # Categorías para ABONOS (solo las que te interesan)
     "Bencina Pathfinder": [
@@ -105,24 +106,24 @@ diccionario_categoria_1 = {
         "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", "Sueldo Tom"
     ],
     "Costos Variables": [
-        "Gas", "Combustible", "Edicion videos","remuneraciones", "leña" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
+        "Gas", "Combustible", "Edicion videos","remuneraciones", "leña", "Stock tablas y bebidas" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
     ],
     "Costos de Marketing": [
         "Publicidad Meta", "Publicidad Google", "Herramientas de marketing" # "marketing", "promoción",
     ],
     "Inversión en Activos": [
-        "Herramientas", "Calefonts", "Poleras", "Motores HotBoat", "Infraestructura" , "Estanques", "camara", "dron", "bateria", 
+        "Herramientas", "Calefonts", "Poleras", "Motores HotBoat", "Infraestructura" , "Estanques", "camara", "Drones", "bateria", "Antena starlink"
     ],
     "Capital aportado": [
         "Aportes de capital"
     ],
     "Inversión General": [
-        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel"
+        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel", "Intereses"
     ]
 }
 
-descripciones_a_eliminar = [
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas"
+descripciones_a_eliminar = [ #tiene que ser exacto
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon"
 ] 
 
 # Lista de registros específicos a eliminar por fecha y monto
@@ -130,13 +131,19 @@ descripciones_a_eliminar = [
 # La fecha puede ser en formato 'YYYY-MM-DD' o 'DD/MM/YYYY'
 eliminaciones_fecha_monto = [
     # Ejemplo de eliminaciones:
-    ['2025-04-21', 1400000],    # Eliminar registro del 15 de julio 2025 por $50,000
-    ['2025-01-09', 300000],
+    ['2025-04-21', 1400000],  
+    ['2025-04-21', 1400000],  
+    ['2025-05-30', 35660],    
+    ['2025-05-27', 32220],
+    ['2025-05-14', 275395.5],  #devolucion sobre abono (al parecer era excedente de dolares que se transfirio a mi cuenta corriente en dolares)
     # ['15/07/2025', 25000],    # Eliminar registro del 15 de julio 2025 por $25,000
     # ['2025-06-01', 100000],   # Eliminar registro del 1 de junio 2025 por $100,000
 ] 
 
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
+
+# Valor aproximado del dólar para conversiones de USD a CLP
+valor_aproximado_dolar = float(950)  # Actualizar según tipo de cambio actual
 
 # Tabla de correcciones para categorías específicas
 # Formato: [fecha, descripcion, monto, categoría_1, categoría_2, observacion]
@@ -167,6 +174,16 @@ tabla_correcciones = [
     ['2025-01-22','','177705','Inversión en Activos','Herramientas' ,'Lija Orbital'],
     ['2025-01-13','','157204','Inversión en Activos','Estanques' ,'Estanque 1400L'],
     ['2025-01-30','','144282','Inversión en Activos','Materiales HotBoat 3' ,'Monomero Estireno'],
+    ['2025-01-12','','116991','Inversión en Activos','Drones' ,'Dron'],
+    ['2025-05-28','','173300','Inversión en Activos','Antena starlink' ,'Antena starlink'],
+    ['2025-05-30','','9800','Inversión en Activos','Herramientas' ,'Llave Inglesa'],
+    ['2025-05-30','','51780','Inversión en Activos','Calefonts' ,'Aislante mangueras y flotadores bomba'],
+    ['2025-05-30','','47123','Inversión en Activos','HotBoat 3' ,'Reductor 48V a 12V'],
+    ['2025-05-30','','68125','Inversión en Activos','HotBoat 3' ,'Cableado HotBoat 3'],
+    ['2025-05-29','','128647','Inversión en Activos','Sistema inteligente' ,'Inversor 48V a 220V'],
+    ['2025-05-29','','23646','Inversión en Activos','Sistema Inteligente' ,'Interruptor Automático'],
+    ['2025-05-26','','13423','Inversión en Activos','Herramientas' ,'Medidor de Humedad'],
+    ['2025-05-26','','22758','Inversión en Activos','Sistema inteligente' ,'Sensor de gas y linterna frontal'],
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
 ]
 

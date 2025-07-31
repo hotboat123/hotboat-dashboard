@@ -46,8 +46,8 @@ ID,fecha_hora_trip,fecha_hora_creacion_reserva,Customer Email,Service,PAID AMOUN
 171,2025-02-18 18:00:00,2025-02-16 00:27:00,belenyessenia69@Gmail.com,HotBoat Trip 5 people (38.990 pp),194950,194950,0,56921644620,daisy obreque
 181,2025-02-18 19:00:00,2025-02-17 02:02:00,fernandaantinao.ggh@gmail.com,HotBoat Trip 5 people (38.990 pp),194950,194950,0,56949906203,Sebastian Soto
 183,2025-02-19 10:00:00,2025-02-18 01:58:00,willykrusea@gmail.com,HotBoat Trip 2 people (69.990 pp),125982,125982,0,56981887303,Willy Kruse
-187,2025-02-19 18:00:00,2025-02-19 01:33:00,javieranadiabarria@gmail.com,HotBoat Trip 4 people (44.990 pp),161964,161964,0,56971371707,Javiera Nadia Barría Retamal
 176,2025-02-19 18:00:00,2025-02-16 13:37:00,jesupellegrinim@gmail.com,HotBoat Trip 5 people (38.990 pp),0,0,0,56984288994,Maria Jesus Pellegrini
+187,2025-02-19 18:00:00,2025-02-19 01:33:00,javieranadiabarria@gmail.com,HotBoat Trip 4 people (44.990 pp),161964,161964,0,56971371707,Javiera Nadia Barría Retamal
 185,2025-02-20 13:00:00,2025-02-18 15:54:00,valereyesmunoz2007@gmail.com,HotBoat Trip 3 people (54.990 pp),148473,148473,0,56957631827,Valentina Reyes
 186,2025-02-21 19:00:00,2025-02-19 01:27:00,Maca.sanchez@gmail.com,HotBoat Trip 5 people (38.990 pp),0,0,0,56991254282,Macarena Sanchez Valdes
 192,2025-02-22 10:00:00,2025-02-20 14:01:00,Nmarin@devcoderx.com,HotBoat Trip 2 people (69.990 pp),125982,125982,0,56940168306,Nathalie Marín
@@ -100,4 +100,23 @@ ID,fecha_hora_trip,fecha_hora_creacion_reserva,Customer Email,Service,PAID AMOUN
 270,2025-06-13 14:00:00,2025-05-20 11:45:00,Venegasu1@gmail.com,HotBoat Trip 2 people (69.990 pp),139980,139980,0,56950907218,Ursula Venegas
 278,2025-06-20 14:00:00,2025-06-16 15:47:00,erickfeliperez@gmail.com,HotBoat Trip 4 people (44.990 pp),179960,179960,0,56994705066,erick perez
 284,2025-06-21 15:00:00,2025-06-21 06:11:00,marcemartinez01@gmail.com,HotBoat Trip 5 people (38.990 pp),194950,194950,0,56957582327,marcela martinez
+285,2025-06-24 16:00:00,2025-06-23 21:13:00,M.vald.duran@gmail.com,HotBoat Trip 2 people (69.990 pp),139980,139980,0,56995752265,Macarena Valdivia duran
+286,2025-06-25 15:00:00,2025-06-25 00:24:00,Natitarocchi@gmail.com,HotBoat Trip 4 people (44.990 pp),189990,189990,0,56944620066,Natalia Olmos
+293,2025-06-27 15:00:00,2025-06-27 14:24:00,patriciomoynaacuna@gmail.com,HotBoat Trip 3 people (54.990 pp),150007,150007,0,56948937626,patricio moyna acuña
+296,2025-06-28 16:00:00,2025-06-27 20:21:00,stephanieviro@gmail.com,HotBoat Trip 5 people (38.990 pp),194950,194950,0,56969088501,Stephanie Vidal
+302,2025-07-02 11:00:00,2025-07-02 01:19:00,rodrigo.pinodiaz84@gmail.com,HotBoat Trip 3 people (54.990 pp),164970,164970,0,56946120217,rodrigo pino
+301,2025-07-02 15:00:00,2025-07-01 16:57:00,Sabrina.lisette87@gmail.com,HotBoat Trip 2 people (69.990 pp),179980,179980,0,56986655708,Sabrina Lorca
+304,2025-07-03 15:00:00,2025-07-03 01:02:00,cesargutierrez3696@gmail.com,HotBoat Trip 3 people (54.990 pp),164970,164970,0,56989844756,Cesar Gutiérrez
+308,2025-07-04 10:00:00,2025-07-03 23:20:00,camila.aillon.molina@gmail.com,HotBoat Trip 4 people (44.990 pp),179960,179960,0,56972195310,Camila Aillon
+307,2025-07-04 13:00:00,2025-07-03 16:58:00,Francisco79@hotmail.com,HotBoat Trip 5 people (38.990 pp),219950,219950,0,56998714740,Francisco Basso
+309,2025-07-04 16:00:00,2025-07-04 00:12:00,apmoreiradelrio@gmail.com,HotBoat Trip 4 people (44.990 pp),179960,179960,0,56977552295,Anitta Moreira
+298,2025-07-05 14:00:00,2025-06-29 13:28:00,Mjose.torocastillo@gmail.com,HotBoat Trip 6 people (32.990 pp),197940,197940,0,56931866872,María jose Toro castillo
+305,2025-07-06 14:00:00,2025-07-03 16:21:00,Viizuu.daanii@gmail.com,HotBoat Trip 3 people (54.990 pp),82485,82485,0,56922340466,Daniela Villena
+311,2025-07-08 16:00:00,2025-07-06 19:27:00,ricardo.rosales@gmail.com,HotBoat Trip 4 people (44.990 pp),179960,179960,0,56942477141,Ricardo Rosales
 280,2025-07-10 12:00:00,2025-06-18 20:29:00,yeseniaignaciamc@gmail.com,HotBoat Trip 2 people (69.990 pp),62991,125982,62991,56942142529,Yesenia Muñoz
+318,2025-07-12 11:00:00,2025-07-08 22:55:00,cataquezadab@gmail.com,HotBoat Trip 2 people (69.990 pp),139980,139980,0,56988292716,Cata Quezada
+290,2025-07-27 15:00:00,2025-06-25 14:39:00,Diazcarrilloluisafernanda@gmail.com,HotBoat Trip 2 people (69.990 pp),179980,179980,0,56945948580,Luisa fernanda Diaz carrillo
+326,2025-07-30 16:00:00,2025-07-10 20:14:00,Fernanda.barim@gmail.com,HotBoat Trip 5 people (38.990 pp),0,214950,214950,56945213121,Fernanda Bari
+319,2025-08-17 16:00:00,2025-07-09 01:37:00,estefaniasaeze@gmail.com,HotBoat Trip 2 people (69.990 pp),0,159980,159980,56948623259,Estefanía Saez
+329,2025-09-26 13:00:00,2025-07-12 04:02:00,Dyoulyhenry111@gmail.com,HotBoat Trip 2 people (69.990 pp),0,199980,199980,17815791750,Dyouly Henry
+338,2026-01-09 12:00:00,2025-07-18 02:47:00,pili.tornini@gmail.com,HotBoat Trip 4 people (44.990 pp),0,179960,179960,56952396518,Carolina Tornini

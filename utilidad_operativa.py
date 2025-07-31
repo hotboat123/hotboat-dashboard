@@ -223,14 +223,15 @@ def generar_utilidad_operativa():
     # Cargar datos de todas las fuentes
     gastos_marketing = cargar_gastos_marketing()
     costos_fijos = cargar_costos_fijos()
-    costos_variables = cargar_costos_variables()
+    # costos_variables = cargar_costos_variables()
     costos_operativos = cargar_costos_operativos()
     ingresos_operativos = cargar_ingresos_operativos()
-    gastos_todos = cargar_todos_gastos()
-    abonos_todos = cargar_todos_abonos()
+    # gastos_todos = cargar_todos_gastos()
+    # abonos_todos = cargar_todos_abonos()
     
     # Verificar que todos los archivos se cargaron correctamente
-    if gastos_marketing.empty and costos_fijos.empty and costos_variables.empty and costos_operativos.empty and ingresos_operativos.empty and gastos_todos.empty and abonos_todos.empty:
+    if gastos_marketing.empty and costos_fijos.empty and costos_operativos.empty and ingresos_operativos.empty:
+    # if gastos_marketing.empty and costos_fijos.empty and costos_variables.empty and costos_operativos.empty and ingresos_operativos.empty and gastos_todos.empty and abonos_todos.empty:
         print("❌ No se pudieron cargar datos de ninguna fuente")
         return False
     
@@ -239,11 +240,11 @@ def generar_utilidad_operativa():
     utilidad_operativa = pd.concat([
         gastos_marketing,
         costos_fijos,
-        costos_variables,
+        #costos_variables,
         costos_operativos,
         ingresos_operativos,
-        gastos_todos,
-        abonos_todos
+        #gastos_todos,
+        #abonos_todos
     ], ignore_index=True)
     
     # Ordenar por fecha (ya están en formato datetime)

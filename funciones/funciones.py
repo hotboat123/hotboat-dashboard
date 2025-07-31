@@ -204,7 +204,7 @@ def leer_excel_mov_facturados_internacional(ruta_archivo, valor_aproximado_dolar
 
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=categoria_fila, header=0)
-    df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
+    df_final['Monto'] = (df_final['Monto (USD)'].astype(float) * valor_aproximado_dolar).astype(int)
     df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto', 'Monto (USD)']]  # Eliminada columna "Categoría"
     return df_final
 
@@ -219,7 +219,7 @@ def leer_excel_mov_no_facturados_internacional(ruta_archivo, valor_aproximado_do
     # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
     df_final = pd.read_excel(ruta_archivo, sheet_name='Saldo y Mov No Facturado', skiprows=descripcion_fila, header=0)
     df_final=df_final[['Fecha', 'Descripción', 'País', 'Monto (USD)']]
-    df_final['Monto'] = df_final['Monto (USD)'] * valor_aproximado_dolar
+    df_final['Monto'] = (df_final['Monto (USD)'].astype(float) * valor_aproximado_dolar).astype(int)
     return df_final
 
 def leer_pdf(ruta_archivo):
@@ -561,6 +561,39 @@ def eliminar_filas_por_fecha_monto(df, lista_fecha_monto):
     return df_resultado
 
 
+def limpiar_cuotas_01_01(df):
+    """
+    Limpia la columna 'Cuotas' convirtiendo valores "01/01" en campos vacíos.
+    
+    Args:
+        df (pd.DataFrame): DataFrame a procesar
+        
+    Returns:
+        pd.DataFrame: DataFrame con columna 'Cuotas' limpia
+    """
+    if df.empty or 'Cuotas' not in df.columns:
+        return df
+    
+    df_copia = df.copy()
+    
+    # Contar cuántos valores "01/01" hay antes de la limpieza
+    valores_01_01 = df_copia['Cuotas'].astype(str).str.strip().str.lower() == '01/01'
+    count_01_01 = valores_01_01.sum()
+    
+    if count_01_01 > 0:
+        print(f"🧹 Limpiando {count_01_01} valores '01/01' de la columna Cuotas...")
+        
+        # Reemplazar valores "01/01" con cadena vacía
+        # Manejar diferentes variaciones: "01/01", " 01/01 ", "01/01", etc.
+        df_copia.loc[valores_01_01, 'Cuotas'] = ''
+        
+        print(f"✅ Se limpiaron {count_01_01} valores '01/01' en la columna Cuotas")
+    else:
+        print("ℹ️  No se encontraron valores '01/01' en la columna Cuotas")
+    
+    return df_copia
+
+
 def agregar_columnas_origen(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos):
     """
     Agrega la columna 'Origen' a cada DataFrame y los recopila en una lista.
@@ -705,6 +738,9 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
     
     # Convertir fechas a datetime usando la nueva función
     df_final = convertir_fechas_a_datetime(df_final, 'Fecha')
+    
+    # Limpiar valores "01/01" en columna Cuotas antes de eliminar duplicados
+    df_final = limpiar_cuotas_01_01(df_final)
     
     #Eliminar duplicados y negativos
     df_final = df_final[df_final['Monto'] >= 0]
@@ -922,9 +958,9 @@ class ProcesadorArchivos:
         
         return datos_consolidados
 
-def procesar_archivos_financieros(directorio_input: str = 'archivos_input/archivos_input_costos', 
+def procesar_archivos_financieros(valor_aproximado_dolar: float,
+                                 directorio_input: str = 'archivos_input/archivos_input_costos', 
                                  directorio_output: str = 'archivos_output',
-                                 valor_aproximado_dolar: float = 950,
                                  año_para_fecha_banco_estado: str = '2025',
                                  diccionario_categorias: dict = None,
                                  descripciones_a_eliminar: list = None,

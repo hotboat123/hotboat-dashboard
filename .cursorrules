@@ -223,6 +223,54 @@ eliminaciones_fecha_monto = [
 
 ---
 
+## Nueva Tarea: Limpieza de Valores "01/01" en Columna Cuotas ✅
+
+**Task:** Crear función para limpiar valores "01/01" de la columna Cuotas y convertirlos en campos vacíos:
+- Nueva función que identifique y limpie valores "01/01"
+- Integración en el flujo de procesamiento antes de eliminar duplicados
+- Output informativo del proceso de limpieza
+
+**Progreso:**
+[X] Crear función limpiar_cuotas_01_01()
+[X] Integrar en procesar_df_final() en el lugar correcto del flujo
+[X] Probar funcionamiento con datos reales
+
+**Plan:**
+1. ✅ Crear función para limpiar valores "01/01" en columna Cuotas
+2. ✅ Integrar función después de convertir fechas pero antes de eliminar duplicados
+3. ✅ Agregar logging informativo del proceso
+4. ✅ Probar con datos reales
+
+**Funcionalidades Implementadas:**
+- ✅ **limpiar_cuotas_01_01()**: Limpia valores "01/01" convirtiéndolos en cadenas vacías
+- ✅ **Detección inteligente**: Maneja variaciones como espacios extra y mayúsculas
+- ✅ **Logging detallado**: Muestra cuántos valores se limpiaron
+- ✅ **Integración correcta**: Se ejecuta después de fechas pero antes de eliminar duplicados
+- ✅ **Manejo de errores**: Verifica existencia de columna 'Cuotas'
+
+**Archivo Modificado:**
+- ✅ `funciones/funciones.py` - Nueva función limpiar_cuotas_01_01() agregada e integrada
+
+**Resultados del Test:**
+- ✅ **664 valores "01/01"** encontrados y limpiados exitosamente
+- ✅ **42 archivos procesados** correctamente
+- ✅ **806 registros de gastos** procesados (después de limpieza)
+- ✅ **Sistema completo funcionando** sin errores
+
+**Ubicación en el Flujo:**
+```
+1. Eliminar por descripción
+2. Eliminar por fecha y monto
+3. Convertir fechas a datetime
+4. ✅ Limpiar cuotas "01/01" ← NUEVA FUNCIÓN
+5. Eliminar duplicados (incluyendo columna Cuotas limpia)
+6. Categorizar datos
+```
+
+**Estado:** ✅ COMPLETADO - Limpieza de cuotas "01/01" implementada y funcional
+
+---
+
 ## Tarea Completada: Crear Tabla "Utilidad Operativa.csv" ✅
 
 **Task:** Crear una nueva tabla que combine datos de:
