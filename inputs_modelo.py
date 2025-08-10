@@ -9,7 +9,7 @@ diccionario_categorias = {
         "Jaime Catricheo"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "mundo pintura", "librer", "doble rr"
+        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "librer", "doble rr"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -33,10 +33,13 @@ diccionario_categorias = {
         "ENTEL", "STARLINK"
     ],
     "Combustible": [
-        "COPEC", "combustible"
+        "COPEC", "combustible", "SHELL"
     ],
     "Mantención Vehículo": [
         "Diconor", "santa eli"
+    ],
+    "Mantención HotBoat": [
+        "mundo pintura",
     ],
     "edicion videos": [
         "Fiverr"
@@ -75,7 +78,7 @@ diccionario_categorias = {
         "77184211"
     ],
     "Gas": [
-        "munoz cucha bast", "Javiera Rodriguez", "ferrete las condes", "ferr cl", "ferrete com"
+        "munoz cucha bast", "Javiera Rodriguez", "ferrete las condes", "ferr cl", "ferrete com", "mercadopagoferreteria"
     ],
     "Mano obra HotBoat daniel": [
         "inostroza canales"
@@ -122,8 +125,9 @@ diccionario_categoria_1 = {
     ]
 }
 
-descripciones_a_eliminar = [ #tiene que ser exacto
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon"
+descripciones_a_eliminar = [ #tien e que ser exacto
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO"
+"pago linea de credito", "Traspaso De:Tomas Damja"
 ] 
 
 # Lista de registros específicos a eliminar por fecha y monto
@@ -184,7 +188,21 @@ tabla_correcciones = [
     ['2025-05-29','','23646','Inversión en Activos','Sistema Inteligente' ,'Interruptor Automático'],
     ['2025-05-26','','13423','Inversión en Activos','Herramientas' ,'Medidor de Humedad'],
     ['2025-05-26','','22758','Inversión en Activos','Sistema inteligente' ,'Sensor de gas y linterna frontal'],
+    ['2025-07-30','','30000','Costos Variables','Leña' ,'Leña juan otarola'],
+    ['2025-07-28','','40000','Costos Variables','Devolucion clientes' ,'Devolucion a cliente'],
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
+]
+
+# Lista de gastos pagados en efectivo
+# Formato: [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
+# Estos gastos se agregarán con origen 'Efectivo'
+gastos_efectivo = [
+    # Ejemplos de gastos en efectivo:
+    ['2025-07-30','Compra leña en efectivo juan otarola','30000','Costos Variables','Leña' ,'Leña juan otarola'],
+    ['2025-08-08','Compra leña en efectivo verduleria','7000','Costos Variables','Leña' ,'Leña verduleria'],
+    # ['2025-01-15', 'Compra herramientas ferretería local', 25000, 'Inversión General', 'Ferretería', 'Compra en efectivo'],
+    # ['2025-01-20', 'Combustible gasolina', 30000, 'Costos Variables', 'Combustible', 'Pago en efectivo estación servicio'],
+    # ['2025-01-25', 'Almuerzo equipo trabajo', 15000, 'Costos Variables', 'Alimentos', 'Almuerzo pagado en efectivo'],
 ]
 
 # Diccionario de categorías para cuenta corriente

@@ -986,3 +986,62 @@ python ejecutar_todos_dashboards.py
 **Estado:** ✅ COMPLETADO - Dashboard actualizado para usar columna "Compras"
 
 ---
+
+## Nueva Tarea: Sistema de Gastos en Efectivo ✅
+
+**Task:** Implementar funcionalidad para agregar gastos pagados en efectivo al sistema de procesamiento:
+- Nueva función que permita agregar gastos con origen "Efectivo"
+- Configuración mediante lista en inputs_modelo.py con mismo formato que correcciones
+- Integración en el flujo de procesamiento después de categorización
+
+**Progreso:**
+[X] Crear función crear_gastos_efectivo()
+[X] Crear función agregar_gastos_efectivo()
+[X] Integrar en procesar_df_final()
+[X] Actualizar procesar_archivos_financieros()
+[X] Crear lista gastos_efectivo en inputs_modelo.py
+[X] Actualizar gastos_hotboat_sin_drive.py
+[X] Usuario agregó primer gasto real de prueba
+
+**Plan:**
+1. ✅ Crear funciones para procesar gastos en efectivo
+2. ✅ Integrar en el flujo de procesamiento
+3. ✅ Agregar configuración en inputs_modelo.py
+4. ✅ Actualizar archivo principal para usar nueva funcionalidad
+5. ✅ Documentar uso y formato
+
+**Funcionalidades Implementadas:**
+- ✅ **crear_gastos_efectivo()**: Convierte lista de listas en DataFrame con origen "Efectivo"
+- ✅ **agregar_gastos_efectivo()**: Agrega gastos al DataFrame final después de categorización
+- ✅ **Formatos consistentes**: Usa mismo formato que tabla_correcciones
+- ✅ **Validación**: Convierte fechas a datetime y montos a numérico
+- ✅ **Output informativo**: Muestra cuántos gastos en efectivo se agregaron
+- ✅ **Integración completa**: Trabaja dentro del flujo de procesamiento normal
+
+**Formato de gastos_efectivo:**
+```python
+gastos_efectivo = [
+    ['2025-07-30','Compra leña en efectivo juan otarola','30000','Costos Variables','Leña' ,'Leña juan otarola'],
+    # [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
+]
+```
+
+**Archivos Modificados:**
+- ✅ `funciones/funciones.py` - Nuevas funciones crear_gastos_efectivo() y agregar_gastos_efectivo()
+- ✅ `funciones/funciones.py` - Actualizadas procesar_df_final() y procesar_archivos_financieros()
+- ✅ `inputs_modelo.py` - Lista gastos_efectivo configurada
+- ✅ `gastos_hotboat_sin_drive.py` - Integración completa
+
+**Características:**
+- ✅ **Origen automático**: Todos los gastos se marcan con origen "Efectivo"
+- ✅ **Posición correcta**: Se agregan después de categorización automática (línea ~840)
+- ✅ **Compatibilidad columnas**: Se ajustan automáticamente las columnas faltantes
+- ✅ **Logging detallado**: Muestra cuántos gastos se agregaron
+- ✅ **No duplicación**: Se agregan sin interferir con datos existentes
+
+**Usuario ya agregó gasto real:**
+- ✅ Leña juan otarola por $30,000 el 30/07/2025
+
+**Estado:** ✅ COMPLETADO - Sistema de gastos en efectivo implementado y con datos reales
+
+---

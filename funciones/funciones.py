@@ -443,12 +443,12 @@ def categorizar_por_diccionario(df, diccionario, nombre_columna):
 
 def reordenar_columna_categoria_extra(df):
     """
-    Reordena las columnas en el orden deseado: Fecha, Monto, Categoría 1, Categoría_2, Observación, Descripción, resto de columnas.
+    Reordena las columnas en el orden deseado: Fecha, Monto, Categoría 1, Categoría_2, Descripción, resto de columnas, Observación (al final).
     """
     cols = list(df.columns)
     
-    # Definir el orden deseado para las columnas principales
-    orden_principal = ['Fecha', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación', 'Descripción']
+    # Definir el orden deseado para las columnas principales (sin Observación)
+    orden_principal = ['Fecha', 'Monto', 'Categoría 1', 'Categoría_2', 'Descripción']
     
     # Crear lista final de columnas
     cols_ordenadas = []
@@ -459,8 +459,17 @@ def reordenar_columna_categoria_extra(df):
             cols_ordenadas.append(col)
             cols.remove(col)  # Remover de la lista original
     
-    # Agregar las columnas restantes al final
+    # Remover Observación de las columnas restantes si existe
+    observacion_existe = 'Observación' in cols
+    if observacion_existe:
+        cols.remove('Observación')
+    
+    # Agregar las columnas restantes
     cols_ordenadas.extend(cols)
+    
+    # Agregar Observación al final si existe
+    if observacion_existe:
+        cols_ordenadas.append('Observación')
     
     # Reordenar el DataFrame
     df = df[cols_ordenadas]
@@ -719,7 +728,133 @@ def aplicar_correcciones_categorias(df_final, tabla_correcciones_lista):
     
     return df_merged
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None):
+def crear_gastos_efectivo(lista_gastos_efectivo):
+    """
+    Convierte una lista de listas en un DataFrame para gastos pagados en efectivo.
+    
+    Args:
+        lista_gastos_efectivo (List[List]): Lista de listas con formato:
+            [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
+            
+    Returns:
+        pd.DataFrame: DataFrame con los gastos en efectivo a agregar
+    """
+    if not lista_gastos_efectivo:
+        return pd.DataFrame()
+    
+    columnas = ['Fecha', 'Descripción', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación']
+    df_gastos_efectivo = pd.DataFrame(lista_gastos_efectivo, columns=columnas)
+    
+    # Convertir fechas a datetime
+    df_gastos_efectivo = convertir_fechas_a_datetime(df_gastos_efectivo, 'Fecha')
+    
+    # Asegurar que el monto sea numérico
+    df_gastos_efectivo['Monto'] = pd.to_numeric(df_gastos_efectivo['Monto'], errors='coerce')
+    
+    # Agregar columna Origen con valor 'Efectivo'
+    df_gastos_efectivo['Origen'] = 'Efectivo'
+    
+    return df_gastos_efectivo
+
+def agregar_gastos_efectivo(df_final, lista_gastos_efectivo):
+    """
+    Agrega gastos pagados en efectivo al DataFrame final.
+    
+    Args:
+        df_final (pd.DataFrame): DataFrame con los datos procesados
+        lista_gastos_efectivo (List[List]): Lista de listas con gastos en efectivo
+        
+    Returns:
+        pd.DataFrame: DataFrame con gastos en efectivo agregados
+    """
+    if not lista_gastos_efectivo:
+        return df_final
+    
+    # Crear DataFrame de gastos en efectivo
+    df_gastos_efectivo = crear_gastos_efectivo(lista_gastos_efectivo)
+    
+    if df_gastos_efectivo.empty:
+        return df_final
+    
+    print(f"💰 Agregando {len(df_gastos_efectivo)} gastos pagados en efectivo...")
+    
+    # Crear columna Observación en df_final si no existe
+    if 'Observación' not in df_final.columns:
+        df_final['Observación'] = ''
+    
+    # Solo agregar a gastos_efectivo las columnas que YA existen en df_final
+    # NO agregar nuevas columnas a df_final
+    for col in df_final.columns:
+        if col not in df_gastos_efectivo.columns:
+            df_gastos_efectivo[col] = ''
+    
+    # Reordenar columnas de gastos_efectivo para que coincidan exactamente con df_final
+    df_gastos_efectivo = df_gastos_efectivo[df_final.columns]
+    
+    # Concatenar DataFrames
+    df_resultado = pd.concat([df_final, df_gastos_efectivo], ignore_index=True)
+    
+    print(f"✅ Se agregaron {len(df_gastos_efectivo)} gastos en efectivo")
+    
+    return df_resultado
+
+def eliminar_duplicados_priorizando_facturado(df):
+    """
+    Elimina duplicados entre movimientos facturados y no facturados,
+    manteniendo siempre el movimiento facturado cuando hay conflicto.
+    
+    Args:
+        df (pd.DataFrame): DataFrame con columna 'Origen'
+        
+    Returns:
+        pd.DataFrame: DataFrame sin duplicados, priorizando facturados
+    """
+    if df.empty or 'Origen' not in df.columns:
+        return df
+    
+    print("🔄 Eliminando duplicados entre movimientos facturados y no facturados...")
+    
+    # Identificar duplicados por fecha, descripción y cuotas
+    duplicados_mask = df.duplicated(subset=['Fecha', 'Descripción', 'Cuotas'], keep=False)
+    
+    if not duplicados_mask.any():
+        print("ℹ️  No se encontraron duplicados")
+        return df
+    
+    # Separar filas duplicadas y no duplicadas
+    df_no_duplicados = df[~duplicados_mask].copy()
+    df_duplicados = df[duplicados_mask].copy()
+    
+    # Crear prioridad: facturados tienen prioridad más alta
+    def asignar_prioridad(origen):
+        if 'Facturado' in origen:
+            return 1  # Alta prioridad
+        elif 'No Facturado' in origen:
+            return 2  # Baja prioridad
+        else:
+            return 0  # Prioridad neutral para otros orígenes
+    
+    df_duplicados['_prioridad'] = df_duplicados['Origen'].apply(asignar_prioridad)
+    
+    # Mantener solo el registro con mayor prioridad (menor número) por cada grupo de duplicados
+    df_duplicados_resueltos = df_duplicados.sort_values('_prioridad').drop_duplicates(
+        subset=['Fecha', 'Descripción', 'Cuotas'], 
+        keep='first'
+    )
+    
+    # Eliminar columna temporal de prioridad
+    df_duplicados_resueltos = df_duplicados_resueltos.drop(columns=['_prioridad'])
+    
+    # Combinar resultados
+    df_resultado = pd.concat([df_no_duplicados, df_duplicados_resueltos], ignore_index=True)
+    
+    duplicados_eliminados = len(df) - len(df_resultado)
+    if duplicados_eliminados > 0:
+        print(f"✅ Se eliminaron {duplicados_eliminados} duplicados, priorizando movimientos facturados")
+    
+    return df_resultado
+
+def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None, gastos_efectivo=None):
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
     dataframes_con_origen = agregar_columnas_origen(
@@ -753,11 +888,18 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
     if diccionario_categoria_1:
         df_final['Categoría 1'] = df_final['Categoría_2'].apply(lambda cat2: obtener_categoria(cat2, diccionario_categoria_1))
     
+    # Agregar gastos pagados en efectivo si se proporcionaron
+    if gastos_efectivo:
+        df_final = agregar_gastos_efectivo(df_final, gastos_efectivo)
+    
     df_final = reordenar_columna_categoria_extra(df_final)
     
     # Aplicar correcciones de categorías si se proporcionaron
     if tabla_correcciones:
         df_final = aplicar_correcciones_categorias(df_final, tabla_correcciones)
+    
+    # Eliminar duplicados entre facturado y no facturado, priorizando facturado
+    df_final = eliminar_duplicados_priorizando_facturado(df_final)
     
     return df_final
 
@@ -966,7 +1108,8 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
                                  descripciones_a_eliminar: list = None,
                                  diccionario_categoria_1: dict = None,
                                  tabla_correcciones: list = None,
-                                 eliminaciones_fecha_monto: list = None) -> bool:
+                                 eliminaciones_fecha_monto: list = None,
+                                 gastos_efectivo: list = None) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -980,6 +1123,7 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
         diccionario_categoria_1: Diccionario de categorías principales
         tabla_correcciones: Lista de listas con correcciones de categorías
         eliminaciones_fecha_monto: Lista de listas con [fecha, monto] a eliminar
+        gastos_efectivo: Lista de listas con gastos pagados en efectivo
         
     Returns:
         bool: True si el procesamiento fue exitoso
@@ -1033,7 +1177,8 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
         descripciones_a_eliminar,
         diccionario_categoria_1,
         tabla_correcciones,
-        eliminaciones_fecha_monto
+        eliminaciones_fecha_monto,
+        gastos_efectivo
     )
     
     # Procesar abonos
