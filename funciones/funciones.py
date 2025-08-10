@@ -382,7 +382,7 @@ def limpiar_y_ordenar_dataframe(df):
     
     return df_ordenado
 
-def exportar_archivos(df_final, df_abonos, directorio_salida="archivos_output"):
+def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output"):
     """
     Exporta los DataFrames a archivos CSV en el directorio especificado.
     
@@ -407,8 +407,8 @@ def exportar_archivos(df_final, df_abonos, directorio_salida="archivos_output"):
     
     # Exportar abonos
     try:
-        ruta_abonos = os.path.join(directorio_salida, "abonos hotboat.csv")
-        df_abonos.to_csv(ruta_abonos, index=False)
+        ruta_abonos = os.path.join(directorio_salida, "abonos hotboat cta cte.csv")
+        df_abonos_cta_cte.to_csv(ruta_abonos, index=False)
     except PermissionError:
         print(f"Error: No se puede escribir el archivo '{ruta_abonos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
     except Exception as e:
@@ -1541,6 +1541,86 @@ def procesar_abonos_cta_cte(
 
     return df
 
+
+def procesar_abonos_banco_estado(
+    df_abonos_be: pd.DataFrame,
+    config: dict | None = None,
+) -> pd.DataFrame:
+    """
+    Procesa abonos provenientes de Banco Estado aplicando:
+    - Eliminaciones por descripción, fecha+monto, fecha+descripción (desde config['abonos'])
+    - Categorización de Categoría_2 usando diccionario o heurística
+    - Derivación de Categoría 1 desde Categoría_2
+    - Correcciones por tabla (merge por Fecha+Monto)
+    - Reordenamiento de columnas
+    Nota: NO agrega ingresos en efectivo aquí (eso se aplica solo una vez en CTA CTE si corresponde)
+    """
+    if df_abonos_be is None or df_abonos_be.empty:
+        return pd.DataFrame()
+
+    # Leer configuración
+    descripciones_a_eliminar_abonos = None
+    eliminaciones_fecha_monto_abonos = None
+    eliminaciones_fecha_descripcion_abonos = None
+    tabla_correcciones_abonos = None
+    diccionario_categoria_1_abonos = None
+    diccionario_categorias_abonos = None
+
+    if isinstance(config, dict) and config.get('abonos'):
+        cfg = config['abonos']
+        descripciones_a_eliminar_abonos = cfg.get('descripciones_a_eliminar')
+        eliminaciones_fecha_monto_abonos = cfg.get('eliminaciones_fecha_monto')
+        eliminaciones_fecha_descripcion_abonos = cfg.get('eliminaciones_fecha_descripcion')
+        tabla_correcciones_abonos = cfg.get('tabla_correcciones')
+        diccionario_categoria_1_abonos = cfg.get('diccionario_categoria_1')
+        diccionario_categorias_abonos = cfg.get('diccionario_categorias')
+
+    df = df_abonos_be.copy()
+
+    # Normalizar tipos
+    if 'Fecha' in df.columns:
+        df = convertir_fechas_a_datetime(df, 'Fecha')
+    if 'Monto' in df.columns:
+        df['Monto'] = pd.to_numeric(df['Monto'], errors='coerce')
+
+    # Eliminaciones
+    df = eliminar_filas_por_descripcion(df, descripciones_a_eliminar_abonos)
+    df = eliminar_filas_por_fecha_monto(df, eliminaciones_fecha_monto_abonos)
+    df = eliminar_filas_por_fecha_descripcion(df, eliminaciones_fecha_descripcion_abonos)
+
+    # Deduplicación básica
+    claves = [c for c in ['Fecha', 'Descripción', 'Monto'] if c in df.columns]
+    if len(claves) == 3:
+        df = df.drop_duplicates(subset=claves, keep='first')
+
+    # Clasificación Categoría_2
+    if diccionario_categorias_abonos:
+        df = categorizar_por_diccionario(df, diccionario_categorias_abonos, 'Categoría_2')
+    else:
+        if 'Categoría_2' not in df.columns:
+            df['Categoría_2'] = df['Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+        else:
+            mask_vacios = df['Categoría_2'].isna() | (df['Categoría_2'].astype(str).str.strip() == '')
+            df.loc[mask_vacios, 'Categoría_2'] = df.loc[mask_vacios, 'Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+
+    # Categoría 1
+    if diccionario_categoria_1_abonos:
+        df['Categoría 1'] = df['Categoría_2'].apply(lambda c2: obtener_categoria(c2, diccionario_categoria_1_abonos))
+    else:
+        df['Categoría 1'] = df['Categoría_2'].apply(_categoria_1_desde_categoria_2)
+
+    # Correcciones
+    if tabla_correcciones_abonos:
+        df = aplicar_correcciones_categorias(df, tabla_correcciones_abonos)
+
+    # Reordenar columnas si existen
+    try:
+        df = reordenar_columna_categoria_extra(df)
+    except Exception:
+        pass
+
+    return df
+
 def procesar_archivos_financieros(
     directorio_input: str = 'archivos_input/archivos_input_costos', 
     directorio_output: str = 'archivos_output',
@@ -1593,14 +1673,7 @@ def procesar_archivos_financieros(
             tabla_correcciones = gastos_cfg.get('tabla_correcciones')
             gastos_efectivo = gastos_cfg.get('gastos_efectivo')
 
-            abonos_cfg = config.get('abonos', {})
-            diccionario_categorias_abonos = abonos_cfg.get('diccionario_categorias')
-            diccionario_categoria_1_abonos = abonos_cfg.get('diccionario_categoria_1')
-            descripciones_a_eliminar_abonos = abonos_cfg.get('descripciones_a_eliminar')
-            eliminaciones_fecha_monto_abonos = abonos_cfg.get('eliminaciones_fecha_monto')
-            eliminaciones_fecha_descripcion_abonos = abonos_cfg.get('eliminaciones_fecha_descripcion')
-            tabla_correcciones_abonos = abonos_cfg.get('tabla_correcciones')
-            ingresos_efectivo_abonos = abonos_cfg.get('ingresos_efectivo')
+
         except Exception as e:
             print(f"⚠️  Error leyendo config unificado: {str(e)}")
 
@@ -1651,6 +1724,10 @@ def procesar_archivos_financieros(
     # Procesar específicamente los abonos de cuenta corriente si existen
     if isinstance(df_abonos_cta_cte, pd.DataFrame) and not df_abonos_cta_cte.empty:
         df_abonos_cta_cte = procesar_abonos_cta_cte(df_abonos_cta_cte, config=config)
+    # Procesar específicamente los abonos de Banco Estado si existen
+    if isinstance(df_abonos_banco_estado, pd.DataFrame) and not df_abonos_banco_estado.empty:
+        df_abonos_banco_estado = procesar_abonos_banco_estado(df_abonos_banco_estado, config=config)
+
     frames_export = [df for df in [df_abonos_banco_estado, df_abonos_cta_cte] if isinstance(df, pd.DataFrame) and not df.empty]
     df_abonos = pd.concat(frames_export, ignore_index=True) if frames_export else pd.DataFrame()
     
@@ -1659,7 +1736,7 @@ def procesar_archivos_financieros(
     
     # Exportar archivos
     try:
-        exportar_archivos(df_final, df_abonos, directorio_output)
+        exportar_archivos(df_final, df_abonos_cta_cte, directorio_output)
         
 
         print("✅ PROCESAMIENTO COMPLETADO EXITOSAMENTE")

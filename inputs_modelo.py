@@ -220,7 +220,7 @@ diccionario_categoria_1_abonos = {
         'aportes de capital'
     ],
     'Ingreso operativo': [
-        'ingreso transbank diario', 'ingreso mercadopago diario', 'ingreso hotboat'
+        'ingreso transbank diario', 'ingreso mercadopago diario', 'ingreso hotboat', "ingreso transferencia hotboat diario"
     ],
     'otros': [
         'otros'
@@ -232,7 +232,8 @@ diccionario_categorias_abonos = {
     'aportes de capital': ["fintual", "dev Impuesto"],
     'ingreso transbank diario': ['transbank', 'tbk'],
     'ingreso mercadopago diario': ['mercado pago', 'mercadopago', 'mpago'],
-    'ingreso hotboat': ["Traspaso De:Hotboat Spa", "Nawrath", "Dutilh"],
+    'ingreso transferencia hotboat diario': ['TEF', "DEPOSITO EN EFECTIVO"],
+    'ingreso hotboat': ["Traspaso De:Hotboat Spa", "Nawrath", "Dutilh", "alberto eduardo", "rodrigo fredes", "patricio eduardo", "tomas damjanic"],
     'otros': ['Odette']
 }
 
@@ -240,8 +241,7 @@ diccionario_categorias_abonos = {
 # Filtros/limpiezas específicos de ABONOS
 descripciones_a_eliminar_abonos = [
     # ejemplos:
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "fani yutronic" , "sacha", "Giuseppe"
-    "Transferencia Desde Linea De Credito"
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "fani yutronic" , "sacha", "Giuseppe", "Transferencia Desde Linea De Credito", "Pago:proveedores 0762966190", "dinko damjanic", "tomas andreas", "dominique denise", "lucas andres"
 ]
 
 eliminaciones_fecha_monto_abonos = [
