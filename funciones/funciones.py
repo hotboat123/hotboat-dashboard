@@ -1322,7 +1322,7 @@ class ProcesadorArchivos:
         
         return datos_consolidados
 
-def procesar_abonos(datos_consolidados: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
+def procesar_abonos(datos_consolidados: dict, config: dict | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Prepara dos DataFrames de abonos, uno por Cuenta Corriente y otro por Banco Estado,
     agregando la columna 'Origen' en cada uno. No concatena; devuelve ambos por separado.
@@ -1456,13 +1456,7 @@ def agregar_ingresos_efectivo(df_abonos: pd.DataFrame, lista_ingresos_efectivo: 
 
 def procesar_abonos_cta_cte(
     df_abonos_cta_cte: pd.DataFrame,
-    descripciones_a_eliminar_abonos: list = None,
-    eliminaciones_fecha_monto_abonos: list = None,
-    eliminaciones_fecha_descripcion_abonos: list = None,
-    tabla_correcciones_abonos: list = None,
-    ingresos_efectivo: list = None,
-    diccionario_categoria_1_abonos: dict = None,
-    diccionario_categorias_abonos: dict = None,
+    config: dict | None = None,
 ) -> pd.DataFrame:
     """
     Procesa abonos de cuenta corriente con las siguientes etapas:
@@ -1476,6 +1470,25 @@ def procesar_abonos_cta_cte(
     """
     if df_abonos_cta_cte is None or df_abonos_cta_cte.empty:
         return pd.DataFrame()
+
+    # Si llega config unificado, completar parámetros faltantes desde config['abonos']
+    descripciones_a_eliminar_abonos = None
+    eliminaciones_fecha_monto_abonos = None
+    eliminaciones_fecha_descripcion_abonos = None
+    tabla_correcciones_abonos = None
+    ingresos_efectivo = None
+    diccionario_categoria_1_abonos = None
+    diccionario_categorias_abonos = None
+
+    if isinstance(config, dict) and config.get('abonos'):
+        cfg = config['abonos']
+        descripciones_a_eliminar_abonos = cfg.get('descripciones_a_eliminar')
+        eliminaciones_fecha_monto_abonos = cfg.get('eliminaciones_fecha_monto')
+        eliminaciones_fecha_descripcion_abonos = cfg.get('eliminaciones_fecha_descripcion')
+        tabla_correcciones_abonos = cfg.get('tabla_correcciones')
+        ingresos_efectivo = cfg.get('ingresos_efectivo')
+        diccionario_categoria_1_abonos = cfg.get('diccionario_categoria_1')
+        diccionario_categorias_abonos = cfg.get('diccionario_categorias')
 
     df = df_abonos_cta_cte.copy()
 
@@ -1528,25 +1541,11 @@ def procesar_abonos_cta_cte(
 
     return df
 
-def procesar_archivos_financieros(valor_aproximado_dolar: float,
-                                 directorio_input: str = 'archivos_input/archivos_input_costos', 
-                                 directorio_output: str = 'archivos_output',
-                                 año_para_fecha_banco_estado: str = '2025',
-                                 diccionario_categorias: dict = None,
-                                 descripciones_a_eliminar: list = None,
-                                 diccionario_categoria_1: dict = None,
-                                 tabla_correcciones: list = None,
-                                 eliminaciones_fecha_monto: list = None,
-                                 gastos_efectivo: list = None,
-                                  eliminaciones_fecha_descripcion: list = None,
-                                  # Nuevos parámetros para procesar abonos cta cte
-                                  descripciones_a_eliminar_abonos: list = None,
-                                  eliminaciones_fecha_monto_abonos: list = None,
-                                  eliminaciones_fecha_descripcion_abonos: list = None,
-                                  tabla_correcciones_abonos: list = None,
-                                  ingresos_efectivo_abonos: list = None,
-                                  diccionario_categoria_1_abonos: dict = None,
-                                  diccionario_categorias_abonos: dict = None) -> bool:
+def procesar_archivos_financieros(
+    directorio_input: str = 'archivos_input/archivos_input_costos', 
+    directorio_output: str = 'archivos_output',
+    config: dict | None = None
+) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -1579,6 +1578,32 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
         print("💡 Asegúrate de tener los archivos en la carpeta correcta")
         return False
     
+    # Si se entrega config unificado, sobre-escribir parámetros individuales
+    if isinstance(config, dict) and config:
+        try:
+            valor_aproximado_dolar = config.get('global', {}).get('valor_aproximado_dolar')
+            año_para_fecha_banco_estado = config.get('global', {}).get('año_para_fecha_banco_estado')
+
+            gastos_cfg = config.get('gastos', {})
+            diccionario_categorias = gastos_cfg.get('diccionario_categorias')
+            diccionario_categoria_1 = gastos_cfg.get('diccionario_categoria_1')
+            descripciones_a_eliminar = gastos_cfg.get('descripciones_a_eliminar')
+            eliminaciones_fecha_monto = gastos_cfg.get('eliminaciones_fecha_monto')
+            eliminaciones_fecha_descripcion = gastos_cfg.get('eliminaciones_fecha_descripcion')
+            tabla_correcciones = gastos_cfg.get('tabla_correcciones')
+            gastos_efectivo = gastos_cfg.get('gastos_efectivo')
+
+            abonos_cfg = config.get('abonos', {})
+            diccionario_categorias_abonos = abonos_cfg.get('diccionario_categorias')
+            diccionario_categoria_1_abonos = abonos_cfg.get('diccionario_categoria_1')
+            descripciones_a_eliminar_abonos = abonos_cfg.get('descripciones_a_eliminar')
+            eliminaciones_fecha_monto_abonos = abonos_cfg.get('eliminaciones_fecha_monto')
+            eliminaciones_fecha_descripcion_abonos = abonos_cfg.get('eliminaciones_fecha_descripcion')
+            tabla_correcciones_abonos = abonos_cfg.get('tabla_correcciones')
+            ingresos_efectivo_abonos = abonos_cfg.get('ingresos_efectivo')
+        except Exception as e:
+            print(f"⚠️  Error leyendo config unificado: {str(e)}")
+
     # Inicializar procesador
     procesador = ProcesadorArchivos()
     archivos_procesados = 0
@@ -1621,20 +1646,11 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
     )
     
     # Procesar abonos: obtener por separado
-    df_abonos_cta_cte, df_abonos_banco_estado = procesar_abonos(datos_consolidados)
+    df_abonos_cta_cte, df_abonos_banco_estado = procesar_abonos(datos_consolidados, config=config)
 
     # Procesar específicamente los abonos de cuenta corriente si existen
     if isinstance(df_abonos_cta_cte, pd.DataFrame) and not df_abonos_cta_cte.empty:
-        df_abonos_cta_cte = procesar_abonos_cta_cte(
-            df_abonos_cta_cte,
-            descripciones_a_eliminar_abonos=descripciones_a_eliminar_abonos,
-            eliminaciones_fecha_monto_abonos=eliminaciones_fecha_monto_abonos,
-            eliminaciones_fecha_descripcion_abonos=eliminaciones_fecha_descripcion_abonos,
-            tabla_correcciones_abonos=tabla_correcciones_abonos,
-            ingresos_efectivo=ingresos_efectivo_abonos,
-            diccionario_categoria_1_abonos=diccionario_categoria_1_abonos,
-            diccionario_categorias_abonos=diccionario_categorias_abonos,
-        )
+        df_abonos_cta_cte = procesar_abonos_cta_cte(df_abonos_cta_cte, config=config)
     frames_export = [df for df in [df_abonos_banco_estado, df_abonos_cta_cte] if isinstance(df, pd.DataFrame) and not df.empty]
     df_abonos = pd.concat(frames_export, ignore_index=True) if frames_export else pd.DataFrame()
     

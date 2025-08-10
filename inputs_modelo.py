@@ -240,8 +240,7 @@ diccionario_categorias_abonos = {
 # Filtros/limpiezas específicos de ABONOS
 descripciones_a_eliminar_abonos = [
     # ejemplos:
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "fany yutronic" , "sacha"
-
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "fani yutronic" , "sacha", "Giuseppe"
     "Transferencia Desde Linea De Credito"
 ]
 
@@ -268,4 +267,34 @@ ingresos_efectivo_abonos = [
 
 # Diccionario de categorías para cuenta corriente
 # Categorías específicas para los movimientos de cuenta corriente
+
+############################
+# CONFIG ÚNICO             #
+############################
+
+# Diccionario único de configuración para el procesamiento
+config_procesamiento = {
+    'global': {
+        'valor_aproximado_dolar': valor_aproximado_dolar,
+        'año_para_fecha_banco_estado': '2025',
+    },
+    'gastos': {
+        'diccionario_categorias': diccionario_categorias_gastos,
+        'diccionario_categoria_1': diccionario_categoria_1_gastos,
+        'descripciones_a_eliminar': descripciones_a_eliminar_gastos,
+        'eliminaciones_fecha_monto': eliminaciones_fecha_monto_gastos,
+        'eliminaciones_fecha_descripcion': eliminaciones_fecha_descripcion_gastos,
+        'tabla_correcciones': tabla_correcciones_gastos,
+        'gastos_efectivo': gastos_efectivo_gastos,
+    },
+    'abonos': {
+        'diccionario_categorias': diccionario_categorias_abonos,
+        'diccionario_categoria_1': diccionario_categoria_1_abonos,
+        'descripciones_a_eliminar': descripciones_a_eliminar_abonos,
+        'eliminaciones_fecha_monto': eliminaciones_fecha_monto_abonos,
+        'eliminaciones_fecha_descripcion': eliminaciones_fecha_descripcion_abonos,
+        'tabla_correcciones': tabla_correcciones_abonos,
+        'ingresos_efectivo': ingresos_efectivo_abonos,
+    }
+}
 

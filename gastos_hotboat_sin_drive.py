@@ -37,24 +37,7 @@ except AttributeError:
 from funciones.funciones import procesar_archivos_financieros
 
 # Importar configuraciones
-from inputs_modelo import (
-    diccionario_categorias_gastos,
-    descripciones_a_eliminar_gastos,
-    diccionario_categoria_1_gastos,
-    tabla_correcciones_gastos,
-    eliminaciones_fecha_monto_gastos,
-    valor_aproximado_dolar,
-    gastos_efectivo_gastos,
-    eliminaciones_fecha_descripcion_gastos,
-    # Abonos
-    diccionario_categoria_1_abonos,
-    descripciones_a_eliminar_abonos,
-    eliminaciones_fecha_monto_abonos,
-    eliminaciones_fecha_descripcion_abonos,
-    tabla_correcciones_abonos,
-    ingresos_efectivo_abonos,
-    diccionario_categorias_abonos,
-)
+from inputs_modelo import config_procesamiento
 
 # ======== CONFIGURACIÓN ========
 AÑO_PARA_FECHA_BANCO_ESTADO = '2025'
@@ -66,25 +49,9 @@ if __name__ == '__main__':
     try:
         # Ejecutar el procesamiento principal (incluye cuenta corriente)
         success = procesar_archivos_financieros(
-            valor_aproximado_dolar=valor_aproximado_dolar,
             directorio_input=DIRECTORIO_INPUT,
             directorio_output=DIRECTORIO_OUTPUT,
-            año_para_fecha_banco_estado=AÑO_PARA_FECHA_BANCO_ESTADO,
-            diccionario_categorias=diccionario_categorias_gastos,
-            descripciones_a_eliminar=descripciones_a_eliminar_gastos,
-            diccionario_categoria_1=diccionario_categoria_1_gastos,
-            tabla_correcciones=tabla_correcciones_gastos,
-            eliminaciones_fecha_monto=eliminaciones_fecha_monto_gastos,
-            gastos_efectivo=gastos_efectivo_gastos,
-            eliminaciones_fecha_descripcion=eliminaciones_fecha_descripcion_gastos,
-            # Nuevos parámetros para abonos cta cte
-            descripciones_a_eliminar_abonos=descripciones_a_eliminar_abonos,
-            eliminaciones_fecha_monto_abonos=eliminaciones_fecha_monto_abonos,
-            eliminaciones_fecha_descripcion_abonos=eliminaciones_fecha_descripcion_abonos,
-            tabla_correcciones_abonos=tabla_correcciones_abonos,
-            ingresos_efectivo_abonos=ingresos_efectivo_abonos,
-            diccionario_categoria_1_abonos=diccionario_categoria_1_abonos,
-            diccionario_categorias_abonos=diccionario_categorias_abonos,
+            config=config_procesamiento,
         )
         
         if success:
