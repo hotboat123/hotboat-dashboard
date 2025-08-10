@@ -1065,7 +1065,34 @@ def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
 
     return df_deudas
 
-def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None, gastos_efectivo=None, eliminaciones_fecha_descripcion: List[List] = None):
+def procesar_df_final(
+    df_banco_estado_cargos,
+    df_banco_chile_facturado_internacional,
+    df_banco_chile_facturado_nacional,
+    df_banco_chile_no_facturado_internacional,
+    df_banco_chile_no_facturado_nacional,
+    df_cuenta_corriente_cargos,
+    config: dict | None = None,
+):
+
+    # Cargar configuración de gastos desde config si se proporcionó
+    diccionario_categorias = None
+    descripciones_a_eliminar = None
+    diccionario_categoria_1 = None
+    tabla_correcciones = None
+    eliminaciones_fecha_monto = None
+    gastos_efectivo = None
+    eliminaciones_fecha_descripcion = None
+
+    if isinstance(config, dict) and config.get('gastos'):
+        cfg_g = config['gastos']
+        diccionario_categorias = cfg_g.get('diccionario_categorias')
+        descripciones_a_eliminar = cfg_g.get('descripciones_a_eliminar')
+        diccionario_categoria_1 = cfg_g.get('diccionario_categoria_1')
+        tabla_correcciones = cfg_g.get('tabla_correcciones')
+        eliminaciones_fecha_monto = cfg_g.get('eliminaciones_fecha_monto')
+        gastos_efectivo = cfg_g.get('gastos_efectivo')
+        eliminaciones_fecha_descripcion = cfg_g.get('eliminaciones_fecha_descripcion')
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
     dataframes_con_origen = agregar_columnas_origen(
@@ -1664,14 +1691,6 @@ def procesar_archivos_financieros(
             valor_aproximado_dolar = config.get('global', {}).get('valor_aproximado_dolar')
             año_para_fecha_banco_estado = config.get('global', {}).get('año_para_fecha_banco_estado')
 
-            gastos_cfg = config.get('gastos', {})
-            diccionario_categorias = gastos_cfg.get('diccionario_categorias')
-            diccionario_categoria_1 = gastos_cfg.get('diccionario_categoria_1')
-            descripciones_a_eliminar = gastos_cfg.get('descripciones_a_eliminar')
-            eliminaciones_fecha_monto = gastos_cfg.get('eliminaciones_fecha_monto')
-            eliminaciones_fecha_descripcion = gastos_cfg.get('eliminaciones_fecha_descripcion')
-            tabla_correcciones = gastos_cfg.get('tabla_correcciones')
-            gastos_efectivo = gastos_cfg.get('gastos_efectivo')
 
 
         except Exception as e:
@@ -1709,13 +1728,7 @@ def procesar_archivos_financieros(
         datos_consolidados['banco_chile_no_facturado_internacional'],
         datos_consolidados['banco_chile_no_facturado_nacional'],
         datos_consolidados['cuenta_corriente_cargos'],
-        diccionario_categorias,
-        descripciones_a_eliminar,
-        diccionario_categoria_1,
-        tabla_correcciones,
-        eliminaciones_fecha_monto,
-        gastos_efectivo,
-        eliminaciones_fecha_descripcion
+        config=config,
     )
     
     # Procesar abonos: obtener por separado
