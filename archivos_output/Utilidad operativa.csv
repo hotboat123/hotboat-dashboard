@@ -1,379 +1,471 @@
-fecha,categoria,categoria_1,categoria_2,descripcion,monto
-2024-08-31 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2024-08-31 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2024-09-17 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2024-09-17 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
-2024-09-18 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,59990.0
-2024-09-18 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2024-09-25 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
-2024-09-25 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2024-09-29 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
-2024-09-29 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-03 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19170.0
-2025-01-09 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
-2025-01-11 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-11 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-12 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-01-12 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-14 00:00:00,costos fijos,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,190000.0
-2025-01-14 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-01-14 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-15 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-15 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-18 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
-2025-01-18 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-18 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-01-19 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
-2025-01-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-01-20 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1919.0
-2025-01-20 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-01-20 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-21 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,1938.0
-2025-01-22 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,768.0
-2025-01-22 00:00:00,costos fijos,Costos Fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,13192.0
-2025-01-22 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,2897.0
-2025-01-23 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,4398.0
-2025-01-23 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-01-23 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-24 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-24 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-25 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-25 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-25 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-25 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-01-26 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-26 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-01-28 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-28 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-01-29 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,6583.0
-2025-01-30 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,9880.0
-2025-01-30 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-01-30 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-31 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,14934.0
-2025-01-31 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-01-31 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,16463.0
-2025-02-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,18116.0
-2025-02-01 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-01 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,190000.0
-2025-02-02 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,19921.0
-2025-02-02 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-02 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,150000.0
-2025-02-04 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19142.0
-2025-02-04 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-04 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-02-04 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-02-04 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-05 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,22182.0
-2025-02-05 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-05 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-02-05 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-05 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-06 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-06 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-02-08 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,24576.0
-2025-02-09 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-09 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-02-10 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,TEF BANCOESTADO A  SAFE TRAVELER TI,196000.0
-2025-02-10 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-10 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-02-10 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-10 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-11 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,27094.0
-2025-02-11 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-11 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-13 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-13 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-13 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-13 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,15000.0
-2025-02-13 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-13 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-02-14 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-14 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-14 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-14 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-02-14 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-14 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-15 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-15 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-02-15 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-15 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-02-16 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-02-16 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-16 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-16 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-02-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,11960.0
-2025-02-17 00:00:00,costos fijos,Costos Fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,13873.0
-2025-02-17 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,169980.0
-2025-02-17 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-17 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-02-17 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-17 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-17 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-02-18 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-18 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-18 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-18 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-19 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-02-19 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,161964.0
-2025-02-19 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-02-19 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-20 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-20 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,148473.0
-2025-02-21 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,500000.0
-2025-02-21 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-21 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-02-22 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-22 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-02-22 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-22 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,152982.0
-2025-02-22 19:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-02-22 19:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-23 09:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-23 09:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-23 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-23 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-23 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-23 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-02-24 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,772.0
-2025-02-24 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,178146.0
-2025-02-24 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-25 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-02-25 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-25 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,97475.0
-2025-02-25 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QPTS7JLE42,33383.0
-2025-02-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,30352.0
-2025-02-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QPTS7JLE42 COMPRAS INT.VI,33383.0
-2025-02-27 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-02-27 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-28 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,36442.0
-2025-02-28 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK* COMPRAS INT.VI,36442.0
-2025-02-28 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,219950.0
-2025-02-28 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-02-28 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-02-28 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-03 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK                  DUBLIN       IE,39748.0
-2025-03-03 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK*,39748.0
-2025-03-05 00:00:00,costos fijos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
-2025-03-05 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19285.0
-2025-03-05 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-05 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-03-06 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *LXL4NJLE42,45058.0
-2025-03-06 00:00:00,costos fijos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
-2025-03-08 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,143968.0
-2025-03-08 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-09 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-09 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,143968.0
-2025-03-12 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *H4RFZLQE42,49362.0
-2025-03-12 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-03-12 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-14 00:00:00,costos fijos,Costos Fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,11893.0
-2025-03-14 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-14 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
-2025-03-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *4M2MYJCF42,8464.0
-2025-03-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *YW4S9MQE42,2565.0
-2025-03-20 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,10000.0
-2025-03-20 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-03-20 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-20 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-03-20 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-03-24 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,777.0
-2025-03-29 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *3APWXMQE42,53513.0
-2025-03-29 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *3APWXMQE42 COMPRAS INT.VI,53513.0
-2025-04-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,29321.0
-2025-04-03 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19403.0
-2025-04-09 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
-2025-04-09 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-11 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,30000.0
-2025-04-11 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-04-11 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-12 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,191970.0
-2025-04-12 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-14 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-04-14 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-15 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-04-15 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QBSV8L4F42,51528.0
-2025-04-17 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,97986.0
-2025-04-17 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-17 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,148473.0
-2025-04-17 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-18 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-18 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-04-18 18:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-18 18:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
-2025-04-19 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-19 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194970.0
-2025-04-19 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
-2025-04-19 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-21 00:00:00,costos fijos,Costos Fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,16990.0
-2025-04-21 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,323200.0
-2025-04-21 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-04-21 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-21 17:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-04-21 17:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-04-22 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,780.0
-2025-05-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,58145.0
-2025-05-01 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-01 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179980.0
-2025-05-02 00:00:00,costos fijos,Costos Fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,300000.0
-2025-05-02 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-05-02 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-02 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197964.0
-2025-05-02 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-04 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-04 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,138558.0
-2025-05-04 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,168980.0
-2025-05-04 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-06 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19494.0
-2025-05-08 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *6E2LPM4F42,59004.0
-2025-05-11 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-11 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,209960.0
-2025-05-11 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-11 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-05-14 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-14 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-05-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *C62DENGF42,3040.0
-2025-05-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *4LXG6PLE42,39738.0
-2025-05-18 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,PADDLE.NET* CHATBOT,18990.0
-2025-05-18 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-05-18 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-22 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,783.0
-2025-05-23 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,119000.0
-2025-05-23 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-23 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-05-23 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-24 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-24 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-05-30 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-05-30 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,69990.0
-2025-05-31 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-05-31 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,46882.0
-2025-06-02 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
-2025-06-03 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,"CURSOR, AI POWERED",19000.0
-2025-06-04 00:00:00,costos fijos,Costos Fijos,Internet,DLOCAL *STARLINK SANTIAGO,35000.0
-2025-06-04 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19549.0
-2025-06-05 00:00:00,costos fijos,Costos Fijos,Beneficios HotBoat,Traspaso A:Felipe Hidalgo Sanhuez,58250.0
-2025-06-05 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,125982.0
-2025-06-05 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-07 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *NBNACQCF42,59802.0
-2025-06-13 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *ZYD9YQUE42,65749.0
-2025-06-13 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-06-13 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *5PWGZQLF42,32556.0
-2025-06-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *CYLK8QYE42,10877.0
-2025-06-18 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,PADDLE.NET* CHATBOT,18990.0
-2025-06-20 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-06-20 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-21 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-21 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-06-22 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *DD2VWQGF42,71877.0
-2025-06-23 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,785.0
-2025-06-24 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-24 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-06-25 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,189990.0
-2025-06-25 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *TDD8XRUE42,79363.0
-2025-06-26 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *TDD8XRUE42 COMPRAS INT.VI,79363.0
-2025-06-27 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,150007.0
-2025-06-27 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-28 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-06-28 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-06-30 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *HE6CER4F42 COMPRAS INT.VI,84540.0
-2025-06-30 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *HE6CER4F42,84540.0
-2025-06-30 00:00:00,costos fijos,Costos Fijos,Sueldo Tom,Traspaso A:Prex Chile S A,200000.0
-2025-07-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,GOOGLE *ADS15719036,15532.0
-2025-07-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,GOOGLE *ADS15719036 COMPRAS INT.VI,15532.0
-2025-07-02 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-02 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-07-02 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-02 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179980.0
-2025-07-03 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
-2025-07-03 00:00:00,costos fijos,Costos Fijos,Internet,STARLINK STARLINK LAS CONDES,35000.0
-2025-07-03 00:00:00,costos fijos,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,19588.0
-2025-07-03 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,164970.0
-2025-07-03 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-04 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,"CURSOR, AI POWERED",19000.0
-2025-07-04 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,"CURSOR, AI POWERED COMPRAS INT.VI",19000.0
-2025-07-04 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-07-04 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-04 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-04 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,219950.0
-2025-07-04 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-04 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-07-05 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QGP9ASCF42 COMPRAS INT.VI,90544.0
-2025-07-05 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *QGP9ASCF42,90544.0
-2025-07-05 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-05 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197940.0
-2025-07-06 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-06 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,82485.0
-2025-07-08 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-08 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179960.0
-2025-07-09 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *F5ZLRRYE42 COMPRAS INT.VI,94914.0
-2025-07-09 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *F5ZLRRYE42,94914.0
-2025-07-10 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,62991.0
-2025-07-10 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-12 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,139980.0
-2025-07-12 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *JR6JYS8F42,41458.0
-2025-07-17 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *JR6JYS8F42 COMPRAS INT.VI,41458.0
-2025-07-17 00:00:00,costos fijos,Costos Fijos,Beneficios HotBoat,Traspaso A:Felipe Hidalgo Sanhuez,72200.0
-2025-07-18 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,PADDLE.NET* CHATBOT COMPRAS INT.VI,18990.0
-2025-07-18 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,PADDLE.NET* CHATBOT,18990.0
-2025-07-21 00:00:00,costos fijos,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
-2025-07-22 00:00:00,costos fijos,Costos Fijos,Seguros,Cargo Seguro Proteccion Bancaria,784.0
-2025-07-27 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,197980.0
-2025-07-27 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-27 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,179980.0
-2025-07-27 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-29 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-29 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-07-30 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-30 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-07-31 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,161964.0
-2025-07-31 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-07-31 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-07-31 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,GOOGLE *ADS15719036 COMPRAS INT.VI,92492.0
-2025-08-01 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Google,GOOGLE ADS1571903631    ccgoogle.comUS,92492.0
-2025-08-01 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,159980.0
-2025-08-01 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-02 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-08-02 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-02 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-02 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-03 00:00:00,Costos de Marketing,Costos de Marketing,Publicidad Meta,FACEBK *CEGWWTGF42 COMPRAS INT.VI,98980.0
-2025-08-03 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,209930.0
-2025-08-03 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-03 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-03 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,194950.0
-2025-08-04 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,1600.0
-2025-08-04 00:00:00,Costos de Marketing,Costos de Marketing,Herramientas de marketing,"CURSOR, AI POWERED COMPRAS INT.VI",19000.0
-2025-08-04 00:00:00,costos fijos,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,350000.0
-2025-08-05 00:00:00,costos fijos,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
-2025-08-09 11:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-09 11:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,97485.0
-2025-08-11 00:00:00,costos fijos,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
-2025-08-17 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-17 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-18 14:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-18 14:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-23 15:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-23 15:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-29 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-29 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-08-30 16:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-08-30 16:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-09-15 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-09-15 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-09-26 10:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2025-09-26 10:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-09-26 13:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
-2025-09-26 13:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2026-01-09 12:00:00,costo operativo,Costos Operativos,Por reserva,Costo operativo por reserva,35000.0
-2026-01-09 12:00:00,ingreso operativo,Ingresos Operativos,Reservas,Ingreso por reserva,0.0
+fecha,categoria,categoria_2,descripcion,monto
+2024-08-31 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2024-08-31 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2024-09-17 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2024-09-17 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,69990.0
+2024-09-18 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2024-09-18 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,59990.0
+2024-09-25 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2024-09-25 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,69990.0
+2024-09-29 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2024-09-29 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,69990.0
+2025-01-03 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19170.0
+2025-01-09 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-01-11 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-11 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-12 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-12 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-01-14 00:00:00,costos fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,190000.0
+2025-01-14 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-01-14 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-15 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-15 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-18 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-01-18 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-19 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-01-19 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-20 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-01-20 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-22 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,768.0
+2025-01-22 00:00:00,costos fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,13192.0
+2025-01-23 09:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-01-23 09:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-24 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-24 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-25 09:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-25 09:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-25 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-25 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-01-26 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-26 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-01-28 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-01-28 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-30 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-01-30 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-31 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-01-31 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-01 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-01 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,190000.0
+2025-02-02 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-02 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,150000.0
+2025-02-04 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19142.0
+2025-02-04 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-04 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-02-04 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-02-04 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-05 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-02-05 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-05 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-05 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-06 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-02-06 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-09 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-09 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-02-10 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-10 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-02-10 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-10 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-11 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-11 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-13 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-13 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-13 17:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-13 17:00:00,ingreso operativo,Reservas,Ingreso por reserva,15000.0
+2025-02-13 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-02-13 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-14 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-02-14 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-14 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-15 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-15 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-02-15 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-02-15 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-16 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-16 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-02-16 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-16 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-02-17 00:00:00,costos fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,13873.0
+2025-02-17 09:00:00,ingreso operativo,Reservas,Ingreso por reserva,169980.0
+2025-02-17 09:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-02-17 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-17 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-02-17 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-18 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-18 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-18 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-18 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-19 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-02-19 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-02-19 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-19 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,161964.0
+2025-02-20 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-20 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,148473.0
+2025-02-21 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,500000.0
+2025-02-21 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-21 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-02-22 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-02-22 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-22 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-22 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,152982.0
+2025-02-22 19:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-22 19:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-02-23 09:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 09:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-23 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-23 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-23 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-02-24 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,772.0
+2025-02-24 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-24 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,178146.0
+2025-02-25 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-02-25 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-25 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-25 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,97475.0
+2025-02-27 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-27 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-02-28 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-02-28 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,219950.0
+2025-02-28 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-02-28 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-05 00:00:00,costos fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-05 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19285.0
+2025-03-05 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-05 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-03-06 00:00:00,costos fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,250000.0
+2025-03-08 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-08 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,143968.0
+2025-03-09 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,143968.0
+2025-03-09 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-12 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-12 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-03-14 00:00:00,costos fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,11893.0
+2025-03-14 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,159980.0
+2025-03-14 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-17 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,0.0
+2025-03-18 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1428.0
+2025-03-19 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5098.0
+2025-03-20 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4361.0
+2025-03-20 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-20 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-03-20 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-03-20 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-03-21 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2598.0
+2025-03-22 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2454.0
+2025-03-23 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1763.0
+2025-03-24 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,777.0
+2025-03-24 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2972.0
+2025-03-25 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2531.0
+2025-03-26 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3053.0
+2025-03-27 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1413.0
+2025-03-28 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,807.0
+2025-03-29 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3393.0
+2025-03-30 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2763.0
+2025-03-31 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4797.0
+2025-04-01 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3128.0
+2025-04-02 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3646.0
+2025-04-03 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2660.0
+2025-04-03 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19403.0
+2025-04-04 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2667.0
+2025-04-05 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3966.0
+2025-04-06 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3298.0
+2025-04-07 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2363.0
+2025-04-08 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2694.0
+2025-04-09 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2122.0
+2025-04-09 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-09 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,159980.0
+2025-04-10 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3135.0
+2025-04-11 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1080.0
+2025-04-11 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-11 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-04-12 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3813.0
+2025-04-12 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,191970.0
+2025-04-12 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-13 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4129.0
+2025-04-14 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3698.0
+2025-04-14 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-04-14 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-15 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3634.0
+2025-04-15 17:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-15 17:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-04-16 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2492.0
+2025-04-17 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3429.0
+2025-04-17 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-17 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,97986.0
+2025-04-17 17:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-17 17:00:00,ingreso operativo,Reservas,Ingreso por reserva,148473.0
+2025-04-18 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3066.0
+2025-04-18 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-18 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-04-18 18:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-18 18:00:00,ingreso operativo,Reservas,Ingreso por reserva,159980.0
+2025-04-19 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2619.0
+2025-04-19 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-19 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,194970.0
+2025-04-19 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,159980.0
+2025-04-19 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-20 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1572.0
+2025-04-21 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,323200.0
+2025-04-21 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2002.0
+2025-04-21 00:00:00,costos fijos,Internet,ENTEL PCS PAGO EN L SANTIAGO,16990.0
+2025-04-21 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-21 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-04-21 17:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-04-21 17:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-04-22 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,780.0
+2025-04-22 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3253.0
+2025-04-23 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1124.0
+2025-04-24 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4926.0
+2025-04-25 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5378.0
+2025-04-26 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2835.0
+2025-04-27 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3866.0
+2025-04-28 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1915.0
+2025-04-29 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2452.0
+2025-04-30 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2231.0
+2025-05-01 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3327.0
+2025-05-01 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-01 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,179980.0
+2025-05-02 00:00:00,costos fijos,Arriendo,TEF BANCOESTADO A QUIROGA TORO PILA,300000.0
+2025-05-02 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2580.0
+2025-05-02 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-02 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-05-02 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-02 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,197964.0
+2025-05-03 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3083.0
+2025-05-04 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1148.0
+2025-05-04 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,138558.0
+2025-05-04 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-04 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,168980.0
+2025-05-04 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-05 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,159.0
+2025-05-06 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1877.0
+2025-05-06 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19494.0
+2025-05-07 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3918.0
+2025-05-08 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5788.0
+2025-05-09 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3608.0
+2025-05-10 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1539.0
+2025-05-11 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5458.0
+2025-05-11 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,209960.0
+2025-05-11 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-11 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-11 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-05-12 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2929.0
+2025-05-13 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2585.0
+2025-05-14 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5053.0
+2025-05-14 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-05-14 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-15 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3836.0
+2025-05-16 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,0.0
+2025-05-18 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-18 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-05-22 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,783.0
+2025-05-23 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-23 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,119000.0
+2025-05-23 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-23 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-05-24 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-24 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-05-30 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-30 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,69990.0
+2025-05-31 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-05-31 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-06-02 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-06-04 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19549.0
+2025-06-04 00:00:00,costos fijos,Internet,DLOCAL *STARLINK SANTIAGO,35000.0
+2025-06-05 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,4672.0
+2025-06-05 00:00:00,costos fijos,Beneficios HotBoat,Traspaso A:Felipe Hidalgo Sanhuez,58250.0
+2025-06-05 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-05 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,125982.0
+2025-06-06 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,9416.0
+2025-06-07 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10446.0
+2025-06-08 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10824.0
+2025-06-09 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,9283.0
+2025-06-10 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10492.0
+2025-06-11 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,11893.0
+2025-06-12 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,14709.0
+2025-06-13 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,7194.0
+2025-06-13 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-13 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-06-14 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,7172.0
+2025-06-15 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,11200.0
+2025-06-16 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10717.0
+2025-06-17 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10463.0
+2025-06-18 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,9640.0
+2025-06-19 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,13313.0
+2025-06-20 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,16912.0
+2025-06-20 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-20 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-06-21 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1417.0
+2025-06-21 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,10475.0
+2025-06-21 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-21 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-06-22 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,18724.0
+2025-06-22 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1835.0
+2025-06-23 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,18063.0
+2025-06-23 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2241.0
+2025-06-23 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,785.0
+2025-06-24 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1394.0
+2025-06-24 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22932.0
+2025-06-24 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-24 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-06-25 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,18455.0
+2025-06-25 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1529.0
+2025-06-25 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-25 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,189990.0
+2025-06-26 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1226.0
+2025-06-26 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,21062.0
+2025-06-27 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,683.0
+2025-06-27 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,20618.0
+2025-06-27 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,150007.0
+2025-06-27 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-28 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,16869.0
+2025-06-28 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2336.0
+2025-06-28 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-06-28 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-06-29 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,21902.0
+2025-06-29 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,823.0
+2025-06-30 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,23572.0
+2025-06-30 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1762.0
+2025-06-30 00:00:00,costos fijos,Sueldo Tom,Traspaso A:Prex Chile S A,200000.0
+2025-07-01 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22913.0
+2025-07-01 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2062.0
+2025-07-02 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,19720.0
+2025-07-02 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2120.0
+2025-07-02 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-02 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-07-02 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-02 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,179980.0
+2025-07-03 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22207.0
+2025-07-03 00:00:00,costos fijos,Seguros,BICE VIDA PAT SANTIAGO,19588.0
+2025-07-03 00:00:00,costos fijos,Internet,STARLINK STARLINK LAS CONDES,35000.0
+2025-07-03 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3567.0
+2025-07-03 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,300000.0
+2025-07-03 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,164970.0
+2025-07-03 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-04 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1550.0
+2025-07-04 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,17341.0
+2025-07-04 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-07-04 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-04 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-04 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,219950.0
+2025-07-04 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-04 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-07-05 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1388.0
+2025-07-05 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,19227.0
+2025-07-05 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-05 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,197940.0
+2025-07-06 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,21558.0
+2025-07-06 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1335.0
+2025-07-06 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-06 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,82485.0
+2025-07-07 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22205.0
+2025-07-07 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,889.0
+2025-07-08 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2219.0
+2025-07-08 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22207.0
+2025-07-08 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,179960.0
+2025-07-08 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-09 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3214.0
+2025-07-09 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,20166.0
+2025-07-10 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,21236.0
+2025-07-10 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2423.0
+2025-07-10 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-10 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,62991.0
+2025-07-11 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,6690.0
+2025-07-11 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1872.0
+2025-07-12 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,0.0
+2025-07-12 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2226.0
+2025-07-12 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-12 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,139980.0
+2025-07-13 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2364.0
+2025-07-14 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1428.0
+2025-07-15 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3749.0
+2025-07-16 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5166.0
+2025-07-17 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4879.0
+2025-07-17 00:00:00,costos fijos,Beneficios HotBoat,Traspaso A:Felipe Hidalgo Sanhuez,72200.0
+2025-07-18 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5684.0
+2025-07-19 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4808.0
+2025-07-20 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2376.0
+2025-07-21 00:00:00,costos fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
+2025-07-21 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3825.0
+2025-07-22 00:00:00,costos fijos,Seguros,Cargo Seguro Proteccion Bancaria,784.0
+2025-07-22 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1093.0
+2025-07-23 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2595.0
+2025-07-24 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2788.0
+2025-07-25 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,941.0
+2025-07-26 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1774.0
+2025-07-27 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4259.0
+2025-07-27 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-27 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,197980.0
+2025-07-27 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,179980.0
+2025-07-27 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-28 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5149.0
+2025-07-29 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5964.0
+2025-07-29 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-07-29 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-30 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22958.0
+2025-07-30 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,7527.0
+2025-07-30 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-07-30 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-31 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,5098.0
+2025-07-31 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,23580.0
+2025-07-31 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-31 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,161964.0
+2025-07-31 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-07-31 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-08-01 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,3495.0
+2025-08-01 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,25058.0
+2025-08-01 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-01 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,159980.0
+2025-08-02 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,22794.0
+2025-08-02 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4056.0
+2025-08-02 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-02 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-08-02 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-08-02 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-03 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2407.0
+2025-08-03 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,17043.0
+2025-08-03 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,209930.0
+2025-08-03 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-03 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,194950.0
+2025-08-03 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-04 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,1570.0
+2025-08-04 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,15515.0
+2025-08-04 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,350000.0
+2025-08-04 00:00:00,costos fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,1600.0
+2025-08-05 00:00:00,costos fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
+2025-08-05 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,2848.0
+2025-08-05 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,15522.0
+2025-08-06 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,14919.0
+2025-08-06 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4461.0
+2025-08-07 00:00:00,Costos de Marketing,Meta,Gasto diario Meta,3381.0
+2025-08-07 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,7170.0
+2025-08-08 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,6891.0
+2025-08-09 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4126.0
+2025-08-09 11:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-09 11:00:00,ingreso operativo,Reservas,Ingreso por reserva,97485.0
+2025-08-10 00:00:00,Costos de Marketing,Google Ads,Gasto diario Google Ads,4110.0
+2025-08-11 00:00:00,costos fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,100000.0
+2025-08-17 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-17 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-08-18 14:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-18 14:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-08-23 15:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-23 15:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-08-29 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-29 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-08-30 16:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-08-30 16:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-09-15 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-09-15 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-09-26 10:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-09-26 10:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2025-09-26 13:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0
+2025-09-26 13:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2026-01-09 12:00:00,costo operativo,Por reserva,Costo operativo por reserva,35000.0
+2026-01-09 12:00:00,ingreso operativo,Reservas,Ingreso por reserva,0.0

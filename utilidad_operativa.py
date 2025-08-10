@@ -17,38 +17,139 @@ import sys
 import os
 from datetime import datetime
 
-# Forzar UTF-8 para evitar problemas con emojis en Windows
-if sys.platform.startswith('win'):
-    import codecs
-    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+# Configurar UTF-8 de forma segura (especialmente en Windows/PowerShell)
+try:
+    # Disponible en Python 3.7+
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
+except Exception:
+    # Si no se puede reconfigurar, continuar sin forzar (evita romper stdout)
+    pass
 
 def cargar_gastos_marketing():
-    """Cargar gastos filtrados por categoría 'Costos de Marketing'"""
+    """Cargar gastos de marketing desde archivos diarios de Meta y Google Ads.
+
+    Lee:
+      - archivos_input/archivos input marketing/costo diario en meta.csv
+      - archivos_input/archivos input marketing/costo diario en google ads.csv
+
+    Devuelve DataFrame con columnas: fecha, categoria, categoria_2, descripcion, monto
+    """
+    def read_csv_auto(path: str) -> pd.DataFrame:
+        try:
+            # Para archivos de Google Ads, saltar las 2 filas de encabezado extra
+            if 'google' in os.path.basename(path).lower():
+                return pd.read_csv(path, sep=None, engine='python', skiprows=2)
+            else:
+                return pd.read_csv(path, sep=None, engine='python')
+        except Exception:
+            try:
+                # Intentar con skiprows=2 para Google Ads
+                if 'google' in os.path.basename(path).lower():
+                    return pd.read_csv(path, skiprows=2)
+                else:
+                    return pd.read_csv(path)
+            except Exception:
+                return pd.DataFrame()
+
+    def detect_col(columns: list, candidates: list) -> str:
+        lower = [c.lower().strip() for c in columns]
+        for cand in candidates:
+            if cand in lower:
+                return columns[lower.index(cand)]
+        for i, c in enumerate(lower):
+            if any(k in c for k in candidates):
+                return columns[i]
+        return ''
+
+    def preparar(path: str, fuente: str) -> pd.DataFrame:
+        df = read_csv_auto(path)
+        if df.empty:
+            return pd.DataFrame(columns=['fecha', 'monto'])
+        fecha_col = detect_col(list(df.columns), ['fecha', 'date', 'dia', 'día', 'day', 'date_start', 'reporting starts', 'reporting_start'])
+        monto_col = detect_col(list(df.columns), [
+            'gasto','costo','coste','spend','spent','amount','amount spent','spent (clp)','importe','importe gastado',
+            'monto','monto gastado','ad spend','cost'
+        ])
+        if not fecha_col or not monto_col:
+            return pd.DataFrame(columns=['fecha', 'monto'])
+        d = df[[fecha_col, monto_col]].copy()
+        d.rename(columns={fecha_col: 'fecha', monto_col: 'monto'}, inplace=True)
+        d['fecha'] = pd.to_datetime(d['fecha'], errors='coerce')
+        if d['monto'].dtype == object:
+            # Normalizar valores monetarios: quitar símbolos y miles, preservar decimales
+            s = d['monto'].astype(str).str.replace('\u202f', '', regex=True)
+            s = s.str.replace('$', '', regex=False).str.replace('CLP', '', regex=False).str.strip()
+            # Caso latino: 1.234,56 -> 1234.56
+            s_lat = s.str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
+            d['monto'] = pd.to_numeric(s_lat, errors='coerce')
+        # Debug: columnas detectadas y primeras filas válidas
+        try:
+            print(f"   🔎 {fuente}: archivo='{os.path.basename(path)}', fecha_col='{fecha_col}', monto_col='{monto_col}'")
+        except Exception:
+            pass
+        d['monto'] = pd.to_numeric(d['monto'], errors='coerce')
+        d = d.dropna(subset=['fecha', 'monto'])
+        before = len(d)
+        # Normalizar fecha al día y agrupar por nombre de columna para mayor compatibilidad
+        d['fecha'] = pd.to_datetime(d['fecha'], errors='coerce').dt.floor('D')
+        d = d.groupby('fecha', as_index=False)['monto'].sum()
+        d['categoria'] = 'Costos de Marketing'
+        d['categoria_2'] = 'Meta' if fuente == 'meta' else 'Google Ads'
+        d['descripcion'] = f'Gasto diario {"Meta" if fuente == "meta" else "Google Ads"}'
+        try:
+            print(f"   ✅ {fuente}: filas válidas={before}, días agregados={len(d)}, total=${d['monto'].sum():,.0f}")
+        except Exception:
+            pass
+        return d
+
     try:
-        print("📊 Cargando gastos de marketing...")
-        gastos = pd.read_csv('archivos_output/gastos hotboat.csv')
-        
-        # Filtrar por categoría 1 = "Costos de Marketing"
-        gastos_marketing = gastos[gastos['Categoría 1'] == 'Costos de Marketing'].copy()
-        
-        # Seleccionar columnas necesarias y renombrar
-        columnas_necesarias = ['Fecha', 'Monto', 'Descripción']
-        if 'Categoría_2' in gastos_marketing.columns:
-            columnas_necesarias.append('Categoría_2')
-        
-        gastos_marketing = gastos_marketing[columnas_necesarias].copy()
-        gastos_marketing['categoria'] = 'Costos de Marketing'
-        gastos_marketing['categoria_1'] = 'Costos de Marketing'
-        gastos_marketing['categoria_2'] = gastos_marketing.get('Categoría_2', 'Sin subcategoría')
-        gastos_marketing['descripcion'] = gastos_marketing.get('Descripción', 'Gasto de marketing')
-        gastos_marketing = gastos_marketing.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
-        
-        # Convertir fecha a datetime si no lo está
-        gastos_marketing['fecha'] = pd.to_datetime(gastos_marketing['fecha'])
-        
+        print("📊 Cargando gastos de marketing (Meta + Google Ads) desde archivos diarios…")
+        base_dir = os.path.join('archivos_input', 'archivos input marketing')
+        # Descubrir archivos por nombre si cambiaron (soporta 'gasto diario' y 'costo diario')
+        meta_defaults = [
+            os.path.join(base_dir, 'gasto diario en meta.csv'),
+            os.path.join(base_dir, 'costo diario en meta.csv'),
+        ]
+        google_defaults = [
+            os.path.join(base_dir, 'gasto diario en google ads.csv'),
+            os.path.join(base_dir, 'costo diario en google ads.csv'),
+        ]
+        meta_default = next((p for p in meta_defaults if os.path.exists(p)), '')
+        google_default = next((p for p in google_defaults if os.path.exists(p)), '')
+        meta_path = meta_default if os.path.exists(meta_default) else ''
+        google_path = google_default if os.path.exists(google_default) else ''
+        try:
+            files = [f for f in os.listdir(base_dir) if f.lower().endswith('.csv')]
+        except Exception:
+            files = []
+        if not meta_path:
+            for f in files:
+                fl = f.lower()
+                if 'meta' in fl or 'facebook' in fl:
+                    meta_path = os.path.join(base_dir, f)
+                    break
+        if not google_path:
+            for f in files:
+                fl = f.lower()
+                if 'google' in fl:
+                    google_path = os.path.join(base_dir, f)
+                    break
+
+        df_meta = preparar(meta_path, 'meta') if meta_path else pd.DataFrame()
+        df_google = preparar(google_path, 'google') if google_path else pd.DataFrame()
+        frames = [df for df in [df_meta, df_google] if not df.empty]
+        if not frames:
+            try:
+                files = os.listdir(base_dir)
+                print(f"⚠️  No se encontraron gastos de marketing diarios. Archivos en carpeta: {files}")
+            except Exception:
+                print("⚠️  No se encontraron gastos de marketing diarios y no se pudo listar la carpeta de input")
+            return pd.DataFrame(columns=['fecha', 'categoria', 'categoria_2', 'descripcion', 'monto'])
+
+        gastos_marketing = pd.concat(frames, ignore_index=True)
         print(f"✅ Gastos de marketing cargados: {len(gastos_marketing)} registros")
         return gastos_marketing
-        
     except Exception as e:
         print(f"❌ Error cargando gastos de marketing: {e}")
         return pd.DataFrame()
@@ -69,7 +170,6 @@ def cargar_costos_fijos():
         
         costos_fijos = costos_fijos[columnas_necesarias].copy()
         costos_fijos['categoria'] = 'costos fijos'
-        costos_fijos['categoria_1'] = 'Costos Fijos'
         costos_fijos['categoria_2'] = costos_fijos.get('Categoría_2', 'Sin subcategoría')
         costos_fijos['descripcion'] = costos_fijos.get('Descripción', 'Costo fijo')
         costos_fijos = costos_fijos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
@@ -100,7 +200,6 @@ def cargar_costos_variables():
         
         costos_variables = costos_variables[columnas_necesarias].copy()
         costos_variables['categoria'] = 'costos variables'
-        costos_variables['categoria_1'] = 'Costos Variables'
         costos_variables['categoria_2'] = costos_variables.get('Categoría_2', 'Sin subcategoría')
         costos_variables['descripcion'] = costos_variables.get('Descripción', 'Costo variable')
         costos_variables = costos_variables.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
@@ -124,7 +223,6 @@ def cargar_costos_operativos():
         # Seleccionar columnas necesarias y renombrar
         costos_operativos = costos[['fecha', 'monto']].copy()
         costos_operativos['categoria'] = 'costo operativo'
-        costos_operativos['categoria_1'] = 'Costos Operativos'
         costos_operativos['categoria_2'] = 'Por reserva'
         costos_operativos['descripcion'] = 'Costo operativo por reserva'
         
@@ -147,7 +245,6 @@ def cargar_ingresos_operativos():
         # Seleccionar columnas necesarias y renombrar
         ingresos_operativos = ingresos[['fecha', 'monto']].copy()
         ingresos_operativos['categoria'] = 'ingreso operativo'
-        ingresos_operativos['categoria_1'] = 'Ingresos Operativos'
         ingresos_operativos['categoria_2'] = 'Reservas'
         ingresos_operativos['descripcion'] = 'Ingreso por reserva'
         
@@ -175,8 +272,7 @@ def cargar_todos_gastos():
             columnas_necesarias.append('Categoría 1')
         
         gastos_todos = gastos[columnas_necesarias].copy()
-        gastos_todos['categoria'] = 'gastos'
-        gastos_todos['categoria_1'] = gastos_todos.get('Categoría 1', 'Sin categoría')
+        gastos_todos['categoria'] = gastos_todos.get('Categoría 1', 'Sin categoría')
         gastos_todos['categoria_2'] = gastos_todos.get('Categoría_2', 'Sin subcategoría')
         gastos_todos['descripcion'] = gastos_todos.get('Descripción', 'Gasto')
         gastos_todos = gastos_todos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
@@ -200,7 +296,6 @@ def cargar_todos_abonos():
         # Seleccionar columnas necesarias y renombrar
         abonos_todos = abonos[['Fecha', 'Monto', 'Descripción']].copy()
         abonos_todos['categoria'] = 'abonos'
-        abonos_todos['categoria_1'] = 'Ingresos'
         abonos_todos['categoria_2'] = 'Abonos bancarios'
         abonos_todos['descripcion'] = abonos_todos.get('Descripción', 'Abono')
         abonos_todos = abonos_todos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
@@ -251,7 +346,7 @@ def generar_utilidad_operativa():
     utilidad_operativa = utilidad_operativa.sort_values('fecha')
     
     # Reordenar columnas
-    utilidad_operativa = utilidad_operativa[['fecha', 'categoria', 'categoria_1', 'categoria_2', 'descripcion', 'monto']]
+    utilidad_operativa = utilidad_operativa[['fecha', 'categoria', 'categoria_2', 'descripcion', 'monto']]
     
     # Guardar archivo
     output_file = 'archivos_output/Utilidad operativa.csv'
@@ -263,19 +358,12 @@ def generar_utilidad_operativa():
     print(f"📅 Período: {utilidad_operativa['fecha'].min().strftime('%Y-%m-%d')} a {utilidad_operativa['fecha'].max().strftime('%Y-%m-%d')}")
     print(f"📊 Total registros: {len(utilidad_operativa):,}")
     
-    # Estadísticas por categoría principal
-    print("\n📋 Distribución por categoría principal:")
+    # Estadísticas por categoría
+    print("\n📋 Distribución por categoría:")
     for categoria in utilidad_operativa['categoria'].unique():
         count = len(utilidad_operativa[utilidad_operativa['categoria'] == categoria])
         total = utilidad_operativa[utilidad_operativa['categoria'] == categoria]['monto'].sum()
         print(f"  • {categoria}: {count:,} registros - ${total:,.0f}")
-    
-    # Estadísticas por categoría 1 (detallada)
-    print("\n📋 Distribución por categoría 1 (detallada):")
-    for categoria_1 in utilidad_operativa['categoria_1'].unique():
-        count = len(utilidad_operativa[utilidad_operativa['categoria_1'] == categoria_1])
-        total = utilidad_operativa[utilidad_operativa['categoria_1'] == categoria_1]['monto'].sum()
-        print(f"  • {categoria_1}: {count:,} registros - ${total:,.0f}")
     
     # Totales generales
     total_ingresos = utilidad_operativa[utilidad_operativa['categoria'] == 'ingreso operativo']['monto'].sum()
