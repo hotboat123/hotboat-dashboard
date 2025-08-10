@@ -71,8 +71,11 @@ diccionario_categorias = {
     "Motores HotBoat": [
         "flipsky"
     ],
+    "Drones": [
+        "ebest"
+    ],
     "Calefonts": [
-        "CEM compras"
+        "CEM compras", "CEM SANTIAGO"
     ],    
     "Poleras": [
         "77184211"

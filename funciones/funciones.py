@@ -839,6 +839,134 @@ def eliminar_duplicados_priorizando_facturado(df):
 
     return df_resultado
 
+def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calcula las deudas remanentes de compras en cuotas a partir de los movimientos.
+
+    Criterios:
+    - Identifica filas con 'Cuotas' en formato n/m (ej: 03/12)
+    - Considera solo el ÚLTIMO cobro (máxima 'Fecha') por plan de cuotas para evitar duplicados
+      Clave del plan: descripción normalizada + total de cuotas + monto de la cuota
+    - Deuda = monto_cuota * (cuotas_totales - cuota_actual)
+    - Solo incluye planes con cuotas restantes > 0
+    - Las nuevas filas tendrán 'Categoría_2' = 'Deudas' y, si existe, 'Categoría 1' = 'Deudas'
+    - Si existe 'Origen', se marca como 'Deuda por cuotas'
+    - Si existe 'Observación', se detalla cuotas restantes y monto de cuota
+
+    Retorna un DataFrame con las mismas columnas que df (en la medida de lo posible),
+    conteniendo únicamente las filas de deudas calculadas.
+    """
+    # Validaciones mínimas
+    columnas_minimas = {'Fecha', 'Descripción', 'Monto', 'Cuotas'}
+    if df.empty or not columnas_minimas.issubset(set(df.columns)):
+        return pd.DataFrame(columns=df.columns)
+
+    df_trabajo = df.copy()
+
+    # Asegurar 'Fecha' como datetime
+    if not pd.api.types.is_datetime64_any_dtype(df_trabajo['Fecha']):
+        df_trabajo = convertir_fechas_a_datetime(df_trabajo, 'Fecha')
+
+    # Filtrar filas con cuotas válidas n/m
+    cuotas_str = df_trabajo['Cuotas'].astype(str).str.strip()
+    mask_cuotas = cuotas_str.str.match(r'^\d+\s*/\s*\d+$', na=False)
+    df_cuotas = df_trabajo[mask_cuotas].copy()
+    if df_cuotas.empty:
+        return pd.DataFrame(columns=df.columns)
+
+    # Parsear n/m
+    def parsear_cuotas(valor: str):
+        try:
+            a, b = [p.strip() for p in str(valor).split('/')]
+            actual = int(a)
+            total = int(b)
+            if total <= 0 or actual < 1 or actual > total:
+                return None, None
+            return actual, total
+        except Exception:
+            return None, None
+
+    df_cuotas['cuota_actual'], df_cuotas['cuotas_totales'] = zip(*df_cuotas['Cuotas'].map(parsear_cuotas))
+    df_cuotas = df_cuotas[df_cuotas['cuota_actual'].notna() & df_cuotas['cuotas_totales'].notna()].copy()
+    if df_cuotas.empty:
+        return pd.DataFrame(columns=df.columns)
+
+    # Normalizar descripción y definir clave del plan
+    def norm_desc(x: str) -> str:
+        return re.sub(r'\s+', ' ', str(x).strip().lower())
+
+    df_cuotas['descripcion_norm'] = df_cuotas['Descripción'].apply(norm_desc)
+    df_cuotas['monto_cuota'] = pd.to_numeric(df_cuotas['Monto'], errors='coerce')
+    df_cuotas = df_cuotas[df_cuotas['monto_cuota'].notna()].copy()
+    if df_cuotas.empty:
+        return pd.DataFrame(columns=df.columns)
+
+    df_cuotas['clave_plan'] = (
+        df_cuotas['descripcion_norm'] + '|' +
+        df_cuotas['cuotas_totales'].astype(int).astype(str) + '|' +
+        df_cuotas['monto_cuota'].round(2).astype(str)
+    )
+
+    # Último cobro por plan: seleccionar la ÚLTIMA cuota pagada
+    # Regla robusta: priorizar mayor 'cuota_actual'; si hay empate, usar mayor 'Fecha'
+    df_cuotas = df_cuotas.sort_values(['clave_plan', 'cuota_actual', 'Fecha'])
+    df_ultimos = df_cuotas.groupby('clave_plan').tail(1).copy()
+    df_ultimos['cuotas_restantes'] = (
+        df_ultimos['cuotas_totales'].astype(int) - df_ultimos['cuota_actual'].astype(int)
+    )
+    df_ultimos = df_ultimos[df_ultimos['cuotas_restantes'] > 0].copy()
+    if df_ultimos.empty:
+        return pd.DataFrame(columns=df.columns)
+
+    # Calcular monto de deuda
+    df_ultimos['Monto_Deuda'] = (df_ultimos['monto_cuota'] * df_ultimos['cuotas_restantes']).astype(int)
+
+    # Construir salida con mismas columnas que df
+    columnas_obj = list(df.columns)
+    base = df_ultimos[['Fecha', 'Descripción']].copy()
+    base['Monto'] = df_ultimos['Monto_Deuda'].values
+
+    # Setear campos de clasificación si existen
+    if 'Categoría_2' in columnas_obj:
+        # Mantener la categoría 2 original del movimiento (no forzar 'Deudas')
+        if 'Categoría_2' in df_ultimos.columns:
+            base['Categoría_2'] = df_ultimos['Categoría_2'].values
+        else:
+            base['Categoría_2'] = ''
+    if 'Categoría 1' in columnas_obj:
+        # Mantener la categoría 1 actual o dejar vacío si no existe
+        if 'Categoría 1' in df_ultimos.columns:
+            base['Categoría 1'] = df_ultimos['Categoría 1'].values
+        else:
+            base['Categoría 1'] = ''
+    if 'Origen' in columnas_obj:
+        base['Origen'] = 'deudas'
+    if 'Observación' in columnas_obj:
+        base['Observación'] = (
+            'Cuotas restantes: ' + df_ultimos['cuotas_restantes'].astype(int).astype(str) +
+            ' de ' + df_ultimos['cuotas_totales'].astype(int).astype(str) +
+            ' | monto cuota: $' + df_ultimos['monto_cuota'].round(0).astype(int).astype(str)
+        )
+    if 'Cuotas' in columnas_obj:
+        base['Cuotas'] = ''
+
+    # Agregar columnas faltantes como vacías para respetar esquema
+    for col in columnas_obj:
+        if col not in base.columns:
+            base[col] = ''
+
+    # Reordenar igual que df
+    df_deudas = base[columnas_obj].copy()
+
+    # Log
+    try:
+        total_deuda = int(df_deudas['Monto'].sum()) if not df_deudas.empty else 0
+        print(f"🏷️  Deudas por cuotas detectadas: {len(df_deudas)} filas | Total estimado: ${total_deuda:,.0f}")
+    except Exception:
+        pass
+
+    return df_deudas
+
 def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None, gastos_efectivo=None):
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
@@ -885,7 +1013,16 @@ def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internaci
     
     # Eliminar duplicados entre facturado y no facturado, priorizando facturado
     df_final = eliminar_duplicados_priorizando_facturado(df_final)
-    
+
+    # Calcular y agregar deudas por compras en cuotas
+    try:
+        df_deudas = calcular_deudas_por_cuotas(df_final)
+        if not df_deudas.empty:
+            df_final = pd.concat([df_final, df_deudas], ignore_index=True)
+            print(f"➕ Agregadas {len(df_deudas)} filas de 'deudas' a gastos")
+    except Exception as e:
+        print(f"⚠️  No se pudieron calcular/agregar deudas por cuotas: {str(e)}")
+
     return df_final
 
 # Función para crear la columna de fecha
