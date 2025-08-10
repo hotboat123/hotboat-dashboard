@@ -800,58 +800,43 @@ def agregar_gastos_efectivo(df_final, lista_gastos_efectivo):
 
 def eliminar_duplicados_priorizando_facturado(df):
     """
-    Elimina duplicados entre movimientos facturados y no facturados,
-    manteniendo siempre el movimiento facturado cuando hay conflicto.
-    
-    Args:
-        df (pd.DataFrame): DataFrame con columna 'Origen'
-        
-    Returns:
-        pd.DataFrame: DataFrame sin duplicados, priorizando facturados
+    Regla solicitada:
+    - Si en un mismo día (Fecha) y mismas 'Cuotas' existen movimientos
+      tanto 'Facturado' como 'No Facturado', entonces ELIMINAR los
+      que provienen de 'No Facturado' y mantener los 'Facturado'.
+    - La 'Descripción' NO se usa para comparar (puede diferir).
     """
-    if df.empty or 'Origen' not in df.columns:
+    if df.empty or 'Origen' not in df.columns or 'Cuotas' not in df.columns or 'Fecha' not in df.columns:
         return df
-    
-    print("🔄 Eliminando duplicados entre movimientos facturados y no facturados...")
-    
-    # Identificar duplicados por fecha, descripción y cuotas
-    duplicados_mask = df.duplicated(subset=['Fecha', 'Descripción', 'Cuotas'], keep=False)
-    
-    if not duplicados_mask.any():
-        print("ℹ️  No se encontraron duplicados")
-        return df
-    
-    # Separar filas duplicadas y no duplicadas
-    df_no_duplicados = df[~duplicados_mask].copy()
-    df_duplicados = df[duplicados_mask].copy()
-    
-    # Crear prioridad: facturados tienen prioridad más alta
-    def asignar_prioridad(origen):
-        if 'Facturado' in origen:
-            return 1  # Alta prioridad
-        elif 'No Facturado' in origen:
-            return 2  # Baja prioridad
-        else:
-            return 0  # Prioridad neutral para otros orígenes
-    
-    df_duplicados['_prioridad'] = df_duplicados['Origen'].apply(asignar_prioridad)
-    
-    # Mantener solo el registro con mayor prioridad (menor número) por cada grupo de duplicados
-    df_duplicados_resueltos = df_duplicados.sort_values('_prioridad').drop_duplicates(
-        subset=['Fecha', 'Descripción', 'Cuotas'], 
-        keep='first'
+
+    filas_iniciales = len(df)
+    print(f"🔄 Resolviendo conflictos Facturado vs No Facturado por Fecha+Cuotas (n={filas_iniciales})...")
+
+    # Creamos una máscara que indica los grupos Fecha+Cuotas que tienen
+    # al menos un Facturado y al menos un No Facturado
+    def hay_conflicto(origenes: pd.Series) -> bool:
+        tiene_fact = origenes.str.contains('Facturado', na=False).any()
+        tiene_no_fact = origenes.str.contains('No Facturado', na=False).any()
+        return bool(tiene_fact and tiene_no_fact)
+
+    # Calcular conflicto a nivel de grupo y propagarlo a cada fila del grupo
+    conflicto_mask = (
+        df.groupby(['Fecha', 'Cuotas'])['Origen']
+          .transform(hay_conflicto)
     )
-    
-    # Eliminar columna temporal de prioridad
-    df_duplicados_resueltos = df_duplicados_resueltos.drop(columns=['_prioridad'])
-    
-    # Combinar resultados
-    df_resultado = pd.concat([df_no_duplicados, df_duplicados_resueltos], ignore_index=True)
-    
-    duplicados_eliminados = len(df) - len(df_resultado)
-    if duplicados_eliminados > 0:
-        print(f"✅ Se eliminaron {duplicados_eliminados} duplicados, priorizando movimientos facturados")
-    
+
+    # Filas a eliminar: aquellas en grupos con conflicto cuyo origen sea No Facturado
+    eliminar_mask = conflicto_mask & df['Origen'].str.contains('No Facturado', na=False)
+
+    eliminadas = int(eliminar_mask.sum())
+    if eliminadas == 0:
+        print("ℹ️  No se encontraron conflictos Facturado vs No Facturado por Fecha+Cuotas")
+        return df
+
+    df_resultado = df[~eliminar_mask].copy()
+    print(f"✅ Eliminadas {eliminadas} filas 'No Facturado' en grupos con 'Facturado' (clave: Fecha+Cuotas)")
+    print(f"📈 Registros: {filas_iniciales} → {len(df_resultado)}")
+
     return df_resultado
 
 def procesar_df_final(df_banco_estado_cargos, df_banco_chile_facturado_internacional, df_banco_chile_facturado_nacional, df_banco_chile_no_facturado_internacional, df_banco_chile_no_facturado_nacional, df_cuenta_corriente_cargos, diccionario_categorias, descripciones_a_eliminar=None, diccionario_categoria_1=None, tabla_correcciones=None, eliminaciones_fecha_monto=None, gastos_efectivo=None):
