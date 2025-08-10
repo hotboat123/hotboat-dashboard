@@ -278,7 +278,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-02-16,3990.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
 2025-02-15,8000.0,Sin categoría,Sin categoría,MAGRITTE CIDER SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-02-12,24896.0,Inversión General,Compras Internacionales,MERCADOPAGO*ALIPAYS LAS CONDES,Mov. Facturado Nacional,,,,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,01/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,01/12,,
 2025-02-10,365265.0,Inversión en Activos,Calefonts,MATUCANA 25 SANTIAGO,Mov. Facturado Nacional,,,,,Calefont 2
 2025-02-04,19142.0,Costos Fijos,Seguros,BICE VIDA PAT SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-02-03,1350.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
@@ -337,7 +337,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-02-26,7550.0,Sin categoría,Sin categoría,MERPAGO*R Y R SPA R PUCON,Mov. Facturado Nacional,,,,,
 2025-02-26,1300.0,Sin categoría,Sin categoría,MERPAGO*BLUEFOX SER SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-02-26,775.0,Sin categoría,Sin categoría,MERPAGO*BLUEFOX SER SANTIAGO,Mov. Facturado Nacional,,,,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,02/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,02/12,,
 2025-03-27,1289.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066%",Mov. Facturado Nacional,,,,,
 2025-03-27,32130.0,Sin categoría,Sin categoría,INTERESES ROTATIVOS,Mov. Facturado Nacional,,,,,
 2025-03-18,2133.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,396%",Mov. Facturado Nacional,,,,,
@@ -403,7 +403,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-03-29,45074.0,Sin categoría,Sin categoría,LATAM.COM XP OTRAS SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-03-26,1210.0,Sin categoría,Sin categoría,SUMUP * LUIS IGNACI PUCON,Mov. Facturado Nacional,,,,,
 2025-03-17,89791.0,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",Mov. Facturado Nacional,,,02/06,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,03/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,03/12,,
 2025-04-25,1675.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066 %",Mov. Facturado Nacional,,,,,
 2025-05-27,15775.0,Inversión General,Ferretería,UNIMARC PUCON PUCON,Mov. Facturado Nacional,,,,,
 2025-05-26,11100.0,Sin categoría,Sin categoría,VILLARRICA VILLARRICA,Mov. Facturado Nacional,,,,,
@@ -487,7 +487,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-04-25,11020.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
 2025-04-25,5400.0,Sin categoría,Sin categoría,AGROFOOD 11001SANTIAG,Mov. Facturado Nacional,,,,,
 2025-03-17,89791.0,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",Mov. Facturado Nacional,,,03/06,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,04/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,04/12,,
 2025-06-25,9250.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
 2025-06-25,175875.0,Inversión General,Compras Internacionales,MERPAGO*ALIPAYSINGA LAS CONDES,Mov. Facturado Nacional,,,,,
 2025-06-25,1430.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
@@ -572,10 +572,9 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-05-28,173300.0,Inversión en Activos,Antena starlink,STARLINK STARLINK C LAS CONDES,Mov. Facturado Nacional,,,,,Antena starlink
 2025-05-28,28490.0,Sin categoría,Sin categoría,MERCADOPAGO*DISTRIB LAS CONDES,Mov. Facturado Nacional,,,,,
 2025-03-17,89791.0,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",Mov. Facturado Nacional,,,04/06,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,05/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,05/12,,
 2025-06-23,2968.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,800%",Mov. Facturado Nacional,,,,,
 2025-06-17,43.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,396%",Mov. Facturado Nacional,,,,,
-2025-06-19,35851.0,Sin categoría,Sin categoría,"DP *FALABELLA.C TASA INT 2,15%",Mov. Facturado Nacional,,,00/12,,
 2025-07-27,3400.0,Sin categoría,Sin categoría,MERCADOPAGO*LAHUERT LAS CONDES,Mov. Facturado Nacional,,,,,
 2025-07-26,13420.0,Inversión General,Compras Internacionales,MERPAGO*ALIPAYSINGA LAS CONDES,Mov. Facturado Nacional,,,,,
 2025-07-26,3500.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
@@ -621,7 +620,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-07-08,11490.0,Inversión General,Ferretería,SUPERMERCADO IBACAC CURARREHUE,Mov. Facturado Nacional,,,,,
 2025-07-07,75179.0,Inversión General,Ferretería,SODIMAC VILLARRICA VILLARRICA,Mov. Facturado Nacional,,,,,
 2025-07-07,173847.0,Inversión en Activos,Dispositivos,MERPAGO*ALIPAYSINGA LAS CONDES,Mov. Facturado Nacional,,,,,Llaves de paso y temperatura
-2025-07-07,274990.0,Sin categoría,Sin categoría,CEM SANTIAGO,Mov. Facturado Nacional,,,,,
+2025-07-07,274990.0,Inversión en Activos,Calefonts,CEM SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-07-07,66170.0,Inversión General,Ferretería,SOCIEDAD INVERSIONE CAUTIN,Mov. Facturado Nacional,,,,,
 2025-07-07,9380.0,Inversión General,Ferretería,FERRETERIA ELTIT PUCON,Mov. Facturado Nacional,,,,,
 2025-07-07,32970.0,Inversión General,Ferretería,FERRETERIA ELTIT PUCON,Mov. Facturado Nacional,,,,,
@@ -646,10 +645,9 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-06-30,2781.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",Mov. Facturado Nacional,,,01/06,,
 2025-06-27,4990.0,Sin categoría,Sin categoría,THEPASSSO EXPRESS PUCON,Mov. Facturado Nacional,,,,,
 2025-06-27,74640.0,Inversión General,Ferretería,SOCIEDAD INVERSIONE CAUTIN,Mov. Facturado Nacional,,,,,
-2025-06-19,35851.0,Sin categoría,Sin categoría,"DP *FALABELLA.C TASA INT. 2,15%",Mov. Facturado Nacional,,,01/12,,
 2025-06-16,1796.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",Mov. Facturado Nacional,,,02/06,,
 2025-03-17,89791.0,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",Mov. Facturado Nacional,,,05/06,,
-2025-02-12,38833.0,Sin categoría,Sin categoría,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,06/12,,
+2025-02-12,38833.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",Mov. Facturado Nacional,,,06/12,,
 2025-07-29,1359.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,066%",Mov. Facturado Nacional,,,,,
 2025-07-28,496.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,800%",Mov. Facturado Nacional,,,,,
 2025-07-25,199.0,Sin categoría,Sin categoría,"IMPUESTO DECRETO LEY 3475 TASA 0,462%",Mov. Facturado Nacional,,,,,
@@ -851,3 +849,13 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-06-27,32220.0,Sin categoría,Sin categoría,Traspaso A:Medio De Pago Fintoc,Cuenta Corriente,,,,,
 2025-07-30,30000.0,Costos Variables,Leña,Compra leña en efectivo juan otarola,Efectivo,,,,,Leña juan otarola
 2025-08-08,7000.0,Costos Variables,Leña,Compra leña en efectivo verduleria,Efectivo,,,,,Leña verduleria
+2025-02-12,232998.0,Inversión en Activos,Drones,"EBEST CL TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 6 de 12 | monto cuota: $38833
+2025-03-17,89791.0,Sin categoría,Sin categoría,"MERCADO PAGO 4 TCOM TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 1 de 6 | monto cuota: $89791
+2025-07-03,52365.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $10473
+2025-06-16,7184.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 4 de 6 | monto cuota: $1796
+2024-09-04,24148.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 1 de 6 | monto cuota: $24148
+2025-06-30,13905.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $2781
+2025-06-30,29995.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $5999
+2025-07-20,32545.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $6509
+2025-07-14,400697.0,Sin categoría,Mantención HotBoat,"MUNDO PINTURA TEMUC TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 11 de 12 | monto cuota: $36427
+2025-07-14,35605.0,Sin categoría,Mantención HotBoat,"MUNDO PINTURA TEMUC TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $7121

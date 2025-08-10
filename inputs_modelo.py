@@ -147,6 +147,15 @@ eliminaciones_fecha_monto = [
     # ['2025-06-01', 100000],   # Eliminar registro del 1 de junio 2025 por $100,000
 ] 
 
+# Lista de registros a eliminar por fecha y descripción (contains)
+# Formato: [fecha, texto_en_descripcion]
+# La fecha puede ser 'YYYY-MM-DD' o 'DD/MM/YYYY'. La descripción hace match por contains insensible a mayúsculas.
+eliminaciones_fecha_descripcion = [
+    # Ejemplos:
+    ['2025-06-19', 'falabella'],
+    # ['15/07/2025', 'spa santiago'],
+]
+
 costo_operativo_por_reserva = 35000 # Leña, gas, agua, luz, axel(15.000)
 
 # Valor aproximado del dólar para conversiones de USD a CLP
