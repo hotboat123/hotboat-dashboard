@@ -1296,6 +1296,206 @@ class ProcesadorArchivos:
         
         return datos_consolidados
 
+def procesar_abonos(datos_consolidados: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Prepara dos DataFrames de abonos, uno por Cuenta Corriente y otro por Banco Estado,
+    agregando la columna 'Origen' en cada uno. No concatena; devuelve ambos por separado.
+
+    Args:
+        datos_consolidados: Diccionario devuelto por consolidar_datos() que
+            puede contener 'banco_estado_abonos' y 'cuenta_corriente_abonos'.
+
+    Returns:
+        tuple[pd.DataFrame, pd.DataFrame]: (df_abonos_cta_cte, df_abonos_banco_estado)
+    """
+    # Banco Estado
+    df_abonos_banco_estado = datos_consolidados.get('banco_estado_abonos', pd.DataFrame())
+    if isinstance(df_abonos_banco_estado, pd.DataFrame) and not df_abonos_banco_estado.empty:
+        df_abonos_banco_estado = df_abonos_banco_estado.copy()
+        df_abonos_banco_estado['Fecha'] = pd.to_datetime(df_abonos_banco_estado['Fecha'], errors='coerce', dayfirst=True)
+        df_abonos_banco_estado['Origen'] = 'Banco Estado'
+        # Deduplicado si existen columnas clave
+        if all(col in df_abonos_banco_estado.columns for col in ['Fecha', 'Descripción', 'Monto']):
+            df_abonos_banco_estado = df_abonos_banco_estado.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        if 'Fecha' in df_abonos_banco_estado.columns:
+            df_abonos_banco_estado = df_abonos_banco_estado.sort_values('Fecha')
+        df_abonos_banco_estado = df_abonos_banco_estado.reset_index(drop=True)
+    else:
+        df_abonos_banco_estado = pd.DataFrame()
+
+    # Cuenta Corriente
+    df_abonos_cta_cte = datos_consolidados.get('cuenta_corriente_abonos', pd.DataFrame())
+    if isinstance(df_abonos_cta_cte, pd.DataFrame) and not df_abonos_cta_cte.empty:
+        df_abonos_cta_cte = df_abonos_cta_cte.copy()
+        df_abonos_cta_cte['Fecha'] = pd.to_datetime(df_abonos_cta_cte['Fecha'], errors='coerce', dayfirst=True)
+        df_abonos_cta_cte['Origen'] = 'Cuenta Corriente'
+        # Deduplicado si existen columnas clave
+        if all(col in df_abonos_cta_cte.columns for col in ['Fecha', 'Descripción', 'Monto']):
+            df_abonos_cta_cte = df_abonos_cta_cte.drop_duplicates(subset=['Fecha', 'Descripción', 'Monto'], keep='first')
+        if 'Fecha' in df_abonos_cta_cte.columns:
+            df_abonos_cta_cte = df_abonos_cta_cte.sort_values('Fecha')
+        df_abonos_cta_cte = df_abonos_cta_cte.reset_index(drop=True)
+    else:
+        df_abonos_cta_cte = pd.DataFrame()
+
+    return df_abonos_cta_cte, df_abonos_banco_estado
+
+# =====================
+# ABONOS CTA CTE AVANZADO
+# =====================
+
+def _clasificar_abono_categoria_2_por_descripcion(descripcion: str) -> str:
+    """
+    Clasifica una descripción de abono en Categoría_2 específica para abonos.
+
+    Reglas pedidas:
+    - Categoría_2: 'aportes de capital', 'ingreso transbank', 'ingreso mercadopago', 'otros'
+    """
+    texto = str(descripcion).strip().lower()
+    if any(pal in texto for pal in ['transbank', 'tbk']):
+        return 'ingreso transbank'
+    if any(pal in texto for pal in ['mercado pago', 'mercadopago', 'mpago']):
+        return 'ingreso mercadopago'
+    if any(pal in texto for pal in ['aporte', 'aportes', 'capital']):
+        return 'aportes de capital'
+    return 'otros'
+
+
+def _categoria_1_desde_categoria_2(cat2: str) -> str:
+    """
+    Deriva Categoría 1 en base a Categoría_2 para abonos.
+
+    Reglas pedidas:
+    - Categoría 1: 'Inversión', 'Ingreso operativo', 'otros'
+      mapeo:
+        'aportes de capital' -> 'Inversión'
+        'ingreso transbank'  -> 'Ingreso operativo'
+        'ingreso mercadopago'-> 'Ingreso operativo'
+        'otros'              -> 'otros'
+    """
+    valor = str(cat2).strip().lower()
+    if valor == 'aportes de capital':
+        return 'Inversión'
+    if valor in ('ingreso transbank', 'ingreso mercadopago'):
+        return 'Ingreso operativo'
+    return 'otros'
+
+
+def crear_ingresos_efectivo(lista_ingresos_efectivo: list) -> pd.DataFrame:
+    """
+    Convierte una lista de listas en un DataFrame para ingresos en efectivo.
+
+    Formato esperado: [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
+    """
+    if not lista_ingresos_efectivo:
+        return pd.DataFrame()
+
+    columnas = ['Fecha', 'Descripción', 'Monto', 'Categoría 1', 'Categoría_2', 'Observación']
+    df_ingresos_efectivo = pd.DataFrame(lista_ingresos_efectivo, columns=columnas)
+    df_ingresos_efectivo = convertir_fechas_a_datetime(df_ingresos_efectivo, 'Fecha')
+    df_ingresos_efectivo['Monto'] = pd.to_numeric(df_ingresos_efectivo['Monto'], errors='coerce')
+    df_ingresos_efectivo['Origen'] = 'Efectivo'
+    return df_ingresos_efectivo
+
+
+def agregar_ingresos_efectivo(df_abonos: pd.DataFrame, lista_ingresos_efectivo: list) -> pd.DataFrame:
+    """
+    Agrega ingresos en efectivo al DataFrame de abonos (cuenta corriente).
+    No altera el esquema de columnas de df_abonos: rellena faltantes en el DataFrame a insertar.
+    """
+    if not lista_ingresos_efectivo:
+        return df_abonos
+
+    df_ingresos_efectivo = crear_ingresos_efectivo(lista_ingresos_efectivo)
+    if df_ingresos_efectivo.empty:
+        return df_abonos
+
+    print(f"💵 Agregando {len(df_ingresos_efectivo)} ingresos en efectivo a abonos...")
+
+    df_resultado = df_abonos.copy()
+    if 'Observación' not in df_resultado.columns:
+        df_resultado['Observación'] = ''
+
+    # Alinear columnas: crear columnas faltantes en df_ingresos_efectivo para que coincidan con df_abonos
+    for col in df_resultado.columns:
+        if col not in df_ingresos_efectivo.columns:
+            df_ingresos_efectivo[col] = ''
+
+    df_ingresos_efectivo = df_ingresos_efectivo[df_resultado.columns]
+    df_resultado = pd.concat([df_resultado, df_ingresos_efectivo], ignore_index=True)
+
+    print(f"✅ Se agregaron {len(df_ingresos_efectivo)} ingresos en efectivo a abonos")
+    return df_resultado
+
+
+def procesar_abonos_cta_cte(
+    df_abonos_cta_cte: pd.DataFrame,
+    descripciones_a_eliminar_abonos: list = None,
+    eliminaciones_fecha_monto_abonos: list = None,
+    eliminaciones_fecha_descripcion_abonos: list = None,
+    tabla_correcciones_abonos: list = None,
+    ingresos_efectivo: list = None,
+    diccionario_categoria_1_abonos: dict = None,
+) -> pd.DataFrame:
+    """
+    Procesa abonos de cuenta corriente con las siguientes etapas:
+    - Limpieza: eliminar por descripción, por fecha+monto, por fecha+descripción (contains)
+    - Fechas a datetime y montos numéricos
+    - Deduplicación por ['Fecha','Descripción','Monto']
+    - Clasificación de categorías: asigna 'Categoría_2' y 'Categoría 1'
+    - Aplicar tabla de correcciones (merge por Fecha+Monto) para sobrescribir categorías y Observación
+    - Agregar ingresos en efectivo
+    - Reordenar columnas y devolver DataFrame final
+    """
+    if df_abonos_cta_cte is None or df_abonos_cta_cte.empty:
+        return pd.DataFrame()
+
+    df = df_abonos_cta_cte.copy()
+
+    # Normalizar tipos
+    df = convertir_fechas_a_datetime(df, 'Fecha') if 'Fecha' in df.columns else df
+    if 'Monto' in df.columns:
+        df['Monto'] = pd.to_numeric(df['Monto'], errors='coerce')
+
+    # Eliminaciones
+    df = eliminar_filas_por_descripcion(df, descripciones_a_eliminar_abonos)
+    df = eliminar_filas_por_fecha_monto(df, eliminaciones_fecha_monto_abonos)
+    df = eliminar_filas_por_fecha_descripcion(df, eliminaciones_fecha_descripcion_abonos)
+
+    # Deduplicación básica
+    claves = [c for c in ['Fecha', 'Descripción', 'Monto'] if c in df.columns]
+    if len(claves) == 3:
+        df = df.drop_duplicates(subset=claves, keep='first')
+
+    # Clasificación de categorías
+    if 'Categoría_2' not in df.columns:
+        df['Categoría_2'] = df['Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+    else:
+        # Completar vacíos únicamente
+        mask_vacios = df['Categoría_2'].isna() | (df['Categoría_2'].astype(str).str.strip() == '')
+        df.loc[mask_vacios, 'Categoría_2'] = df.loc[mask_vacios, 'Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+
+    if diccionario_categoria_1_abonos:
+        df['Categoría 1'] = df['Categoría_2'].apply(lambda c2: obtener_categoria(c2, diccionario_categoria_1_abonos))
+    else:
+        df['Categoría 1'] = df['Categoría_2'].apply(_categoria_1_desde_categoria_2)
+
+    # Correcciones
+    if tabla_correcciones_abonos:
+        df = aplicar_correcciones_categorias(df, tabla_correcciones_abonos)
+
+    # Ingresos en efectivo
+    if ingresos_efectivo:
+        df = agregar_ingresos_efectivo(df, ingresos_efectivo)
+
+    # Reordenar columnas si existen
+    try:
+        df = reordenar_columna_categoria_extra(df)
+    except Exception:
+        pass
+
+    return df
+
 def procesar_archivos_financieros(valor_aproximado_dolar: float,
                                  directorio_input: str = 'archivos_input/archivos_input_costos', 
                                  directorio_output: str = 'archivos_output',
@@ -1306,7 +1506,13 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
                                  tabla_correcciones: list = None,
                                  eliminaciones_fecha_monto: list = None,
                                  gastos_efectivo: list = None,
-                                 eliminaciones_fecha_descripcion: list = None) -> bool:
+                                  eliminaciones_fecha_descripcion: list = None,
+                                  # Nuevos parámetros para procesar abonos cta cte
+                                  descripciones_a_eliminar_abonos: list = None,
+                                  eliminaciones_fecha_monto_abonos: list = None,
+                                  eliminaciones_fecha_descripcion_abonos: list = None,
+                                  tabla_correcciones_abonos: list = None,
+                                  ingresos_efectivo_abonos: list = None) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -1380,18 +1586,21 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
         eliminaciones_fecha_descripcion
     )
     
-    # Procesar abonos
-    df_abonos = pd.DataFrame()
-    if not datos_consolidados['banco_estado_abonos'].empty:
-        df_banco_estado_abonos = datos_consolidados['banco_estado_abonos'].copy()
-        df_banco_estado_abonos['Fecha'] = pd.to_datetime(df_banco_estado_abonos['Fecha'], format='%d/%m/%Y', errors='coerce')
-        df_abonos = pd.concat([df_banco_estado_abonos], axis=0)
-    
-    # Agregar abonos de cuenta corriente
-    if not datos_consolidados['cuenta_corriente_abonos'].empty:
-        df_abonos_cc = datos_consolidados['cuenta_corriente_abonos'].copy()
-        df_abonos_cc['Fecha'] = pd.to_datetime(df_abonos_cc['Fecha'], format='%d/%m/%Y', errors='coerce')
-        df_abonos = pd.concat([df_abonos, df_abonos_cc], axis=0)
+    # Procesar abonos: obtener por separado
+    df_abonos_cta_cte, df_abonos_banco_estado = procesar_abonos(datos_consolidados)
+
+    # Procesar específicamente los abonos de cuenta corriente si existen
+    if isinstance(df_abonos_cta_cte, pd.DataFrame) and not df_abonos_cta_cte.empty:
+        df_abonos_cta_cte = procesar_abonos_cta_cte(
+            df_abonos_cta_cte,
+            descripciones_a_eliminar_abonos=descripciones_a_eliminar_abonos,
+            eliminaciones_fecha_monto_abonos=eliminaciones_fecha_monto_abonos,
+            eliminaciones_fecha_descripcion_abonos=eliminaciones_fecha_descripcion_abonos,
+            tabla_correcciones_abonos=tabla_correcciones_abonos,
+            ingresos_efectivo=ingresos_efectivo_abonos,
+        )
+    frames_export = [df for df in [df_abonos_banco_estado, df_abonos_cta_cte] if isinstance(df, pd.DataFrame) and not df.empty]
+    df_abonos = pd.concat(frames_export, ignore_index=True) if frames_export else pd.DataFrame()
     
     print("=" * 60)
     print("💾 EXPORTANDO ARCHIVOS...")

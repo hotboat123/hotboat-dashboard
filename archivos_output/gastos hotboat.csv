@@ -776,18 +776,18 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-08-11,100000.0,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,Cuenta Corriente,,,,,
 2025-08-11,25000.0,Costos Variables,Remuneraciones,Traspaso A:Axel Aguirre,Cuenta Corriente,,,,,
 2025-08-11,70000.0,Costos Variables,Remuneraciones,Traspaso A:Nestor Aguirre,Cuenta Corriente,,,,,
-2025-08-08,65000.0,Sin categoría,Sin categoría,Traspaso A:Alfredo Gebert Zuniga,Cuenta Corriente,,,,,
+2025-08-08,65000.0,Inversión en Activos,HotBoat matriz,Traspaso A:Alfredo Gebert Zuniga,Cuenta Corriente,,,,,Fierros y ruedas matriz exterior
 2025-08-07,10000.0,Costos Variables,Remuneraciones,Traspaso A:Nestor Aguirre,Cuenta Corriente,,,,,
 2025-08-05,6000.0,Costos Variables,Remuneraciones,Traspaso A:Nestor Aguirre,Cuenta Corriente,,,,,
 2025-08-05,100000.0,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,Cuenta Corriente,,,,,
 2025-08-04,1600.0,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,Cuenta Corriente,,,,,
 2025-08-04,350000.0,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,Cuenta Corriente,,,,,
-2025-08-04,177600.0,Sin categoría,Sin categoría,Traspaso A:Daniel Inostroza Canal,Cuenta Corriente,,,,,
+2025-08-04,177600.0,Inversión en Activos,HotBoat matriz,Traspaso A:Daniel Inostroza Canal,Cuenta Corriente,,,,,Terciados matriz exterior
 2025-08-04,90000.0,Costos Variables,Remuneraciones,Traspaso A:Axel Aguirre,Cuenta Corriente,,,,,
 2025-08-04,137000.0,Costos Variables,Remuneraciones,Traspaso A:Nestor Aguirre,Cuenta Corriente,,,,,
 2025-08-01,3696.0,Sin categoría,Sin categoría,Intereses Linea De Credito,Cuenta Corriente,,,,,
 2025-08-01,230.0,Sin categoría,Sin categoría,Impuesto Linea De Credito,Cuenta Corriente,,,,,
-2025-08-01,27500.0,Sin categoría,Sin categoría,Traspaso A:Rayen Romann,Cuenta Corriente,,,,,
+2025-08-01,27500.0,Inversión en Activos,HotBoat 2,Traspaso A:Rayen Romann,Cuenta Corriente,,,,,2da mitad leñera
 2025-07-30,30000.0,Costos Variables,Leña,Giro Cajero Automatico             *,Cuenta Corriente,,,,,Leña juan otarola
 2025-07-28,73500.0,Costos Variables,Remuneraciones,Traspaso A:Nestor Aguirre,Cuenta Corriente,,,,,
 2025-07-28,61500.0,Costos Variables,Remuneraciones,Traspaso A:Axel Aguirre,Cuenta Corriente,,,,,

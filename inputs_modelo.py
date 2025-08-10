@@ -1,7 +1,7 @@
 # Diccionario de categorías para gastos
 # Puedes modificar las palabras clave y categorías según tus necesidades
 
-diccionario_categorias = {
+diccionario_categorias_gastos = {
     "Stock tablas y bebidas": [
         "LIDER.CL"
     ],
@@ -107,7 +107,8 @@ diccionario_categorias = {
 }
 
 
-diccionario_categoria_1 = {
+# Diccionario de categorías 1 para GASTOS
+diccionario_categoria_1_gastos = {
     "Costos Fijos": [
         "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", "Sueldo Tom"
     ],
@@ -128,7 +129,7 @@ diccionario_categoria_1 = {
     ]
 }
 
-descripciones_a_eliminar = [ #tien e que ser exacto
+descripciones_a_eliminar_gastos = [ #tien e que ser exacto
     "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO", "Amortizacion A Linea De Credito",
 "pago linea de credito", "Traspaso De:Tomas Damja"
 ] 
@@ -136,7 +137,7 @@ descripciones_a_eliminar = [ #tien e que ser exacto
 # Lista de registros específicos a eliminar por fecha y monto
 # Formato: [fecha, monto]
 # La fecha puede ser en formato 'YYYY-MM-DD' o 'DD/MM/YYYY'
-eliminaciones_fecha_monto = [
+eliminaciones_fecha_monto_gastos = [
     # Ejemplo de eliminaciones:
     ['2025-04-21', 1400000],  
     ['2025-04-21', 1400000],  
@@ -150,7 +151,7 @@ eliminaciones_fecha_monto = [
 # Lista de registros a eliminar por fecha y descripción (contains)
 # Formato: [fecha, texto_en_descripcion]
 # La fecha puede ser 'YYYY-MM-DD' o 'DD/MM/YYYY'. La descripción hace match por contains insensible a mayúsculas.
-eliminaciones_fecha_descripcion = [
+eliminaciones_fecha_descripcion_gastos = [
     # Ejemplos:
     ['2025-06-19', 'falabella'],
     # ['15/07/2025', 'spa santiago'],
@@ -165,7 +166,7 @@ valor_aproximado_dolar = float(950)  # Actualizar según tipo de cambio actual
 # Formato: [fecha, descripcion, monto, categoría_1, categoría_2, observacion]
 # Esta tabla permite sobrescribir categorías automáticas y agregar observaciones
 # El merge se hace por fecha y monto (sin descripción)
-tabla_correcciones = [
+tabla_correcciones_gastos = [
     # Ejemplo de corrección:
     ['2025-07-17', 'Traspaso A:Daniel Inostroza Canales', 1000000, 'Inversión en Activos', 'HotBoat matriz', 'Pago a daniel para hacer matriz'],
     ['2025-07-04','','500000','Inversión en Activos','HotBoat matriz','Pago a daniel para hacer matriz'],
@@ -211,13 +212,64 @@ tabla_correcciones = [
 # Lista de gastos pagados en efectivo
 # Formato: [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
 # Estos gastos se agregarán con origen 'Efectivo'
-gastos_efectivo = [
+gastos_efectivo_gastos = [
     # Ejemplos de gastos en efectivo:
     ['2025-07-30','Compra leña en efectivo juan otarola','30000','Costos Variables','Leña' ,'Leña juan otarola'],
     ['2025-08-08','Compra leña en efectivo verduleria','7000','Costos Variables','Leña' ,'Leña verduleria'],
     # ['2025-01-15', 'Compra herramientas ferretería local', 25000, 'Inversión General', 'Ferretería', 'Compra en efectivo'],
     # ['2025-01-20', 'Combustible gasolina', 30000, 'Costos Variables', 'Combustible', 'Pago en efectivo estación servicio'],
     # ['2025-01-25', 'Almuerzo equipo trabajo', 15000, 'Costos Variables', 'Alimentos', 'Almuerzo pagado en efectivo'],
+]
+
+############################
+# ABONOS - CONFIGURACIÓN   #
+############################
+
+# Diccionario de categorías 1 para ABONOS
+# Reglas solicitadas: Inversión, Ingreso operativo, otros (según Categoría_2)
+diccionario_categoria_1_abonos = {
+    'Inversión': [
+        'aportes de capital'
+    ],
+    'Ingreso operativo': [
+        'ingreso transbank', 'ingreso mercadopago'
+    ],
+    'otros': [
+        'otros'
+    ],
+}
+
+# Opcional: Diccionario de categorías 2 para ABONOS (si se quisiera forzar por keywords)
+diccionario_categorias_abonos = {
+    'aportes de capital': ['aporte', 'aportes', 'capital'],
+    'ingreso transbank': ['transbank', 'tbk'],
+    'ingreso mercadopago': ['mercado pago', 'mercadopago', 'mpago'],
+    'otros': []
+}
+
+# Filtros/limpiezas específicos de ABONOS
+descripciones_a_eliminar_abonos = [
+    # ejemplos:
+]
+
+eliminaciones_fecha_monto_abonos = [
+    # ['2025-07-15', 50000],
+]
+
+eliminaciones_fecha_descripcion_abonos = [
+    # ['2025-07-15', 'texto en descripcion'],
+]
+
+# Correcciones para ABONOS (merge por Fecha+Monto)
+# Formato: [fecha, descripcion, monto, categoría_1, categoría_2, observacion]
+tabla_correcciones_abonos = [
+    # ['2025-07-20', '', 150000, 'Ingreso operativo', 'ingreso transbank', 'Ajuste manual'],
+]
+
+# Ingresos en efectivo a sumar a los abonos
+# Formato: [fecha, descripcion, monto, categoria_1, categoria_2, observacion]
+ingresos_efectivo_abonos = [
+    # ['2025-07-30', 'Ingreso caja chica', 50000, 'Ingreso operativo', 'otros', 'Ingreso manual'],
 ]
 
 # Diccionario de categorías para cuenta corriente
