@@ -124,12 +124,12 @@ diccionario_categoria_1 = {
         "Aportes de capital"
     ],
     "Inversión General": [
-        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel", "Intereses"
+        "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel", "Intereses", "Mantención HotBoat"
     ]
 }
 
 descripciones_a_eliminar = [ #tien e que ser exacto
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO"
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO", "Amortizacion A Linea De Credito",
 "pago linea de credito", "Traspaso De:Tomas Damja"
 ] 
 
@@ -202,6 +202,9 @@ tabla_correcciones = [
     ['2025-05-26','','22758','Inversión en Activos','Sistema inteligente' ,'Sensor de gas y linterna frontal'],
     ['2025-07-30','','30000','Costos Variables','Leña' ,'Leña juan otarola'],
     ['2025-07-28','','40000','Costos Variables','Devolucion clientes' ,'Devolucion a cliente'],
+    ['2025-08-08','','65000','Inversión en Activos','HotBoat matriz' ,'Fierros y ruedas matriz exterior'],
+    ['2025-08-04','','177600','Inversión en Activos','HotBoat matriz' ,'Terciados matriz exterior'],
+    ['2025-08-01','','27500','Inversión en Activos','HotBoat 2' ,'2da mitad leñera'],
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
 ]
 
