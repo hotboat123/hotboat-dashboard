@@ -477,12 +477,38 @@ def reordenar_columna_categoria_extra(df):
 
 def eliminar_filas_por_descripcion(df, lista_descripciones):
     """
-    Elimina filas del DataFrame donde la columna 'Descripción' coincide (ignorando mayúsculas/minúsculas y espacios) con alguna de las descripciones en la lista.
+    Elimina filas del DataFrame donde la columna 'Descripción' CONTIENE
+    cualquiera de los textos entregados en la lista (case-insensitive).
+
+    Antes: coincidencia exacta; Ahora: "contains" por cada texto.
     """
-    if not lista_descripciones:
+    if df is None or df.empty or not lista_descripciones or 'Descripción' not in df.columns:
         return df
-    descripciones_normalizadas = [d.strip().lower() for d in lista_descripciones]
-    return df[~df['Descripción'].str.strip().str.lower().isin(descripciones_normalizadas)]
+
+    # Normalizar textos a buscar
+    textos = [str(d).strip().lower() for d in lista_descripciones if str(d).strip()]
+    if not textos:
+        return df
+
+    desc_lower = df['Descripción'].astype(str).str.lower()
+    mask_eliminar = pd.Series(False, index=df.index)
+
+    for t in textos:
+        try:
+            mask_eliminar = mask_eliminar | desc_lower.str.contains(re.escape(t), na=False)
+        except Exception:
+            # Fallback simple si falla el escape
+            mask_eliminar = mask_eliminar | desc_lower.str.contains(t, na=False)
+
+    filas_iniciales = len(df)
+    df_resultado = df[~mask_eliminar].copy()
+    eliminadas = filas_iniciales - len(df_resultado)
+    if eliminadas > 0:
+        print(f"✅ Eliminadas {eliminadas} filas por descripción (contains) usando {len(textos)} patrones")
+    else:
+        print("ℹ️  No se eliminaron filas por descripción (contains)")
+
+    return df_resultado
 
 
 def eliminar_filas_por_fecha_monto(df, lista_fecha_monto):
@@ -1436,6 +1462,7 @@ def procesar_abonos_cta_cte(
     tabla_correcciones_abonos: list = None,
     ingresos_efectivo: list = None,
     diccionario_categoria_1_abonos: dict = None,
+    diccionario_categorias_abonos: dict = None,
 ) -> pd.DataFrame:
     """
     Procesa abonos de cuenta corriente con las siguientes etapas:
@@ -1467,13 +1494,18 @@ def procesar_abonos_cta_cte(
     if len(claves) == 3:
         df = df.drop_duplicates(subset=claves, keep='first')
 
-    # Clasificación de categorías
-    if 'Categoría_2' not in df.columns:
-        df['Categoría_2'] = df['Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+    # Clasificación de categorías (Categoría_2)
+    if diccionario_categorias_abonos:
+        # Usar diccionario explícito si se proporciona
+        df = categorizar_por_diccionario(df, diccionario_categorias_abonos, 'Categoría_2')
     else:
-        # Completar vacíos únicamente
-        mask_vacios = df['Categoría_2'].isna() | (df['Categoría_2'].astype(str).str.strip() == '')
-        df.loc[mask_vacios, 'Categoría_2'] = df.loc[mask_vacios, 'Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+        # Fallback: heurística por descripción
+        if 'Categoría_2' not in df.columns:
+            df['Categoría_2'] = df['Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
+        else:
+            # Completar vacíos únicamente
+            mask_vacios = df['Categoría_2'].isna() | (df['Categoría_2'].astype(str).str.strip() == '')
+            df.loc[mask_vacios, 'Categoría_2'] = df.loc[mask_vacios, 'Descripción'].apply(_clasificar_abono_categoria_2_por_descripcion)
 
     if diccionario_categoria_1_abonos:
         df['Categoría 1'] = df['Categoría_2'].apply(lambda c2: obtener_categoria(c2, diccionario_categoria_1_abonos))
@@ -1512,7 +1544,9 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
                                   eliminaciones_fecha_monto_abonos: list = None,
                                   eliminaciones_fecha_descripcion_abonos: list = None,
                                   tabla_correcciones_abonos: list = None,
-                                  ingresos_efectivo_abonos: list = None) -> bool:
+                                  ingresos_efectivo_abonos: list = None,
+                                  diccionario_categoria_1_abonos: dict = None,
+                                  diccionario_categorias_abonos: dict = None) -> bool:
     """
     Función principal que procesa todos los archivos financieros
     
@@ -1598,6 +1632,8 @@ def procesar_archivos_financieros(valor_aproximado_dolar: float,
             eliminaciones_fecha_descripcion_abonos=eliminaciones_fecha_descripcion_abonos,
             tabla_correcciones_abonos=tabla_correcciones_abonos,
             ingresos_efectivo=ingresos_efectivo_abonos,
+            diccionario_categoria_1_abonos=diccionario_categoria_1_abonos,
+            diccionario_categorias_abonos=diccionario_categorias_abonos,
         )
     frames_export = [df for df in [df_abonos_banco_estado, df_abonos_cta_cte] if isinstance(df, pd.DataFrame) and not df.empty]
     df_abonos = pd.concat(frames_export, ignore_index=True) if frames_export else pd.DataFrame()

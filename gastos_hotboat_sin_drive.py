@@ -53,6 +53,7 @@ from inputs_modelo import (
     eliminaciones_fecha_descripcion_abonos,
     tabla_correcciones_abonos,
     ingresos_efectivo_abonos,
+    diccionario_categorias_abonos,
 )
 
 # ======== CONFIGURACIÓN ========
@@ -82,6 +83,8 @@ if __name__ == '__main__':
             eliminaciones_fecha_descripcion_abonos=eliminaciones_fecha_descripcion_abonos,
             tabla_correcciones_abonos=tabla_correcciones_abonos,
             ingresos_efectivo_abonos=ingresos_efectivo_abonos,
+            diccionario_categoria_1_abonos=diccionario_categoria_1_abonos,
+            diccionario_categorias_abonos=diccionario_categorias_abonos,
         )
         
         if success:

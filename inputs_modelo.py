@@ -92,18 +92,6 @@ diccionario_categorias_gastos = {
     "Intereses": [
         "Pago automatico tarjeta de credito", "amortizacion linea de credito" 
     ],
-
-    
-    # Categorías para ABONOS (solo las que te interesan)
-    "Bencina Pathfinder": [
-        "Odette"
-    ],
-    "Ingresos HotBoat": [
-        "traspaso de:hotboat spa", "Nawrath", "Dutilh"
-    ],
-    "Aportes de capital": [
-        "fintual", "dev Impuesto"
-    ]
 }
 
 
@@ -232,7 +220,7 @@ diccionario_categoria_1_abonos = {
         'aportes de capital'
     ],
     'Ingreso operativo': [
-        'ingreso transbank', 'ingreso mercadopago'
+        'ingreso transbank diario', 'ingreso mercadopago diario', 'ingreso hotboat'
     ],
     'otros': [
         'otros'
@@ -241,19 +229,25 @@ diccionario_categoria_1_abonos = {
 
 # Opcional: Diccionario de categorías 2 para ABONOS (si se quisiera forzar por keywords)
 diccionario_categorias_abonos = {
-    'aportes de capital': ['aporte', 'aportes', 'capital'],
-    'ingreso transbank': ['transbank', 'tbk'],
-    'ingreso mercadopago': ['mercado pago', 'mercadopago', 'mpago'],
-    'otros': []
+    'aportes de capital': ["fintual", "dev Impuesto"],
+    'ingreso transbank diario': ['transbank', 'tbk'],
+    'ingreso mercadopago diario': ['mercado pago', 'mercadopago', 'mpago'],
+    'ingreso hotboat': ["Traspaso De:Hotboat Spa", "Nawrath", "Dutilh"],
+    'otros': ['Odette']
 }
+
 
 # Filtros/limpiezas específicos de ABONOS
 descripciones_a_eliminar_abonos = [
     # ejemplos:
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "fany yutronic" , "sacha"
+
+    "Transferencia Desde Linea De Credito"
 ]
 
 eliminaciones_fecha_monto_abonos = [
     # ['2025-07-15', 50000],
+    ['2025-04-16', 1400000], 
 ]
 
 eliminaciones_fecha_descripcion_abonos = [
