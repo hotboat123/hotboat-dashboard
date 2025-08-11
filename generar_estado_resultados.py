@@ -12,14 +12,23 @@ Entrada:
 Salida:
  - archivos_output/estado_resultados.csv           (resumen TOTAL)
  - archivos_output/estado_resultados_mensual.csv   (resumen por mes)
+ - archivos_output/estado_resultados_semanal.csv   (resumen por semana)
+ - archivos_output/estado_resultados_diario.csv    (resumen por día)
 
 Uso:
-    python generar_estado_resultados.py
+    python generar_estado_resultados.py [--periodo PERIODO]
+    
+Períodos disponibles:
+    - diario: Estado de resultados por día
+    - semanal: Estado de resultados por semana
+    - mensual: Estado de resultados por mes (por defecto)
+    - todos: Genera todos los períodos
 """
 
 import os
 import sys
 import pandas as pd
+import argparse
 from datetime import datetime
 
 
@@ -41,6 +50,8 @@ def normalizar_categoria_utilidad(cat: str) -> str:
         return 'ingreso operativo'
     if 'marketing' in t:
         return 'costos de marketing'
+    if 'fijos' in t:
+        return 'costos fijos'
     if 'costo' in t:
         return 'costo operativo'
     return t
@@ -74,6 +85,12 @@ def preparar_utilidad_operativa(df_uo: pd.DataFrame) -> pd.DataFrame:
     df_uo['monto'] = pd.to_numeric(df_uo['monto'], errors='coerce')
     df_uo['categoria'] = df_uo['categoria'].apply(normalizar_categoria_utilidad)
     df_uo = df_uo.dropna(subset=['fecha', 'monto'])
+    
+    # FILTRAR costos fijos para evitar duplicación
+    # Los costos fijos se manejan por separado desde gastos hotboat.csv
+    df_uo = df_uo[df_uo['categoria'] != 'costos fijos'].copy()
+    print(f"📊 Utilidad operativa cargada: {len(df_uo)} registros (excluyendo costos fijos)")
+    
     return df_uo
 
 
@@ -104,7 +121,7 @@ def preparar_costos_fijos(df_gastos: pd.DataFrame) -> pd.DataFrame:
     return df_g[mask_fijos].copy()
 
 
-def calcular_pl(df_uo: pd.DataFrame, df_fijos: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def calcular_pl(df_uo: pd.DataFrame, df_fijos: pd.DataFrame, periodo: str = 'mensual') -> tuple[pd.DataFrame, pd.DataFrame]:
     if df_uo.empty and df_fijos.empty:
         columnas = [
             'periodo', 'Ingresos Operativos', 'Costo Operativo', 'Utilidad Bruta',
@@ -112,12 +129,36 @@ def calcular_pl(df_uo: pd.DataFrame, df_fijos: pd.DataFrame) -> tuple[pd.DataFra
         ]
         return pd.DataFrame(columns=columnas), pd.DataFrame(columns=columnas)
 
-    # Periodo YYYY-MM
+    # Configurar período según parámetro
+    if periodo == 'diario':
+        freq = 'D'
+        formato_periodo = lambda x: x.strftime('%Y-%m-%d')
+    elif periodo == 'semanal':
+        freq = 'W'
+        formato_periodo = lambda x: f"{x.strftime('%Y-%m-%d')} (S{x.isocalendar()[1]})"
+    else:  # mensual
+        freq = 'M'
+        formato_periodo = lambda x: x.strftime('%Y-%m')
+    
+    # Aplicar período a utilidad operativa
     if not df_uo.empty:
-        df_uo['periodo'] = df_uo['fecha'].dt.to_period('M').astype(str)
-    # Períodos de fijos
+        if periodo == 'semanal':
+            # Para semanal, usar el lunes de cada semana como referencia
+            df_uo['periodo'] = df_uo['fecha'].dt.to_period('W').dt.start_time.apply(formato_periodo)
+        elif periodo == 'diario':
+            df_uo['periodo'] = df_uo['fecha'].apply(formato_periodo)
+        else:  # mensual
+            df_uo['periodo'] = df_uo['fecha'].dt.to_period('M').astype(str)
+    
+    # Aplicar mismo período a costos fijos
     if not df_fijos.empty:
-        df_fijos['periodo'] = pd.to_datetime(df_fijos['Fecha']).dt.to_period('M').astype(str)
+        df_fijos_fechas = pd.to_datetime(df_fijos['Fecha'])
+        if periodo == 'semanal':
+            df_fijos['periodo'] = df_fijos_fechas.dt.to_period('W').dt.start_time.apply(formato_periodo)
+        elif periodo == 'diario':
+            df_fijos['periodo'] = df_fijos_fechas.apply(formato_periodo)
+        else:  # mensual
+            df_fijos['periodo'] = df_fijos_fechas.dt.to_period('M').astype(str)
 
     # Pivot utilidad operativa por periodo
     pivot = (
@@ -184,23 +225,56 @@ def guardar_csv(df: pd.DataFrame, ruta: str) -> None:
 
 
 def main() -> bool:
+    # Parsear argumentos de línea de comandos
+    parser = argparse.ArgumentParser(description='Generar Estado de Resultados')
+    parser.add_argument('--periodo', choices=['diario', 'semanal', 'mensual', 'todos'], 
+                       default='todos', help='Período para el estado de resultados')
+    args = parser.parse_args()
+    
     print("📑 Generando Estado de Resultados (P&L) …")
+    print(f"🔄 Período seleccionado: {args.periodo}")
 
+    # Cargar datos base
     ruta_uo = os.path.join('archivos_output', 'Utilidad operativa.csv')
     ruta_gastos = os.path.join('archivos_output', 'gastos hotboat.csv')
     df_uo_raw = leer_csv_seguro(ruta_uo)
     df_gastos_raw = leer_csv_seguro(ruta_gastos)
     df_uo = preparar_utilidad_operativa(df_uo_raw)
     df_fijos = preparar_costos_fijos(df_gastos_raw)
-    df_mensual, df_total = calcular_pl(df_uo, df_fijos)
-
-    out_mensual = os.path.join('archivos_output', 'estado_resultados_mensual.csv')
+    
+    # Determinar qué períodos generar
+    periodos_a_generar = []
+    if args.periodo == 'todos':
+        periodos_a_generar = ['diario', 'semanal', 'mensual']
+    else:
+        periodos_a_generar = [args.periodo]
+    
+    print(f"📊 Generando estados de resultados para: {', '.join(periodos_a_generar)}")
+    
+    # Generar cada período
+    for periodo in periodos_a_generar:
+        print(f"\n🔄 Procesando período: {periodo}")
+        df_periodo, df_total = calcular_pl(df_uo, df_fijos, periodo)
+        
+        # Definir archivos de salida
+        out_periodo = os.path.join('archivos_output', f'estado_resultados_{periodo}.csv')
+        
+        # Guardar archivos
+        guardar_csv(df_periodo, out_periodo)
+        
+        # Mostrar resumen
+        if not df_periodo.empty:
+            print(f"  📈 {len(df_periodo)} períodos procesados")
+            if 'Resultado Final' in df_periodo.columns:
+                resultado_total = df_periodo['Resultado Final'].sum()
+                print(f"  💰 Resultado total: ${resultado_total:,.0f}")
+    
+    # Siempre generar el resumen total
+    df_mensual, df_total = calcular_pl(df_uo, df_fijos, 'mensual')
     out_total = os.path.join('archivos_output', 'estado_resultados.csv')
-
-    guardar_csv(df_mensual, out_mensual)
     guardar_csv(df_total, out_total)
 
-    print("✅ Estado de Resultados generado con éxito")
+    print("\n✅ Estado de Resultados generado con éxito")
     return True
 
 
