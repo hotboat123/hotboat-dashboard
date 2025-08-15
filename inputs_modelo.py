@@ -204,6 +204,7 @@ gastos_efectivo_gastos = [
     # Ejemplos de gastos en efectivo:
     ['2025-07-30','Compra leña en efectivo juan otarola','30000','Costos Variables','Leña' ,'Leña juan otarola'],
     ['2025-08-08','Compra leña en efectivo verduleria','7000','Costos Variables','Leña' ,'Leña verduleria'],
+    ['2025-08-12','Compra leña en efectivo verduleria','45000','Costos Variables','Leña' ,'Leña juan otarola''],
     # ['2025-01-15', 'Compra herramientas ferretería local', 25000, 'Inversión General', 'Ferretería', 'Compra en efectivo'],
     # ['2025-01-20', 'Combustible gasolina', 30000, 'Costos Variables', 'Combustible', 'Pago en efectivo estación servicio'],
     # ['2025-01-25', 'Almuerzo equipo trabajo', 15000, 'Costos Variables', 'Alimentos', 'Almuerzo pagado en efectivo'],

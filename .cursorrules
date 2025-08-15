@@ -1045,3 +1045,32 @@ gastos_efectivo = [
 **Estado:** ✅ COMPLETADO - Sistema de gastos en efectivo implementado y con datos reales
 
 ---
+
+## Nueva Tarea: Simulación de Utilidad Operativa ✅
+
+**Task:** Crear simulación que genere:
+- `ingresos_operativos_simulacion.csv` y `costos_operativos_simulacion.csv` con misma estructura que los reales
+- Consolidado `Utilidad operativa simulacion.csv` (fecha, categoria, categoria_2, descripcion, monto)
+
+**Inputs:** `inputs_simulacion.py`
+- demanda_por_mes: {'YYYY-MM': clientes}
+- ticket_promedio (CLP)
+- costo_variable_por_reserva (CLP)
+- gasto_marketing_mensual (CLP) [default 300,000]
+- costo_fijo_mensual (CLP) [default 700,000]
+
+**Progreso:**
+[X] Crear `inputs_simulacion.py`
+[X] Crear `utilidad_operativa_simulacion.py`
+[X] Generar CSVs simulados en `archivos_output/`
+[X] Consolidar y ordenar por fecha
+[X] Resumen en consola (ingresos, costos op, marketing, fijos, utilidad)
+
+**Uso:**
+```bash
+python utilidad_operativa_simulacion.py
+```
+
+**Estado:** ✅ COMPLETADO - Simulación creada y funcional
+
+---
