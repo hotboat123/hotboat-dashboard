@@ -42,6 +42,17 @@ ticket_promedio = 150_000
 # Costo operativo por cada reserva (CLP)
 costo_variable_por_reserva = 45_000
 
+# Desglose opcional del costo operativo por reserva.
+# Si se activa y se define el dict, se generará una fila por componente por cada reserva.
+usar_desglose_costos_operativos = True
+costo_operativo_detalle_por_reserva = {
+    'leña': 1_500,
+    'agua': 700,
+    'luz': 520,
+    'pago extra ayudante': 25_000,
+    'gas': 10_000,
+}
+
 # Gasto de marketing mensual (CLP)
 gasto_marketing_mensual = 300_000
 

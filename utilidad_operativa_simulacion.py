@@ -88,13 +88,31 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 'descripcion': cfg.descripcion_ingreso,
                 'monto': cfg.ticket_promedio,
             })
-            registros_costos_op.append({
-                'fecha': f,
-                'email': cfg.email_placeholder,
-                'id_reserva': id_counter,
-                'descripcion': cfg.descripcion_costo_operativo,
-                'monto': cfg.costo_variable_por_reserva,
-            })
+            # Costos por reserva: desglose si está habilitado, si no costo único
+            try:
+                usar_detalle = bool(getattr(cfg, 'usar_desglose_costos_operativos', False))
+                detalle: dict = getattr(cfg, 'costo_operativo_detalle_por_reserva', {}) or {}
+            except Exception:
+                usar_detalle = False
+                detalle = {}
+
+            if usar_detalle and isinstance(detalle, dict) and len(detalle) > 0:
+                for nombre, monto in detalle.items():
+                    registros_costos_op.append({
+                        'fecha': f,
+                        'email': cfg.email_placeholder,
+                        'id_reserva': id_counter,
+                        'descripcion': str(nombre),
+                        'monto': float(monto),
+                    })
+            else:
+                registros_costos_op.append({
+                    'fecha': f,
+                    'email': cfg.email_placeholder,
+                    'id_reserva': id_counter,
+                    'descripcion': cfg.descripcion_costo_operativo,
+                    'monto': cfg.costo_variable_por_reserva,
+                })
             id_counter += 1
 
         # Gastos de marketing mensuales (1 registro al último día del mes)
@@ -157,8 +175,10 @@ def generar_consolidado(df_ing: pd.DataFrame, df_cost_op: pd.DataFrame, df_mark:
     if not df_cost_op.empty:
         b = df_cost_op[['fecha', 'monto']].copy()
         b['categoria'] = 'costo operativo'
-        b['categoria_2'] = 'Por reserva (sim)'
-        b['descripcion'] = cfg.descripcion_costo_operativo
+        # Subcategoría = componente del costo (leña, agua, etc.)
+        b['categoria_2'] = df_cost_op['descripcion'].values
+        # Descripción: preservamos el nombre del componente
+        b['descripcion'] = df_cost_op['descripcion'].values
         bloques.append(b)
     if not df_mark.empty:
         b = df_mark[['fecha', 'monto']].copy()
