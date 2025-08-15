@@ -49,9 +49,22 @@ costo_operativo_detalle_por_reserva = {
     'leña': 1_500,
     'agua': 700,
     'luz': 520,
-    'pago extra ayudante': 25_000,
     'gas': 10_000,
 }
+
+# Pago del ayudante escalonado por día según número de reservas ese día
+usar_pago_ayudante_escalonado = True
+# Lista de tuplas: (cantidad_reservas, pago_diario)
+pago_ayudante_escalas = [
+    (1, 25_000),
+    (2, 45_000),
+    (3, 60_000),
+    (4, 70_000),
+    (5, 80_000),
+    (6, 90_000),
+    (7, 100_000),
+]
+# Si hay más reservas que el mayor umbral, se usa el último monto de la lista
 
 # Gasto de marketing mensual (CLP)
 gasto_marketing_mensual = 300_000

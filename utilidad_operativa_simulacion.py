@@ -115,6 +115,41 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 })
             id_counter += 1
 
+        # Pago ayudante escalonado por día (una fila por día)
+        try:
+            usar_escalonado = bool(getattr(cfg, 'usar_pago_ayudante_escalonado', False))
+            escalas = list(getattr(cfg, 'pago_ayudante_escalas', []) or [])
+            escalas_sorted = sorted(escalas, key=lambda x: x[0])
+        except Exception:
+            usar_escalonado = False
+            escalas_sorted = []
+
+        if usar_escalonado and len(fechas) > 0:
+            # Agrupar fechas por día (YYYY-MM-DD) y contar reservas por día
+            conteo_por_dia = {}
+            for f in fechas:
+                clave = f.date()
+                conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
+
+            for dia, cantidad in conteo_por_dia.items():
+                # determinar pago según la escala
+                pago = 0
+                for umbral, monto in escalas_sorted:
+                    if cantidad >= umbral:
+                        pago = monto
+                    else:
+                        break
+                if pago == 0 and escalas_sorted:
+                    pago = escalas_sorted[0][1]
+
+                registros_costos_op.append({
+                    'fecha': datetime(dia.year, dia.month, dia.day, 20, 0, 0),
+                    'email': cfg.email_placeholder,
+                    'id_reserva': None,
+                    'descripcion': 'pago extra ayudante (diario)',
+                    'monto': float(pago),
+                })
+
         # Gastos de marketing mensuales (1 registro al último día del mes)
         y, m = map(int, yyyy_mm.split('-'))
         last_day = monthrange(y, m)[1]
