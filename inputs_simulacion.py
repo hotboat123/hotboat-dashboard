@@ -16,24 +16,46 @@ Puedes agregar tantos meses como quieras en el diccionario demanda_por_mes.
 """
 
 # Mapea cada mes con su demanda estimada (número de clientes)
+# demanda_por_mes = {
+#     # Ejemplos, edítalos libremente:
+#     '2025-08': 13,
+#     '2025-09': 16,
+#     '2025-10': 15,
+#     '2025-11': 15,
+#     '2025-12': 20,
+#     '2026-01': 60,
+#     '2026-02': 80,
+#     '2026-03': 20,
+#     '2026-04': 20, 
+#     '2026-05': 20,
+#     '2026-06': 10,
+#     '2026-07': 35,
+#     '2026-08': 15,
+#     '2026-09': 18,
+#     '2026-10': 18,
+#     '2026-11': 28,
+# }
+
 demanda_por_mes = {
-    # Ejemplos, edítalos libremente:
+    # Nuevas demandas para probar:
+
     '2025-08': 13,
     '2025-09': 16,
     '2025-10': 15,
-    '2025-11': 15,
-    '2025-12': 20,
-    '2026-01': 60,
-    '2026-02': 80,
+    '2025-11': 20,
+    '2025-12': 25,
+    '2026-01': 120,
+    '2026-02': 130,
     '2026-03': 20,
     '2026-04': 20, 
     '2026-05': 20,
-    '2026-06': 10,
-    '2026-07': 35,
-    '2026-08': 15,
-    '2026-09': 18,
-    '2026-10': 18,
-    '2026-11': 28,
+    '2026-06': 15,
+    '2026-07': 40,
+    '2026-08': 20,
+    '2026-09': 25,
+    '2026-10': 20,
+    '2026-11': 30,
+    '2026-12': 35
 }
 
 # Ingreso promedio por cliente (CLP)
@@ -82,4 +104,20 @@ descripcion_costo_fijo = "Costo fijo mensual simulado"
 email_placeholder = "sim@hotboat.cl"
 id_reserva_base = 1_000_000  # base para generar IDs únicos en la simulación
 
+
+# Configuración de distribución semana / fin de semana por mes
+# Formato: {'YYYY-MM': (reservas_semana, reservas_finde)}
+# Ejemplo: en marzo 2 a 5 => de cada 7 reservas, 2 en semana y 5 en fin de semana
+# Si un mes no está presente en este dict, se usará el valor por defecto de abajo.
+ratio_semana_finde_por_mes = {
+    # '2026-03': (2, 5),  # ejemplo: marzo con 2:5
+     '2026-01': (0, 5),  # ejemplo: marzo con 2:5
+}
+
+# Ratio por defecto si no se especifica uno por mes
+ratio_semana_finde_default = (3, 4)  # 3 en semana, 4 en fin de semana (aprox 43% semana / 57% finde)
+
+# Semilla opcional para reproducibilidad de la asignación aleatoria de días
+# Establécela a un entero (por ejemplo 42) para resultados reproducibles; déjala en None para aleatorio puro
+random_seed = 42
 

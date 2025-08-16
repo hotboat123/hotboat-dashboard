@@ -13,9 +13,10 @@ Parámetros en inputs_simulacion.py
 
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from calendar import monthrange
 import pandas as pd
+import random
 
 # Asegurar UTF-8 en Windows
 try:
@@ -37,35 +38,79 @@ def asegurar_directorio_salida() -> str:
     return out_dir
 
 
+def _dias_semana_y_finde(year: int, month: int) -> tuple[list, list]:
+    """Devuelve listas de fechas datetime.date separadas en días de semana (0-4) y fin de semana (5-6)."""
+    last_day = monthrange(year, month)[1]
+    dias_semana = []
+    dias_finde = []
+    for day in range(1, last_day + 1):
+        d = datetime(year, month, day).date()
+        if d.weekday() < 5:
+            dias_semana.append(d)
+        else:
+            dias_finde.append(d)
+    return dias_semana, dias_finde
+
+
+def _calcular_asignacion_semana_finde(yyyy_mm: str, cantidad_total: int) -> tuple[int, int]:
+    """Calcula cuántas reservas van a semana y cuántas a fin de semana según el ratio mensual.
+    - Usa cfg.ratio_semana_finde_por_mes.get(yyyy_mm) o cfg.ratio_semana_finde_default si no está.
+    - Asigna proporcionalmente: semana = round(cantidad_total * ratio_semana/(s+f))
+      y finde = cantidad_total - semana (para conservar el total).
+    """
+    try:
+        ratio = getattr(cfg, 'ratio_semana_finde_por_mes', {}) or {}
+        default_ratio = tuple(getattr(cfg, 'ratio_semana_finde_default', (3, 4)))
+        r = ratio.get(yyyy_mm, default_ratio)
+        semana_r, finde_r = int(r[0]), int(r[1])
+        base = max(semana_r + finde_r, 1)
+        semana = round(cantidad_total * (semana_r / base))
+        finde = cantidad_total - semana
+        return max(0, semana), max(0, finde)
+    except Exception:
+        # Fallback: mitad y mitad
+        s = cantidad_total // 2
+        return s, cantidad_total - s
+
+
+def _asignar_aleatorio_en_dias(dias: list, cantidad: int, year: int, month: int, hora: int = 12) -> list:
+    """Asigna `cantidad` reservas en días de la lista `dias` al azar, permitiendo múltiples en el mismo día.
+    La hora se fija a `hora:00`. Si hay múltiples en el mismo día, se desempatan con minutos 0,10,20,...
+    """
+    if cantidad <= 0 or len(dias) == 0:
+        return []
+    # Semilla opcional para reproducibilidad
+    try:
+        seed = getattr(cfg, 'random_seed', None)
+        if seed is not None:
+            random.seed(seed)
+    except Exception:
+        pass
+    escogidos = [random.choice(dias) for _ in range(cantidad)]
+    # Construir datetimes y desempatarlos por bloques de 10 minutos
+    asignadas = []
+    contador_por_dia = {}
+    for d in escogidos:
+        count = contador_por_dia.get(d, 0)
+        minute = (count * 10) % 60
+        asignadas.append(datetime(d.year, d.month, d.day, hora, minute, 0))
+        contador_por_dia[d] = count + 1
+    return asignadas
+
+
 def generar_fechas_para_mes(yyyy_mm: str, cantidad: int) -> list:
-    """Distribuye `cantidad` fechas de reservas dentro del mes dado (YYYY-MM).
-    Usa días espaciados y hora fija 12:00 para simplicidad.
+    """Distribuye `cantidad` reservas dentro del mes (YYYY-MM) respetando ratio semana/fin de semana.
+    1) Determina cuántas van a semana y cuántas a fin de semana según cfg.ratio_semana_finde_*
+    2) Asigna aleatoriamente cada grupo a sus días correspondientes.
     """
     year, month = map(int, yyyy_mm.split('-'))
-    last_day = monthrange(year, month)[1]
     if cantidad <= 0:
         return []
-    # Espaciado uniforme por día; si cantidad > días, agrupar en días consecutivos
-    step = max(1, last_day // max(1, min(last_day, cantidad)))
-    days = []
-    d = 1
-    for _ in range(cantidad):
-        days.append(min(d, last_day))
-        d += step
-        if d > last_day:
-            d = (d - last_day)
-            if d < 1:
-                d = 1
-    fechas = [datetime(year, month, day, 12, 0, 0) for day in sorted(days)]
-    # Si hay duplicados por redondeo, ajustar minutos incremental
-    if len(set(fechas)) < len(fechas):
-        acc = {}
-        ajustadas = []
-        for f in fechas:
-            count = acc.get(f, 0)
-            ajustadas.append(f.replace(minute=(f.minute + count) % 60))
-            acc[f] = count + 5
-        return ajustadas
+    dias_semana, dias_finde = _dias_semana_y_finde(year, month)
+    cant_semana, cant_finde = _calcular_asignacion_semana_finde(yyyy_mm, int(cantidad))
+    fechas_semana = _asignar_aleatorio_en_dias(dias_semana, cant_semana, year, month, hora=12)
+    fechas_finde = _asignar_aleatorio_en_dias(dias_finde, cant_finde, year, month, hora=12)
+    fechas = sorted(fechas_semana + fechas_finde)
     return fechas
 
 
@@ -79,6 +124,13 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
 
     for yyyy_mm, demanda in (cfg.demanda_por_mes or {}).items():
         fechas = generar_fechas_para_mes(yyyy_mm, int(demanda))
+        # Resumen por mes: semana vs fin de semana
+        try:
+            semana_count = sum(1 for f in fechas if f.weekday() < 5)
+            finde_count = len(fechas) - semana_count
+            print(f"🗓️ {yyyy_mm}: {len(fechas)} reservas → semana: {semana_count}, finde: {finde_count}")
+        except Exception:
+            pass
         # Ingresos y costos operativos por reserva
         for f in fechas:
             registros_ingresos.append({

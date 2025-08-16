@@ -1074,3 +1074,31 @@ python utilidad_operativa_simulacion.py
 **Estado:** ✅ COMPLETADO - Simulación creada y funcional
 
 ---
+
+## Nueva Tarea: Distribución Semana vs Fin de Semana en Simulación ⚙️
+
+**Task:** Permitir que la demanda mensual se distribuya distinto entre semana y fin de semana con ratio por mes y asignación aleatoria de días.
+
+**Progreso:**
+[X] Agregar inputs de ratio por mes y default en `inputs_simulacion.py`
+[X] Implementar lógica de separación semana/fin de semana por mes
+[X] Asignación aleatoria de días dentro del grupo (semana/fin de semana)
+[X] Semilla opcional para reproducibilidad
+
+**Cambios Clave:**
+- `inputs_simulacion.py`:
+  - `ratio_semana_finde_por_mes = {'YYYY-MM': (semana, finde)}`
+  - `ratio_semana_finde_default = (3, 4)`
+  - `random_seed = 42`
+- `utilidad_operativa_simulacion.py`:
+  - Nueva lógica en `generar_fechas_para_mes()` que:
+    1) Calcula `cant_semana` y `cant_finde` según el ratio (por mes o default)
+    2) Asigna aleatoriamente los días dentro de semana y dentro de fin de semana
+    3) Ajusta minutos para múltiples reservas en el mismo día (0,10,20,...)
+
+**Uso:**
+- Define para cada mes un ratio como `(2,5)` para 2 de cada 7 en semana y 5 en fin de semana.
+- Si no está definido, se usa `(3,4)` por defecto.
+- Opcional: fija `random_seed` para resultados reproducibles.
+
+**Estado:** ✅ IMPLEMENTADO
