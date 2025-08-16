@@ -114,6 +114,57 @@ def generar_fechas_para_mes(yyyy_mm: str, cantidad: int) -> list:
     return fechas
 
 
+def generar_demanda_expandida() -> dict:
+    """Devuelve un diccionario YYYY-MM -> demanda, expandiendo a años futuros si está habilitado.
+    - No sobrescribe meses existentes salvo que cfg.sobrescribir_demanda_existente_con_crecimiento sea True.
+    - Para cada mes base, genera el mismo mes en años siguientes hasta `simular_hasta_anio`,
+      multiplicando por (1 + tasa)^años_transcurridos y redondeando a entero.
+    """
+    try:
+        demanda_base = dict(getattr(cfg, 'demanda_por_mes', {}) or {})
+    except Exception:
+        demanda_base = {}
+    if not demanda_base:
+        return {}
+
+    try:
+        expandir = bool(getattr(cfg, 'expandir_demanda_con_crecimiento', False))
+        tasa = float(getattr(cfg, 'tasa_crecimiento_anual', 0.0) or 0.0)
+        hasta_anio = int(getattr(cfg, 'simular_hasta_anio', 0) or 0)
+        sobrescribir = bool(getattr(cfg, 'sobrescribir_demanda_existente_con_crecimiento', False))
+    except Exception:
+        expandir = False
+        tasa = 0.0
+        hasta_anio = 0
+        sobrescribir = False
+
+    if not expandir or tasa <= 0.0 or hasta_anio <= 0:
+        return demanda_base
+
+    added = 0
+    # Iterar ordenado para determinismo
+    for key in sorted(list(demanda_base.keys())):
+        try:
+            y, m = map(int, key.split('-'))
+        except Exception:
+            continue
+        base_val = int(demanda_base[key])
+        # Generar años siguientes
+        for year in range(y + 1, hasta_anio + 1):
+            new_key = f"{year:04d}-{m:02d}"
+            years_elapsed = year - y
+            new_val = int(round(base_val * ((1.0 + tasa) ** years_elapsed)))
+            if new_val < 0:
+                new_val = 0
+            if new_key in demanda_base and not sobrescribir:
+                continue
+            demanda_base[new_key] = new_val
+            added += 1
+
+    print(f"🔁 Expansión de demanda: añadidos {added} meses hasta {hasta_anio} con tasa {tasa:.2%} anual.")
+    return demanda_base
+
+
 def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     registros_ingresos = []
     registros_costos_op = []
@@ -122,7 +173,9 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
 
     id_counter = cfg.id_reserva_base
 
-    for yyyy_mm, demanda in (cfg.demanda_por_mes or {}).items():
+    demanda_map = generar_demanda_expandida()
+    for yyyy_mm in sorted((demanda_map or {}).keys()):
+        demanda = demanda_map[yyyy_mm]
         fechas = generar_fechas_para_mes(yyyy_mm, int(demanda))
         # Resumen por mes: semana vs fin de semana
         try:

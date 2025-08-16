@@ -1102,3 +1102,28 @@ python utilidad_operativa_simulacion.py
 - Opcional: fija `random_seed` para resultados reproducibles.
 
 **Estado:** ✅ IMPLEMENTADO
+
+---
+
+## Nueva Tarea: Crecimiento Anual y Expansión de Demanda ⚙️
+
+**Task:** Simular años posteriores aplicando un crecimiento anual (ej. 20%) hasta un año objetivo, multiplicando la demanda de cada mes por el ratio anual cada año.
+
+**Progreso:**
+[X] Agregar parámetros en `inputs_simulacion.py` (activar expansión, tasa, año objetivo, sobrescritura)
+[X] Implementar `generar_demanda_expandida()` en `utilidad_operativa_simulacion.py`
+[X] Integrar expansión antes de generar fechas por mes
+[X] Log de resumen con meses añadidos y parámetros usados
+
+**Parámetros Nuevos:**
+- `expandir_demanda_con_crecimiento = True`
+- `tasa_crecimiento_anual = 0.20`
+- `simular_hasta_anio = 2028`
+- `sobrescribir_demanda_existente_con_crecimiento = False`
+
+**Lógica:**
+- Para cada `YYYY-MM` base: genera el mismo mes en años siguientes hasta `simular_hasta_anio`.
+- Demanda anual = base * (1 + tasa)^años_transcurridos.
+- No sobrescribe meses ya definidos a menos que se active `sobrescribir_*`.
+
+**Estado:** ✅ IMPLEMENTADO

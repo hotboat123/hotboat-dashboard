@@ -121,3 +121,13 @@ ratio_semana_finde_default = (3, 4)  # 3 en semana, 4 en fin de semana (aprox 43
 # Establécela a un entero (por ejemplo 42) para resultados reproducibles; déjala en None para aleatorio puro
 random_seed = 42
 
+# Crecimiento anual de demanda (simulación de años posteriores)
+# Si activas `expandir_demanda_con_crecimiento`, el sistema generará meses futuros
+# hasta `simular_hasta_anio`, multiplicando la demanda base de cada mes por
+# (1 + tasa_crecimiento_anual)^(años_transcurridos). No sobrescribe meses ya presentes
+# salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
+expandir_demanda_con_crecimiento = True
+tasa_crecimiento_anual = 0.20  # 20%
+simular_hasta_anio = 2028      # Generar datos hasta este año (inclusive)
+sobrescribir_demanda_existente_con_crecimiento = False
+
