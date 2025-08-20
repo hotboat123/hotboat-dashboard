@@ -61,7 +61,7 @@ demanda_por_mes = {
 ticket_promedio = 150_000
 
 # Costo operativo por cada reserva (CLP)
-# costo_variable_por_reserva = 45_000
+costo_variable_por_reserva = 45_000
 
 # Desglose opcional del costo operativo por reserva.
 # Si se activa y se define el dict, se generará una fila por componente por cada reserva.
@@ -110,7 +110,7 @@ id_reserva_base = 1_000_000  # base para generar IDs únicos en la simulación
 # Si un mes no está presente en este dict, se usará el valor por defecto de abajo.
 ratio_semana_finde_por_mes = {
     # '2026-03': (2, 5),  # ejemplo: marzo con 2:5
-    # '2026-01': (0, 5),  # ejemplo: marzo con 2:5
+    '2026-01': (0, 5),  # ejemplo: marzo con 2:5
 }
 
 # Ratio por defecto si no se especifica uno por mes
