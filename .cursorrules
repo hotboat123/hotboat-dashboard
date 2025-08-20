@@ -1127,3 +1127,20 @@ python utilidad_operativa_simulacion.py
 - No sobrescribe meses ya definidos a menos que se active `sobrescribir_*`.
 
 **Estado:** ✅ IMPLEMENTADO
+
+---
+
+## Nueva Tarea: Actualizar flujo en `actualizar_todo.py` ✅
+
+**Task:** Modificar `actualizar_todo.py` para que no ejecute dashboards y use `actualizar_reservas_utilidad.py` después de procesar gastos.
+
+**Progreso:**
+[X] Leer `actualizar_todo.py` y `actualizar_reservas_utilidad.py`
+[X] Actualizar orden y textos (2 pasos)
+[X] Remover ejecución de dashboards
+
+**Nuevo Flujo:**
+1) `python gastos_hotboat_sin_drive.py`
+2) `python actualizar_reservas_utilidad.py`
+
+**Estado:** ✅ IMPLEMENTADO

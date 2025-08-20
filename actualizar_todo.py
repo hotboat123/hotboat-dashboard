@@ -5,11 +5,11 @@
 🚤 ACTUALIZAR TODO - HOTBOAT
 ============================
 
-Este script ejecuta todos los procesos de HotBoat en el orden correcto:
+Este script ejecuta el flujo principal de HotBoat en el orden correcto:
 1. Procesar gastos y costos
-2. Procesar reservas
-3. Calcular utilidad
-4. Ejecutar dashboards
+2. Actualizar reservas y utilidad operativa (usa actualizar_reservas_utilidad.py)
+
+No ejecuta dashboards.
 
 Uso:
     python actualizar_todo.py
@@ -80,9 +80,7 @@ def main():
     print()
     print("📋 Este script ejecutará todos los procesos en el siguiente orden:")
     print("   1. 🏦 Procesar gastos y costos (gastos_hotboat_sin_drive.py)")
-    print("   2. 📅 Procesar reservas (Informacion_reservas.py)")
-    print("   3. 💰 Calcular utilidad (estimacion_utilidad_hotboat.py)")
-    print("   4. 📊 Ejecutar dashboards (ejecutar_todos_dashboards.py)")
+    print("   2. 📦 Actualizar reservas y utilidad operativa (actualizar_reservas_utilidad.py)")
     print()
     
     # Verificar que estamos en el directorio correcto
@@ -94,9 +92,7 @@ def main():
     # Lista de comandos a ejecutar en orden
     comandos = [
         ("python gastos_hotboat_sin_drive.py", "PROCESAR GASTOS Y COSTOS"),
-        ("python Informacion_reservas.py", "PROCESAR RESERVAS"),
-        ("python estimacion_utilidad_hotboat.py", "CALCULAR UTILIDAD"),
-        ("python ejecutar_todos_dashboards.py", "EJECUTAR DASHBOARDS")
+        ("python actualizar_reservas_utilidad.py", "ACTUALIZAR RESERVAS Y UTILIDAD OPERATIVA"),
     ]
     
     # Contador de procesos exitosos
@@ -105,7 +101,7 @@ def main():
     
     # Ejecutar cada comando en orden
     for i, (comando, descripcion) in enumerate(comandos, 1):
-        print(f"\n📋 Paso {i}/4: {descripcion}")
+        print(f"\n📋 Paso {i}/{len(comandos)}: {descripcion}")
         
         if ejecutar_comando(comando, descripcion):
             procesos_exitosos += 1
@@ -136,10 +132,6 @@ def main():
     
     if procesos_fallidos == 0:
         print("\n🎉 ¡Todos los procesos se completaron exitosamente!")
-        print("🌐 Los dashboards deberían estar ejecutándose en:")
-        print("   - Dashboard Reservas: http://localhost:8050")
-        print("   - Dashboard Utilidad: http://localhost:8055")
-        print("   - Dashboard Marketing: http://localhost:8056")
     else:
         print(f"\n⚠️  {procesos_fallidos} proceso(s) falló/failaron")
         print("💡 Revisa los errores anteriores y ejecuta manualmente los procesos fallidos")

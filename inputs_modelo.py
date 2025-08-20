@@ -132,6 +132,7 @@ eliminaciones_fecha_monto_gastos = [
     ['2025-05-30', 35660],    
     ['2025-05-27', 32220],
     ['2025-05-14', 275395.5],  #devolucion sobre abono (al parecer era excedente de dolares que se transfirio a mi cuenta corriente en dolares)
+
     # ['15/07/2025', 25000],    # Eliminar registro del 15 de julio 2025 por $25,000
     # ['2025-06-01', 100000],   # Eliminar registro del 1 de junio 2025 por $100,000
 ] 
@@ -142,6 +143,9 @@ eliminaciones_fecha_monto_gastos = [
 eliminaciones_fecha_descripcion_gastos = [
     # Ejemplos:
     ['2025-06-19', 'falabella'],
+    ['2025-06-13', 'JETSMAR'],
+    ['2025-06-19', 'Web travel sky'],
+    ['2025-06-19', 'rushersky'],
     # ['15/07/2025', 'spa santiago'],
 ]
 
@@ -175,6 +179,7 @@ tabla_correcciones_gastos = [
     ['2025-02-25','','283033.5','Costos de Marketing','Externalizacion Marketing','Pago a Arbi'],
     ['2025-02-10','','365265','Inversión en Activos','Calefonts','Calefont 2'],
     ['2025-03-20','','198623','Devolucion a cliente','Devolucion a cliente','Devolucion a cliente'],
+    ['2025-08-17','','97475','Devolucion a cliente','Devolucion a cliente','Devolucion a cliente'],
     ['2025-04-08','','190000','Inversión en Activos','Infraestructura' ,'Bajada Lancha'],
     ['2025-01-22','','177705','Inversión en Activos','Herramientas' ,'Lija Orbital'],
     ['2025-01-13','','157204','Inversión en Activos','Estanques' ,'Estanque 1400L'],
@@ -194,6 +199,9 @@ tabla_correcciones_gastos = [
     ['2025-08-08','','65000','Inversión en Activos','HotBoat matriz' ,'Fierros y ruedas matriz exterior'],
     ['2025-08-04','','177600','Inversión en Activos','HotBoat matriz' ,'Terciados matriz exterior'],
     ['2025-08-01','','27500','Inversión en Activos','HotBoat 2' ,'2da mitad leñera'],
+    ['2025-08-15','','17999','Inversión en Activos','Iluminacion Laguna' ,'Alargador 20 metros'],
+    ['2025-08-13','','16691','Inversión en Activos','Sistema inteligente' ,'Fuente de poder'],
+
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
 ]
 
