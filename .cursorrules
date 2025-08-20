@@ -1144,3 +1144,26 @@ python utilidad_operativa_simulacion.py
 2) `python actualizar_reservas_utilidad.py`
 
 **Estado:** ✅ IMPLEMENTADO
+
+---
+
+## Nueva Tarea: Simulador de Escenarios (Pesimista, Normal, Optimista) ✅
+
+**Task:** Crear un script para ejecutar múltiples escenarios variando la demanda (0.5x, 1.0x, 1.5x) y reportar ingreso mensual del ayudante.
+
+**Progreso:**
+[X] Agregar `escenarios_demanda` a `inputs_simulacion.py`
+[X] Crear `simular_escenarios_utilidad.py` reutilizando la simulación existente
+[X] Imprimir ingreso mensual del ayudante (suma de pagos diarios por mes)
+[X] Mantener distribución semana/fin de semana y expansión anual
+
+**Uso:**
+```bash
+python simular_escenarios_utilidad.py
+```
+
+**Configuración:**
+- Editar `escenarios_demanda` en `inputs_simulacion.py` para cambiar factores
+- Respeta `ratio_semana_finde_por_mes`, `random_seed` y expansión anual
+
+**Estado:** ✅ IMPLEMENTADO

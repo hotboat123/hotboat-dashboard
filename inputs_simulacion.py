@@ -77,13 +77,13 @@ costo_operativo_detalle_por_reserva = {
 usar_pago_ayudante_escalonado = True
 # Lista de tuplas: (cantidad_reservas, pago_diario)
 pago_ayudante_escalas = [
-    (1, 25_000),
-    (2, 45_000),
-    (3, 60_000),
-    (4, 70_000),
-    (5, 80_000),
+    (1, 15_000),
+    (2, 30_000),
+    (3, 45_000),
+    (4, 60_000),
+    (5, 75_000),
     (6, 90_000),
-    (7, 100_000),
+    (7, 105_000),
 ]
 # Si hay más reservas que el mayor umbral, se usa el último monto de la lista
 
@@ -110,7 +110,7 @@ id_reserva_base = 1_000_000  # base para generar IDs únicos en la simulación
 # Si un mes no está presente en este dict, se usará el valor por defecto de abajo.
 ratio_semana_finde_por_mes = {
     # '2026-03': (2, 5),  # ejemplo: marzo con 2:5
-    '2026-01': (0, 5),  # ejemplo: marzo con 2:5
+    # '2026-01': (0, 5),  # ejemplo: marzo con 2:5
 }
 
 # Ratio por defecto si no se especifica uno por mes
@@ -127,6 +127,14 @@ random_seed = 42
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
 tasa_crecimiento_anual = 0.20  # 20%
-simular_hasta_anio = 2028      # Generar datos hasta este año (inclusive)
+simular_hasta_anio = 2026 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
+
+# Escenarios de simulación de demanda (multiplicadores)
+# Puedes editar los factores aquí para cada escenario
+escenarios_demanda = {
+    'pesimista': 0.5,
+    'normal': 1.0,
+    'optimista': 1.5,
+}
 
