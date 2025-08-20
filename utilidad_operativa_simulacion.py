@@ -247,12 +247,19 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 if pago == 0 and escalas_sorted:
                     pago = escalas_sorted[0][1]
 
+                # Multiplicar por la cantidad de ayudantes
+                try:
+                    num_ayudantes = int(getattr(cfg, 'numero_ayudantes', 1))
+                except Exception:
+                    num_ayudantes = 1
+                monto_total_ayudantes = float(pago) * max(1, num_ayudantes)
+
                 registros_costos_op.append({
                     'fecha': datetime(dia.year, dia.month, dia.day, 20, 0, 0),
                     'email': cfg.email_placeholder,
                     'id_reserva': None,
                     'descripcion': 'pago extra ayudante (diario)',
-                    'monto': float(pago),
+                    'monto': monto_total_ayudantes,
                 })
 
         # Gastos de marketing mensuales (1 registro al último día del mes)
@@ -266,12 +273,31 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
             'descripcion': cfg.descripcion_marketing,
             'monto': float(cfg.gasto_marketing_mensual),
         })
+        # Costo fijo mensual (con soporte estacional opcional)
+        try:
+            usar_estacional = bool(getattr(cfg, 'usar_costo_fijo_estacional', False))
+            meses_verano = list(getattr(cfg, 'meses_verano', [12, 1, 2]) or [12, 1, 2])
+            meses_invierno = list(getattr(cfg, 'meses_invierno', [6, 7, 8]) or [6, 7, 8])
+            costo_verano = float(getattr(cfg, 'costo_fijo_mensual_verano', getattr(cfg, 'costo_fijo_mensual', 0)))
+            costo_invierno = float(getattr(cfg, 'costo_fijo_mensual_invierno', getattr(cfg, 'costo_fijo_mensual', 0)))
+            if usar_estacional:
+                if m in meses_verano:
+                    costo_fijo_mes = costo_verano
+                elif m in meses_invierno:
+                    costo_fijo_mes = costo_invierno
+                else:
+                    costo_fijo_mes = float(getattr(cfg, 'costo_fijo_mensual', 0))
+            else:
+                costo_fijo_mes = float(getattr(cfg, 'costo_fijo_mensual', 0))
+        except Exception:
+            costo_fijo_mes = float(getattr(cfg, 'costo_fijo_mensual', 0))
+
         registros_costos_fijos.append({
             'fecha': fecha_mes,
             'categoria': 'costos fijos',
             'categoria_2': 'Simulación',
             'descripcion': cfg.descripcion_costo_fijo,
-            'monto': float(cfg.costo_fijo_mensual),
+            'monto': costo_fijo_mes,
         })
 
     df_ing = pd.DataFrame(registros_ingresos)

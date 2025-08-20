@@ -87,11 +87,23 @@ pago_ayudante_escalas = [
 ]
 # Si hay más reservas que el mayor umbral, se usa el último monto de la lista
 
+# Número de ayudantes (cada uno recibe el pago según la escala)
+numero_ayudantes = 2
+
 # Gasto de marketing mensual (CLP)
 gasto_marketing_mensual = 300_000
 
 # Costo fijo mensual (CLP)
-costo_fijo_mensual = 700_000
+costo_fijo_mensual = 335_000
+
+# Costo fijo estacional (verano vs invierno)
+# Si activas `usar_costo_fijo_estacional`, se usará un costo distinto para los meses definidos como verano o invierno.
+usar_costo_fijo_estacional = True
+costo_fijo_mensual_verano = 535_000
+costo_fijo_mensual_invierno = 335_000
+# Por defecto: verano = dic-ene-feb; invierno = jun-jul-ago. Puedes modificar estas listas.
+meses_verano = [1, 2]
+meses_invierno = [7]
 
 # Texto que aparecerá en los CSV simulados
 descripcion_ingreso = "Ingreso simulado por reserva"

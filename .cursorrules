@@ -1167,3 +1167,23 @@ python simular_escenarios_utilidad.py
 - Respeta `ratio_semana_finde_por_mes`, `random_seed` y expansión anual
 
 **Estado:** ✅ IMPLEMENTADO
+
+---
+
+## Nueva Tarea: Costo Fijo Estacional en Simulación ✅
+
+**Task:** Permitir costo fijo diferente en verano e invierno en la simulación.
+
+**Progreso:**
+[X] Agregar parámetros en `inputs_simulacion.py` (activar flag, valores por estación, meses)
+[X] Actualizar `utilidad_operativa_simulacion.py` para usar el costo estacional por mes
+[X] Mantener fallback a `costo_fijo_mensual` si no está activo
+
+**Parámetros Nuevos:**
+- `usar_costo_fijo_estacional = True`
+- `costo_fijo_mensual_verano = 900_000`
+- `costo_fijo_mensual_invierno = 700_000`
+- `meses_verano = [12, 1, 2]`
+- `meses_invierno = [6, 7, 8]`
+
+**Estado:** ✅ IMPLEMENTADO

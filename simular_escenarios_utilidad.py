@@ -121,20 +121,31 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
         if resumen.empty:
             print("ℹ️  No hay pagos al ayudante en este escenario")
         else:
-            print("👷 Ingreso mensual del ayudante:")
+            try:
+                num_ayudantes = int(getattr(cfg, 'numero_ayudantes', 1))
+            except Exception:
+                num_ayudantes = 1
+            if num_ayudantes > 1:
+                print(f"👷 Ingreso mensual total de {num_ayudantes} ayudantes (mismo pago cada uno):")
+            else:
+                print("👷 Ingreso mensual del ayudante:")
             for _, row in resumen.iterrows():
-                print(f"  - {row['mes']}: ${row['ingreso_ayudante']:,.0f}")
+                if num_ayudantes > 1:
+                    por_ayudante = row['ingreso_ayudante'] / num_ayudantes
+                    print(f"  - {row['mes']}: total ${row['ingreso_ayudante']:,.0f} (≈ ${por_ayudante:,.0f} c/u)")
+                else:
+                    print(f"  - {row['mes']}: ${row['ingreso_ayudante']:,.0f}")
 
-        # Utilidad operativa mensual y total
+        # Utilidad total mensual y total (incluye costos fijos y marketing)
         uo = resumen_utilidad_operativa_mensual(df_ing, df_cost_op, df_mark, df_fijos)
         if uo.empty:
             print("ℹ️  No hay datos para calcular utilidad operativa")
         else:
-            print("💼 Utilidad operativa mensual:")
+            print("💼 Utilidad total mensual:")
             for _, row in uo.iterrows():
                 print(f"  - {row['mes']}: ${row['utilidad']:,.0f}")
             total_uo = uo["utilidad"].sum()
-            print(f"🧮 Utilidad operativa total del escenario: ${total_uo:,.0f}")
+            print(f"🧮 Utilidad total del escenario: ${total_uo:,.0f}")
         return df_ing, df_cost_op, df_mark, df_fijos
     finally:
         # Restaurar demanda original
