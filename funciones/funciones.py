@@ -913,8 +913,8 @@ def eliminar_duplicados_priorizando_facturado(df):
     # Creamos una máscara que indica los grupos Fecha+Cuotas que tienen
     # al menos un Facturado y al menos un No Facturado
     def hay_conflicto(origenes: pd.Series) -> bool:
-        tiene_fact = origenes.str.contains('Facturado', na=False).any()
-        tiene_no_fact = origenes.str.contains('No Facturado', na=False).any()
+        tiene_fact = origenes.str.contains('Mov. Facturado', na=False).any()
+        tiene_no_fact = origenes.str.contains('Mov. No Facturado', na=False).any()
         return bool(tiene_fact and tiene_no_fact)
 
     # Calcular conflicto a nivel de grupo y propagarlo a cada fila del grupo
@@ -936,6 +936,30 @@ def eliminar_duplicados_priorizando_facturado(df):
     print(f"📈 Registros: {filas_iniciales} → {len(df_resultado)}")
 
     return df_resultado
+
+def drop_duplicates_priorizando_deudas(df: pd.DataFrame, subset: list[str] | tuple[str, ...]) -> pd.DataFrame:
+    """
+    Elimina duplicados por las claves en `subset`, priorizando mantener filas cuyo
+    `Origen` sea exactamente 'deudas' cuando se encuentran empates.
+
+    Si no existe columna 'Origen', se comporta como drop_duplicates normal.
+    """
+    if df is None or df.empty:
+        return df
+    if not isinstance(subset, (list, tuple)) or len(subset) == 0:
+        return df
+    if 'Origen' not in df.columns:
+        return df.drop_duplicates(subset=subset, keep='first')
+
+    df_tmp = df.copy()
+    df_tmp['_prio_deuda'] = df_tmp['Origen'].astype(str).str.lower().eq('deudas')
+    df_tmp = (
+        df_tmp
+        .sort_values('_prio_deuda', ascending=False)
+        .drop_duplicates(subset=subset, keep='first')
+        .drop(columns=['_prio_deuda'])
+    )
+    return df_tmp
 
 def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -994,7 +1018,23 @@ def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
         return re.sub(r'\s+', ' ', str(x).strip().lower())
 
     df_cuotas['descripcion_norm'] = df_cuotas['Descripción'].apply(norm_desc)
-    df_cuotas['monto_cuota'] = pd.to_numeric(df_cuotas['Monto'], errors='coerce')
+
+    # Calcular monto de la cuota condicionado por el origen
+    # - Mov. Facturado: el 'Monto' ya es el valor de la cuota
+    # - Mov. No Facturado: el 'Monto' corresponde al total de la compra, por lo que
+    #   el monto de la cuota debe ser Monto / cuotas_totales
+    monto_numeric = pd.to_numeric(df_cuotas['Monto'], errors='coerce')
+    df_cuotas['monto_cuota'] = monto_numeric
+
+    if 'Origen' in df_cuotas.columns:
+        es_no_fact = df_cuotas['Origen'].astype(str).str.contains('Mov. No Facturado', na=False)
+        # Evitar división por cero y por NaN en cuotas_totales
+        valid_totales = df_cuotas['cuotas_totales'].astype(float)
+        mask_divisible = es_no_fact & valid_totales.notna() & (valid_totales > 0)
+        df_cuotas.loc[mask_divisible, 'monto_cuota'] = (
+            monto_numeric[mask_divisible] / valid_totales[mask_divisible]
+        )
+
     df_cuotas = df_cuotas[df_cuotas['monto_cuota'].notna()].copy()
     if df_cuotas.empty:
         return pd.DataFrame(columns=df.columns)
@@ -1012,12 +1052,24 @@ def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
     df_ultimos['cuotas_restantes'] = (
         df_ultimos['cuotas_totales'].astype(int) - df_ultimos['cuota_actual'].astype(int)
     )
+    # Para Mov. No Facturado, considerar que aún no se ha pagado ninguna cuota:
+    # cuotas_restantes = cuotas_totales (p.ej., 12/12 en vez de 11/12)
+    if 'Origen' in df_ultimos.columns:
+        mask_no_fact = df_ultimos['Origen'].astype(str).str.contains('Mov. No Facturado', na=False)
+        df_ultimos.loc[mask_no_fact, 'cuotas_restantes'] = df_ultimos.loc[mask_no_fact, 'cuotas_totales'].astype(int)
     df_ultimos = df_ultimos[df_ultimos['cuotas_restantes'] > 0].copy()
     if df_ultimos.empty:
         return pd.DataFrame(columns=df.columns)
 
     # Calcular monto de deuda
-    df_ultimos['Monto_Deuda'] = (df_ultimos['monto_cuota'] * df_ultimos['cuotas_restantes']).astype(int)
+    # - Para Mov. Facturado: deuda = monto_cuota * cuotas_restantes
+    # - Para Mov. No Facturado: deuda = monto total del plan = monto_cuota * cuotas_totales
+    deuda_base = (df_ultimos['monto_cuota'] * df_ultimos['cuotas_restantes'])
+    if 'Origen' in df_ultimos.columns:
+        es_no_fact_ult = df_ultimos['Origen'].astype(str).str.contains('Mov. No Facturado', na=False)
+        deuda_no_fact = (df_ultimos['monto_cuota'] * df_ultimos['cuotas_totales'])
+        deuda_base.loc[es_no_fact_ult] = deuda_no_fact.loc[es_no_fact_ult]
+    df_ultimos['Monto_Deuda'] = deuda_base.astype(int)
 
     # Construir salida con mismas columnas que df
     columnas_obj = list(df.columns)
@@ -1146,6 +1198,7 @@ def procesar_df_final(
         df_deudas = calcular_deudas_por_cuotas(df_final)
         if not df_deudas.empty:
             df_final = pd.concat([df_final, df_deudas], ignore_index=True)
+            df_final = drop_duplicates_priorizando_deudas(df_final, subset=['Fecha', 'Descripción', 'Monto'])
             print(f"➕ Agregadas {len(df_deudas)} filas de 'deudas' a gastos")
     except Exception as e:
         print(f"⚠️  No se pudieron calcular/agregar deudas por cuotas: {str(e)}")

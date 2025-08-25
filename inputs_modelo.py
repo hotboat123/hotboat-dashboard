@@ -201,6 +201,11 @@ tabla_correcciones_gastos = [
     ['2025-08-01','','27500','Inversión en Activos','HotBoat 2' ,'2da mitad leñera'],
     ['2025-08-15','','17999','Inversión en Activos','Iluminacion Laguna' ,'Alargador 20 metros'],
     ['2025-08-13','','16691','Inversión en Activos','Sistema inteligente' ,'Fuente de poder'],
+    ['2025-08-19','','66851','Inversión en Activos','HotBoat 1' ,'Sistema Iluminacion: botones inox y caja ip67 botones'],
+    ['2025-08-22','','17661','Inversión en Activos','HotBoat 1' ,'Sistema Iluminacion: caja ip67 fusibles'],
+    ['2025-08-16','','552990','Inversión en Activos','Drones' ,'Dron 2'],
+    ['2025-08-16','','538746','Inversión en Activos','Compresor' ,'Compresor'],
+
 
     # [''2025-02-10', 'SODIMAC compra herramientas', 25000, 'Ferretería', 'Inversión General', 'Herramientas para mantención''],
 ]
