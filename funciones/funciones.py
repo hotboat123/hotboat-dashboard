@@ -961,6 +961,227 @@ def drop_duplicates_priorizando_deudas(df: pd.DataFrame, subset: list[str] | tup
     )
     return df_tmp
 
+def eliminar_no_facturado_cuota_fija_si_equivale_a_total_facturado(df: pd.DataFrame, tolerancia: float = 0.15) -> pd.DataFrame:
+    """
+    Elimina filas con 'Origen' = 'deudas' cuya 'Descripción' contiene "cuota fija"
+    cuando, en la misma fecha (día), existe al menos otra fila con 'Origen' = 'deudas'
+    y con un monto similar (diferencia relativa <= tolerancia).
+
+    Reglas pedidas:
+    1) Buscar, por día, pares de filas con Origen 'deudas' cuyos montos se diferencien
+       en menos de `tolerancia` (por defecto 15%).
+    2) Si una de las filas del par tiene en su descripción el texto "cuota fija"
+       (insensible a mayúsculas/minúsculas), eliminar esa fila.
+
+    Args:
+        df (pd.DataFrame): DataFrame de trabajo. Debe tener columnas 'Fecha', 'Descripción', 'Monto', 'Origen'.
+        tolerancia (float): Tolerancia relativa para considerar montos "parecidos".
+
+    Returns:
+        pd.DataFrame: DataFrame con las filas "cuota fija" eliminadas cuando aplican las reglas.
+    """
+    columnas_necesarias = {'Fecha', 'Descripción', 'Monto', 'Origen'}
+    if df is None or df.empty or not columnas_necesarias.issubset(df.columns):
+        return df
+
+    df_trabajo = df.copy()
+
+    # Asegurar tipos adecuados
+    if not pd.api.types.is_datetime64_any_dtype(df_trabajo['Fecha']):
+        df_trabajo = convertir_fechas_a_datetime(df_trabajo, 'Fecha')
+    df_trabajo['Monto'] = pd.to_numeric(df_trabajo['Monto'], errors='coerce')
+
+    # Filtrar filas de Origen 'deudas'
+    origen_lower = df_trabajo['Origen'].astype(str).str.lower()
+    es_deuda = origen_lower.eq('deudas')
+    if es_deuda.sum() == 0:
+        return df_trabajo
+
+    # Precalcular auxiliares
+    df_trabajo['_fecha_dia'] = df_trabajo['Fecha'].dt.date
+    df_trabajo['_desc_lower'] = df_trabajo['Descripción'].astype(str).str.lower()
+    df_trabajo['_es_cuota_fija'] = es_deuda & df_trabajo['_desc_lower'].str.contains('cuota fija', na=False)
+
+    indices_a_eliminar = []
+    actualizaciones = 0
+
+    # Iterar sobre cada fila marcada como 'cuota fija' dentro de 'deudas'
+    for idx in df_trabajo.index[df_trabajo['_es_cuota_fija']]:
+        fecha_dia = df_trabajo.at[idx, '_fecha_dia']
+        monto_ref = abs(df_trabajo.at[idx, 'Monto'])
+
+        # Grupo: mismas deudas en la misma fecha (excluyéndose a sí misma)
+        mask_grupo = es_deuda & (df_trabajo['_fecha_dia'] == fecha_dia) & (df_trabajo.index != idx)
+        if not mask_grupo.any():
+            continue
+
+        montos = df_trabajo.loc[mask_grupo, 'Monto'].abs()
+        if montos.empty:
+            continue
+
+        # Comparación relativa por el mayor de ambos montos para simetría
+        denom = pd.concat([
+            montos.abs(),
+            pd.Series(monto_ref, index=montos.index)
+        ], axis=1).max(axis=1).replace(0, 1.0)
+
+        dif_rel = (montos.subtract(monto_ref).abs()) / denom
+        candidatos = dif_rel[dif_rel <= tolerancia]
+        if not candidatos.empty:
+            # Elegir el candidato más cercano en monto
+            idx_target = candidatos.idxmin()
+            # Calcular interés total y ponerlo en Observación (manteniendo la descripción)
+            interes_pct = None
+            try:
+                monto_cuota_fija = abs(float(df_trabajo.at[idx, 'Monto']))
+                monto_referencia = abs(float(df_trabajo.at[idx_target, 'Monto']))
+                if monto_referencia > 0:
+                    interes_pct = ((monto_cuota_fija / monto_referencia) - 1.0) * 100.0
+            except Exception:
+                interes_pct = None
+
+            # Asegurar columna Observación
+            if 'Observación' not in df_trabajo.columns:
+                df_trabajo['Observación'] = ''
+
+            # Transferir Categoría 1 y Categoría_2; Observación se maneja aparte
+            for col in ['Categoría 1', 'Categoría_2']:
+                if col in df_trabajo.columns:
+                    try:
+                        df_trabajo.at[idx_target, col] = df_trabajo.at[idx, col]
+                        actualizaciones += 1
+                    except Exception:
+                        pass
+
+            # Construir Observación combinada y agregar interés si se pudo calcular
+            try:
+                obs_source = ''
+                obs_target = ''
+                if 'Observación' in df_trabajo.columns:
+                    obs_source = str(df_trabajo.at[idx, 'Observación']) if pd.notna(df_trabajo.at[idx, 'Observación']) else ''
+                    obs_target = str(df_trabajo.at[idx_target, 'Observación']) if pd.notna(df_trabajo.at[idx_target, 'Observación']) else ''
+                partes = []
+                if obs_source.strip():
+                    partes.append(obs_source.strip())
+                if obs_target.strip() and obs_target.strip() not in partes:
+                    partes.append(obs_target.strip())
+                if interes_pct is not None:
+                    partes.append(f"Interes total = {interes_pct:.2f}%")
+                if partes:
+                    df_trabajo.at[idx_target, 'Observación'] = ' | '.join(partes)
+                    actualizaciones += 1
+            except Exception:
+                pass
+            indices_a_eliminar.append(idx)
+
+    # Eliminar filas marcadas
+    if indices_a_eliminar:
+        antes = len(df_trabajo)
+        df_trabajo = df_trabajo.drop(index=indices_a_eliminar)
+        eliminadas = antes - len(df_trabajo)
+        try:
+            print(f"🗑️ Eliminadas {eliminadas} filas 'deudas' con 'cuota fija' por equivalencia en misma fecha (±{int(tolerancia*100)}%). Campos trasladados: {actualizaciones}")
+        except Exception:
+            pass
+
+    # Limpiar columnas auxiliares
+    df_trabajo = df_trabajo.drop(columns=[c for c in ['_fecha_dia', '_desc_lower', '_es_cuota_fija'] if c in df_trabajo.columns])
+
+    return df_trabajo
+
+def eliminar_cuota_si_coincide_con_total_mismo_dia(df: pd.DataFrame, tolerancia_relativa: float = 0.02) -> pd.DataFrame:
+    """
+    Implementación directa del algoritmo solicitado:
+    1) Revisar si en un día hay algo en la columna 'Cuotas'
+    2) Si hay, multiplicar 'Monto' por el número total de cuotas (n/m -> m) y revisar
+       si ese valor coincide con un gasto ese mismo día
+    3) Si coincide, eliminar la fila con la columna 'Cuotas' (la de monto menor)
+
+    Coincidencia exacta de montos. Se compara por día (ignora hora).
+    """
+    if df is None or df.empty:
+        return df
+
+    trabajo = df.copy()
+    # Tipos
+    if 'Fecha' in trabajo.columns and not pd.api.types.is_datetime64_any_dtype(trabajo['Fecha']):
+        trabajo = convertir_fechas_a_datetime(trabajo, 'Fecha')
+    if 'Monto' in trabajo.columns:
+        trabajo['Monto'] = pd.to_numeric(trabajo['Monto'], errors='coerce')
+
+    # Si no existe Cuotas, nada que hacer
+    if 'Cuotas' not in trabajo.columns:
+        return trabajo
+
+    # Detección de formato n/m
+    cuotas_str = trabajo['Cuotas'].astype(str).str.strip()
+    mask_con_cuotas = cuotas_str.str.contains('/')
+    if not mask_con_cuotas.any():
+        return trabajo
+
+    # Precalcular fecha día
+    trabajo['__fecha_dia'] = trabajo['Fecha'].dt.date if 'Fecha' in trabajo.columns else pd.NaT
+
+    # Parsear n/m -> total m y total_estimado = monto * m
+    def total_cuotas(valor: str) -> int | None:
+        try:
+            partes = str(valor).split('/')
+            if len(partes) != 2:
+                return None
+            total = int(str(partes[1]).strip())
+            return total if total > 0 else None
+        except Exception:
+            return None
+
+    trabajo['__cuotas_totales'] = cuotas_str.map(total_cuotas)
+    mask_valid = mask_con_cuotas & trabajo['__cuotas_totales'].notna() & trabajo['Monto'].notna()
+    if not mask_valid.any():
+        trabajo = trabajo.drop(columns=[c for c in ['__fecha_dia', '__cuotas_totales'] if c in trabajo.columns])
+        return trabajo
+
+    indices_a_borrar = []
+    # Para cada fila con cuotas válidas, buscar si existe el total en el mismo día
+    for i in trabajo.index[mask_valid]:
+        dia = trabajo.at[i, '__fecha_dia']
+        try:
+            total_cuotas = int(trabajo.at[i, '__cuotas_totales'])
+        except Exception:
+            # Si no es convertible a entero, saltar
+            continue
+        # Calcular total estimado para esta fila (monto cuota * total de cuotas)
+        monto_cuota = abs(float(trabajo.at[i, 'Monto'])) if pd.notna(trabajo.at[i, 'Monto']) else None
+        if monto_cuota is None:
+            continue
+        total_est = monto_cuota * total_cuotas
+
+        # Candidatos mismo día (excluyendo la propia fila)
+        mask_mismo_dia = trabajo['__fecha_dia'].eq(dia)
+        mask_otro = trabajo.index != i
+        candidatos = trabajo[mask_mismo_dia & mask_otro]
+        if candidatos.empty:
+            continue
+
+        # ¿Existe monto que coincida con tolerancia relativa?
+        montos_abs = candidatos['Monto'].abs()
+        denom = montos_abs.combine(pd.Series(total_est, index=montos_abs.index), func=lambda a, b: max(a, b) if pd.notna(a) else b)
+        dif_rel = (montos_abs - total_est).abs() / denom.replace(0, 1.0)
+        if (dif_rel <= tolerancia_relativa).any():
+            indices_a_borrar.append(i)
+
+    if indices_a_borrar:
+        antes = len(trabajo)
+        trabajo = trabajo.drop(index=indices_a_borrar)
+        eliminadas = antes - len(trabajo)
+        try:
+            print(f"🗑️ Eliminadas {eliminadas} filas de cuotas que duplicaban el total el mismo día")
+        except Exception:
+            pass
+
+    # Limpiar temporales
+    trabajo = trabajo.drop(columns=[c for c in ['__fecha_dia', '__cuotas_totales'] if c in trabajo.columns])
+
+    return trabajo
+
 def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
     """
     Calcula las deudas remanentes de compras en cuotas a partir de los movimientos.
@@ -1002,7 +1223,8 @@ def calcular_deudas_por_cuotas(df: pd.DataFrame) -> pd.DataFrame:
             a, b = [p.strip() for p in str(valor).split('/')]
             actual = int(a)
             total = int(b)
-            if total <= 0 or actual < 1 or actual > total:
+            # Permitir 0/n como válido (0 cuotas pagadas de n)
+            if total <= 0 or actual < 0 or actual > total:
                 return None, None
             return actual, total
         except Exception:
@@ -1199,10 +1421,15 @@ def procesar_df_final(
         if not df_deudas.empty:
             df_final = pd.concat([df_final, df_deudas], ignore_index=True)
             df_final = drop_duplicates_priorizando_deudas(df_final, subset=['Fecha', 'Descripción', 'Monto'])
+            df_final.drop_duplicates(subset=['Fecha', 'Monto', 'Origen'], keep='first', inplace=True)
+            # Regla adicional: si en la misma fecha hay 2 filas con Origen 'deudas'
+            # y montos parecidos (±15%), eliminar la que en su descripción diga 'cuota fija'
+            df_final = eliminar_no_facturado_cuota_fija_si_equivale_a_total_facturado(df_final, tolerancia=0.15)
+            # Aplicar eliminación de cuotas duplicadas por total del mismo día SIEMPRE
+            df_final = eliminar_cuota_si_coincide_con_total_mismo_dia(df_final)
             print(f"➕ Agregadas {len(df_deudas)} filas de 'deudas' a gastos")
     except Exception as e:
         print(f"⚠️  No se pudieron calcular/agregar deudas por cuotas: {str(e)}")
-
     return df_final
 
 # Función para crear la columna de fecha
