@@ -130,7 +130,7 @@ ratio_semana_finde_default = (3, 4)  # 3 en semana, 4 en fin de semana (aprox 43
 
 # Semilla opcional para reproducibilidad de la asignación aleatoria de días
 # Establécela a un entero (por ejemplo 42) para resultados reproducibles; déjala en None para aleatorio puro
-random_seed = 46
+random_seed = 48
 
 # Crecimiento anual de demanda (simulación de años posteriores)
 # Si activas `expandir_demanda_con_crecimiento`, el sistema generará meses futuros

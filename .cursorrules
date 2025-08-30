@@ -114,6 +114,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - **NUEVO**: Los scripts de captura de screenshots son funcionalidades complejas que deben preservarse en ramas separadas
 - **NUEVO**: En los archivos de marketing, usar columna "Compras" en lugar de "Artículos agregados al carrito" para métricas de conversión
 - **NUEVO**: Sistema de correcciones de categorías implementado: permite sobrescribir categorías automáticas usando tabla_correcciones en inputs_modelo.py con formato [fecha, descripcion, monto, categoría_2, categoría_1, observacion]
+- **NUEVO**: Monte Carlo franquicias: los royalties (promedio/σ/percentiles) se calculan sumando TODAS las franquicias; el cálculo de “franquicias necesarias” clona SOLO la `nombre_franquicia_modelo` y evalúa contra el objetivo anual
 
 # Scratchpad
 

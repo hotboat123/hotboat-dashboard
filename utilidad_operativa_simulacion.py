@@ -82,6 +82,7 @@ def _asignar_aleatorio_en_dias(dias: list, cantidad: int, year: int, month: int,
     # Semilla opcional para reproducibilidad
     try:
         seed = getattr(cfg, 'random_seed', None)
+        # Si cfg.random_seed es None, asumimos que ya se sembró desde fuera (Monte Carlo)
         if seed is not None:
             random.seed(seed)
     except Exception:
