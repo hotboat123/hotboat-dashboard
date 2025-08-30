@@ -165,6 +165,42 @@ def generar_demanda_expandida() -> dict:
     return demanda_base
 
 
+def aplicar_aleatoriedad_demanda(demanda_map: dict) -> dict:
+    """
+    Aplica aleatoriedad uniforme por mes: para cada mes YYYY-MM con demanda d,
+    muestrea d' ~ Uniform([(1-r)*d, (1+r)*d]) y redondea a entero (>=0).
+    Controlado por cfg.usar_aleatoriedad_demanda y cfg.demanda_uniforme_rango_pct.
+    Reutiliza cfg.random_seed si está definido para reproducibilidad.
+    """
+    try:
+        usar = bool(getattr(cfg, 'usar_aleatoriedad_demanda', False))
+        rango = float(getattr(cfg, 'demanda_uniforme_rango_pct', 0.0) or 0.0)
+    except Exception:
+        usar = False
+        rango = 0.0
+    if not usar or rango <= 0.0:
+        return demanda_map
+
+    try:
+        seed = getattr(cfg, 'random_seed', None)
+        if seed is not None:
+            random.seed(seed)
+    except Exception:
+        pass
+
+    salida = dict(demanda_map)
+    for k, v in list(salida.items()):
+        try:
+            base = float(v)
+            low = max(0.0, (1.0 - rango) * base)
+            high = (1.0 + rango) * base
+            sampled = int(round(random.uniform(low, high)))
+            salida[k] = sampled
+        except Exception:
+            continue
+    return salida
+
+
 def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     registros_ingresos = []
     registros_costos_op = []
@@ -174,6 +210,7 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
     id_counter = cfg.id_reserva_base
 
     demanda_map = generar_demanda_expandida()
+    demanda_map = aplicar_aleatoriedad_demanda(demanda_map)
     for yyyy_mm in sorted((demanda_map or {}).keys()):
         demanda = demanda_map[yyyy_mm]
         fechas = generar_fechas_para_mes(yyyy_mm, int(demanda))

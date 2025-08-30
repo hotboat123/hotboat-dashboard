@@ -130,7 +130,7 @@ ratio_semana_finde_default = (3, 4)  # 3 en semana, 4 en fin de semana (aprox 43
 
 # Semilla opcional para reproducibilidad de la asignación aleatoria de días
 # Establécela a un entero (por ejemplo 42) para resultados reproducibles; déjala en None para aleatorio puro
-random_seed = 42
+random_seed = 46
 
 # Crecimiento anual de demanda (simulación de años posteriores)
 # Si activas `expandir_demanda_con_crecimiento`, el sistema generará meses futuros
@@ -139,7 +139,7 @@ random_seed = 42
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
 tasa_crecimiento_anual = 0.20  # 20%
-simular_hasta_anio = 2026 # Generar datos hasta este año (inclusive)
+simular_hasta_anio = 2030 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 
 # Escenarios de simulación de demanda (multiplicadores)
@@ -150,3 +150,18 @@ escenarios_demanda = {
     'optimista': 1.5,
 }
 
+#Configuración en inputs_simulacion.py (opcional):
+optimizar_pagos_config = {
+    'alphas': [0.6, 0.8, 1.0],
+    'base_invierno': [300_000, 300_000, 300_000],
+    'base_verano':   [700_000, 700_000, 700_000],
+    'piso_invierno': [2_000_000, 2_250_000, 3_000_000],
+    'piso_verano':   [3_000_000, 3_350_000, 4_000_000],
+    'escenarios': ['pesimista','normal','optimista'],  # o ['pesimista','normal','optimista']
+}
+
+# Aleatoriedad de demanda mensual (uniforme alrededor de la media definida)
+# Si activas `usar_aleatoriedad_demanda`, por cada mes se muestrea una demanda
+# desde Uniforme([(1-rango)*demanda, (1+rango)*demanda]) y se redondea a entero.
+usar_aleatoriedad_demanda = True
+demanda_uniforme_rango_pct = 0.20  # 20% → [0.8x, 1.2x]
