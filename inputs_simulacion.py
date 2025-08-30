@@ -138,7 +138,7 @@ random_seed = 48
 # (1 + tasa_crecimiento_anual)^(años_transcurridos). No sobrescribe meses ya presentes
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
-tasa_crecimiento_anual = 0.20  # 20%
+tasa_crecimiento_anual = 0.10  # 20%
 simular_hasta_anio = 2030 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 

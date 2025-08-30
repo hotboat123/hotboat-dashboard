@@ -63,12 +63,26 @@ franquicias = {
 }
 
 # Franquicia de referencia para replicar (si deseas estimar cuántas iguales necesitas)
-nombre_franquicia_modelo = 'Franquicia 2'
+nombre_franquicia_modelo = 'Franquicia 1'
 
 # Año objetivo para evaluar royalties (solo ese año). Si es None, se usa el último año disponible.
-objetivo_anio = None  # Ej: 2028
+objetivo_anio = 2030  # Ej: 2028
 
 # Número de iteraciones Monte Carlo para promediar resultados
 simulaciones_num_iter = 100
+
+
+# Escenario de aperturas de franquicias por año (para simular ingreso de la marca)
+# Clona la `nombre_franquicia_modelo` con estos años de apertura y cantidades
+# Ejemplo: {2027: 2, 2028: 4, 2029: 7, 2030: 10}
+ingresos_marca_schedule = {
+    2027: 2,
+    2028: 4,
+    2029: 7,
+    2030: 10,
+}
+
+# Mes de apertura por defecto para clones del schedule (1=enero)
+apertura_mes_default = 1
 
 

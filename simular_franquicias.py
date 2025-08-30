@@ -146,6 +146,10 @@ def main() -> bool:
     royalties_por_iter = []
     n_req_por_iter = []
     util_ok_por_iter = []
+    royalties_schedule_por_iter = []
+    # Acumulador anual (por año) para ingreso marca (schedule) en cada iteración
+    # dict[anio] -> list[royalty_en_esa_iteración]
+    schedule_anual_series: dict[int, list[float]] = {}
 
     for k in range(max(1, iteraciones)):
         # Control de semilla por iteración: usar base de cfg.random_seed si existe, si no tiempo
@@ -171,6 +175,9 @@ def main() -> bool:
         anio_objetivo = anio_objetivo_cfg
         util_negativa = False
 
+        # Desglose por franquicia (diccionario 'franquicias')
+        if k == 0:
+            print("\n— DESGLOSE POR FRANQUICIA (diccionario 'franquicias') —")
         for nombre, franquicia in (fcfg.franquicias or {}).items():
             dem = _ajustar_demanda_por_franquicia(demanda_map, franquicia)
             fin = _calcular_finanzas_franquicia(dem, franquicia)
@@ -197,6 +204,35 @@ def main() -> bool:
             n_req = 0
         n_req_por_iter.append(n_req)
 
+        # Simular ingresos de la marca por schedule de aperturas
+        schedule = getattr(fcfg, 'ingresos_marca_schedule', {}) or {}
+        apertura_mes_def = int(getattr(fcfg, 'apertura_mes_default', 1))
+        roy_total_schedule = 0.0
+        roy_anual_map: dict[int, float] = {}
+        if schedule and nombre_modelo in fcfg.franquicias:
+            base = dict(fcfg.franquicias[nombre_modelo])
+            for anio, cantidad in schedule.items():
+                for j in range(int(cantidad)):
+                    fr = dict(base)
+                    fr['apertura'] = f"{int(anio):04d}-{int(apertura_mes_def):02d}"
+                    dem_clon = _ajustar_demanda_por_franquicia(demanda_map, fr)
+                    fin_clon = _calcular_finanzas_franquicia(dem_clon, fr)
+                    dfc = fin_clon['detalle']
+                    if not dfc.empty:
+                        dfc['anio'] = dfc['anio'] if 'anio' in dfc.columns else dfc['mes'].str.slice(0, 4).astype(int)
+                        # Sumar por año (para desglose anual)
+                        sums = dfc.groupby('anio', as_index=False)['royalty'].sum()
+                        for _, row in sums.iterrows():
+                            a = int(row['anio'])
+                            roy_anual_map[a] = roy_anual_map.get(a, 0.0) + float(row['royalty'])
+                        # Sumar para el año objetivo (para métrica principal)
+                        if anio_objetivo is not None:
+                            roy_total_schedule += float(dfc[dfc['anio'] == int(anio_objetivo)]['royalty'].sum())
+        royalties_schedule_por_iter.append(roy_total_schedule)
+        # Registrar serie anual de esta iteración
+        for a, val in roy_anual_map.items():
+            schedule_anual_series.setdefault(a, []).append(float(val))
+
     # Estadísticos
     import statistics as stats
 
@@ -217,9 +253,13 @@ def main() -> bool:
 
     roy_sorted = sorted(royalties_por_iter)
     n_sorted = sorted(n_req_por_iter)
+    roy_sched_sorted = sorted(royalties_schedule_por_iter)
     p10_roy = _percentile(roy_sorted, 0.10)
     p50_roy = _percentile(roy_sorted, 0.50)
     p90_roy = _percentile(roy_sorted, 0.90)
+    p10_sched = _percentile(roy_sched_sorted, 0.10)
+    p50_sched = _percentile(roy_sched_sorted, 0.50)
+    p90_sched = _percentile(roy_sched_sorted, 0.90)
     p10_n = _percentile(n_sorted, 0.10)
     p50_n = _percentile(n_sorted, 0.50)
     p90_n = _percentile(n_sorted, 0.90)
@@ -231,12 +271,28 @@ def main() -> bool:
     objetivo = float(getattr(fcfg, 'objetivo_royalty_total', 500_000_000))
     prob_supera_obj = sum(1 for v in royalties_por_iter if v >= objetivo) / len(royalties_por_iter)
     prob_util_ok = sum(1 for b in util_ok_por_iter if b) / len(util_ok_por_iter)
+    avg_sched = float(sum(royalties_schedule_por_iter)) / len(royalties_schedule_por_iter) if royalties_schedule_por_iter else 0.0
+    std_sched = float(stats.pstdev(royalties_schedule_por_iter)) if len(royalties_schedule_por_iter) > 1 else 0.0
 
-    print(f"\n📊 Resultados Monte Carlo ({len(royalties_por_iter)} iteraciones) en {anio_objetivo}:")
-    print(f"   Royalties totales promedio: ${avg_roy:,.0f} (σ={std_roy:,.0f}) | p10=${p10_roy:,.0f}, p50=${p50_roy:,.0f}, p90=${p90_roy:,.0f}")
-    print(f"   Franquicias necesarias promedio: {avg_n:.1f} (σ={std_n:.1f}) | p10={p10_n:.1f}, p50={p50_n:.1f}, p90={p90_n:.1f}")
-    print(f"   Probabilidad de superar objetivo (${objetivo:,.0f}): {prob_supera_obj:.1%}")
-    print(f"   Probabilidad de utilidad positiva (todas las franquicias): {prob_util_ok:.1%}")
+    print(f"\n📊 Resultados Monte Carlo ({len(royalties_por_iter)} iteraciones) para el año {anio_objetivo}:")
+    print("   Alcance: SUMA de TODAS las franquicias definidas en fcfg.franquicias")
+    print(f"   Royalties (todas las franquicias) promedio: ${avg_roy:,.0f} (σ={std_roy:,.0f}) | p10=${p10_roy:,.0f}, p50=${p50_roy:,.0f}, p90=${p90_roy:,.0f}")
+    print(f"   Franquicias necesarias (clonando modelo) promedio: {avg_n:.1f} (σ={std_n:.1f}) | p10={p10_n:.1f}, p50={p50_n:.1f}, p90={p90_n:.1f}")
+    print(f"   Prob. de superar objetivo con TODAS las franquicias (${objetivo:,.0f}): {prob_supera_obj:.1%}")
+    print(f"   Prob. de utilidad positiva (todas las franquicias): {prob_util_ok:.1%}")
+    if royalties_schedule_por_iter:
+        print("\n📦 Ingreso de la marca por schedule de aperturas:")
+        nombre_modelo = str(getattr(fcfg, 'nombre_franquicia_modelo', 'Franquicia 1'))
+        print(f"   Alcance: CLONANDO SOLO la franquicia modelo '{nombre_modelo}' según ingresos_marca_schedule")
+        print(f"   Ingreso marca (schedule) en año {anio_objetivo} promedio: ${avg_sched:,.0f} (σ={std_sched:,.0f}) | p10=${p10_sched:,.0f}, p50=${p50_sched:,.0f}, p90=${p90_sched:,.0f}")
+        # Desglose anual: promedio y σ por año
+        if schedule_anual_series:
+            print("\n   Ingreso marca anual (promedio ±σ) por año (schedule):")
+            for a in sorted(schedule_anual_series.keys()):
+                vals = schedule_anual_series[a]
+                avg_a = float(sum(vals)) / len(vals)
+                sd_a = float(stats.pstdev(vals)) if len(vals) > 1 else 0.0
+                print(f"     - {a}: ${avg_a:,.0f} (σ={sd_a:,.0f})")
     return True
 
 
