@@ -20,7 +20,7 @@ Resultado:
 """
 
 # Tasa de royalty (dueño de la marca recibe este % de las ventas)
-royalty_rate = 0.10 # 9% (ajustable)
+royalty_rate = 0.09 # 9% (ajustable)
 
 # Objetivo de royalty total (CLP) a superar
 objetivo_royalty_total = 500_000_000
@@ -63,13 +63,13 @@ franquicias = {
 }
 
 # Franquicia de referencia para replicar (si deseas estimar cuántas iguales necesitas)
-nombre_franquicia_modelo = 'Franquicia 1'
+nombre_franquicia_modelo = 'Franquicia 2'
 
 # Año objetivo para evaluar royalties (solo ese año). Si es None, se usa el último año disponible.
 objetivo_anio = 2030  # Ej: 2028
 
 # Número de iteraciones Monte Carlo para promediar resultados
-simulaciones_num_iter = 100
+simulaciones_num_iter = 10
 
 
 # Escenario de aperturas de franquicias por año (para simular ingreso de la marca)
@@ -84,5 +84,33 @@ ingresos_marca_schedule = {
 
 # Mes de apertura por defecto para clones del schedule (1=enero)
 apertura_mes_default = 1
+
+# Configuración de la FÁBRICA (venta de HotBoats a franquiciados)
+# Supuestos: capacidad anual = trabajadores * productividad_anual_por_trabajador
+factory_config = {
+    'costo_variable_hotboat': 4_000_000,           # costo de fabricar un HotBoat
+    'precio_venta_hotboat':   15_000_000,          # precio de venta por unidad
+    # Costos fijos desglosados (MENSUALES)
+    'costos_fijos_mensuales_otros': 500_000,     # otros fijos mensuales (servicios, seguros, admins, etc.)
+    'arriendo_mensual':       1_000_000,           # arriendo mensual
+    'sueldo_mensual_por_trabajador': 500_000,      # sueldo mensual por trabajador
+    # Capacidad
+    'trabajadores':           3,                  # cantidad de trabajadores actuales
+    'productividad_anual_por_trabajador': 6,       # HotBoats/año por trabajador
+    # Inventario y política de producción
+    'factory_initial_stock': 0,                    # stock inicial de HotBoats
+    'factory_produce_to_capacity': False,           # True: producir = capacidad; False: producir solo lo necesario
+    # Tercerización
+    'costo_tercerizado_por_unidad': 8_000_000,    # costo por unidad si produce un tercero
+    'overhead_mensual_tercerizar': 300_000,        # overhead mensual (gestión, QA, logística)
+    # Ventas a particulares (canal retail) con precio y demanda anual independiente
+    'precio_venta_particular': 15_000_000,         # precio de venta por unidad a particulares
+    'particulares_unidades_por_anio': {            # demanda anual de particulares por año
+        2027: 3,
+        2028: 5,
+        2029: 5,
+        # 2030: 10,
+    },
+}
 
 

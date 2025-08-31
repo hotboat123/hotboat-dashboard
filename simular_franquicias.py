@@ -150,6 +150,20 @@ def main() -> bool:
     # Acumulador anual (por año) para ingreso marca (schedule) en cada iteración
     # dict[anio] -> list[royalty_en_esa_iteración]
     schedule_anual_series: dict[int, list[float]] = {}
+    # Métricas fábrica
+    # Utilidad por franquicia (por año objetivo) en cada iteración
+    util_por_franquicia_series: dict[str, list[float]] = {}
+    fabrica_ingreso_anual_series: dict[int, list[float]] = {}
+    fabrica_utilidad_anual_series: dict[int, list[float]] = {}
+    fabrica_costo_var_anual_series: dict[int, list[float]] = {}
+    fabrica_costo_fijos_anual_series: dict[int, list[float]] = {}
+    fabrica_producido_anual_series: dict[int, list[int]] = {}
+    fabrica_vendido_anual_series: dict[int, list[int]] = {}
+    fabrica_stock_final_anual_series: dict[int, list[int]] = {}
+    fabrica_vendido_fran_anual_series: dict[int, list[int]] = {}
+    fabrica_vendido_part_anual_series: dict[int, list[int]] = {}
+    fabrica_ingreso_fran_anual_series: dict[int, list[float]] = {}
+    fabrica_ingreso_part_anual_series: dict[int, list[float]] = {}
 
     for k in range(max(1, iteraciones)):
         # Control de semilla por iteración: usar base de cfg.random_seed si existe, si no tiempo
@@ -189,6 +203,8 @@ def main() -> bool:
                     anio_objetivo = anios[-1]
                 fin_anio = df[df['anio'] == int(anio_objetivo)]['royalty'].sum()
                 total_royalties += float(fin_anio)
+                util_fran = float(df[df['anio'] == int(anio_objetivo)]['utilidad'].sum())
+                util_por_franquicia_series.setdefault(nombre, []).append(util_fran)
             if fin['utilidad_total'] <= 0:
                 util_negativa = True
 
@@ -211,7 +227,26 @@ def main() -> bool:
         roy_anual_map: dict[int, float] = {}
         if schedule and nombre_modelo in fcfg.franquicias:
             base = dict(fcfg.franquicias[nombre_modelo])
+            # Fábrica: parámetros
+            fcfg_fact = getattr(fcfg, 'factory_config', {}) or {}
+            costo_unit = float(fcfg_fact.get('costo_variable_hotboat', 0))
+            precio_unit = float(fcfg_fact.get('precio_venta_hotboat', 0))
+            precio_part = float(fcfg_fact.get('precio_venta_particular', precio_unit))
+            fijos_otros_m = float(fcfg_fact.get('costos_fijos_mensuales_otros', 0))
+            arriendo_m = float(fcfg_fact.get('arriendo_mensual', 0))
+            sueldo_m_unit = float(fcfg_fact.get('sueldo_mensual_por_trabajador', 0))
+            trab = int(fcfg_fact.get('trabajadores', 0))
+            prod_por_trab = float(fcfg_fact.get('productividad_anual_por_trabajador', 0))
+            capacidad_anual = int(trab * prod_por_trab) if trab and prod_por_trab else 0
+            stock_inicial = int(fcfg_fact.get('factory_initial_stock', 0))
+            produce_to_capacity = bool(fcfg_fact.get('factory_produce_to_capacity', True))
+            # Demanda de HotBoats por año: franquicias (schedule) + particulares
+            demanda_hotboats_por_anio: dict[int, int] = {}
             for anio, cantidad in schedule.items():
+                demanda_hotboats_por_anio[int(anio)] = demanda_hotboats_por_anio.get(int(anio), 0) + int(cantidad)
+            demanda_part = fcfg_fact.get('particulares_unidades_por_anio', {}) or {}
+            for anio, cant_p in demanda_part.items():
+                demanda_hotboats_por_anio[int(anio)] = demanda_hotboats_por_anio.get(int(anio), 0) + int(cant_p)
                 for j in range(int(cantidad)):
                     fr = dict(base)
                     fr['apertura'] = f"{int(anio):04d}-{int(apertura_mes_def):02d}"
@@ -232,6 +267,42 @@ def main() -> bool:
         # Registrar serie anual de esta iteración
         for a, val in roy_anual_map.items():
             schedule_anual_series.setdefault(a, []).append(float(val))
+        # Fábrica: calcular ingresos y utilidad anual por capacidad y demanda
+        if schedule:
+            stock = stock_inicial
+            for anio, demanda_unidades in sorted(demanda_hotboats_por_anio.items()):
+                # Desglose de demanda por canal
+                dem_fran = int(schedule.get(int(anio), 0))
+                dem_part = int(demanda_part.get(int(anio), 0))
+                if produce_to_capacity:
+                    produccion = int(capacidad_anual)
+                else:
+                    # producir al menos lo necesario para cubrir demanda y reponer stock si negativo
+                    neces = max(0, int(demanda_unidades) - stock)
+                    produccion = min(int(capacidad_anual), neces) if capacidad_anual else neces
+                # Ventas por prioridad: franquicias primero, luego particulares
+                capacidad_vender = stock + produccion
+                vend_fran = min(dem_fran, capacidad_vender)
+                capacidad_vender -= vend_fran
+                vend_part = min(dem_part, capacidad_vender)
+                vendido = vend_fran + vend_part
+                ingreso = float(vend_fran) * precio_unit + float(vend_part) * precio_part
+                costo_var = float(produccion) * costo_unit  # Costo variable por TODAS las unidades PRODUCIDAS
+                costo_sueldos = float(trab) * sueldo_m_unit * 12.0
+                costos_fijos_tot = (fijos_otros_m + arriendo_m) * 12.0 + costo_sueldos
+                stock = stock + produccion - vendido
+                utilidad = ingreso - (costo_var + costos_fijos_tot)
+                fabrica_ingreso_anual_series.setdefault(int(anio), []).append(ingreso)
+                fabrica_utilidad_anual_series.setdefault(int(anio), []).append(utilidad)
+                fabrica_costo_var_anual_series.setdefault(int(anio), []).append(costo_var)
+                fabrica_costo_fijos_anual_series.setdefault(int(anio), []).append(costos_fijos_tot)
+                fabrica_producido_anual_series.setdefault(int(anio), []).append(int(produccion))
+                fabrica_vendido_anual_series.setdefault(int(anio), []).append(int(vendido))
+                fabrica_stock_final_anual_series.setdefault(int(anio), []).append(int(stock))
+                fabrica_vendido_fran_anual_series.setdefault(int(anio), []).append(int(vend_fran))
+                fabrica_vendido_part_anual_series.setdefault(int(anio), []).append(int(vend_part))
+                fabrica_ingreso_fran_anual_series.setdefault(int(anio), []).append(float(vend_fran) * precio_unit)
+                fabrica_ingreso_part_anual_series.setdefault(int(anio), []).append(float(vend_part) * precio_part)
 
     # Estadísticos
     import statistics as stats
@@ -274,12 +345,54 @@ def main() -> bool:
     avg_sched = float(sum(royalties_schedule_por_iter)) / len(royalties_schedule_por_iter) if royalties_schedule_por_iter else 0.0
     std_sched = float(stats.pstdev(royalties_schedule_por_iter)) if len(royalties_schedule_por_iter) > 1 else 0.0
 
+    # Comparación fábrica vs tercerizar (estimación rápida con Q anual desde schedule en año objetivo)
+    comp_msg = None
+    try:
+        fcfg_fact = getattr(fcfg, 'factory_config', {}) or {}
+        c_terc = float(fcfg_fact.get('costo_tercerizado_por_unidad', 0))
+        oh_terc_m = float(fcfg_fact.get('overhead_mensual_tercerizar', 0))
+        # Tomar Q objetivo: suma esperada de aperturas en año_objetivo
+        sched = getattr(fcfg, 'ingresos_marca_schedule', {}) or {}
+        q_obj = float(sched.get(int(anio_objetivo), 0))
+        # Costeo anual: fábrica (aprox) vs tercerizar
+        trab = int(fcfg_fact.get('trabajadores', 0))
+        prod_por_trab = float(fcfg_fact.get('productividad_anual_por_trabajador', 0))
+        cap = trab * prod_por_trab
+        fijos_otros_m = float(fcfg_fact.get('costos_fijos_mensuales_otros', 0))
+        arriendo_m = float(fcfg_fact.get('arriendo_mensual', 0))
+        sueldo_m_unit = float(fcfg_fact.get('sueldo_mensual_por_trabajador', 0))
+        fijos_anuales = (fijos_otros_m + arriendo_m) * 12.0 + (trab * sueldo_m_unit * 12.0)
+        c_var_unit = float(fcfg_fact.get('costo_variable_hotboat', 0))
+        precio_unit = float(fcfg_fact.get('precio_venta_hotboat', 0))
+        # Utilidades esperadas (ingresos por Q vendidas)
+        util_fabrica_est = q_obj * (precio_unit - c_var_unit) - fijos_anuales
+        util_terc_est = q_obj * (precio_unit - c_terc) - (oh_terc_m * 12.0)
+        # Break-even Q
+        q_be = (fijos_anuales - oh_terc_m * 12.0) / max(1e-9, (c_terc - c_var_unit)) if (c_terc - c_var_unit) > 0 else float('inf')
+        comp_msg = (util_fabrica_est, util_terc_est, q_be, cap)
+    except Exception:
+        pass
+
     print(f"\n📊 Resultados Monte Carlo ({len(royalties_por_iter)} iteraciones) para el año {anio_objetivo}:")
     print("   Alcance: SUMA de TODAS las franquicias definidas en fcfg.franquicias")
     print(f"   Royalties (todas las franquicias) promedio: ${avg_roy:,.0f} (σ={std_roy:,.0f}) | p10=${p10_roy:,.0f}, p50=${p50_roy:,.0f}, p90=${p90_roy:,.0f}")
     print(f"   Franquicias necesarias (clonando modelo) promedio: {avg_n:.1f} (σ={std_n:.1f}) | p10={p10_n:.1f}, p50={p50_n:.1f}, p90={p90_n:.1f}")
     print(f"   Prob. de superar objetivo con TODAS las franquicias (${objetivo:,.0f}): {prob_supera_obj:.1%}")
     print(f"   Prob. de utilidad positiva (todas las franquicias): {prob_util_ok:.1%}")
+    # Desglose: utilidad por franquicia
+    if util_por_franquicia_series:
+        print("\n   Utilidad por franquicia (promedio, σ, p10/p50/p90) en el año objetivo:")
+        for nombre in sorted(util_por_franquicia_series.keys()):
+            vals = util_por_franquicia_series[nombre]
+            if not vals:
+                continue
+            v_sorted = sorted(vals)
+            avg_u_f = float(sum(vals)) / len(vals)
+            std_u_f = float(stats.pstdev(vals)) if len(vals) > 1 else 0.0
+            p10_u = _percentile(v_sorted, 0.10)
+            p50_u = _percentile(v_sorted, 0.50)
+            p90_u = _percentile(v_sorted, 0.90)
+            print(f"     - {nombre}: avg=${avg_u_f:,.0f} (σ={std_u_f:,.0f}) | p10=${p10_u:,.0f}, p50=${p50_u:,.0f}, p90=${p90_u:,.0f}")
     if royalties_schedule_por_iter:
         print("\n📦 Ingreso de la marca por schedule de aperturas:")
         nombre_modelo = str(getattr(fcfg, 'nombre_franquicia_modelo', 'Franquicia 1'))
@@ -293,6 +406,43 @@ def main() -> bool:
                 avg_a = float(sum(vals)) / len(vals)
                 sd_a = float(stats.pstdev(vals)) if len(vals) > 1 else 0.0
                 print(f"     - {a}: ${avg_a:,.0f} (σ={sd_a:,.0f})")
+        # Fábrica: reporte anual
+        if fabrica_ingreso_anual_series:
+            print("\n🏭 Fábrica (venta de HotBoats a franquicias del schedule):")
+            print("   Supuestos: capacidad_anual = trabajadores * productividad_anual_por_trabajador")
+            for a in sorted(fabrica_ingreso_anual_series.keys()):
+                vals_ing = fabrica_ingreso_anual_series[a]
+                vals_u = fabrica_utilidad_anual_series.get(a, [])
+                vals_cv = fabrica_costo_var_anual_series.get(a, [])
+                vals_cf = fabrica_costo_fijos_anual_series.get(a, [])
+                vals_prod = fabrica_producido_anual_series.get(a, [])
+                vals_vend = fabrica_vendido_anual_series.get(a, [])
+                vals_stock = fabrica_stock_final_anual_series.get(a, [])
+                vals_vfr = fabrica_vendido_fran_anual_series.get(a, [])
+                vals_vpt = fabrica_vendido_part_anual_series.get(a, [])
+                vals_ing_fr = fabrica_ingreso_fran_anual_series.get(a, [])
+                vals_ing_pt = fabrica_ingreso_part_anual_series.get(a, [])
+                avg_ing = float(sum(vals_ing)) / len(vals_ing)
+                sd_ing = float(stats.pstdev(vals_ing)) if len(vals_ing) > 1 else 0.0
+                avg_u = float(sum(vals_u)) / len(vals_u) if vals_u else 0.0
+                sd_u = float(stats.pstdev(vals_u)) if len(vals_u) > 1 else 0.0
+                avg_cv = float(sum(vals_cv)) / len(vals_cv) if vals_cv else 0.0
+                avg_cf = float(sum(vals_cf)) / len(vals_cf) if vals_cf else 0.0
+                avg_prod = float(sum(vals_prod)) / len(vals_prod) if vals_prod else 0.0
+                avg_vend = float(sum(vals_vend)) / len(vals_vend) if vals_vend else 0.0
+                avg_stock = float(sum(vals_stock)) / len(vals_stock) if vals_stock else 0.0
+                avg_vfr = float(sum(vals_vfr)) / len(vals_vfr) if vals_vfr else 0.0
+                avg_vpt = float(sum(vals_vpt)) / len(vals_vpt) if vals_vpt else 0.0
+                avg_ing_fr = float(sum(vals_ing_fr)) / len(vals_ing_fr) if vals_ing_fr else 0.0
+                avg_ing_pt = float(sum(vals_ing_pt)) / len(vals_ing_pt) if vals_ing_pt else 0.0
+                print(f"     - {a}: Ingreso=${avg_ing:,.0f} (σ={sd_ing:,.0f}) | Costos: Var=${avg_cv:,.0f}, Fijos=${avg_cf:,.0f} | Utilidad=${avg_u:,.0f} (σ={sd_u:,.0f})")
+                print(f"           Producidos≈{avg_prod:.1f} | Vendidos≈{avg_vend:.1f} (Franquicias≈{avg_vfr:.1f}, Particulares≈{avg_vpt:.1f}) | Stock final≈{avg_stock:.1f}")
+                print(f"           Ingreso por canal: Franquicias=${avg_ing_fr:,.0f} | Particulares=${avg_ing_pt:,.0f}")
+        if comp_msg is not None:
+            util_fabrica_est, util_terc_est, q_be, cap = comp_msg
+            print("\n🔀 Comparación fábrica vs tercerizar (estimación rápida para año objetivo):")
+            print(f"   Q esperado={int(fcfg.ingresos_marca_schedule.get(int(anio_objetivo), 0))} | Capacidad={cap:.0f} | Q_break-even≈{q_be:.1f}")
+            print(f"   Utilidad estimada fábrica: ${util_fabrica_est:,.0f} vs tercerizar: ${util_terc_est:,.0f}")
     return True
 
 
