@@ -446,6 +446,10 @@ def reordenar_columna_categoria_extra(df):
     Reordena las columnas en el orden deseado: Fecha, Monto, Categoría 1, Categoría_2, Descripción, resto de columnas, Observación (al final).
     """
     cols = list(df.columns)
+    # Asegurar columna 'Ciudad' exista (vacía si no está)
+    if 'Ciudad' not in cols:
+        df['Ciudad'] = ''
+        cols.append('Ciudad')
     
     # Definir el orden deseado para las columnas principales (sin Observación)
     orden_principal = ['Fecha', 'Monto', 'Categoría 1', 'Categoría_2', 'Descripción']
@@ -463,10 +467,23 @@ def reordenar_columna_categoria_extra(df):
     observacion_existe = 'Observación' in cols
     if observacion_existe:
         cols.remove('Observación')
+    # Remover 'Ciudad' para posicionarla luego entre 'Cuotas' y 'Observación'
+    ciudad_existe = 'Ciudad' in cols
+    if ciudad_existe:
+        cols.remove('Ciudad')
     
     # Agregar las columnas restantes
     cols_ordenadas.extend(cols)
     
+    # Insertar 'Ciudad' inmediatamente después de 'Cuotas' si existe, 
+    # de lo contrario, antes de 'Observación' (al final la agregamos Observación)
+    if 'Ciudad' not in cols_ordenadas:
+        if 'Cuotas' in cols_ordenadas:
+            idx_cuotas = cols_ordenadas.index('Cuotas')
+            cols_ordenadas.insert(idx_cuotas + 1, 'Ciudad')
+        else:
+            cols_ordenadas.append('Ciudad')
+
     # Agregar Observación al final si existe
     if observacion_existe:
         cols_ordenadas.append('Observación')

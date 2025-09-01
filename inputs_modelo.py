@@ -57,7 +57,7 @@ diccionario_categorias_gastos = {
         "CANVA", "LIBRERIA", "VIATOR"
     ],
     "Remuneraciones": [
-        "aguirre paillale", "Axel Aguirre", "Nestor", 
+        "aguirre paillale", "Axel Aguirre", "Nestor", "Francisco godoy"
     ],
     "Sueldo Tom": [
         "Tomas", "Prex"
@@ -117,9 +117,19 @@ diccionario_categoria_1_gastos = {
     ]
 }
 
+# Deudas manuales por compras en cuotas (input explícito)
+# Formato por fila:
+# [fecha_compra, descripcion, monto_de_la_cuota, numero_cuotas, categoria_1, categoria_2, observacion]
+# La deuda agregada será: Monto = monto_de_la_cuota * numero_cuotas; Origen='deudas'
+deudas_manual = [
+    # Ejemplo:
+    # ['2025-08-16', 'Compresor ABC', 538746, 1, 'Inversión en Activos', 'Compresor', 'Deuda manual compresor'],
+    ['2025-08-16', 'Mercado', 506902, 12, 'Inversión en Activos', 'Drones', 'Dron 2'],
+]
+
 descripciones_a_eliminar_gastos = [ #tien e que ser exacto
     "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO", "Amortizacion A Linea De Credito",
-"pago linea de credito", "Traspaso De:Tomas Damja"
+"pago linea de credito", "Traspaso De:Tomas Damja", "flybondi", "jetsmar", "uber", "santos", "busbud"
 ] 
 
 # Lista de registros específicos a eliminar por fecha y monto
@@ -144,8 +154,11 @@ eliminaciones_fecha_descripcion_gastos = [
     # Ejemplos:
     ['2025-06-19', 'falabella'],
     ['2025-06-13', 'JETSMAR'],
-    ['2025-06-19', 'Web travel sky'],
-    ['2025-06-19', 'rushersky'],
+    ['2025-08-12', 'sky'],
+    ['2025-08-09', 'rushersky'],
+    ['2025-08-28', 'airbnb'],
+    ['2025-08-18', 'fintoc'],
+    ['2025-08-27', 'rock'],
     # ['15/07/2025', 'spa santiago'],
 ]
 
@@ -296,6 +309,7 @@ config_procesamiento = {
     'gastos': {
         'diccionario_categorias': diccionario_categorias_gastos,
         'diccionario_categoria_1': diccionario_categoria_1_gastos,
+        'deudas_manual': deudas_manual,
         'descripciones_a_eliminar': descripciones_a_eliminar_gastos,
         'eliminaciones_fecha_monto': eliminaciones_fecha_monto_gastos,
         'eliminaciones_fecha_descripcion': eliminaciones_fecha_descripcion_gastos,
