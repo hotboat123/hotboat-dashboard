@@ -432,6 +432,119 @@ def categorizar_por_descripcion(df, diccionario_categorias):
     df['Categoría_2'] = df['Descripción'].apply(lambda desc: obtener_categoria(desc, diccionario_categorias))
     return df
 
+def aplicar_categorizacion_cuotas_por_deudas_manual(df: pd.DataFrame, deudas_manual: list | None) -> pd.DataFrame:
+    """
+    Sobrescribe categorización y descripción de compras en cuotas según reglas manuales.
+
+    Empareja por:
+      - Fecha (día)
+      - Monto de la CUOTA (no el total)
+      - Número TOTAL de cuotas (m en n/m)
+
+    Formato esperado de cada item en deudas_manual:
+      [fecha_compra, descripcion_nueva, monto_cuota, numero_cuotas, categoria_1, categoria_2, observacion]
+
+    Efectos:
+      - Rellena/Actualiza 'Categoría 1', 'Categoría_2' y 'Descripción' en filas que calzan.
+      - No crea filas nuevas.
+    """
+    if df is None or df.empty or not deudas_manual:
+        return df
+
+    df_trabajo = df.copy()
+
+    # Requisitos mínimos de columnas
+    columnas_necesarias = {'Fecha', 'Monto', 'Descripción'}
+    if not columnas_necesarias.issubset(df_trabajo.columns):
+        return df_trabajo
+
+    # Asegurar tipos
+    if not pd.api.types.is_datetime64_any_dtype(df_trabajo['Fecha']):
+        df_trabajo = convertir_fechas_a_datetime(df_trabajo, 'Fecha')
+    df_trabajo['Monto'] = pd.to_numeric(df_trabajo['Monto'], errors='coerce')
+
+    # Si no existe 'Cuotas', nada que hacer
+    if 'Cuotas' not in df_trabajo.columns:
+        return df_trabajo
+
+    # Extraer total de cuotas de la forma n/m
+    cuotas_totales = (
+        df_trabajo['Cuotas']
+        .astype(str)
+        .str.extract(r'^\s*\d+\s*/\s*(\d+)\s*$', expand=False)
+    )
+    try:
+        df_trabajo['__cuotas_totales'] = pd.to_numeric(cuotas_totales, errors='coerce').astype('Int64')
+    except Exception:
+        df_trabajo['__cuotas_totales'] = pd.to_numeric(cuotas_totales, errors='coerce')
+
+    # Construir DataFrame de reglas
+    columnas_reglas = ['Fecha', 'Descripción_nueva', 'Monto_Cuota', 'Numero_Cuotas', 'Categoría 1', 'Categoría_2', 'Observación']
+    try:
+        df_reglas = pd.DataFrame(deudas_manual, columns=columnas_reglas)
+    except Exception:
+        # Intentar longitud variable rellenando faltantes
+        df_reglas = pd.DataFrame([(
+            r + [None] * (len(columnas_reglas) - len(r))
+        )[:len(columnas_reglas)] for r in deudas_manual], columns=columnas_reglas)
+
+    # Normalizar reglas
+    df_reglas = convertir_fechas_a_datetime(df_reglas, 'Fecha')
+    df_reglas['Monto_Cuota'] = pd.to_numeric(df_reglas['Monto_Cuota'], errors='coerce')
+    df_reglas['Numero_Cuotas'] = pd.to_numeric(df_reglas['Numero_Cuotas'], errors='coerce').fillna(0).astype(int)
+
+    total_actualizaciones = 0
+    for _, regla in df_reglas.iterrows():
+        fecha_rule = regla.get('Fecha')
+        monto_cuota = regla.get('Monto_Cuota')
+        num_cuotas = int(regla.get('Numero_Cuotas')) if pd.notna(regla.get('Numero_Cuotas')) else None
+        if pd.isna(fecha_rule) or pd.isna(monto_cuota) or num_cuotas is None or num_cuotas <= 0:
+            continue
+
+        mask_fecha = df_trabajo['Fecha'].dt.date == pd.to_datetime(fecha_rule).date()
+        mask_monto = df_trabajo['Monto'] == float(monto_cuota)
+        mask_cuotas = df_trabajo['__cuotas_totales'] == num_cuotas
+        mask = mask_fecha & mask_monto & mask_cuotas
+
+        if not mask.any():
+            continue
+
+        # Descripción nueva (si viene en regla, sobrescribe)
+        desc_nueva = regla.get('Descripción_nueva')
+        if isinstance(desc_nueva, str) and desc_nueva.strip():
+            df_trabajo.loc[mask, 'Descripción'] = desc_nueva.strip()
+
+        # Categorías manuales (si vienen, sobrescriben)
+        cat2 = regla.get('Categoría_2')
+        if isinstance(cat2, str) and cat2.strip():
+            df_trabajo.loc[mask, 'Categoría_2'] = cat2.strip()
+        cat1 = regla.get('Categoría 1')
+        if isinstance(cat1, str) and cat1.strip():
+            if 'Categoría 1' not in df_trabajo.columns:
+                df_trabajo['Categoría 1'] = ''
+            df_trabajo.loc[mask, 'Categoría 1'] = cat1.strip()
+
+        # Observación opcional
+        obs = regla.get('Observación')
+        if isinstance(obs, str) and obs.strip():
+            if 'Observación' not in df_trabajo.columns:
+                df_trabajo['Observación'] = ''
+            df_trabajo.loc[mask, 'Observación'] = obs.strip()
+
+        total_actualizaciones += int(mask.sum())
+
+    if total_actualizaciones:
+        try:
+            print(f"🏷️  Categorización manual por cuotas aplicada a {total_actualizaciones} filas")
+        except Exception:
+            pass
+
+    # Limpiar temporales
+    if '__cuotas_totales' in df_trabajo.columns:
+        df_trabajo = df_trabajo.drop(columns=['__cuotas_totales'])
+
+    return df_trabajo
+
 def categorizar_por_diccionario(df, diccionario, nombre_columna):
     """
     Asigna una categoría a cada fila del DataFrame según la coincidencia de palabras clave en la columna 'Descripción'.
@@ -1404,6 +1517,7 @@ def procesar_df_final(
     eliminaciones_fecha_monto = None
     gastos_efectivo = None
     eliminaciones_fecha_descripcion = None
+    deudas_manual = None
 
     if isinstance(config, dict) and config.get('gastos'):
         cfg_g = config['gastos']
@@ -1414,6 +1528,7 @@ def procesar_df_final(
         eliminaciones_fecha_monto = cfg_g.get('eliminaciones_fecha_monto')
         gastos_efectivo = cfg_g.get('gastos_efectivo')
         eliminaciones_fecha_descripcion = cfg_g.get('eliminaciones_fecha_descripcion')
+        deudas_manual = cfg_g.get('deudas_manual')
 
     # Agregar columna "Origen" a cada DataFrame antes de concatenar
     dataframes_con_origen = agregar_columnas_origen(
@@ -1444,10 +1559,16 @@ def procesar_df_final(
     
     # Categorizar todos los datos usando el diccionario (incluyendo cuenta corriente)
     df_final = categorizar_por_descripcion(df_final, diccionario_categorias)
+
+    # Categorización manual de compras en cuotas por reglas de deudas_manual
+    df_final = aplicar_categorizacion_cuotas_por_deudas_manual(df_final, deudas_manual)
     
     # Luego categorizar Categoría 1 basándose en Categoría_2
     if diccionario_categoria_1:
-        df_final['Categoría 1'] = df_final['Categoría_2'].apply(lambda cat2: obtener_categoria(cat2, diccionario_categoria_1))
+        if 'Categoría 1' not in df_final.columns:
+            df_final['Categoría 1'] = ''
+        mask_vacios_cat1 = df_final['Categoría 1'].isna() | (df_final['Categoría 1'].astype(str).str.strip() == '')
+        df_final.loc[mask_vacios_cat1, 'Categoría 1'] = df_final.loc[mask_vacios_cat1, 'Categoría_2'].apply(lambda cat2: obtener_categoria(cat2, diccionario_categoria_1))
     
     # Agregar gastos pagados en efectivo si se proporcionaron
     if gastos_efectivo:

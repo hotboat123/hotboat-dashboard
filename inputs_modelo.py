@@ -124,7 +124,7 @@ diccionario_categoria_1_gastos = {
 deudas_manual = [
     # Ejemplo:
     # ['2025-08-16', 'Compresor ABC', 538746, 1, 'Inversión en Activos', 'Compresor', 'Deuda manual compresor'],
-    ['2025-08-16', 'Mercado', 506902, 12, 'Inversión en Activos', 'Drones', 'Dron 2'],
+    ['2025-08-16', 'Mercado', 46082, 12, 'Inversión en Activos', 'Drones', 'Dron 2'],
 ]
 
 descripciones_a_eliminar_gastos = [ #tien e que ser exacto

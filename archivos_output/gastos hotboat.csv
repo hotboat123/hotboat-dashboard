@@ -14,7 +14,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-07-09,48000.0,Sin categoría,Sin categoría,"MERCADOPAGO*FERRETE TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 2 de 3 | monto cuota: $24000
 2025-07-24,38450.0,Sin categoría,Sin categoría,"MERCADOPAGO*FERRETE TASA INT. 1,72%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $7690
 2025-07-17,68000.0,Inversión General,Mantención Vehículo,"COMERCIAL SANTA ELI TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 2 de 3 | monto cuota: $34000
-2025-08-13,13905.0,Sin categoría,Sin categoría,"MERPAGO*MOHITSIMPOR TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $2781
+2025-08-16,506902.0,Inversión en Activos,Drones,Mercado,deudas,,,,,Cuotas restantes: 11 de 12 | monto cuota: $46082
 2025-07-20,26036.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 4 de 6 | monto cuota: $6509
 2025-07-17,21501.0,Inversión General,Ferretería,"SOCIEDAD INVERSIONE TASA INT 0,00%",deudas,,,,,Cuotas restantes: 3 de 3 | monto cuota: $7167
 2025-07-25,64009.0,Sin categoría,Sin categoría,"PUCON TASA INT. 1,72%",deudas,,,,,Cuotas restantes: 11 de 12 | monto cuota: $5819
@@ -26,7 +26,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2024-09-04,24148.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 1 de 6 | monto cuota: $24148
 2025-06-16,5388.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 3 de 6 | monto cuota: $1796
 2025-07-03,41892.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 4 de 6 | monto cuota: $10473
-2025-08-16,506902.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 11 de 12 | monto cuota: $46082
+2025-08-13,13905.0,Sin categoría,Sin categoría,"MERPAGO*MOHITSIMPOR TASA INT. 0,00%",deudas,,,,,Cuotas restantes: 5 de 6 | monto cuota: $2781
 2025-07-07,274990.0,Inversión en Activos,Calefonts,CEM SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-07-07,4000.0,Inversión General,Ferretería,FERRETERIA ELTIT PUCON,Mov. Facturado Nacional,,,,,
 2025-07-07,32970.0,Inversión General,Ferretería,FERRETERIA ELTIT PUCON,Mov. Facturado Nacional,,,,,
@@ -340,7 +340,7 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-08-11,100000.0,Costos Fijos,Sueldo Tom,Traspaso A:Tomas Andreas Damjanic,Cuenta Corriente,,,,,
 2025-04-21,323200.0,Costos Fijos,Arriendo,Traspaso A:Pilar Quiroga Toro,Cuenta Corriente,,,,,
 2025-04-22,3500.0,Costos Variables,leña,Traspaso A:Jaime Catricheo,Cuenta Corriente,,,,,
-2025-08-16,46082.0,Sin categoría,Sin categoría,"MP *MERCADO LIB TASA INT. 0,00%",Mov. Facturado Nacional,,,01/12,,
+2025-08-16,46082.0,Inversión en Activos,Drones,Mercado,Mov. Facturado Nacional,,,01/12,,Dron 2
 2025-08-22,17661.0,Inversión en Activos,HotBoat 1,MERPAGO*ALIPAYSINGA LAS CONDES,Mov. Facturado Nacional,,,,,Sistema Iluminacion: caja ip67 fusibles
 2025-08-20,98000.0,Costos Variables,Gas,MERCADOPAGO*FERRETE LAS CONDES,Mov. Facturado Nacional,,,,,
 2025-08-19,18631.0,Sin categoría,Sin categoría,TRIPLE E SANTIAGO,Mov. Facturado Nacional,,,,,
@@ -886,4 +886,3 @@ Fecha,Monto,Categoría 1,Categoría_2,Descripción,Origen,País,Monto (USD),Cuot
 2025-03-22,12000.0,Sin categoría,Sin categoría,CLUB DE PADEL LA PO CAUTIN,Mov. Facturado Nacional,,,,,
 2025-03-20,10000.0,Costos de Marketing,Publicidad Google,DLOCAL *GOOGLE ADS SANTIAGO,Mov. Facturado Nacional,,,,,
 2025-05-05,111014.0,Inversión General,Ferretería,SUPERMERCADO PUCON PUCON,Mov. Facturado Nacional,,,,,
-2025-08-16,6082824.0,Inversión en Activos,Drones,"Mercado - deuda manual (rest 12 x $506,902)",deudas,,,,,Dron 2 | Dron 2
