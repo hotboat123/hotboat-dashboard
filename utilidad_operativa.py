@@ -30,9 +30,20 @@ except Exception:
 try:
     from inputs_modelo import config_utilidad_operativa as _cfg_utilidad
     IGNORAR_SUELDO_TOM_EN_COSTOS_FIJOS = bool(_cfg_utilidad.get('ignorar_sueldo_tom_en_costos_fijos', False))
+    COSTO_DETALLE_POR_PRODUCTO = dict(_cfg_utilidad.get('costo_operativo_detalle_por_producto', {}))
+    AJUSTAR_COSTO_A_MONTO_RESERVA = bool(_cfg_utilidad.get('ajustar_costos_operativos_a_monto_por_reserva', True))
 except Exception:
-    # Fallback seguro: activar por defecto si no se puede leer la config
+    # Fallback seguro
     IGNORAR_SUELDO_TOM_EN_COSTOS_FIJOS = True
+    COSTO_DETALLE_POR_PRODUCTO = {
+        'default': {
+            'Gas': 10000,
+            'Leña': 15000,
+            'Agua': 700,
+            'Luz': 520,
+        }
+    }
+    AJUSTAR_COSTO_A_MONTO_RESERVA = True
 
 def cargar_gastos_marketing():
     """Cargar gastos de marketing desde archivos diarios de Meta y Google Ads.
@@ -258,6 +269,137 @@ def cargar_costos_operativos():
         print(f"❌ Error cargando costos operativos: {e}")
         return pd.DataFrame()
 
+def _extraer_producto_base(service: str) -> str:
+    """Quita el tramo de precio entre paréntesis del campo Service para obtener el nombre base del producto."""
+    if not isinstance(service, str):
+        return 'default'
+    s = service.strip()
+    # Ejemplo: "HotBoat Trip 2 people (69.990 pp)" -> "HotBoat Trip 2 people"
+    if '(' in s:
+        return s.split('(')[0].strip()
+    return s or 'default'
+
+def cargar_costos_operativos_desglosados_por_producto():
+    """Cargar costos operativos y desglosarlos por producto usando inputs_modelo.
+
+    - Une costos por reserva con reservas para conocer el producto (Service)
+    - Aplica desglose definido por producto (o 'default')
+    - Si AJUSTAR_COSTO_A_MONTO_RESERVA=True, escala el desglose para que sume el monto por reserva
+    """
+    try:
+        print("📊 Cargando costos operativos desglosados por producto…")
+        costos = pd.read_csv('archivos_output/costos_operativos.csv')
+        reservas = pd.read_csv('archivos_output/reservas_HotBoat.csv')
+
+        # Asegurar columnas necesarias
+        for col in ['fecha', 'id_reserva', 'monto']:
+            if col not in costos.columns:
+                print(f"❌ costos_operativos.csv no tiene columna requerida: {col}")
+                return pd.DataFrame()
+        if 'ID' not in reservas.columns or 'Service' not in reservas.columns:
+            print("❌ reservas_HotBoat.csv no tiene columnas requeridas: 'ID' y 'Service'")
+            return pd.DataFrame()
+
+        # Join por ID de reserva
+        costos['id_reserva'] = pd.to_numeric(costos['id_reserva'], errors='coerce')
+        reservas['ID'] = pd.to_numeric(reservas['ID'], errors='coerce')
+        merged = costos.merge(reservas[['ID', 'Service']], left_on='id_reserva', right_on='ID', how='left')
+
+        registros = []
+        for _, row in merged.iterrows():
+            fecha = pd.to_datetime(row['fecha'], errors='coerce')
+            monto_reserva = pd.to_numeric(row['monto'], errors='coerce')
+            producto = _extraer_producto_base(row.get('Service', 'default'))
+
+            detalle_producto = COSTO_DETALLE_POR_PRODUCTO.get(producto)
+            if not detalle_producto:
+                detalle_producto = COSTO_DETALLE_POR_PRODUCTO.get('default', {})
+            if not detalle_producto:
+                # Si no hay configuración, dejar como costo operativo genérico
+                registros.append({
+                    'fecha': fecha,
+                    'categoria': 'costo operativo',
+                    'categoria_2': 'Por reserva',
+                    'descripcion': f"Costo operativo por reserva ({producto})",
+                    'monto': monto_reserva,
+                })
+                continue
+
+            # Calcular montos por componente
+            componentes = list(detalle_producto.items())
+            if AJUSTAR_COSTO_A_MONTO_RESERVA and pd.notna(monto_reserva):
+                total_cfg = sum(max(float(v), 0.0) for _, v in componentes)
+                if total_cfg <= 0 and len(componentes) > 0:
+                    # distribución uniforme
+                    valor_por_comp = monto_reserva / len(componentes)
+                    for nombre_comp, _ in componentes:
+                        registros.append({
+                            'fecha': fecha,
+                            'categoria': 'costo operativo',
+                            'categoria_2': nombre_comp,
+                            'descripcion': f"Costo operativo {producto} - {nombre_comp}",
+                            'monto': valor_por_comp,
+                        })
+                else:
+                    acumulado = 0.0
+                    for i, (nombre_comp, valor_cfg) in enumerate(componentes):
+                        if i < len(componentes) - 1:
+                            monto_comp = (float(valor_cfg) / total_cfg) * float(monto_reserva)
+                            acumulado += monto_comp
+                        else:
+                            # último componente ajusta residuo para cuadrar exactamente con monto_reserva
+                            monto_comp = float(monto_reserva) - acumulado
+                        registros.append({
+                            'fecha': fecha,
+                            'categoria': 'costo operativo',
+                            'categoria_2': nombre_comp,
+                            'descripcion': f"Costo operativo {producto} - {nombre_comp}",
+                            'monto': monto_comp,
+                        })
+            else:
+                # Usar valores absolutos de configuración
+                for nombre_comp, valor_cfg in componentes:
+                    registros.append({
+                        'fecha': fecha,
+                        'categoria': 'costo operativo',
+                        'categoria_2': nombre_comp,
+                        'descripcion': f"Costo operativo {producto} - {nombre_comp}",
+                        'monto': float(valor_cfg),
+                    })
+
+        df = pd.DataFrame(registros)
+        if not df.empty:
+            df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce')
+        print(f"✅ Costos operativos desglosados: {len(df)} registros (productos: {len(set(merged['Service'].dropna()))})")
+        return df
+    except Exception as e:
+        print(f"❌ Error cargando costos operativos desglosados: {e}")
+        return pd.DataFrame()
+
+def cargar_remuneraciones():
+    """Cargar remuneraciones reales desde gastos hotboat (Categoría_2 == 'Remuneraciones')."""
+    try:
+        print("📊 Cargando remuneraciones desde gastos hotboat…")
+        gastos = pd.read_csv('archivos_output/gastos hotboat.csv')
+        if 'Categoría_2' not in gastos.columns:
+            print("⚠️  No existe columna 'Categoría_2' en gastos hotboat.csv")
+            return pd.DataFrame()
+        mask = gastos['Categoría_2'].fillna('').astype(str).str.lower() == 'remuneraciones'
+        df = gastos.loc[mask, ['Fecha', 'Monto', 'Descripción']].copy()
+        if df.empty:
+            print("⚠️  No se encontraron filas con Categoría_2 = 'Remuneraciones'")
+            return pd.DataFrame()
+        df.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'}, inplace=True)
+        df['categoria'] = 'costo operativo'
+        df['categoria_2'] = 'Remuneraciones'
+        df['descripcion'] = df.get('Descripción', 'Remuneración')
+        df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce')
+        print(f"✅ Remuneraciones cargadas: {len(df)} registros, total=${pd.to_numeric(df['monto'], errors='coerce').sum():,.0f}")
+        return df[['fecha', 'categoria', 'categoria_2', 'descripcion', 'monto']]
+    except Exception as e:
+        print(f"❌ Error cargando remuneraciones: {e}")
+        return pd.DataFrame()
+
 def cargar_ingresos_operativos():
     """Cargar ingresos operativos"""
     try:
@@ -341,8 +483,10 @@ def generar_utilidad_operativa():
     gastos_marketing = cargar_gastos_marketing()
     costos_fijos = cargar_costos_fijos()
     # costos_variables = cargar_costos_variables()
-    costos_operativos = cargar_costos_operativos()
+    # costos_operativos = cargar_costos_operativos()
+    costos_operativos = cargar_costos_operativos_desglosados_por_producto()
     ingresos_operativos = cargar_ingresos_operativos()
+    remuneraciones = cargar_remuneraciones()
     # gastos_todos = cargar_todos_gastos()
     # abonos_todos = cargar_todos_abonos()
     
@@ -360,6 +504,7 @@ def generar_utilidad_operativa():
         #costos_variables,
         costos_operativos,
         ingresos_operativos,
+        remuneraciones,
         #gastos_todos,
         #abonos_todos
     ], ignore_index=True)

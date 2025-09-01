@@ -332,5 +332,26 @@ config_procesamiento = {
 config_utilidad_operativa = {
     # Si True, en costos fijos se considera monto=0 cuando la descripción contiene "Sueldo Tom"
     'ignorar_sueldo_tom_en_costos_fijos': True,
+    # Desglose por producto para costos operativos (valores relativos; se escalan al monto por reserva)
+    # Claves: nombre de producto (como en columna Service sin el precio) o 'default'
+    # Ejemplo de claves de producto: 'HotBoat Trip 2 people', 'HotBoat Trip 3 people', etc.
+    'costo_operativo_detalle_por_producto': {
+        'default': {
+            'Gas': 10000,
+            'Leña': 1500,
+            'Agua': 700,
+            'Luz': 520,
+        }
+
+        # Puedes definir productos específicos si requieren proporciones distintas, por ejemplo:
+        # 'HotBoat Trip 2 people': {
+        #     'Gas': 12000,
+        #     'Leña': 14000,
+        #     'Agua': 800,
+        #     'Luz': 600,
+        # }
+    },
+    # Si True, el desglose anterior se escala exactamente al 'monto' de cada reserva
+    'ajustar_costos_operativos_a_monto_por_reserva': False,
 }
 

@@ -58,7 +58,7 @@ demanda_por_mes = {
 }
 
 # Ingreso promedio por cliente (CLP)
-ticket_promedio = 150_000
+ticket_promedio = 144848
 
 # Costo operativo por cada reserva (CLP)
 costo_variable_por_reserva = 45_000
@@ -77,12 +77,12 @@ costo_operativo_detalle_por_reserva = {
 usar_pago_ayudante_escalonado = True
 # Lista de tuplas: (cantidad_reservas, pago_diario)
 pago_ayudante_escalas = [
-    (1, 15_000),
-    (2, 30_000),
-    (3, 45_000),
-    (4, 60_000),
-    (5, 75_000),
-    (6, 90_000),
+    (1, 25_000),
+    (2, 40_000),
+    (3, 55_000),
+    (4, 65_000),
+    (5, 80_000),
+    (6, 95_000),
     (7, 105_000),
 ]
 # Si hay más reservas que el mayor umbral, se usa el último monto de la lista
@@ -91,16 +91,16 @@ pago_ayudante_escalas = [
 numero_ayudantes = 2
 
 # Gasto de marketing mensual (CLP)
-gasto_marketing_mensual = 300_000
+gasto_marketing_mensual = 484_940
 
 # Costo fijo mensual (CLP)
-costo_fijo_mensual = 335_000
+costo_fijo_mensual = 456_926
 
 # Costo fijo estacional (verano vs invierno)
 # Si activas `usar_costo_fijo_estacional`, se usará un costo distinto para los meses definidos como verano o invierno.
 usar_costo_fijo_estacional = True
-costo_fijo_mensual_verano = 535_000
-costo_fijo_mensual_invierno = 335_000
+costo_fijo_mensual_verano = 635_000
+costo_fijo_mensual_invierno = 456_926
 # Por defecto: verano = dic-ene-feb; invierno = jun-jul-ago. Puedes modificar estas listas.
 meses_verano = [1, 2]
 meses_invierno = [7]
