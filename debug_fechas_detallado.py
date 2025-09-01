@@ -7,7 +7,7 @@ print("=" * 70)
 
 # Paso 1: Leer archivo de cuenta corriente
 print("📄 PASO 1: Leyendo archivo de cuenta corriente...")
-cargos_cc, abonos_cc = leer_cartola_cuenta_corriente('archivos_input/archivos_input_costos/cartola (4).xls')
+cargos_cc, abonos_cc, consolidado_cc = leer_cartola_cuenta_corriente('archivos_input/archivos_input_costos/cartola (4).xls')
 
 print(f"   Cargos encontrados: {len(cargos_cc)}")
 if not cargos_cc.empty:

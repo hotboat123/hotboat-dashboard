@@ -23,7 +23,7 @@ for archivo in os.listdir(DIRECTORIO_INPUT_TST):
         ruta = os.path.join(DIRECTORIO_INPUT_TST, archivo)
         print(f"📄 Procesando: {archivo}")
         try:
-            cargos, abonos = leer_cartola_cuenta_corriente(ruta)
+            cargos, abonos, consolidado = leer_cartola_cuenta_corriente(ruta)
             if not cargos.empty:
                 cuenta_corriente_cargos.append(cargos)
                 print(f"   ✅ Cargos: {len(cargos)} filas")
@@ -36,6 +36,7 @@ for archivo in os.listdir(DIRECTORIO_INPUT_TST):
 # Consolidar resultados
 df_cargos_cc = pd.DataFrame()
 df_abonos_cc = pd.DataFrame()
+df_consolidado_cc = pd.DataFrame()
 
 if cuenta_corriente_cargos:
     df_cargos_cc = pd.concat(cuenta_corriente_cargos, ignore_index=True)

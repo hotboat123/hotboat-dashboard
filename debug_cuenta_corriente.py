@@ -20,7 +20,7 @@ if archivos_cc:
     archivo_ejemplo = os.path.join('archivos_input/archivos_input_costos', archivos_cc[0])
     print(f"\n🔍 Procesando archivo de ejemplo: {archivos_cc[0]}")
     
-    cargos, abonos = leer_cartola_cuenta_corriente(archivo_ejemplo)
+    cargos, abonos, consolidado = leer_cartola_cuenta_corriente(archivo_ejemplo)
     
     print(f"   Cargos: {len(cargos)} registros")
     if not cargos.empty:
@@ -32,6 +32,7 @@ if archivos_cc:
         print(cargos[['Fecha', 'Descripción', 'Monto']].head())
     
     print(f"   Abonos: {len(abonos)} registros")
+    print(f"   Consolidado: {len(consolidado)} registros")
     if not abonos.empty:
         print(f"   Columnas de abonos: {list(abonos.columns)}")
         print(f"   Tipo de Fecha: {type(abonos['Fecha'].iloc[0])}")

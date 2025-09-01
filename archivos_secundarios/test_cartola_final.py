@@ -9,7 +9,7 @@ print(f"🔍 Probando archivo: {archivo_test}")
 print("=" * 60)
 
 try:
-    cargos, abonos = leer_cartola_cuenta_corriente(archivo_test)
+    cargos, abonos, consolidado = leer_cartola_cuenta_corriente(archivo_test)
     
     print(f"📊 RESULTADOS:")
     print(f"   Cargos: {len(cargos)} filas")
@@ -24,6 +24,11 @@ try:
         print(f"\n📋 ABONOS - Primeras 3 filas:")
         print(abonos.head(3))
         print(f"\n📋 ABONOS - Columnas: {list(abonos.columns)}")
+
+    if not consolidado.empty:
+        print(f"\n📋 CONSOLIDADO - Primeras 3 filas:")
+        print(consolidado.head(3))
+        print(f"\n📋 CONSOLIDADO - Columnas: {list(consolidado.columns)}")
         
 except Exception as e:
     print(f"❌ Error: {str(e)}")

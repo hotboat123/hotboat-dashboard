@@ -382,7 +382,7 @@ def limpiar_y_ordenar_dataframe(df):
     
     return df_ordenado
 
-def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output"):
+def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None):
     """
     Exporta los DataFrames a archivos CSV en el directorio especificado.
     
@@ -413,6 +413,16 @@ def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_o
         print(f"Error: No se puede escribir el archivo '{ruta_abonos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
     except Exception as e:
         print(f"Error inesperado al guardar abonos: {str(e)}")
+
+    # Exportar consolidado de cuenta corriente (si se provee)
+    try:
+        if isinstance(df_cta_cte_consolidado, pd.DataFrame) and not df_cta_cte_consolidado.empty:
+            ruta_consolidado = os.path.join(directorio_salida, "cuenta_corriente_consolidado.csv")
+            df_cta_cte_consolidado.to_csv(ruta_consolidado, index=False)
+    except PermissionError:
+        print(f"Error: No se puede escribir el archivo '{ruta_consolidado}'. Cierre el archivo e intente nuevamente.")
+    except Exception as e:
+        print(f"Error inesperado al guardar consolidado cta cte: {str(e)}")
 
 def obtener_categoria(descripcion, diccionario_categorias):
     descripcion_normalizada = str(descripcion).strip().lower()
@@ -1623,6 +1633,7 @@ class ProcesadorArchivos:
         self.df_banco_chile_no_facturado_internacional = []
         self.df_cuenta_corriente_cargos = []
         self.df_cuenta_corriente_abonos = []
+        self.df_cuenta_corriente_consolidado = []
         
     def procesar_archivo(self, ruta_archivo: str, nombre_archivo: str, valor_aproximado_dolar: float, año_para_fecha_banco_estado: str) -> bool:
         """
@@ -1652,13 +1663,16 @@ class ProcesadorArchivos:
             elif "cartola" in nombre_archivo.lower():
                 print(f"   ✅ Archivo Cartola (Cuenta Corriente) detectado")
                 try:
-                    cargos, abonos = leer_cartola_cuenta_corriente(ruta_archivo)
+                    cargos, abonos, consolidado = leer_cartola_cuenta_corriente(ruta_archivo)
                     if not cargos.empty:
                         self.df_cuenta_corriente_cargos.append(cargos)
                         print(f"      💳 Cargos cuenta corriente: {len(cargos)} filas")
                     if not abonos.empty:
                         self.df_cuenta_corriente_abonos.append(abonos)
                         print(f"      💳 Abonos cuenta corriente: {len(abonos)} filas")
+                    if isinstance(consolidado, pd.DataFrame) and not consolidado.empty:
+                        self.df_cuenta_corriente_consolidado.append(consolidado)
+                        print(f"      🧾 Consolidado cuenta corriente: {len(consolidado)} filas")
                     return True
                 except Exception as e:
                     print(f"   ❌ Error procesando cartola: {str(e)}")
@@ -1794,6 +1808,25 @@ class ProcesadorArchivos:
         else:
             datos_consolidados['cuenta_corriente_abonos'] = pd.DataFrame()
             print("⚠️  No se encontraron archivos de abonos cuenta corriente")
+        
+        # Consolidado Cuenta Corriente (copiado de tabla original)
+        if self.df_cuenta_corriente_consolidado:
+            df_ccc = pd.concat(self.df_cuenta_corriente_consolidado, ignore_index=True)
+            # Normalizar fecha
+            if 'Fecha' in df_ccc.columns:
+                df_ccc['Fecha'] = pd.to_datetime(df_ccc['Fecha'], errors='coerce', dayfirst=True)
+                df_ccc = df_ccc[df_ccc['Fecha'].notna()]
+            # Deduplicar usando columnas presentes
+            subset_cols = [c for c in ['Fecha', 'Descripción', 'Cargos (CLP)', 'Abonos (CLP)', 'Saldo (CLP)'] if c in df_ccc.columns]
+            if subset_cols:
+                df_ccc = df_ccc.drop_duplicates(subset=subset_cols, keep='first')
+            else:
+                df_ccc = df_ccc.drop_duplicates(keep='first')
+            datos_consolidados['cuenta_corriente_consolidado'] = df_ccc.reset_index(drop=True)
+            print(f"✅ Consolidado Cuenta Corriente: {len(datos_consolidados['cuenta_corriente_consolidado'])} registros")
+        else:
+            datos_consolidados['cuenta_corriente_consolidado'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos consolidados de cuenta corriente")
         
         return datos_consolidados
 
@@ -2197,7 +2230,12 @@ def procesar_archivos_financieros(
     
     # Exportar archivos
     try:
-        exportar_archivos(df_final, df_abonos_cta_cte, directorio_output)
+        exportar_archivos(
+            df_final,
+            df_abonos_cta_cte,
+            directorio_output,
+            datos_consolidados.get('cuenta_corriente_consolidado', pd.DataFrame())
+        )
         
 
         print("✅ PROCESAMIENTO COMPLETADO EXITOSAMENTE")
@@ -2218,7 +2256,15 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
     """
     Lee una cartola de cuenta corriente buscando dinámicamente donde empieza la tabla
     (donde aparecen "fecha" y "descripción"), y separa en cargos y abonos con columna 'Monto'.
-    Devuelve dos DataFrames: cargos y abonos.
+    También crea un DataFrame consolidado directamente desde la tabla de transacciones,
+    eliminando duplicados.
+
+    Returns:
+        tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]: (cargos, abonos, consolidado)
+            - cargos: columnas ['Fecha','Descripción','Monto'] (Monto positivo)
+            - abonos: columnas ['Fecha','Descripción','Monto'] (Monto positivo)
+            - consolidado: DataFrame deduplicado basado en la tabla original, con columnas
+              estandarizadas (por ejemplo 'Fecha','Descripción','Cargos (CLP)','Abonos (CLP)' si existen)
     """
     # Leer la hoja principal sin encabezado
     df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)
@@ -2301,7 +2347,30 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
         if not abonos.empty:
             abonos['Fecha'] = pd.to_datetime(abonos['Fecha'], errors='coerce', dayfirst=True)
     
-    return cargos, abonos
+    # Construir DataFrame consolidado DIRECTAMENTE desde df_transacciones (copiar y deduplicar)
+    consolidado = pd.DataFrame()
+    try:
+        consolidado = df_transacciones.copy()
+        # Mantener columnas clave si existen
+        columnas_interes = [c for c in ['Fecha', 'Descripción', 'Cargos (CLP)', 'Abonos (CLP)', 'Saldo (CLP)'] if c in consolidado.columns]
+        if columnas_interes:
+            consolidado = consolidado[columnas_interes]
+        # Normalizar Fecha
+        if 'Fecha' in consolidado.columns:
+            consolidado['Fecha'] = pd.to_datetime(consolidado['Fecha'], errors='coerce', dayfirst=True)
+            consolidado = consolidado[consolidado['Fecha'].notna()]
+        # Eliminar duplicados usando las columnas disponibles
+        subset_dups = [c for c in ['Fecha', 'Descripción', 'Cargos (CLP)', 'Abonos (CLP)', 'Saldo (CLP)'] if c in consolidado.columns]
+        if subset_dups:
+            consolidado = consolidado.drop_duplicates(subset=subset_dups, keep='first')
+        else:
+            consolidado = consolidado.drop_duplicates(keep='first')
+        consolidado = consolidado.reset_index(drop=True)
+    except Exception as e:
+        print(f"⚠️  No se pudo construir consolidado de cuenta corriente: {str(e)}")
+        consolidado = pd.DataFrame()
+
+    return cargos, abonos, consolidado
 
 def convertir_fechas_a_datetime(df, columna_fecha='Fecha'):
     """

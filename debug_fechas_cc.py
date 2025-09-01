@@ -10,7 +10,7 @@ archivo_cc = "archivos_input/archivos_input_costos/cartola (4).xls"
 print(f"📄 Procesando archivo: {archivo_cc}")
 
 # Leer datos de cuenta corriente
-cargos, abonos = leer_cartola_cuenta_corriente(archivo_cc)
+cargos, abonos, consolidado = leer_cartola_cuenta_corriente(archivo_cc)
 
 print(f"\n📊 Cargos encontrados: {len(cargos)}")
 print(f"📊 Abonos encontrados: {len(abonos)}")
