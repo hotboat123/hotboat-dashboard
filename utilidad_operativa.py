@@ -26,6 +26,14 @@ except Exception:
     # Si no se puede reconfigurar, continuar sin forzar (evita romper stdout)
     pass
 
+# Config de utilidad operativa (toggle desde inputs_modelo.py)
+try:
+    from inputs_modelo import config_utilidad_operativa as _cfg_utilidad
+    IGNORAR_SUELDO_TOM_EN_COSTOS_FIJOS = bool(_cfg_utilidad.get('ignorar_sueldo_tom_en_costos_fijos', False))
+except Exception:
+    # Fallback seguro: activar por defecto si no se puede leer la config
+    IGNORAR_SUELDO_TOM_EN_COSTOS_FIJOS = True
+
 def cargar_gastos_marketing():
     """Cargar gastos de marketing desde archivos diarios de Meta y Google Ads.
 
@@ -173,6 +181,20 @@ def cargar_costos_fijos():
         costos_fijos['categoria_2'] = costos_fijos.get('Categoría_2', 'Sin subcategoría')
         costos_fijos['descripcion'] = costos_fijos.get('Descripción', 'Costo fijo')
         costos_fijos = costos_fijos.rename(columns={'Fecha': 'fecha', 'Monto': 'monto'})
+        
+        # Ajuste opcional: tratar "Sueldo Tom" como monto 0 en costos fijos
+        if IGNORAR_SUELDO_TOM_EN_COSTOS_FIJOS:
+            try:
+                mask_desc = costos_fijos['descripcion'].astype(str).str.contains('sueldo tom', case=False, na=False)
+                # Considerar también cuando viene por subcategoría
+                mask_cat2 = costos_fijos.get('categoria_2', '').astype(str).str.contains('sueldo tom', case=False, na=False) if 'categoria_2' in costos_fijos.columns else False
+                mask_sueldo_tom = mask_desc | mask_cat2
+                afectados = int(mask_sueldo_tom.sum())
+                if afectados > 0:
+                    costos_fijos.loc[mask_sueldo_tom, 'monto'] = 0
+                    print(f"   ✂️ Ajuste aplicado: {afectados} registro(s) 'Sueldo Tom' con monto=0")
+            except Exception as e:
+                print(f"   ⚠️ No se pudo aplicar ajuste 'Sueldo Tom': {e}")
         
         # Convertir fecha a datetime si no lo está
         costos_fijos['fecha'] = pd.to_datetime(costos_fijos['fecha'])

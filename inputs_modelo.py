@@ -327,3 +327,10 @@ config_procesamiento = {
     }
 }
 
+# Configuración para Utilidad Operativa
+# Permite activar/desactivar ajustes específicos de la consolidación
+config_utilidad_operativa = {
+    # Si True, en costos fijos se considera monto=0 cuando la descripción contiene "Sueldo Tom"
+    'ignorar_sueldo_tom_en_costos_fijos': True,
+}
+
