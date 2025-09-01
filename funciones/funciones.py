@@ -922,6 +922,36 @@ def eliminar_duplicados_priorizando_facturado(df):
         df.groupby(['Fecha', 'Cuotas'])['Origen']
           .transform(hay_conflicto)
     )
+    # Algunas filas pueden quedar con NaN en el transform (por claves con NaN).
+    # Rellenar con False para que el enmascarado no falle.
+    if conflicto_mask.isna().any():
+        conflicto_mask = conflicto_mask.fillna(False)
+
+    # Desde cero: antes de eliminar, transferir Categoría 1 y Categoría_2 del 'Mov. No Facturado'
+    # al/los 'Mov. Facturado' del mismo grupo (Fecha+Cuotas)
+    columnas_categorias = [c for c in ['Categoría 1', 'Categoría_2'] if c in df.columns]
+    if columnas_categorias:
+        sub_conf = df[conflicto_mask]
+        transferencias = 0
+        # Usar groupby sin dropna para compatibilidad amplia
+        for _, sub in sub_conf.groupby(['Fecha', 'Cuotas']):
+            origen_sub = sub['Origen'].astype(str)
+            es_nf = origen_sub.str.contains('Mov. No Facturado', na=False).fillna(False)
+            es_f = (origen_sub.str.contains('Mov. Facturado', na=False) & ~origen_sub.str.contains('No Facturado', na=False)).fillna(False)
+            if not es_nf.any() or not es_f.any():
+                continue
+            fila_src = sub[es_nf].iloc[0]
+            for tgt_idx in sub[es_f].index:
+                for col in columnas_categorias:
+                    val = fila_src[col] if col in fila_src else None
+                    if pd.notna(val) and str(val).strip() != '':
+                        df.at[tgt_idx, col] = val
+                        transferencias += 1
+        if transferencias:
+            try:
+                print(f"🔄 Transferidas {transferencias} categorías desde 'No Facturado' a 'Mov. Facturado' (antes de eliminar)")
+            except Exception:
+                pass
 
     # Filas a eliminar: aquellas en grupos con conflicto cuyo origen sea No Facturado
     eliminar_mask = conflicto_mask & df['Origen'].str.contains('No Facturado', na=False)

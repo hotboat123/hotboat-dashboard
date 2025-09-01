@@ -82,7 +82,7 @@
 247,"15/04/2025 17:00","Jacqueline Leon",Jacqueline.leon@usach.cl,+56988992341,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$125.982,$125.982,$0,Paid
 250,"21/04/2025 13:00","Monserrat Masferrer",Monserrat.masferrer9@gmail.com,+56958290613,RUKAPILLAN,"HotBoat Trip 3 people (54.990 pp)",WooCommerce,$164.970,$164.970,$0,Paid
 251,"21/04/2025 17:00","tania fernanda valdivia flores",fernandavaldiviaflores@gmail.com,954817242,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$139.980,$139.980,$0,Paid
-253,"30/05/2025 16:00","Michelle Montoya",mmontoyal@me.com,92138945,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$69.990,$69.990,"Paid (deposit)"
+253,"30/05/2025 16:00","Michelle Montoya",mmontoyal@me.com,92138945,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$139.980,$0,Paid
 255,"01/05/2025 12:00","Victoria Muñoz",Victoria.munozm@gmail.com,994021302,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$179.980,$179.980,$0,Paid
 259,"02/05/2025 15:00","Gonzalo Dinamarca",gdinamarca@dnmk.cl,+56968434887,RUKAPILLAN,"HotBoat Trip 4 people (44.990 pp)",WooCommerce,$197.964,$197.964,$0,Paid
 260,"23/05/2025 15:00","Kevin Rojas",kevin.rojasc.2310@gmail.com,+56945305519,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$139.980,$0,Paid
@@ -126,17 +126,24 @@
 349,"01/08/2025 15:00","Catalina Searovich",Catasearovichsant@gmail.com,+56935875875,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$159.980,$159.980,$0,Paid
 350,"31/07/2025 16:00","katherine ubillo recabal",katherince.ubillor@gmail.com,962230659,RUKAPILLAN,"HotBoat Trip 5 people (38.990 pp)","Pay in Person",$194.950,$194.950,$0,Paid
 351,"03/08/2025 16:00","Naiara Diaz Palma",naiaradiazp@gmail.com,+56942108353,RUKAPILLAN,"HotBoat Trip 5 people (38.990 pp)",WooCommerce,$194.950,$194.950,$0,Paid
-352,"23/08/2025 15:00","Catherine Roa",nose@gmail.com,111111111,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$139.980,$0,$139.980,Pending
+352,"23/08/2025 15:00","Catherine Roa",nose@gmail.com,111111111,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$118.983,$118.983,$0,Paid
 354,"02/08/2025 11:00","Fernanda Hagedorn",fernandalilianahp@gmail.com,+56951530653,RUKAPILLAN,"HotBoat Trip 5 people (38.990 pp)",WooCommerce,$194.950,$194.950,$0,Paid
 355,"26/09/2025 10:00","Jerry Toussaint",Jerrytoussaint111@gmail.com,+56953493670,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$199.980,$0,$199.980,Pending
 357,"03/08/2025 13:00","henry muñoz",munozgarceshenry33@gmail.com,+56972217728,RUKAPILLAN,"HotBoat Trip 7 people (29.990 pp)","Pay in Person",$209.930,$209.930,$0,Paid
 369,"15/08/2025 12:00","Consuelo Torres",Consuandrea.ts@gmail.com,+56940306149,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$139.980,$0,Paid
 370,"16/08/2025 13:00","Patricia Rodriguez Lopez",Patriciarodriguezlopez1981@gmail.com,+56958645600,RUKAPILLAN,"HotBoat Trip 4 people (44.990 pp)",WooCommerce,$179.960,$179.960,$0,Paid
-375,"02/09/2025 15:00","Maca Beato",mbeato705@gmail.com,976319777,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$159.980,$0,$159.980,Pending
 376,"15/08/2025 15:00","Elena Faúndez",elfaundez@gmail.com,+56995729389,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$139.980,$0,Paid
 377,"17/08/2025 15:00","Marcelo Nawrath",marcelonawrath94@gmail.com,+56975419427,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$153.978,$153.978,$0,Paid
 378,"01/10/2025 16:00","Mario Heredia",Mariogodoy1904@gmail.com,976413533,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$0,$139.980,Pending
 379,"17/08/2025 12:00","Varvara Solovyeva",zhhhh11@gmail.com,"9 6353 4211",RUKAPILLAN,"HotBoat Trip 4 people (44.990 pp)",WooCommerce,$179.960,$179.960,$0,Paid
 380,"19/09/2025 14:00","Diana Betanzo",Diana.betanzo@gmail.com,94026797,RUKAPILLAN,"HotBoat Trip 5 people (38.990 pp)",WooCommerce,$194.950,$0,$194.950,Pending
-381,"16/08/2025 16:00","Diego Valdebenito",ds.valdebenito@gmail.com,961334598,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$139.980,$139.980,$0,Paid
+381,"16/08/2025 16:00","Diego Valdebenito",ds.valdebenito@gmail.com,961334598,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$118.990,$119.000,$-10,Paid
 382,"18/08/2025 16:00","alexander alexander",gobets97@gmail.com,99670890,RUKAPILLAN,"HotBoat Trip 3 people (54.990 pp)","Pay in Person",$164.970,$164.970,$0,Paid
+386,"07/09/2025 18:00","Danitza Herrera",danitzah4910@gmail.com,"9 9735 3374",RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$169.980,$169.980,$0,Paid
+387,"23/08/2025 12:00","Benjamin Nagel",benjanagel@gmail.com,+56982305380,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$139.980,$0,Paid
+388,"05/09/2025 16:00","Alonso Novoa",Noseeviator@gmail.com,56975147588,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$139.980,$139.980,$0,Paid
+389,"16/09/2025 15:00","Claudio Araya",Opensky@gmail.com,977577307,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)","Pay in Person",$139.980,$0,$139.980,"Not paid"
+390,"26/09/2025 16:00","Denisse Contreras Leiva",denisse.fcaa@gmail.com,+56994758464,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$139.980,$0,$139.980,Pending
+391,"28/08/2025 10:00","Leandro Canales",Leandrocanales2003@gmail.com,+56951759193,RUKAPILLAN,"HotBoat Trip 7 people (29.990 pp)","Pay in Person",$154.000,$154.000,$0,Paid
+392,"31/08/2025 15:00","Ismael Norambuena",isma.norambuena@gmail.com,+56920738197,RUKAPILLAN,"HotBoat Trip 3 people (54.990 pp)",WooCommerce,$164.970,$164.970,$0,Paid
+396,"14/09/2025 16:00","Andrés Lores",andreslores96@gmail.com,+56989272694,RUKAPILLAN,"HotBoat Trip 2 people (69.990 pp)",WooCommerce,$213.978,$106.989,$106.989,"Paid (deposit)"
