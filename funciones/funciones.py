@@ -382,7 +382,7 @@ def limpiar_y_ordenar_dataframe(df):
     
     return df_ordenado
 
-def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None):
+def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None, df_final_sin_eliminaciones: pd.DataFrame | None = None):
     """
     Exporta los DataFrames a archivos CSV en el directorio especificado.
     
@@ -404,6 +404,16 @@ def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_o
         print(f"Error: No se puede escribir el archivo '{ruta_gastos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
     except Exception as e:
         print(f"Error inesperado al guardar gastos: {str(e)}")
+
+    # Exportar gastos SIN eliminaciones (opcional)
+    try:
+        if isinstance(df_final_sin_eliminaciones, pd.DataFrame) and not df_final_sin_eliminaciones.empty:
+            ruta_gastos_sin = os.path.join(directorio_salida, "gastos hotboat sin eliminaciones.csv")
+            df_final_sin_eliminaciones.to_csv(ruta_gastos_sin, index=False)
+    except PermissionError:
+        print(f"Error: No se puede escribir el archivo '{ruta_gastos_sin}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
+    except Exception as e:
+        print(f"Error inesperado al guardar gastos sin eliminaciones: {str(e)}")
     
     # Exportar abonos
     try:
@@ -1517,6 +1527,7 @@ def procesar_df_final(
     df_banco_chile_no_facturado_nacional,
     df_cuenta_corriente_cargos,
     config: dict | None = None,
+    skip_eliminaciones: bool = False,
 ):
 
     # Cargar configuración de gastos desde config si se proporcionó
@@ -1552,10 +1563,14 @@ def procesar_df_final(
     
     # Concatenar todos los DataFrames con la columna "Origen"
     df_final = pd.concat(dataframes_con_origen, ignore_index=True, sort=False) if dataframes_con_origen else pd.DataFrame()
-    df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
-    df_final = eliminar_filas_por_fecha_monto(df_final, eliminaciones_fecha_monto)
-    # Nueva: eliminar por fecha + descripción contiene
-    df_final = eliminar_filas_por_fecha_descripcion(df_final, eliminaciones_fecha_descripcion)
+    # Eliminaciones configurables
+    if not skip_eliminaciones:
+        df_final = eliminar_filas_por_descripcion(df_final, descripciones_a_eliminar)
+        df_final = eliminar_filas_por_fecha_monto(df_final, eliminaciones_fecha_monto)
+        # Nueva: eliminar por fecha + descripción contiene
+        df_final = eliminar_filas_por_fecha_descripcion(df_final, eliminaciones_fecha_descripcion)
+    else:
+        print("⏭️ Omitiendo eliminaciones por descripción, fecha+monto y fecha+descripción (consolidado sin eliminaciones)")
     
     # Convertir fechas a datetime usando la nueva función
     df_final = convertir_fechas_a_datetime(df_final, 'Fecha')
@@ -2211,6 +2226,18 @@ def procesar_archivos_financieros(
         datos_consolidados['cuenta_corriente_cargos'],
         config=config,
     )
+
+    # Generar versión SIN eliminaciones
+    df_final_sin_eliminaciones = procesar_df_final(
+        datos_consolidados['banco_estado_cargos'],
+        datos_consolidados['banco_chile_facturado_internacional'],
+        datos_consolidados['banco_chile_facturado_nacional'],
+        datos_consolidados['banco_chile_no_facturado_internacional'],
+        datos_consolidados['banco_chile_no_facturado_nacional'],
+        datos_consolidados['cuenta_corriente_cargos'],
+        config=config,
+        skip_eliminaciones=True,
+    )
     
     # Procesar abonos: obtener por separado
     df_abonos_cta_cte, df_abonos_banco_estado = procesar_abonos(datos_consolidados, config=config)
@@ -2234,7 +2261,8 @@ def procesar_archivos_financieros(
             df_final,
             df_abonos_cta_cte,
             directorio_output,
-            datos_consolidados.get('cuenta_corriente_consolidado', pd.DataFrame())
+            datos_consolidados.get('cuenta_corriente_consolidado', pd.DataFrame()),
+            df_final_sin_eliminaciones
         )
         
 
@@ -2244,6 +2272,8 @@ def procesar_archivos_financieros(
         print(f"   ✅ Archivos procesados: {archivos_procesados}")
         print(f"   ❌ Archivos con error: {archivos_con_error}")
         print(f"   📈 Gastos totales: {len(df_final)} registros")
+        if isinstance(df_final_sin_eliminaciones, pd.DataFrame):
+            print(f"   📈 Gastos sin eliminaciones: {len(df_final_sin_eliminaciones)} registros")
         print(f"   💰 Abonos totales: {len(df_abonos)} registros")
 
         return True
