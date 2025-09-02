@@ -53,17 +53,40 @@ def escalar_demanda(demanda_base: Dict[str, int], factor: float) -> Dict[str, in
 
 
 def resumen_ingreso_ayudante_por_mes(df_cost_op: pd.DataFrame) -> pd.DataFrame:
-    """Filtra pagos del ayudante y resume por mes calendario (YYYY-MM)."""
+    """Filtra pagos del ayudante y resume por mes calendario (YYYY-MM).
+    Devuelve columnas: mes, total_pagado, ayudantes_totales, pago_unitario_promedio, ingreso_por_ayudante_promedio
+    """
     if df_cost_op is None or df_cost_op.empty:
-        return pd.DataFrame(columns=["mes", "ingreso_ayudante"])
+        return pd.DataFrame(columns=["mes", "total_pagado", "ayudantes_totales", "pago_unitario_promedio", "ingreso_por_ayudante_promedio"])
     df = df_cost_op.copy()
     df = df[(df["descripcion"].astype(str).str.lower() == "pago extra ayudante (diario)")]
     if df.empty:
-        return pd.DataFrame(columns=["mes", "ingreso_ayudante"])
+        return pd.DataFrame(columns=["mes", "total_pagado", "ayudantes_totales", "pago_unitario_promedio", "ingreso_por_ayudante_promedio"])
     df["mes"] = pd.to_datetime(df["fecha"]).dt.to_period("M").astype(str)
-    res = df.groupby("mes", as_index=False)["monto"].sum().rename(columns={"monto": "ingreso_ayudante"})
-    res = res.sort_values("mes")
-    return res
+    # Asegurar columnas nuevas existen
+    if "ayudantes_pagados" not in df.columns:
+        df["ayudantes_pagados"] = 1
+    if "pago_unitario" not in df.columns:
+        # Si no existe, derivar unitario como monto (asumiendo 1 ayudante)
+        df["pago_unitario"] = df["monto"]
+    # Resumen total por mes
+    agg = df.groupby("mes", as_index=False).agg(
+        total_pagado=("monto", "sum"),
+        ayudantes_totales=("ayudantes_pagados", "sum"),
+        pago_unitario_promedio=("pago_unitario", "mean"),
+    )
+    agg["ingreso_por_ayudante_promedio"] = agg.apply(
+        lambda r: (r["total_pagado"] / r["ayudantes_totales"]) if r["ayudantes_totales"] not in (0, None) else 0.0,
+        axis=1,
+    )
+    # Breakdown por ayudante (1..N) dentro del mes
+    if "ayudante" in df.columns:
+        detalle = df.groupby(["mes", "ayudante"], as_index=False)["monto"].sum().rename(columns={"monto": "ingreso_ayudante"})
+        # Pivot opcional para mostrar columnas ayudante_1, ayudante_2, ...
+        pivot = detalle.pivot(index="mes", columns="ayudante", values="ingreso_ayudante").fillna(0.0)
+        pivot.columns = [f"ayudante_{int(c)}" for c in pivot.columns]
+        agg = agg.merge(pivot.reset_index(), on="mes", how="left")
+    return agg.sort_values("mes")
 
 
 def resumen_utilidad_operativa_mensual(
@@ -121,20 +144,18 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
         if resumen.empty:
             print("ℹ️  No hay pagos al ayudante en este escenario")
         else:
-            try:
-                num_ayudantes = int(getattr(cfg, 'numero_ayudantes', 1))
-            except Exception:
-                num_ayudantes = 1
-            if num_ayudantes > 1:
-                print(f"👷 Ingreso mensual total de {num_ayudantes} ayudantes (mismo pago cada uno):")
-            else:
-                print("👷 Ingreso mensual del ayudante:")
+            print("👷 Pagos a ayudantes por mes:")
             for _, row in resumen.iterrows():
-                if num_ayudantes > 1:
-                    por_ayudante = row['ingreso_ayudante'] / num_ayudantes
-                    print(f"  - {row['mes']}: total ${row['ingreso_ayudante']:,.0f} (≈ ${por_ayudante:,.0f} c/u)")
-                else:
-                    print(f"  - {row['mes']}: ${row['ingreso_ayudante']:,.0f}")
+                total = row.get('total_pagado', 0.0)
+                ayud_tot = int(row.get('ayudantes_totales', 0) or 0)
+                unit_prom = row.get('pago_unitario_promedio', 0.0)
+                por_ayud = row.get('ingreso_por_ayudante_promedio', 0.0)
+                print(f"  - {row['mes']}: total ${total:,.0f} | ayudantes {ayud_tot} | unitario prom. ${unit_prom:,.0f} | por ayudante prom. ${por_ayud:,.0f}")
+                # Mostrar detalle por ayudante si existe
+                cols_det = [c for c in row.index if str(c).startswith('ayudante_')]
+                if cols_det:
+                    detalle_txt = ", ".join([f"{c.replace('ayudante_', 'ayudante ')}: ${row[c]:,.0f}" for c in cols_det])
+                    print(f"      Detalle → {detalle_txt}")
 
         # Utilidad total mensual y total (incluye costos fijos y marketing)
         uo = resumen_utilidad_operativa_mensual(df_ing, df_cost_op, df_mark, df_fijos)
@@ -162,6 +183,18 @@ def main() -> bool:
         })
     except Exception:
         escenarios = {'pesimista': 0.5, 'normal': 1.0, 'optimista': 1.5}
+
+    # Chequear flag para ejecutar escenarios
+    try:
+        ejecutar = bool(getattr(cfg, 'ejecutar_escenarios_demanda', True))
+    except Exception:
+        ejecutar = True
+    if not ejecutar:
+        factor_normal = float(escenarios.get('normal', 1.0))
+        print("ℹ️ ejecutar_escenarios_demanda=False → se ejecutará solo el escenario 'normal'.")
+        ejecutar_escenario('normal', factor_normal)
+        print("\n✅ Escenario 'normal' completado")
+        return True
 
     base = getattr(cfg, 'demanda_por_mes', None)
     if not isinstance(base, dict) or len(base) == 0:

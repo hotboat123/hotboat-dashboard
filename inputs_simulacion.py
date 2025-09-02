@@ -58,10 +58,10 @@ demanda_por_mes = {
 }
 
 # Ingreso promedio por cliente (CLP)
-ticket_promedio = 144848
+ticket_promedio = 160_000
 
 # Costo operativo por cada reserva (CLP)
-costo_variable_por_reserva = 45_000
+costo_variable_por_reserva = 45_000 #no se usa
 
 # Desglose opcional del costo operativo por reserva.
 # Si se activa y se define el dict, se generará una fila por componente por cada reserva.
@@ -77,21 +77,29 @@ costo_operativo_detalle_por_reserva = {
 usar_pago_ayudante_escalonado = True
 # Lista de tuplas: (cantidad_reservas, pago_diario)
 pago_ayudante_escalas = [
-    (1, 25_000),
+    (1, 20_000),
     (2, 40_000),
     (3, 55_000),
-    (4, 65_000),
-    (5, 80_000),
+    (4, 70_000),
+    (5, 85_000),
     (6, 95_000),
     (7, 105_000),
 ]
 # Si hay más reservas que el mayor umbral, se usa el último monto de la lista
 
+# Escala especial cuando hay exactamente 1 cliente en el día y solo se necesita 1 ayudante.
+# Si está definida y no vacía, en días con 1 reserva se usará esta escala en vez de `pago_ayudante_escalas`
+# y se pagará a 1 solo ayudante (ignora `numero_ayudantes` ese día).
+# Formato: lista de tuplas (cantidad_reservas, pago_diario). Normalmente basta con (1, monto).
+pago_ayudante_escalas_solitario = [
+    (1, 25_000),  # ejemplo: con 1 cliente, pagar $30.000 a 1 ayudante
+]
+
 # Número de ayudantes (cada uno recibe el pago según la escala)
 numero_ayudantes = 2
 
 # Gasto de marketing mensual (CLP)
-gasto_marketing_mensual = 484_940
+gasto_marketing_mensual = 300_000
 
 # Costo fijo mensual (CLP)
 costo_fijo_mensual = 456_926
@@ -139,7 +147,7 @@ random_seed = 48
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
 tasa_crecimiento_anual = 0.10  # 20%
-simular_hasta_anio = 2030 # Generar datos hasta este año (inclusive)
+simular_hasta_anio = 2026 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 
 # Escenarios de simulación de demanda (multiplicadores)
@@ -149,6 +157,10 @@ escenarios_demanda = {
     'normal': 1.0,
     'optimista': 1.5,
 }
+
+# Control para ejecutar (o no) el simulador de escenarios (pesimista/normal/optimista)
+# Si es False, el script simular_escenarios_utilidad.py saldrá sin ejecutar escenarios
+ejecutar_escenarios_demanda = False
 
 #Configuración en inputs_simulacion.py (opcional):
 optimizar_pagos_config = {
@@ -163,5 +175,5 @@ optimizar_pagos_config = {
 # Aleatoriedad de demanda mensual (uniforme alrededor de la media definida)
 # Si activas `usar_aleatoriedad_demanda`, por cada mes se muestrea una demanda
 # desde Uniforme([(1-rango)*demanda, (1+rango)*demanda]) y se redondea a entero.
-usar_aleatoriedad_demanda = True
+usar_aleatoriedad_demanda = False
 demanda_uniforme_rango_pct = 0.20  # 20% → [0.8x, 1.2x]

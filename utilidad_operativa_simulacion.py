@@ -258,6 +258,21 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 })
             id_counter += 1
 
+        # Resumen semanal de demanda (por semana calendario Lun-Dom)
+        try:
+            if len(fechas) > 0:
+                from collections import defaultdict
+                semanas = defaultdict(lambda: [0, 0, 0, 0, 0, 0, 0])
+                for f in fechas:
+                    d = f.date()
+                    week_start = d - timedelta(days=d.weekday())  # lunes de esa semana
+                    semanas[week_start][d.weekday()] += 1
+                for semana_inicio in sorted(semanas.keys()):
+                    conteos = tuple(semanas[semana_inicio])
+                    print(f"semana ({semana_inicio.day}/{semana_inicio.month}/{semana_inicio.year}): {conteos}")
+        except Exception:
+            pass
+
         # Pago ayudante escalonado por día (una fila por día)
         try:
             usar_escalonado = bool(getattr(cfg, 'usar_pago_ayudante_escalonado', False))
@@ -275,30 +290,47 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
 
             for dia, cantidad in conteo_por_dia.items():
-                # determinar pago según la escala
+                # Regla de ayudantes por día:
+                # - 1 cliente => 1 ayudante (usa escala solitario si existe)
+                # - >1 clientes => 2 ayudantes (usa escala general)
                 pago = 0
-                for umbral, monto in escalas_sorted:
-                    if cantidad >= umbral:
-                        pago = monto
-                    else:
-                        break
-                if pago == 0 and escalas_sorted:
-                    pago = escalas_sorted[0][1]
-
-                # Multiplicar por la cantidad de ayudantes
+                num_ayudantes_dia = 1 if cantidad == 1 else (2 if cantidad > 1 else 0)
                 try:
-                    num_ayudantes = int(getattr(cfg, 'numero_ayudantes', 1))
+                    escalas_solitario = list(getattr(cfg, 'pago_ayudante_escalas_solitario', []) or [])
+                    escalas_solitario_sorted = sorted(escalas_solitario, key=lambda x: x[0])
                 except Exception:
-                    num_ayudantes = 1
-                monto_total_ayudantes = float(pago) * max(1, num_ayudantes)
+                    escalas_solitario_sorted = []
 
-                registros_costos_op.append({
-                    'fecha': datetime(dia.year, dia.month, dia.day, 20, 0, 0),
-                    'email': cfg.email_placeholder,
-                    'id_reserva': None,
-                    'descripcion': 'pago extra ayudante (diario)',
-                    'monto': monto_total_ayudantes,
-                })
+                if cantidad == 1 and len(escalas_solitario_sorted) > 0:
+                    for umbral, monto in escalas_solitario_sorted:
+                        if cantidad >= umbral:
+                            pago = monto
+                        else:
+                            break
+                    if pago == 0:
+                        pago = escalas_solitario_sorted[0][1]
+                else:
+                    for umbral, monto in escalas_sorted:
+                        if cantidad >= umbral:
+                            pago = monto
+                        else:
+                            break
+                    if pago == 0 and escalas_sorted:
+                        pago = escalas_sorted[0][1]
+
+                # Registrar una fila por ayudante para poder sumar por ayudante en el mes
+                num = max(0, int(num_ayudantes_dia))
+                for ayud_idx in range(1, num + 1):
+                    registros_costos_op.append({
+                        'fecha': datetime(dia.year, dia.month, dia.day, 20, 0, 0),
+                        'email': cfg.email_placeholder,
+                        'id_reserva': None,
+                        'descripcion': 'pago extra ayudante (diario)',
+                        'monto': float(pago),
+                        'ayudantes_pagados': int(num_ayudantes_dia),
+                        'pago_unitario': float(pago),
+                        'ayudante': ayud_idx,
+                    })
 
         # Gastos de marketing mensuales (1 registro al último día del mes)
         y, m = map(int, yyyy_mm.split('-'))
