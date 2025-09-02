@@ -9,6 +9,7 @@ PATH_CC = os.path.join(OUTPUT_DIR, 'cuenta_corriente_consolidado.csv')
 PATH_ABONOS = os.path.join(OUTPUT_DIR, 'abonos hotboat cta cte.csv')
 PATH_GASTOS = os.path.join(OUTPUT_DIR, 'gastos hotboat.csv')
 PATH_CASHFLOW = os.path.join(OUTPUT_DIR, 'cashflow_mensual.csv')
+PATH_CASHFLOW_FORMAT = os.path.join(OUTPUT_DIR, 'cashflow_mensual_formato.csv')
 
 
 def read_csv_safe(path: str) -> pd.DataFrame:
@@ -234,6 +235,112 @@ def build_cashflow(cc_bal: pd.DataFrame, abonos: pd.DataFrame, gastos: pd.DataFr
     return df[final_cols]
 
 
+def _series_from(df: pd.DataFrame, key_col: str, value_col: str) -> dict:
+    if df is None or df.empty or key_col not in df.columns or value_col not in df.columns:
+        return {}
+    s = df.set_index(key_col)[value_col]
+    try:
+        s = pd.to_numeric(s, errors='coerce')
+    except Exception:
+        pass
+    return s.fillna(0).to_dict()
+
+
+def _sorted_months(*dfs: pd.DataFrame) -> list:
+    meses = set()
+    for df in dfs:
+        if isinstance(df, pd.DataFrame) and not df.empty and 'Mes' in df.columns:
+            meses.update(df['Mes'].dropna().astype(str).tolist())
+    if not meses:
+        return []
+    try:
+        return sorted(list(meses), key=lambda m: pd.to_datetime(m + '-01'))
+    except Exception:
+        return sorted(list(meses))
+
+
+def build_cashflow_statement_formatted(cc_bal: pd.DataFrame, abonos: pd.DataFrame, gastos: pd.DataFrame) -> pd.DataFrame:
+    """
+    Construye un estado de flujo de caja mensual en formato de filas=partidas y columnas=meses,
+    separando Operating (OPEX), Investing (CAPEX) y Financing, manteniendo el orden del ejemplo.
+    """
+    meses = _sorted_months(cc_bal, abonos, gastos)
+    if not meses:
+        return pd.DataFrame()
+
+    # Series por mes
+    beg = _series_from(cc_bal, 'Mes', 'Beginning_Balance')
+    end = _series_from(cc_bal, 'Mes', 'Ending_Balance')
+
+    ingresos_op = _series_from(abonos, 'Mes', 'Ingresos_Operativos')
+    inversiones = _series_from(abonos, 'Mes', 'Inversiones')
+    otros_ing = _series_from(abonos, 'Mes', 'Otros_Ingresos')
+
+    fijos = _series_from(gastos, 'Mes', 'Costos_Fijos')
+    variables = _series_from(gastos, 'Mes', 'Costos_Variables')
+    marketing = _series_from(gastos, 'Mes', 'Marketing')
+    capex = _series_from(gastos, 'Mes', 'CAPEX')
+
+    # Helpers para obtener valor por mes con default 0
+    g = lambda d, m: float(d.get(m, 0.0))
+    gb = lambda m: beg.get(m, pd.NA)
+    ge = lambda m: end.get(m, pd.NA)
+
+    # Precalcular subtotales por mes
+    net_op = {m: g(ingresos_op, m) - (g(fijos, m) + g(variables, m) + g(marketing, m)) for m in meses}
+    net_inv = {m: -g(capex, m) for m in meses}
+    net_fin = {m: g(inversiones, m) + g(otros_ing, m) for m in meses}
+    net_change = {m: net_op[m] + net_inv[m] + net_fin[m] for m in meses}
+
+    # Ending balance por flujo (si no hay ending real, usar beginning + net_change)
+    ending_flow = {}
+    for m in meses:
+        if pd.notna(ge(m)):
+            ending_flow[m] = ge(m)
+        elif pd.notna(gb(m)):
+            try:
+                ending_flow[m] = float(gb(m)) + net_change[m]
+            except Exception:
+                ending_flow[m] = pd.NA
+        else:
+            ending_flow[m] = pd.NA
+
+    # Armar tabla
+    filas = [
+        ('Beginning Balance', lambda m: gb(m)),
+        ('Operating Activities', None),
+        ('Cash Receipts from Customers', lambda m: g(ingresos_op, m)),
+        ('Cash Paid - Fixed Costs', lambda m: -g(fijos, m)),
+        ('Cash Paid - Variable Costs', lambda m: -g(variables, m)),
+        ('Cash Paid - Marketing', lambda m: -g(marketing, m)),
+        ('Net Cash Flow from Operating Activities', lambda m: net_op[m]),
+        ('Investing Activities', None),
+        ('Purchase of Property, Plant & Equipment', lambda m: -g(capex, m)),
+        ('Net Cash Flow from Investing Activities', lambda m: net_inv[m]),
+        ('Financing Activities', None),
+        ('Issuance of Common Stock', lambda m: g(inversiones, m)),
+        ('Other Financing Inflows', lambda m: g(otros_ing, m)),
+        ('Net Cash Flow from Financing Activities', lambda m: net_fin[m]),
+        ('Net Cash Increase/Decrease in Cash', lambda m: net_change[m]),
+        ('Ending Cash Balance', lambda m: ending_flow[m]),
+    ]
+
+    data = {'Particulars': []}
+    for m in meses:
+        data[m] = []
+
+    for label, fn in filas:
+        data['Particulars'].append(label)
+        for m in meses:
+            if fn is None:
+                data[m].append('')  # filas de título de sección
+            else:
+                data[m].append(fn(m))
+
+    df_stmt = pd.DataFrame(data)
+    return df_stmt
+
+
 def main():
     print("📊 Generando cashflow mensual...")
 
@@ -256,6 +363,17 @@ def main():
         print(f"✅ Cashflow mensual exportado a: {PATH_CASHFLOW}")
     except Exception as e:
         print(f"❌ Error exportando cashflow: {str(e)}", file=sys.stderr)
+
+    # Construir formato tipo estado de flujo (filas=partidas, columnas=meses)
+    stmt = build_cashflow_statement_formatted(balances, abonos_m, gastos_m)
+    if stmt is None or stmt.empty:
+        print("⚠️ No se pudo construir el cashflow en formato de estado (datos insuficientes)")
+        return
+    try:
+        stmt.to_csv(PATH_CASHFLOW_FORMAT, index=False)
+        print(f"✅ Cashflow mensual (formato estado) exportado a: {PATH_CASHFLOW_FORMAT}")
+    except Exception as e:
+        print(f"❌ Error exportando cashflow formato: {str(e)}", file=sys.stderr)
 
 
 if __name__ == '__main__':

@@ -98,7 +98,7 @@ diccionario_categorias_gastos = {
 # Diccionario de categorías 1 para GASTOS
 diccionario_categoria_1_gastos = {
     "Costos Fijos": [
-        "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", "Sueldo Tom"
+        "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", 
     ],
     "Costos Variables": [
         "Gas", "Combustible", "Edicion videos","remuneraciones", "leña", "Stock tablas y bebidas" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
@@ -114,7 +114,10 @@ diccionario_categoria_1_gastos = {
     ],
     "Inversión General": [
         "Branding", "Logo", "Sitio web", "Diseño", "Asesoría", "Ferretería", "Compras internacionales", "Mantención Vehículo", "Mano obra HotBoat otros", "Mano obra HotBoat daniel", "Intereses", "Mantención HotBoat"
-    ]
+    ],
+    "Sueldo Tom": [
+        "Sueldo Tom"
+    ],
 }
 
 # Deudas manuales por compras en cuotas (input explícito)
