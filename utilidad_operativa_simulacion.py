@@ -115,6 +115,73 @@ def generar_fechas_para_mes(yyyy_mm: str, cantidad: int) -> list:
     return fechas
 
 
+def generar_fechas_para_mes_por_semana(yyyy_mm: str, demanda_semanal: list) -> list:
+    """Distribuye las reservas según vector semanal [w1, w2, ...].
+    Las semanas se basan en el calendario (lunes a domingo) usando calendar.monthcalendar.
+    Puede haber 4, 5 o 6 semanas en un mes; si entregas menos valores de los necesarios, se avisa por consola.
+    """
+    try:
+        year, month = map(int, yyyy_mm.split('-'))
+    except Exception:
+        return []
+    # Construir semanas reales del mes (lunes-domingo)
+    import calendar as _cal
+    weeks_matrix = _cal.monthcalendar(year, month)  # cada fila: [lun..dom], 0 = día fuera de mes
+    semanas_dias = []
+    for week in weeks_matrix:
+        dias_semana = []
+        for idx, day in enumerate(week):
+            if day > 0:
+                dias_semana.append(datetime(year, month, day).date())
+        if dias_semana:
+            semanas_dias.append(dias_semana)
+
+    num_semanas = len(semanas_dias)
+    counts = list(demanda_semanal or [])
+    if len(counts) < num_semanas:
+        print(f"⚠️  {yyyy_mm} tiene {num_semanas} semanas, pero entregaste {len(counts)} valores. Agrega el/los faltante(s).")
+        # Rellenar con 0 para continuar
+        counts = counts + [0] * (num_semanas - len(counts))
+    elif len(counts) > num_semanas:
+        print(f"ℹ️  {yyyy_mm}: se entregaron {len(counts)} valores, pero el mes tiene {num_semanas} semanas. Se ignorarán los extras.")
+        counts = counts[:num_semanas]
+
+    fechas = []
+    for idx in range(len(semanas_dias)):
+        dias = semanas_dias[idx]
+        cantidad = int(counts[idx]) if idx < len(counts) else 0
+        if cantidad <= 0 or len(dias) == 0:
+            continue
+        # Respetar ratio semana/fin de semana dentro de la semana
+        dias_sem = [d for d in dias if d.weekday() < 5]
+        dias_fin = [d for d in dias if d.weekday() >= 5]
+        cant_sem, cant_fin = _calcular_asignacion_semana_finde(yyyy_mm, cantidad)
+        fechas_sem = _asignar_aleatorio_en_dias(dias_sem, cant_sem, year, month, hora=12)
+        fechas_fin = _asignar_aleatorio_en_dias(dias_fin, cant_fin, year, month, hora=12)
+        fechas.extend(fechas_sem)
+        fechas.extend(fechas_fin)
+    fechas = sorted(fechas)
+    # Debug: mostrar asignación por semana
+    try:
+        asignadas_por_semana = []
+        for dias in semanas_dias:
+            dias_set = set(dias)
+            count = sum(1 for fdt in fechas if fdt.date() in dias_set)
+            asignadas_por_semana.append(count)
+        total_entregadas = sum(int(x) for x in counts)
+        total_asignadas = sum(asignadas_por_semana)
+        semanas_txt = ", ".join([
+            f"[{dias[0].strftime('%d/%m')}–{dias[-1].strftime('%d/%m')}]" if len(dias) > 0 else "[]"
+            for dias in semanas_dias
+        ])
+        print(f"🧮 {yyyy_mm}: semanas={num_semanas} ({semanas_txt}) | entregadas={counts} (total={total_entregadas}) | asignadas={asignadas_por_semana} (total={total_asignadas})")
+        if total_asignadas != total_entregadas:
+            print(f"‼️ {yyyy_mm}: MISMATCH total entregadas vs asignadas. Revisa el vector semanal o reporta este mensaje.")
+    except Exception:
+        pass
+    return fechas
+
+
 def generar_demanda_expandida() -> dict:
     """Devuelve un diccionario YYYY-MM -> demanda, expandiendo a años futuros si está habilitado.
     - No sobrescribe meses existentes salvo que cfg.sobrescribir_demanda_existente_con_crecimiento sea True.
@@ -149,7 +216,26 @@ def generar_demanda_expandida() -> dict:
             y, m = map(int, key.split('-'))
         except Exception:
             continue
-        base_val = int(demanda_base[key])
+        base_val_raw = demanda_base[key]
+        # Soportar demanda como entero o lista semanal
+        if isinstance(base_val_raw, (list, tuple)):
+            try:
+                base_vec = [int(x) for x in list(base_val_raw)]
+            except Exception:
+                base_vec = [0]
+            # Generar para cada año aplicando crecimiento a cada elemento
+            for year in range(y + 1, hasta_anio + 1):
+                new_key = f"{year:04d}-{m:02d}"
+                years_elapsed = year - y
+                factor = ((1.0 + tasa) ** years_elapsed)
+                new_vec = [max(0, int(round(v * factor))) for v in base_vec]
+                if new_key in demanda_base and not sobrescribir:
+                    continue
+                demanda_base[new_key] = new_vec
+                added += 1
+            continue
+        else:
+            base_val = int(base_val_raw)
         # Generar años siguientes
         for year in range(y + 1, hasta_anio + 1):
             new_key = f"{year:04d}-{m:02d}"
@@ -191,6 +277,9 @@ def aplicar_aleatoriedad_demanda(demanda_map: dict) -> dict:
 
     salida = dict(demanda_map)
     for k, v in list(salida.items()):
+        # Solo aplicar aleatoriedad a demandas enteras; listas semanales se respetan
+        if isinstance(v, (list, tuple)):
+            continue
         try:
             base = float(v)
             low = max(0.0, (1.0 - rango) * base)
@@ -211,10 +300,20 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
     id_counter = cfg.id_reserva_base
 
     demanda_map = generar_demanda_expandida()
+    # Aleatoriedad solo si los valores son enteros; listas semanales se preservan
     demanda_map = aplicar_aleatoriedad_demanda(demanda_map)
+    # Log de entrada para verificar formatos
+    try:
+        ejemplo = {k: (v if isinstance(v, int) else list(v) if isinstance(v, (list, tuple)) else v) for k, v in list(demanda_map.items())[:3]}
+        print(f"📥 Demanda (muestra): {ejemplo}")
+    except Exception:
+        pass
     for yyyy_mm in sorted((demanda_map or {}).keys()):
         demanda = demanda_map[yyyy_mm]
-        fechas = generar_fechas_para_mes(yyyy_mm, int(demanda))
+        if isinstance(demanda, (list, tuple)):
+            fechas = generar_fechas_para_mes_por_semana(yyyy_mm, list(demanda))
+        else:
+            fechas = generar_fechas_para_mes(yyyy_mm, int(demanda))
         # Resumen por mes: semana vs fin de semana
         try:
             semana_count = sum(1 for f in fechas if f.weekday() < 5)

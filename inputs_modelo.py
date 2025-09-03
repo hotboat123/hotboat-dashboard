@@ -60,7 +60,7 @@ diccionario_categorias_gastos = {
         "aguirre paillale", "Axel Aguirre", "Nestor", "Francisco godoy"
     ],
     "Sueldo Tom": [
-        "Tomas", "Prex"
+        "Tomas Andreas", "Prex"
     ],
     "Beneficios HotBoat": [
         "Felipe Hidalgo", 

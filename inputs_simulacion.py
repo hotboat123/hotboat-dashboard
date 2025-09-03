@@ -38,7 +38,7 @@ Puedes agregar tantos meses como quieras en el diccionario demanda_por_mes.
 
 demanda_por_mes = {
     # Nuevas demandas para probar:
-    '2025-08': 16,
+    '2025-08': [1,3,4,5,5],
     '2025-09': 25,
     '2025-10': 15,
     '2025-11': 20,

@@ -38,17 +38,33 @@ except Exception as e:
     raise
 
 
-def escalar_demanda(demanda_base: Dict[str, int], factor: float) -> Dict[str, int]:
-    """Devuelve un nuevo dict YYYY-MM -> demanda escalada por `factor` (redondeo a entero)."""
-    escalada: Dict[str, int] = {}
+def escalar_demanda(demanda_base: Dict[str, object], factor: float) -> Dict[str, object]:
+    """Escala la demanda por `factor`.
+    - Si el valor es entero, escala a entero redondeado.
+    - Si el valor es lista/tupla (semanal), escala cada elemento y redondea.
+    """
+    escalada: Dict[str, object] = {}
+    f = float(factor)
     for k, v in (demanda_base or {}).items():
-        try:
-            val = int(round(float(v) * float(factor)))
-        except Exception:
-            val = 0
-        if val < 0:
-            val = 0
-        escalada[k] = val
+        if isinstance(v, (list, tuple)):
+            nueva = []
+            for x in list(v):
+                try:
+                    val = int(round(float(x) * f))
+                except Exception:
+                    val = 0
+                if val < 0:
+                    val = 0
+                nueva.append(val)
+            escalada[k] = nueva
+        else:
+            try:
+                val = int(round(float(v) * f))
+            except Exception:
+                val = 0
+            if val < 0:
+                val = 0
+            escalada[k] = val
     return escalada
 
 
@@ -141,6 +157,16 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
         df_ing, df_cost_op, df_mark, df_fijos = sim.construir_ingresos_y_costos_simulados()
         # Mostrar resumen mensual de ayudante
         resumen = resumen_ingreso_ayudante_por_mes(df_cost_op)
+        # Contar reservas por mes
+        reservas_por_mes = {}
+        try:
+            if df_ing is not None and not df_ing.empty:
+                dcnt = df_ing.copy()
+                dcnt["mes"] = pd.to_datetime(dcnt["fecha"]).dt.to_period("M").astype(str)
+                gcnt = dcnt.groupby("mes", as_index=False)["fecha"].count().rename(columns={"fecha": "reservas_mes"})
+                reservas_por_mes = {r["mes"]: int(r["reservas_mes"]) for _, r in gcnt.iterrows()}
+        except Exception:
+            reservas_por_mes = {}
         if resumen.empty:
             print("ℹ️  No hay pagos al ayudante en este escenario")
         else:
@@ -150,7 +176,8 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
                 ayud_tot = int(row.get('ayudantes_totales', 0) or 0)
                 unit_prom = row.get('pago_unitario_promedio', 0.0)
                 por_ayud = row.get('ingreso_por_ayudante_promedio', 0.0)
-                print(f"  - {row['mes']}: total ${total:,.0f} | ayudantes {ayud_tot} | unitario prom. ${unit_prom:,.0f} | por ayudante prom. ${por_ayud:,.0f}")
+                reservas_mes = reservas_por_mes.get(row['mes'], 0)
+                print(f"  - {row['mes']}: total ${total:,.0f} | reservas {reservas_mes} | Total servicio ayudantes {ayud_tot} | Costo total remuneracion prom. ${unit_prom:,.0f} | Ganancia promedio ayudantes: ${por_ayud:,.0f}")
                 # Mostrar detalle por ayudante si existe
                 cols_det = [c for c in row.index if str(c).startswith('ayudante_')]
                 if cols_det:
