@@ -38,8 +38,8 @@ Puedes agregar tantos meses como quieras en el diccionario demanda_por_mes.
 
 demanda_por_mes = {
     # Nuevas demandas para probar:
-    '2025-08': [1,3,4,5,5],
-    '2025-09': 25,
+    '2025-08': [3,2,4,5,5],
+    '2025-09': 20,
     '2025-10': 15,
     '2025-11': 20,
     '2025-12': 25,
@@ -133,9 +133,7 @@ ratio_semana_finde_por_mes = {
     # '2026-01': (0, 5),  # ejemplo: marzo con 2:5
 }
 
-# Ratio por defecto si no se especifica uno por mes
-ratio_semana_finde_default = (3, 4)  # 3 en semana, 4 en fin de semana (aprox 43% semana / 57% finde)
-
+#
 # Semilla opcional para reproducibilidad de la asignación aleatoria de días
 # Establécela a un entero (por ejemplo 42) para resultados reproducibles; déjala en None para aleatorio puro
 random_seed = 48
@@ -177,3 +175,208 @@ optimizar_pagos_config = {
 # desde Uniforme([(1-rango)*demanda, (1+rango)*demanda]) y se redondea a entero.
 usar_aleatoriedad_demanda = False
 demanda_uniforme_rango_pct = 0.20  # 20% → [0.8x, 1.2x]
+
+
+
+
+
+
+#festivos 
+
+# Modo de distribución de días para reservas cuando la demanda es un entero
+# Opciones:
+#  - 'semana_finde': usa ratio_semana_finde_por_mes / ratio_semana_finde_default
+#  - 'diario': usa ratio_diario_por_mes / ratio_diario_default (7 pesos lun..dom)
+#  - 'festivo': usa ratio_festivo_no_festivo_* (2 pesos festivo/no)
+#  - 'diario_festivo': usa pesos por día (lun..dom) diferenciando normal/festivo
+modo_distribucion_dias = 'diario_festivo'
+
+# Opcion 1:
+#  Ratio por defecto si no se especifica uno por mes
+ratio_semana_finde_default = (60, 83)  # 3 en semana, 4 en fin de semana (aprox 43% semana / 57% finde)
+
+# Opcion 2:
+# Ratio diario por defecto (Lun..Dom) cuando modo_distribucion_dias = 'diario'
+# Ejemplo pedido: (lunes, martes, miércoles, jueves, viernes, sábado, domingo)
+# ratio_diario_default = (12, 14, 14, 20, 31, 26, 26)
+
+
+# Opcion 3:
+# Pesos por día diferenciando Normal vs Festivo cuando modo_distribucion_dias = 'diario_festivo'
+# Estructura: {'normal': tuple7_lun_a_dom, 'festivo': tuple7_lun_a_dom}
+ratio_diario_festivo_default = {
+    'normal':  (12, 15, 15, 20, 31, 26, 26),
+    'festivo': (27, 17, 27, 40, 40, 41, 40),
+}
+
+# Overrides por mes (YYYY-MM -> {'normal': tuple7, 'festivo': tuple7})
+ratio_diario_festivo_por_mes = {
+    # '2026-01': {
+    #     'normal':  (10, 10, 12, 18, 30, 28, 25),
+    #     'festivo': (14, 14, 16, 20, 36, 42, 40),
+    # },
+}
+
+# País de feriados a usar para clasificar fechas ("Chile" o "Argentina")
+pais_festivos = 'Chile'
+
+# Activar modo de distribución por tipo de fecha (festivo vs no festivo)
+# Para usarlo, establece: modo_distribucion_dias = 'festivo'
+usar_distribucion_festivo = True
+
+# Ratio festivo vs no festivo por mes (opcional): {'YYYY-MM': (festivo, no_festivo)}
+ratio_festivo_no_festivo_por_mes = {
+    # '2025-09': (2, 5),
+}
+
+
+
+# Considerar como festivo todo el fin de semana si Sábado o Domingo caen en feriado (true recomendado)
+marcar_fin_de_semana_con_feriado_como_festivo = False
+
+# Para modo 'diario_festivo': usar primero cuota festivo vs no festivo
+# según ratio_festivo_no_festivo_* antes de distribuir por día de la semana
+usar_cuota_festivo_en_diario_festivo = True
+# Ratio festivo vs no festivo por defecto
+ratio_festivo_no_festivo_default = (1, 1)
+
+# Para modo 'diario_festivo': asignación determinística (sin aleatoriedad)
+# respeta proporciones por pesos y ajusta con método de mayores restos
+asignacion_deterministica_en_diario_festivo = True
+
+# Para modo 'diario_festivo': balancear por semanas (cada semana calendario recibe cupos
+# proporcionales a sus pesos y luego se reparte por weekday dentro de la semana)
+balancear_por_semanas = True
+
+# Debug: imprimir peso total por semana y desglose por weekday al simular
+debug_pesos_semanales = True
+
+# Feriados CHILE (2025)
+feriados_chile_2025 = [
+    '2025-04-17',  # Viernes Santo
+    '2025-04-18',  # Viernes Santousar_cuota_festivo_en_diario_festivo 
+    '2025-04-19',  # Viernes Santo
+    '2025-04-20',  # Viernes Santo
+    '2025-04-21',  # Viernes Santo
+    '2025-05-01',  # Día del Trabajo
+    '2025-05-02',  # Día del Trabajo
+    '2025-05-03',  # Día del Trabajo
+    '2025-05-04',  # Día del Trabajo
+    '2025-05-05',  # Día del Trabajo
+    '2025-05-21',  # Glorias Navales
+    '2025-06-20',  # Pueblos Indígenas
+    '2025-08-15',  # Asunción de la Virgen
+    '2025-08-16',  # Asunción de la Virgen
+    '2025-08-17',  # Asunción de la Virgen
+    '2025-08-18',  # Asunción de la Virgen
+    '2025-09-18',  # Independencia (irrenunciable)
+    '2025-09-19',  # Glorias del Ejército (irrenunciable)
+    '2025-09-20',
+    '2025-09-21',
+    '2025-09-22',
+    '2025-10-12',  # Encuentro de Dos Mundos
+    '2025-10-31',  # Iglesias Evangélicas y Protestantes
+    '2025-11-01',  # Todos los Santos
+    '2025-12-08',  # Inmaculada Concepción
+    '2025-12-25',  # Navidad (irrenunciable)
+]
+
+# Feriados ARGENTINA (2025)
+feriados_argentina_2025 = [
+    '2025-01-01',  # Año Nuevo
+    '2025-03-03',  # Carnaval
+    '2025-03-04',  # Carnaval
+    '2025-03-24',  # Memoria, Verdad y Justicia
+    '2025-04-02',  # Malvinas
+    '2025-04-18',  # Viernes Santo
+    '2025-05-01',  # Día del Trabajo
+    '2025-05-25',  # Revolución de Mayo
+    '2025-06-16',  # Güemes (observado)
+    '2025-06-20',  # Belgrano
+    '2025-07-09',  # Independencia
+    '2025-08-17',  # San Martín
+    '2025-10-12',  # Diversidad Cultural
+    '2025-11-24',  # Soberanía Nacional (observado)
+    '2025-12-08',  # Inmaculada Concepción
+    '2025-12-25',  # Navidad
+]
+
+# Años a considerar para feriados automáticos
+feriados_anos = [2025, 2026, 2027]
+
+# Listas extra manuales (se suman si no se puede generar automáticamente con librería)
+feriados_chile_extra_2026 = [
+    '2026-01-01', '2026-05-01', '2026-05-21', '2026-07-16', '2026-08-15',
+    '2026-09-18', '2026-09-19', '2026-10-12', '2026-10-31', '2026-11-01',
+    '2026-12-08', '2026-12-25',
+]
+feriados_chile_extra_2027 = [
+    '2027-01-01', '2027-05-01', '2027-05-21', '2027-07-16', '2027-08-15',
+    '2027-09-18', '2027-09-19', '2027-10-12', '2027-10-31', '2027-11-01',
+    '2027-12-08', '2027-12-25',
+]
+feriados_argentina_extra_2026 = [
+    '2026-01-01', '2026-03-24', '2026-04-02', '2026-05-01', '2026-05-25',
+    '2026-06-20', '2026-07-09', '2026-08-17', '2026-10-12', '2026-11-20',
+    '2026-12-08', '2026-12-25',
+]
+feriados_argentina_extra_2027 = [
+    '2027-01-01', '2027-03-24', '2027-04-02', '2027-05-01', '2027-05-25',
+    '2027-06-20', '2027-07-09', '2027-08-17', '2027-10-12', '2027-11-20',
+    '2027-12-08', '2027-12-25',
+]
+
+# Intentar generar feriados automáticamente usando la librería 'holidays' si está disponible
+try:
+    # Construir por año para asegurar cobertura; si un año no está en la librería, usar extras
+    cl_all = []
+    ar_all = []
+    for _year in feriados_anos:
+        try:
+            try:
+                from holidays import Chile as _Chile
+                _cl_set = _Chile(years=_year)
+            except Exception:
+                import holidays as _pyhol
+                _cl_set = _pyhol.country_holidays(country='CL', years=_year)
+            cur = sorted({d.strftime('%Y-%m-%d') for d in _cl_set.keys()})
+        except Exception:
+            cur = []
+        if not cur:
+            if _year == 2026:
+                cur = list(feriados_chile_extra_2026)
+            elif _year == 2027:
+                cur = list(feriados_chile_extra_2027)
+            else:
+                cur = list(feriados_chile_2025)
+        cl_all.extend(cur)
+
+        try:
+            try:
+                from holidays import Argentina as _Argentina
+                _ar_set = _Argentina(years=_year)
+            except Exception:
+                import holidays as _pyhol
+                _ar_set = _pyhol.country_holidays(country='AR', years=_year)
+            cur = sorted({d.strftime('%Y-%m-%d') for d in _ar_set.keys()})
+        except Exception:
+            cur = []
+        if not cur:
+            if _year == 2026:
+                cur = list(feriados_argentina_extra_2026)
+            elif _year == 2027:
+                cur = list(feriados_argentina_extra_2027)
+            else:
+                cur = list(feriados_argentina_2025)
+        ar_all.extend(cur)
+
+    feriados_chile = sorted(set(cl_all))
+    feriados_argentina = sorted(set(ar_all))
+except Exception:
+    # Fallback sin librería: usar listas 2025 + extras
+    feriados_chile = sorted(set(
+        feriados_chile_2025 + feriados_chile_extra_2026 + feriados_chile_extra_2027
+    ))
+    feriados_argentina = sorted(set(
+        feriados_argentina_2025 + feriados_argentina_extra_2026 + feriados_argentina_extra_2027
+    ))
