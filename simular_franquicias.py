@@ -171,6 +171,10 @@ def main() -> bool:
     fabrica_vendido_part_anual_series: dict[int, list[int]] = {}
     fabrica_ingreso_fran_anual_series: dict[int, list[float]] = {}
     fabrica_ingreso_part_anual_series: dict[int, list[float]] = {}
+    # Desglose de costos fijos de fábrica (anuales)
+    fabrica_cf_arriendo_anual_series: dict[int, list[float]] = {}
+    fabrica_cf_otros_anual_series: dict[int, list[float]] = {}
+    fabrica_cf_sueldos_anual_series: dict[int, list[float]] = {}
 
     for k in range(max(1, iteraciones)):
         # Control de semilla por iteración: usar base de cfg.random_seed si existe, si no tiempo
@@ -416,13 +420,18 @@ def main() -> bool:
                 ingreso = float(vend_fran) * precio_unit + float(vend_part) * precio_part
                 costo_var = float(produccion) * costo_unit  # Costo variable por TODAS las unidades PRODUCIDAS
                 costo_sueldos = float(trab) * sueldo_m_unit * 12.0
-                costos_fijos_tot = (fijos_otros_m + arriendo_m) * 12.0 + costo_sueldos
+                cf_arriendo_anual = float(arriendo_m) * 12.0
+                cf_otros_anual = float(fijos_otros_m) * 12.0
+                costos_fijos_tot = cf_arriendo_anual + cf_otros_anual + costo_sueldos
                 stock = stock + produccion - vendido
                 utilidad = ingreso - (costo_var + costos_fijos_tot)
                 fabrica_ingreso_anual_series.setdefault(int(anio), []).append(ingreso)
                 fabrica_utilidad_anual_series.setdefault(int(anio), []).append(utilidad)
                 fabrica_costo_var_anual_series.setdefault(int(anio), []).append(costo_var)
                 fabrica_costo_fijos_anual_series.setdefault(int(anio), []).append(costos_fijos_tot)
+                fabrica_cf_arriendo_anual_series.setdefault(int(anio), []).append(cf_arriendo_anual)
+                fabrica_cf_otros_anual_series.setdefault(int(anio), []).append(cf_otros_anual)
+                fabrica_cf_sueldos_anual_series.setdefault(int(anio), []).append(costo_sueldos)
                 fabrica_producido_anual_series.setdefault(int(anio), []).append(int(produccion))
                 fabrica_vendido_anual_series.setdefault(int(anio), []).append(int(vendido))
                 fabrica_stock_final_anual_series.setdefault(int(anio), []).append(int(stock))
@@ -641,6 +650,13 @@ def main() -> bool:
                 sd_u = float(stats.pstdev(vals_u)) if len(vals_u) > 1 else 0.0
                 avg_cv = float(sum(vals_cv)) / len(vals_cv) if vals_cv else 0.0
                 avg_cf = float(sum(vals_cf)) / len(vals_cf) if vals_cf else 0.0
+                # Desglose fijos
+                vals_cf_arr = fabrica_cf_arriendo_anual_series.get(a, [])
+                vals_cf_otr = fabrica_cf_otros_anual_series.get(a, [])
+                vals_cf_sue = fabrica_cf_sueldos_anual_series.get(a, [])
+                avg_cf_arr = float(sum(vals_cf_arr)) / len(vals_cf_arr) if vals_cf_arr else 0.0
+                avg_cf_otr = float(sum(vals_cf_otr)) / len(vals_cf_otr) if vals_cf_otr else 0.0
+                avg_cf_sue = float(sum(vals_cf_sue)) / len(vals_cf_sue) if vals_cf_sue else 0.0
                 avg_prod = float(sum(vals_prod)) / len(vals_prod) if vals_prod else 0.0
                 avg_vend = float(sum(vals_vend)) / len(vals_vend) if vals_vend else 0.0
                 avg_stock = float(sum(vals_stock)) / len(vals_stock) if vals_stock else 0.0
@@ -649,6 +665,7 @@ def main() -> bool:
                 avg_ing_fr = float(sum(vals_ing_fr)) / len(vals_ing_fr) if vals_ing_fr else 0.0
                 avg_ing_pt = float(sum(vals_ing_pt)) / len(vals_ing_pt) if vals_ing_pt else 0.0
                 print(f"     - {a}: Ingreso=${avg_ing:,.0f} (σ={sd_ing:,.0f}) | Costos: Var=${avg_cv:,.0f}, Fijos=${avg_cf:,.0f} | Utilidad=${avg_u:,.0f} (σ={sd_u:,.0f})")
+                print(f"           Fijos → Arriendo=${avg_cf_arr:,.0f} | Otros=${avg_cf_otr:,.0f} | Remuneraciones=${avg_cf_sue:,.0f}")
                 print(f"           Producidos≈{avg_prod:.1f} | Vendidos≈{avg_vend:.1f} (Franquicias≈{avg_vfr:.1f}, Particulares≈{avg_vpt:.1f}) | Stock final≈{avg_stock:.1f}")
                 print(f"           Ingreso por canal: Franquicias=${avg_ing_fr:,.0f} | Particulares=${avg_ing_pt:,.0f}")
                 # Valuación por año (EV y Equity) usando utilidad como proxy de EBITDA del modelo
