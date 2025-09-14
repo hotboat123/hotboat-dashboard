@@ -143,12 +143,13 @@ def resumen_operacion_mensual(
     df_cost_op: pd.DataFrame,
     df_fijos: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Devuelve desglose mensual: reservas, ingresos, costos variables, costos fijos y utilidad.
-    - reservas: conteo de filas en df_ing por mes (aprox. número de reservas)
+    """Devuelve desglose mensual: reservas, ingresos, CVOps (insumos), CTrab (ayudantes), costos fijos y utilidad.
+    - reservas: conteo en df_ing por mes (aprox. número de reservas)
     - ingresos: suma df_ing por mes
-    - costos_variables: suma df_cost_op por mes (incluye pagos de ayudantes y costos por reserva)
+    - CVOps: suma de df_cost_op EXCLUYENDO filas con descripcion == 'pago extra ayudante (diario)'
+    - CTrab: suma de df_cost_op SOLO donde descripcion == 'pago extra ayudante (diario)'
     - costos_fijos: suma df_fijos por mes
-    - utilidad: ingresos - (costos_variables + costos_fijos)
+    - utilidad: ingresos - (CVOps + CTrab + costos_fijos)
     """
     def group_month_sum(df: pd.DataFrame, value_col: str = "monto") -> pd.DataFrame:
         if df is None or df.empty:
@@ -166,19 +167,31 @@ def resumen_operacion_mensual(
         g_res = dcnt.groupby("mes", as_index=False)["fecha"].count().rename(columns={"fecha": "reservas"})
 
     g_ing = group_month_sum(df_ing, "monto").rename(columns={"monto": "ingresos"})
-    g_cv = group_month_sum(df_cost_op, "monto").rename(columns={"monto": "costos_variables"})
+    # separar costo de ayudantes vs operativos
+    if df_cost_op is None or df_cost_op.empty:
+        g_ctrab = pd.DataFrame(columns=["mes", "CTrab"]).assign(CTrab=pd.Series(dtype=float))
+        g_cvops = pd.DataFrame(columns=["mes", "CVOps"]).assign(CVOps=pd.Series(dtype=float))
+    else:
+        dco = df_cost_op.copy()
+        dco["mes"] = pd.to_datetime(dco["fecha"]).dt.to_period("M").astype(str)
+        is_trab = dco["descripcion"].astype(str).str.lower() == "pago extra ayudante (diario)"
+        df_trab = dco[is_trab]
+        df_ops = dco[~is_trab]
+        g_ctrab = df_trab.groupby("mes", as_index=False)["monto"].sum().rename(columns={"monto": "CTrab"})
+        g_cvops = df_ops.groupby("mes", as_index=False)["monto"].sum().rename(columns={"monto": "CVOps"})
     g_cf = group_month_sum(df_fijos, "monto").rename(columns={"monto": "costos_fijos"})
 
     # Merge y rellenar
     res = g_res.merge(g_ing, on="mes", how="outer")
-    res = res.merge(g_cv, on="mes", how="outer")
+    res = res.merge(g_cvops, on="mes", how="outer")
+    res = res.merge(g_ctrab, on="mes", how="outer")
     res = res.merge(g_cf, on="mes", how="outer")
-    for c in ["reservas", "ingresos", "costos_variables", "costos_fijos"]:
+    for c in ["reservas", "ingresos", "CVOps", "CTrab", "costos_fijos"]:
         if c not in res.columns:
             res[c] = 0
         res[c] = res[c].fillna(0)
     # Utilidad
-    res["utilidad"] = res["ingresos"] - (res["costos_variables"] + res["costos_fijos"])
+    res["utilidad"] = res["ingresos"] - (res["CVOps"] + res["CTrab"] + res["costos_fijos"])
     return res.sort_values("mes")
 
 
@@ -233,30 +246,32 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
         if opm.empty:
             print("ℹ️  No hay datos para calcular la operación mensual")
         else:
-            print("📊 Operación mensual (reservas, ingresos, CV, CF, utilidad):")
+            print("📊 Operación mensual (reservas, ingresos, CVOps, CTrab, CF, utilidad):")
             # Agrupar por año y presentar tabla con totales
             opm["anio"] = opm["mes"].str.slice(0, 4).astype(int)
             for anio, dfy in opm.groupby("anio"):
                 print(f"  Año {anio}:")
-                print("    Mes    Reservas        Ingresos          CV          CF     Utilidad")
-                t_res = t_ing = t_cv = t_cf = t_util = 0.0
+                print("    Mes    Reservas        Ingresos       CVOps       CTrab          CF     Utilidad")
+                t_res = t_ing = t_cvops = t_ctrab = t_cf = t_util = 0.0
                 for _, r in dfy.sort_values("mes").iterrows():
                     res = int(r.get("reservas", 0) or 0)
                     ing = float(r.get("ingresos", 0) or 0)
-                    cv = float(r.get("costos_variables", 0) or 0)
+                    cvops = float(r.get("CVOps", 0) or 0)
+                    ctrab = float(r.get("CTrab", 0) or 0)
                     cf = float(r.get("costos_fijos", 0) or 0)
                     util = float(r.get("utilidad", 0) or 0)
-                    print(f"    {r['mes']}  {res:>9}  ${ing:>12,.0f}  ${cv:>10,.0f}  ${cf:>10,.0f}  ${util:>10,.0f}")
-                    t_res += res; t_ing += ing; t_cv += cv; t_cf += cf; t_util += util
-                print(f"    Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cv:>10,.0f}  ${t_cf:>10,.0f}  ${t_util:>10,.0f}")
+                    print(f"    {r['mes']}  {res:>9}  ${ing:>12,.0f}  ${cvops:>10,.0f}  ${ctrab:>10,.0f}  ${cf:>10,.0f}  ${util:>10,.0f}")
+                    t_res += res; t_ing += ing; t_cvops += cvops; t_ctrab += ctrab; t_cf += cf; t_util += util
+                print(f"    Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cvops:>10,.0f}  ${t_ctrab:>10,.0f}  ${t_cf:>10,.0f}  ${t_util:>10,.0f}")
             # Totales globales
             g_res = int(opm["reservas"].sum())
             g_ing = float(opm["ingresos"].sum())
-            g_cv = float(opm["costos_variables"].sum())
+            g_cvops = float(opm["CVOps"].sum()) if "CVOps" in opm.columns else 0.0
+            g_ctrab = float(opm["CTrab"].sum()) if "CTrab" in opm.columns else 0.0
             g_cf = float(opm["costos_fijos"].sum())
             g_util = float(opm["utilidad"].sum())
             print("\n🧮 Totales del escenario:")
-            print(f"  Reservas={g_res} | Ingresos=${g_ing:,.0f} | CV=${g_cv:,.0f} | CF=${g_cf:,.0f} | Utilidad=${g_util:,.0f}")
+            print(f"  Reservas={g_res} | Ingresos=${g_ing:,.0f} | CVOps=${g_cvops:,.0f} | CTrab=${g_ctrab:,.0f} | CF=${g_cf:,.0f} | Utilidad=${g_util:,.0f}")
         return df_ing, df_cost_op, df_mark, df_fijos
     finally:
         # Restaurar demanda original

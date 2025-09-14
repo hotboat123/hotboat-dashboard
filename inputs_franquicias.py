@@ -43,7 +43,7 @@ franquicias = {
     'Franquicia 1': {
         'n_hotboats': 2,
         'estacionalidad': {
-            'Verano': 1.10,   # vende 10% más que el input base
+            'Verano': 1.0,   # vende 10% más que el input base
             'Invierno': 1.00, # igual que base
             'normal': 1.00,   # no vende fuera de estación (si fuera 0)
         },
@@ -55,7 +55,7 @@ franquicias = {
         'estacionalidad': {
             'Verano': 1.0,   # vende 10% más que el input base
             'Invierno': 1.0, # igual que base
-            'normal': 1.10,   # no vende fuera de estación
+            'normal': 1.0,   # no vende fuera de estación
         },
         'apertura': '2026-05',
         'arriendo_mensual': 500_000,
@@ -69,7 +69,7 @@ nombre_franquicia_modelo = 'Franquicia 2'
 objetivo_anio = 2035  # Ej: 2028
 
 # Número de iteraciones Monte Carlo para promediar resultados
-simulaciones_num_iter = 10
+simulaciones_num_iter = 1
 
 
 # Escenario de aperturas de franquicias por año (para simular ingreso de la marca)

@@ -150,6 +150,8 @@ def main() -> bool:
     # Acumulador anual (por año) para ingreso marca (schedule) en cada iteración
     # dict[anio] -> list[royalty_en_esa_iteración]
     schedule_anual_series: dict[int, list[float]] = {}
+    # Acumulador anual por tipo de franquicia: dict[anio] -> dict[tipo] -> list[royalty]
+    schedule_tipo_anual_series: dict[int, dict[str, list[float]]] = {}
     # Acumulador mensual (por mes YYYY-MM) para ingreso marca (schedule) en cada iteración
     schedule_mensual_series: dict[str, list[float]] = {}
     # Acumulador mensual de operación de la franquicia modelo (por mes YYYY-MM)
@@ -229,39 +231,112 @@ def main() -> bool:
         if nombre_modelo in fcfg.franquicias:
             base_mod = dict(fcfg.franquicias[nombre_modelo])
             dem_mod = _ajustar_demanda_por_franquicia(demanda_map, base_mod)
-            fin_mod = _calcular_finanzas_franquicia(dem_mod, base_mod)
-            dfm = fin_mod['detalle']
-            if not dfm.empty:
-                try:
-                    cvar_mod = fcfg.costo_variable_por_reserva_franquicia
-                    if cvar_mod is None:
-                        cvar_mod = float(getattr(cfg, 'costo_variable_por_reserva', 0))
-                    cvar_mod = float(cvar_mod)
-                except Exception:
-                    cvar_mod = float(getattr(cfg, 'costo_variable_por_reserva', 0))
-                cfijo_m = float(base_mod.get('arriendo_mensual', 0))
-                for _, r in dfm.iterrows():
-                    ym = str(r['mes'])
-                    dmes = int(r['demanda'])
-                    ventas = float(r['ventas'])
-                    cv = float(dmes) * float(cvar_mod)
-                    cf = float(cfijo_m)
-                    utilm = float(r['utilidad'])
-                    if ym not in modelo_mensual_series:
-                        modelo_mensual_series[ym] = {'res': [], 'ing': [], 'cv': [], 'cf': [], 'util': []}
-                    modelo_mensual_series[ym]['res'].append(float(dmes))
-                    modelo_mensual_series[ym]['ing'].append(ventas)
-                    modelo_mensual_series[ym]['cv'].append(cv)
-                    modelo_mensual_series[ym]['cf'].append(cf)
-                    modelo_mensual_series[ym]['util'].append(utilm)
+            # Parámetros de costos y reglas (reusar lógica del simulador de utilidad)
+            try:
+                usar_detalle = bool(getattr(cfg, 'usar_desglose_costos_operativos', False))
+                detalle_map: dict = getattr(cfg, 'costo_operativo_detalle_por_reserva', {}) or {}
+            except Exception:
+                usar_detalle = False
+                detalle_map = {}
+            try:
+                usar_escalonado = bool(getattr(cfg, 'usar_pago_ayudante_escalonado', False))
+                escalas = list(getattr(cfg, 'pago_ayudante_escalas', []) or [])
+                escalas_sorted = sorted(escalas, key=lambda x: x[0])
+            except Exception:
+                usar_escalonado = False
+                escalas_sorted = []
+            try:
+                escalas_solitario = list(getattr(cfg, 'pago_ayudante_escalas_solitario', []) or [])
+                escalas_solitario_sorted = sorted(escalas_solitario, key=lambda x: x[0])
+            except Exception:
+                escalas_solitario_sorted = []
+            ticket = float(getattr(cfg, 'ticket_promedio', 0))
+            rate = float(getattr(fcfg, 'royalty_rate', 0.0))
+            cfijo_m = float(base_mod.get('arriendo_mensual', 0))
+
+            for ym in sorted(dem_mod.keys()):
+                dmes = int(dem_mod[ym])
+                if dmes <= 0:
+                    continue
+                # Generar fechas para el mes (mismo método que simulación)
+                fechas = sim.generar_fechas_para_mes(str(ym), int(dmes))
+                reservas_mes = len(fechas)
+                ventas = float(reservas_mes) * ticket
+                # CVOps por reserva (detalle o costo base)
+                if usar_detalle and isinstance(detalle_map, dict) and len(detalle_map) > 0:
+                    costo_por_reserva = float(sum(float(v) for v in detalle_map.values()))
+                else:
+                    try:
+                        cvar_mod = fcfg.costo_variable_por_reserva_franquicia
+                        if cvar_mod is None:
+                            cvar_mod = float(getattr(cfg, 'costo_variable_por_reserva', 0))
+                        costo_por_reserva = float(cvar_mod)
+                    except Exception:
+                        costo_por_reserva = float(getattr(cfg, 'costo_variable_por_reserva', 0))
+                cvops = float(reservas_mes) * costo_por_reserva
+                # CTrab: pagos a ayudantes por día
+                ctrab_total = 0.0
+                if usar_escalonado and len(fechas) > 0:
+                    # conteo por día
+                    conteo_por_dia = {}
+                    for fdt in fechas:
+                        clave = fdt.date()
+                        conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
+                    for dia, cantidad in conteo_por_dia.items():
+                        pago = 0.0
+                        num_ayudantes_dia = 1 if cantidad == 1 else (2 if cantidad > 1 else 0)
+                        if cantidad == 1 and len(escalas_solitario_sorted) > 0:
+                            for umbral, monto in escalas_solitario_sorted:
+                                if cantidad >= umbral:
+                                    pago = float(monto)
+                                else:
+                                    break
+                            if pago == 0 and escalas_solitario_sorted:
+                                pago = float(escalas_solitario_sorted[0][1])
+                        else:
+                            for umbral, monto in escalas_sorted:
+                                if cantidad >= umbral:
+                                    pago = float(monto)
+                                else:
+                                    break
+                            if pago == 0 and escalas_sorted:
+                                pago = float(escalas_sorted[0][1])
+                        ctrab_total += float(num_ayudantes_dia) * float(pago)
+                # CF y CRoy
+                cf = float(cfijo_m)
+                croy = float(ventas * rate)
+                # Utilidad neta de royalties
+                util_calc = float(ventas - (cvops + ctrab_total + cf + croy))
+                if ym not in modelo_mensual_series:
+                    modelo_mensual_series[ym] = {'res': [], 'ing': [], 'cvops': [], 'ctrab': [], 'cf': [], 'roy': [], 'util': []}
+                modelo_mensual_series[ym]['res'].append(float(reservas_mes))
+                modelo_mensual_series[ym]['ing'].append(ventas)
+                modelo_mensual_series[ym]['cvops'].append(cvops)
+                modelo_mensual_series[ym]['ctrab'].append(ctrab_total)
+                modelo_mensual_series[ym]['cf'].append(cf)
+                modelo_mensual_series[ym]['roy'].append(croy)
+                modelo_mensual_series[ym]['util'].append(util_calc)
 
         # Simular ingresos de la marca por schedule de aperturas
         schedule = getattr(fcfg, 'ingresos_marca_schedule', {}) or {}
+        schedule_det = getattr(fcfg, 'ingresos_marca_schedule_detallado', {}) or {}
         apertura_mes_def = int(getattr(fcfg, 'apertura_mes_default', 1))
         roy_total_schedule = 0.0
         roy_anual_map: dict[int, float] = {}
-        if schedule and nombre_modelo in fcfg.franquicias:
-            base = dict(fcfg.franquicias[nombre_modelo])
+        # Mapa de conteos por año y tipo
+        counts_por_tipo: dict[int, dict[str, int]] = {}
+        if schedule_det:
+            for anio, tipo_map in (schedule_det or {}).items():
+                counts_por_tipo[int(anio)] = {}
+                for tipo, cnt in (tipo_map or {}).items():
+                    counts_por_tipo[int(anio)][str(tipo)] = int(cnt)
+        else:
+            # fallback: solo tipo = nombre_modelo
+            if schedule and nombre_modelo in fcfg.franquicias:
+                for anio, cnt in schedule.items():
+                    counts_por_tipo[int(anio)] = {str(nombre_modelo): int(cnt)}
+
+        if counts_por_tipo:
             # Fábrica: parámetros
             fcfg_fact = getattr(fcfg, 'factory_config', {}) or {}
             costo_unit = float(fcfg_fact.get('costo_variable_hotboat', 0))
@@ -277,36 +352,48 @@ def main() -> bool:
             produce_to_capacity = bool(fcfg_fact.get('factory_produce_to_capacity', True))
             # Demanda de HotBoats por año: franquicias (schedule) + particulares
             demanda_hotboats_por_anio: dict[int, int] = {}
-            for anio, cantidad in schedule.items():
-                demanda_hotboats_por_anio[int(anio)] = demanda_hotboats_por_anio.get(int(anio), 0) + int(cantidad)
+            for anio, tipo_map in counts_por_tipo.items():
+                demanda_hotboats_por_anio[int(anio)] = demanda_hotboats_por_anio.get(int(anio), 0) + int(sum(tipo_map.values()))
             demanda_part = fcfg_fact.get('particulares_unidades_por_anio', {}) or {}
-            for anio, cant_p in demanda_part.items():
+            for anio, cant_p in (demanda_part or {}).items():
                 demanda_hotboats_por_anio[int(anio)] = demanda_hotboats_por_anio.get(int(anio), 0) + int(cant_p)
-                for j in range(int(cantidad)):
-                    fr = dict(base)
-                    fr['apertura'] = f"{int(anio):04d}-{int(apertura_mes_def):02d}"
-                    dem_clon = _ajustar_demanda_por_franquicia(demanda_map, fr)
-                    fin_clon = _calcular_finanzas_franquicia(dem_clon, fr)
-                    dfc = fin_clon['detalle']
-                    if not dfc.empty:
-                        dfc['anio'] = dfc['anio'] if 'anio' in dfc.columns else dfc['mes'].str.slice(0, 4).astype(int)
-                        # Sumar por año (para desglose anual)
-                        sums = dfc.groupby('anio', as_index=False)['royalty'].sum()
-                        for _, row in sums.iterrows():
-                            a = int(row['anio'])
-                            roy_anual_map[a] = roy_anual_map.get(a, 0.0) + float(row['royalty'])
-                        # Sumar por mes (para desglose mensual)
-                        sums_m = dfc.groupby('mes', as_index=False)['royalty'].sum()
-                        for _, row in sums_m.iterrows():
-                            mm = str(row['mes'])
-                            schedule_mensual_series.setdefault(mm, []).append(float(row['royalty']))
-                        # Sumar para el año objetivo (para métrica principal)
-                        if anio_objetivo is not None:
-                            roy_total_schedule += float(dfc[dfc['anio'] == int(anio_objetivo)]['royalty'].sum())
+            # Series por tipo en esta iteración
+            tipo_iter_map: dict[int, dict[str, float]] = {}
+            for anio, tipo_map in counts_por_tipo.items():
+                for tipo, cnt in tipo_map.items():
+                    base_f = dict(fcfg.franquicias.get(str(tipo), fcfg.franquicias.get(nombre_modelo, {})))
+                    for _ in range(int(cnt)):
+                        fr = dict(base_f)
+                        fr['apertura'] = f"{int(anio):04d}-{int(apertura_mes_def):02d}"
+                        dem_clon = _ajustar_demanda_por_franquicia(demanda_map, fr)
+                        fin_clon = _calcular_finanzas_franquicia(dem_clon, fr)
+                        dfc = fin_clon['detalle']
+                        if not dfc.empty:
+                            dfc['anio'] = dfc['anio'] if 'anio' in dfc.columns else dfc['mes'].str.slice(0, 4).astype(int)
+                            # Sumar por año (para desglose anual)
+                            sums = dfc.groupby('anio', as_index=False)['royalty'].sum()
+                            for _, row in sums.iterrows():
+                                a = int(row['anio'])
+                                val = float(row['royalty'])
+                                roy_anual_map[a] = roy_anual_map.get(a, 0.0) + val
+                                tipo_iter_map.setdefault(a, {}).setdefault(str(tipo), 0.0)
+                                tipo_iter_map[a][str(tipo)] += val
+                            # Sumar por mes (para desglose mensual)
+                            sums_m = dfc.groupby('mes', as_index=False)['royalty'].sum()
+                            for _, row in sums_m.iterrows():
+                                mm = str(row['mes'])
+                                schedule_mensual_series.setdefault(mm, []).append(float(row['royalty']))
+                            # Sumar para el año objetivo (para métrica principal)
+                            if anio_objetivo is not None:
+                                roy_total_schedule += float(dfc[dfc['anio'] == int(anio_objetivo)]['royalty'].sum())
         royalties_schedule_por_iter.append(roy_total_schedule)
         # Registrar serie anual de esta iteración
         for a, val in roy_anual_map.items():
             schedule_anual_series.setdefault(a, []).append(float(val))
+        # Registrar series por tipo de esta iteración
+        for a, tipo_map in (tipo_iter_map if 'tipo_iter_map' in locals() else {}).items():
+            for tipo, val in tipo_map.items():
+                schedule_tipo_anual_series.setdefault(int(a), {}).setdefault(str(tipo), []).append(float(val))
         # Fábrica: calcular ingresos y utilidad anual por capacidad y demanda
         if schedule:
             stock = stock_inicial
@@ -446,6 +533,46 @@ def main() -> bool:
                 avg_a = float(sum(vals)) / len(vals)
                 sd_a = float(stats.pstdev(vals)) if len(vals) > 1 else 0.0
                 print(f"     - {a}: ${avg_a:,.0f} (σ={sd_a:,.0f})")
+            # Desglose por tipo de franquicia y cantidad
+            if schedule_tipo_anual_series:
+                print("\n   Ingreso marca anual por tipo de franquicia (promedio ±σ):")
+                # Reconstruir conteos por tipo (por año) y acumulados hasta el año
+                counts_conf = getattr(fcfg, 'ingresos_marca_schedule_detallado', {}) or {}
+                fallback_counts = getattr(fcfg, 'ingresos_marca_schedule', {}) or {}
+                nom_modelo = str(getattr(fcfg, 'nombre_franquicia_modelo', 'Franquicia 1'))
+                counts_por_tipo: dict[int, dict[str, int]] = {}
+                if counts_conf:
+                    for anio, tipo_map in (counts_conf or {}).items():
+                        counts_por_tipo[int(anio)] = {}
+                        for tipo, cnt in (tipo_map or {}).items():
+                            counts_por_tipo[int(anio)][str(tipo)] = int(cnt)
+                else:
+                    for anio, cnt in (fallback_counts or {}).items():
+                        counts_por_tipo[int(anio)] = {nom_modelo: int(cnt)}
+                # Construir acumulados por año
+                tipos_all = sorted({t for m in counts_por_tipo.values() for t in m.keys()})
+                anos_sorted = sorted(counts_por_tipo.keys())
+                counts_acum: dict[int, dict[str, int]] = {}
+                acc = {t: 0 for t in tipos_all}
+                for a_year in anos_sorted:
+                    for t in tipos_all:
+                        acc[t] += int(counts_por_tipo.get(a_year, {}).get(t, 0))
+                    counts_acum[a_year] = dict(acc)
+                for a in sorted(schedule_tipo_anual_series.keys()):
+                    tipo_map = schedule_tipo_anual_series[a]
+                    for tipo, series in sorted(tipo_map.items()):
+                        avg_t = float(sum(series)) / len(series)
+                        sd_t = float(stats.pstdev(series)) if len(series) > 1 else 0.0
+                        # Total acumulado de franquicias hasta el año 'a'
+                        # Buscar el último año <= a presente en counts_acum
+                        anos_candidatos = [y for y in counts_acum.keys() if int(y) <= int(a)]
+                        n_total = 0
+                        if anos_candidatos:
+                            y_sel = max(anos_candidatos)
+                            n_total = int(counts_acum.get(int(y_sel), {}).get(str(tipo), 0))
+                        # Ingreso por franquicia (promedio) usando el total acumulado de franquicias
+                        ingreso_por_franq = (avg_t / n_total) if n_total > 0 else 0.0
+                        print(f"     - Año {a} | Tipo='{tipo}' | Nº franquicias (acum)={n_total} | Ingreso=${avg_t:,.0f} (σ={sd_t:,.0f}) | Ingreso/franquicia=${ingreso_por_franq:,.0f}")
         # Operación mensual de la franquicia modelo: imprimir tabla por año con promedios
         if modelo_mensual_series:
             try:
@@ -463,31 +590,27 @@ def main() -> bool:
                 anos_map.setdefault(a, []).append(mm)
             for a in sorted(anos_map.keys()):
                 print(f"     Año {a}:")
-                print("       Mes    Reservas        Ingresos          CV          CF     Utilidad")
-                t_res = 0.0
-                t_ing = 0.0
-                t_cv = 0.0
-                t_cf = 0.0
-                t_util = 0.0
+                print("       Mes    Reservas        Ingresos       CVOps       CTrab          CF        CRoy     Utilidad")
+                t_res = t_ing = t_cvops = t_ctrab = t_cf = t_roy = t_util = 0.0
                 for mm in sorted(anos_map[a]):
                     met = modelo_mensual_series.get(mm, {})
                     res_vals = met.get('res', []) or []
                     ing_vals = met.get('ing', []) or []
-                    cv_vals = met.get('cv', []) or []
+                    cvops_vals = met.get('cvops', []) or []
+                    ctrab_vals = met.get('ctrab', []) or []
                     cf_vals = met.get('cf', []) or []
+                    roy_vals = met.get('roy', []) or []
                     util_vals = met.get('util', []) or []
                     avg_res = float(sum(res_vals)) / len(res_vals) if len(res_vals) > 0 else 0.0
                     avg_ing = float(sum(ing_vals)) / len(ing_vals) if len(ing_vals) > 0 else 0.0
-                    avg_cv = float(sum(cv_vals)) / len(cv_vals) if len(cv_vals) > 0 else 0.0
+                    avg_cvops = float(sum(cvops_vals)) / len(cvops_vals) if len(cvops_vals) > 0 else 0.0
+                    avg_ctrab = float(sum(ctrab_vals)) / len(ctrab_vals) if len(ctrab_vals) > 0 else 0.0
                     avg_cf = float(sum(cf_vals)) / len(cf_vals) if len(cf_vals) > 0 else 0.0
+                    avg_roy = float(sum(roy_vals)) / len(roy_vals) if len(roy_vals) > 0 else 0.0
                     avg_util = float(sum(util_vals)) / len(util_vals) if len(util_vals) > 0 else 0.0
-                    print(f"       {mm}  {int(round(avg_res)):>9}  ${avg_ing:>12,.0f}  ${avg_cv:>10,.0f}  ${avg_cf:>10,.0f}  ${avg_util:>10,.0f}")
-                    t_res += avg_res
-                    t_ing += avg_ing
-                    t_cv += avg_cv
-                    t_cf += avg_cf
-                    t_util += avg_util
-                print(f"       Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cv:>10,.0f}  ${t_cf:>10,.0f}  ${t_util:>10,.0f}")
+                    print(f"       {mm}  {int(round(avg_res)):>9}  ${avg_ing:>12,.0f}  ${avg_cvops:>10,.0f}  ${avg_ctrab:>10,.0f}  ${avg_cf:>10,.0f}  ${avg_roy:>10,.0f}  ${avg_util:>10,.0f}")
+                    t_res += avg_res; t_ing += avg_ing; t_cvops += avg_cvops; t_ctrab += avg_ctrab; t_cf += avg_cf; t_roy += avg_roy; t_util += avg_util
+                print(f"       Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cvops:>10,.0f}  ${t_ctrab:>10,.0f}  ${t_cf:>10,.0f}  ${t_roy:>10,.0f}  ${t_util:>10,.0f}")
         # Fábrica: reporte anual
         if fabrica_ingreso_anual_series:
             print("\n🏭 Fábrica (venta de HotBoats a franquicias del schedule):")

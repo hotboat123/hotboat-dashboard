@@ -145,15 +145,15 @@ random_seed = 48
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
 tasa_crecimiento_anual = 0.10  # SOLO INFLUYE EN LA DEMANDA, NO EN LOS COSTOS
-simular_hasta_anio = 2027 # Generar datos hasta este año (inclusive)
+simular_hasta_anio = 2032 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 
 # Escenarios de simulación de demanda (multiplicadores)
 # Puedes editar los factores aquí para cada escenario
 escenarios_demanda = {
-    'pesimista': 0.5,
+    'pesimista': 0.6,
     'normal': 1.0,
-    'optimista': 1.5,
+    'optimista': 1.3
 }
 
 # Control para ejecutar (o no) el simulador de escenarios (pesimista/normal/optimista)
@@ -174,7 +174,7 @@ optimizar_pagos_config = {
 # Si activas `usar_aleatoriedad_demanda`, por cada mes se muestrea una demanda
 # desde Uniforme([(1-rango)*demanda, (1+rango)*demanda]) y se redondea a entero.
 usar_aleatoriedad_demanda = False
-demanda_uniforme_rango_pct = 0.20  # 20% → [0.8x, 1.2x]
+demanda_uniforme_rango_pct = 0.3  # 20% → [0.8x, 1.2x]
 
 
 
@@ -249,7 +249,7 @@ asignacion_deterministica_en_diario_festivo = True
 balancear_por_semanas = True
 
 # Debug: imprimir peso total por semana y desglose por weekday al simular
-debug_pesos_semanales = True
+debug_pesos_semanales = False
 
 # Feriados CHILE (2025)
 feriados_chile_2025 = [
