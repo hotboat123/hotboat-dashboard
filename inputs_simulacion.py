@@ -38,8 +38,8 @@ Puedes agregar tantos meses como quieras en el diccionario demanda_por_mes.
 
 demanda_por_mes = {
     # Nuevas demandas para probar:
-    '2025-08': [3,2,4,5,5],
-    '2025-09': 20,
+    '2025-08': 16, ## ESTO ES POR SEMANA (FUNCIONA) [3,2,4,5,5]
+    '2025-09': 20,##  (TAMBIEN FUNCIONA)
     '2025-10': 15,
     '2025-11': 20,
     '2025-12': 25,
@@ -107,8 +107,8 @@ costo_fijo_mensual = 456_926
 # Costo fijo estacional (verano vs invierno)
 # Si activas `usar_costo_fijo_estacional`, se usará un costo distinto para los meses definidos como verano o invierno.
 usar_costo_fijo_estacional = True
-costo_fijo_mensual_verano = 635_000
-costo_fijo_mensual_invierno = 456_926
+costo_fijo_mensual_verano = 635_000  # SUBE A 500 EL ARRIENDO
+costo_fijo_mensual_invierno = 456_926 ## 300 ARRIENDO, 30 AGUA, 35 INTERNET +??
 # Por defecto: verano = dic-ene-feb; invierno = jun-jul-ago. Puedes modificar estas listas.
 meses_verano = [1, 2]
 meses_invierno = [7]
@@ -144,8 +144,8 @@ random_seed = 48
 # (1 + tasa_crecimiento_anual)^(años_transcurridos). No sobrescribe meses ya presentes
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
-tasa_crecimiento_anual = 0.10  # 20%
-simular_hasta_anio = 2026 # Generar datos hasta este año (inclusive)
+tasa_crecimiento_anual = 0.10  # SOLO INFLUYE EN LA DEMANDA, NO EN LOS COSTOS
+simular_hasta_anio = 2035 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 
 # Escenarios de simulación de demanda (multiplicadores)

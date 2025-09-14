@@ -278,6 +278,7 @@ descripciones_a_eliminar_abonos = [
 eliminaciones_fecha_monto_abonos = [
     # ['2025-07-15', 50000],
     ['2025-04-16', 1400000], 
+    ['2025-08-09', 50000], 
 ]
 
 eliminaciones_fecha_descripcion_abonos = [
@@ -358,3 +359,8 @@ config_utilidad_operativa = {
     'ajustar_costos_operativos_a_monto_por_reserva': False,
 }
 
+### notas
+# nose en que fecha, pero antes, me deposite 50 de chile a prex desde bco de chile en vez de bco estado, entonces luego transferi los 50 desde estado a chile
+# 11 septiembre compre super con banco estado en vez de prex
+# 12 de septiembre se transfire 160650 desde estado a chile para pagar gelcoat
+# 12 de septiembre compre 7200 con prex en vez e bco estado pq no tenia la billetera, era bolsas de basura y palmito en lata

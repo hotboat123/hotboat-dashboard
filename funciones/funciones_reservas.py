@@ -16,11 +16,15 @@ def procesar_fechas_reservas(df):
         df = df.copy()
         
         if "fecha_hora_trip" not in df.columns:
-            # Convertir fechas y horas
-            df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
-            df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
-            df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
-            df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
+            # Conversión estricta como antes
+            if "fecha_trip" in df.columns:
+                df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%Y-%m-%d")
+            if "fecha_creacion_reserva" in df.columns:
+                df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%Y-%m-%d")
+            if "hora_trip" in df.columns:
+                df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M:%S").dt.time
+            if "hora_creacion_reserva" in df.columns:
+                df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M:%S").dt.time
         return df
     except Exception as e:
         print(f"Error procesando las fechas: {str(e)}")
@@ -63,14 +67,29 @@ def procesar_appointments(payments, appointments):
     df['PAID AMOUNT'] = df['PAID AMOUNT'].replace({'\$': '', '\.': ''}, regex=True).astype(int)
     df['DUE AMOUNT'] = df['DUE AMOUNT'].replace({'\$': '', '\.': ''}, regex=True).astype(int)
 
-    # Separar fecha en dos columnas
-    df[['fecha_trip', 'hora_trip']] = df['APPOINTMENT DATE'].str.split(' ', expand=True)
-    df[['fecha_creacion_reserva', 'hora_creacion_reserva']] = df['CREATED AT'].str.split(' ', expand=True)
-    df["fecha_trip"] = pd.to_datetime(df["fecha_trip"], format="%d/%m/%Y")
-    df["fecha_creacion_reserva"] = pd.to_datetime(df["fecha_creacion_reserva"], format="%d/%m/%Y")
-    df["hora_trip"] = pd.to_datetime(df["hora_trip"], format="%H:%M").dt.time
-    df["hora_creacion_reserva"] = pd.to_datetime(df["hora_creacion_reserva"], format="%H:%M").dt.time
-    df = df.drop(columns=['APPOINTMENT DATE','START DATE','CREATED AT'])
+    # Extraer fecha y hora de columnas fuente, creando directamente columnas combinadas robustas
+    appointment_col = 'APPOINTMENT DATE' if 'APPOINTMENT DATE' in df.columns else ('START DATE' if 'START DATE' in df.columns else None)
+    created_col = 'CREATED AT' if 'CREATED AT' in df.columns else None
+    if appointment_col is None or created_col is None:
+        raise ValueError("Faltan columnas de fecha: se requiere 'APPOINTMENT DATE' o 'START DATE' y 'CREATED AT'.")
+
+    dt_appointment = pd.to_datetime(df[appointment_col].astype(str), errors='coerce', dayfirst=True)
+    dt_created = pd.to_datetime(df[created_col].astype(str), errors='coerce', dayfirst=True)
+
+    # Fallback: si CREATED AT es NaT, usar appointment
+    dt_created = dt_created.fillna(dt_appointment)
+
+    # Asignar columnas combinadas directamente
+    df['fecha_hora_trip'] = dt_appointment
+    df['fecha_hora_creacion_reserva'] = dt_created
+
+    # Además, mantener columnas separadas para compatibilidad posterior
+    df['fecha_trip'] = dt_appointment.dt.date
+    df['hora_trip'] = dt_appointment.dt.time
+    df['fecha_creacion_reserva'] = dt_created.dt.date
+    df['hora_creacion_reserva'] = dt_created.dt.time
+
+    df = df.drop(columns=[col for col in ['APPOINTMENT DATE','START DATE','CREATED AT'] if col in df.columns])
 
     # Aplicar la función a la columna 'telefono'
     df['Phone Number_2'] = df['Phone Number'].apply(formatear_telefono)
@@ -111,13 +130,13 @@ def asegurar_columnas_fechas_combinadas(df):
     """
     df = df.copy()
     if 'fecha_hora_trip' not in df.columns and 'fecha_trip' in df.columns and 'hora_trip' in df.columns:
-        df['fecha_hora_trip'] = pd.to_datetime(df['fecha_trip'].astype(str) + ' ' + df['hora_trip'].astype(str))
+        df['fecha_hora_trip'] = pd.to_datetime(df['fecha_trip'].astype(str) + ' ' + df['hora_trip'].astype(str), dayfirst=True, errors='coerce')
         df = df.drop(columns=['fecha_trip', 'hora_trip'])
     elif 'fecha_hora_trip' in df.columns:
         df['fecha_hora_trip'] = pd.to_datetime(df['fecha_hora_trip'])
     
     if 'fecha_hora_creacion_reserva' not in df.columns and 'fecha_creacion_reserva' in df.columns and 'hora_creacion_reserva' in df.columns:
-        df['fecha_hora_creacion_reserva'] = pd.to_datetime(df['fecha_creacion_reserva'].astype(str) + ' ' + df['hora_creacion_reserva'].astype(str))
+        df['fecha_hora_creacion_reserva'] = pd.to_datetime(df['fecha_creacion_reserva'].astype(str) + ' ' + df['hora_creacion_reserva'].astype(str), dayfirst=True, errors='coerce')
         df = df.drop(columns=['fecha_creacion_reserva', 'hora_creacion_reserva'])
     elif 'fecha_hora_creacion_reserva' in df.columns:
         df['fecha_hora_creacion_reserva'] = pd.to_datetime(df['fecha_hora_creacion_reserva'])
@@ -147,6 +166,12 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
         df_reservas_nuevas = asegurar_columnas_fechas_combinadas(df_reservas_nuevas)
         df_reservas_original = asegurar_columnas_fechas_combinadas(df_reservas_original)
         
+        # Alinear columnas críticas antes de intersectar, para no perder 'Customer'
+        if 'Customer' in df_reservas_nuevas.columns and 'Customer' not in df_reservas_original.columns:
+            df_reservas_original['Customer'] = ''
+        if 'Customer' in df_reservas_original.columns and 'Customer' not in df_reservas_nuevas.columns:
+            df_reservas_nuevas['Customer'] = ''
+
         # Ahora obtener las columnas comunes
         columnas_comunes = list(set(df_reservas_original.columns) & set(df_reservas_nuevas.columns))
         df_reservas_original = df_reservas_original[columnas_comunes]
@@ -191,6 +216,15 @@ def procesar_reservas(df_reservas_original, df_reservas_nuevas):
     if 'ID' in df_final.columns:
         df_final["ID"] = df_final["ID"].astype(int)
     
+    # Completar 'Customer' desde las nuevas reservas cuando esté vacío en las originales
+    try:
+        if 'ID' in df_final.columns and 'Customer' in df_final.columns and 'Customer' in df_reservas_nuevas.columns:
+            mapping_customer = df_reservas_nuevas.set_index('ID')['Customer']
+            mask_vacio = df_final['Customer'].isna() | (df_final['Customer'].astype(str).str.strip() == '')
+            df_final.loc[mask_vacio, 'Customer'] = df_final.loc[mask_vacio, 'ID'].map(mapping_customer)
+    except Exception as e:
+        print(f"Advertencia al completar 'Customer' desde nuevas reservas: {e}")
+
     # Reordenar columnas en el orden especificado después de juntar todas las reservas
     columnas_ordenadas = [
         'ID', 

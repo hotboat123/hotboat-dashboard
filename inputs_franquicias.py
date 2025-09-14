@@ -45,7 +45,7 @@ franquicias = {
         'estacionalidad': {
             'Verano': 1.10,   # vende 10% más que el input base
             'Invierno': 1.00, # igual que base
-            'normal': 1.00,   # no vende fuera de estación
+            'normal': 1.00,   # no vende fuera de estación (si fuera 0)
         },
         'apertura': '2027-05',
         'arriendo_mensual': 1_000_000,
@@ -66,7 +66,7 @@ franquicias = {
 nombre_franquicia_modelo = 'Franquicia 2'
 
 # Año objetivo para evaluar royalties (solo ese año). Si es None, se usa el último año disponible.
-objetivo_anio = 2030  # Ej: 2028
+objetivo_anio = 2035  # Ej: 2028
 
 # Número de iteraciones Monte Carlo para promediar resultados
 simulaciones_num_iter = 10
@@ -78,12 +78,19 @@ simulaciones_num_iter = 10
 ingresos_marca_schedule = {
     2027: 2,
     2028: 4,
-    2029: 7,
-    2030: 10,
+    2029: 5,
+    2030: 5,
+    2031: 5,
+    2032: 5,
+    2033: 5,
+    2034: 5,
+    2035: 5,
 }
 
 # Mes de apertura por defecto para clones del schedule (1=enero)
 apertura_mes_default = 1
+
+
 
 # Configuración de la FÁBRICA (venta de HotBoats a franquiciados)
 # Supuestos: capacidad anual = trabajadores * productividad_anual_por_trabajador
@@ -96,7 +103,7 @@ factory_config = {
     'sueldo_mensual_por_trabajador': 500_000,      # sueldo mensual por trabajador
     # Capacidad
     'trabajadores':           3,                  # cantidad de trabajadores actuales
-    'productividad_anual_por_trabajador': 6,       # HotBoats/año por trabajador
+    'productividad_anual_por_trabajador': 6,       # HotBoats/año por trabajador (si tengo 3 trabajadores, con productividad anual de 6, produzco 18 HotBoats/año), 1.5 por mes
     # Inventario y política de producción
     'factory_initial_stock': 0,                    # stock inicial de HotBoats
     'factory_produce_to_capacity': False,           # True: producir = capacidad; False: producir solo lo necesario
