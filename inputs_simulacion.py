@@ -145,7 +145,7 @@ random_seed = 48
 # salvo que `sobrescribir_demanda_existente_con_crecimiento` sea True.
 expandir_demanda_con_crecimiento = True
 tasa_crecimiento_anual = 0.10  # SOLO INFLUYE EN LA DEMANDA, NO EN LOS COSTOS
-simular_hasta_anio = 2035 # Generar datos hasta este año (inclusive)
+simular_hasta_anio = 2027 # Generar datos hasta este año (inclusive)
 sobrescribir_demanda_existente_con_crecimiento = False
 
 # Escenarios de simulación de demanda (multiplicadores)

@@ -53,9 +53,9 @@ franquicias = {
     'Franquicia 2': {
         'n_hotboats': 2,
         'estacionalidad': {
-            'Verano': 1.50,   # vende 10% más que el input base
-            'Invierno': 1.50, # igual que base
-            'normal': 1.50,   # no vende fuera de estación
+            'Verano': 1.0,   # vende 10% más que el input base
+            'Invierno': 1.0, # igual que base
+            'normal': 1.10,   # no vende fuera de estación
         },
         'apertura': '2026-05',
         'arriendo_mensual': 500_000,
@@ -102,7 +102,7 @@ factory_config = {
     'arriendo_mensual':       1_000_000,           # arriendo mensual
     'sueldo_mensual_por_trabajador': 500_000,      # sueldo mensual por trabajador
     # Capacidad
-    'trabajadores':           3,                  # cantidad de trabajadores actuales
+    'trabajadores':           2,                  # cantidad de trabajadores actuales #incluye a daniel
     'productividad_anual_por_trabajador': 6,       # HotBoats/año por trabajador (si tengo 3 trabajadores, con productividad anual de 6, produzco 18 HotBoats/año), 1.5 por mes
     # Inventario y política de producción
     'factory_initial_stock': 0,                    # stock inicial de HotBoats
@@ -113,11 +113,15 @@ factory_config = {
     # Ventas a particulares (canal retail) con precio y demanda anual independiente
     'precio_venta_particular': 15_000_000,         # precio de venta por unidad a particulares
     'particulares_unidades_por_anio': {            # demanda anual de particulares por año
-        2027: 3,
-        2028: 5,
-        2029: 5,
+        2027: 1,
+        2028: 0,
+        2029: 0,
         # 2030: 10,
     },
+    # Valuación (múltiplos)
+    'ebitda_multiple': 4.0,            # múltiplo EV/EBITDA para valorar la fábrica
+    'deuda_neta': 0,                   # CLP; se resta para llegar a Equity
+    'activos_no_operativos': 0,        # CLP; se suman para llegar a Equity
 }
 
 

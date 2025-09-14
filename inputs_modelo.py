@@ -364,3 +364,4 @@ config_utilidad_operativa = {
 # 11 septiembre compre super con banco estado en vez de prex
 # 12 de septiembre se transfire 160650 desde estado a chile para pagar gelcoat
 # 12 de septiembre compre 7200 con prex en vez e bco estado pq no tenia la billetera, era bolsas de basura y palmito en lata
+#14 de sep paguer short del elya con prex, son 66.218, luego me lo transferi de banco detado

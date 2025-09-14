@@ -150,6 +150,11 @@ def main() -> bool:
     # Acumulador anual (por año) para ingreso marca (schedule) en cada iteración
     # dict[anio] -> list[royalty_en_esa_iteración]
     schedule_anual_series: dict[int, list[float]] = {}
+    # Acumulador mensual (por mes YYYY-MM) para ingreso marca (schedule) en cada iteración
+    schedule_mensual_series: dict[str, list[float]] = {}
+    # Acumulador mensual de operación de la franquicia modelo (por mes YYYY-MM)
+    # dict["YYYY-MM"] -> { 'res':[..], 'ing': [..], 'cv': [..], 'cf': [..], 'util': [..] }
+    modelo_mensual_series: dict[str, dict[str, list[float]]] = {}
     # Métricas fábrica
     # Utilidad por franquicia (por año objetivo) en cada iteración
     util_por_franquicia_series: dict[str, list[float]] = {}
@@ -220,6 +225,36 @@ def main() -> bool:
             n_req = 0
         n_req_por_iter.append(n_req)
 
+        # Operación mensual de la franquicia modelo (una instancia)
+        if nombre_modelo in fcfg.franquicias:
+            base_mod = dict(fcfg.franquicias[nombre_modelo])
+            dem_mod = _ajustar_demanda_por_franquicia(demanda_map, base_mod)
+            fin_mod = _calcular_finanzas_franquicia(dem_mod, base_mod)
+            dfm = fin_mod['detalle']
+            if not dfm.empty:
+                try:
+                    cvar_mod = fcfg.costo_variable_por_reserva_franquicia
+                    if cvar_mod is None:
+                        cvar_mod = float(getattr(cfg, 'costo_variable_por_reserva', 0))
+                    cvar_mod = float(cvar_mod)
+                except Exception:
+                    cvar_mod = float(getattr(cfg, 'costo_variable_por_reserva', 0))
+                cfijo_m = float(base_mod.get('arriendo_mensual', 0))
+                for _, r in dfm.iterrows():
+                    ym = str(r['mes'])
+                    dmes = int(r['demanda'])
+                    ventas = float(r['ventas'])
+                    cv = float(dmes) * float(cvar_mod)
+                    cf = float(cfijo_m)
+                    utilm = float(r['utilidad'])
+                    if ym not in modelo_mensual_series:
+                        modelo_mensual_series[ym] = {'res': [], 'ing': [], 'cv': [], 'cf': [], 'util': []}
+                    modelo_mensual_series[ym]['res'].append(float(dmes))
+                    modelo_mensual_series[ym]['ing'].append(ventas)
+                    modelo_mensual_series[ym]['cv'].append(cv)
+                    modelo_mensual_series[ym]['cf'].append(cf)
+                    modelo_mensual_series[ym]['util'].append(utilm)
+
         # Simular ingresos de la marca por schedule de aperturas
         schedule = getattr(fcfg, 'ingresos_marca_schedule', {}) or {}
         apertura_mes_def = int(getattr(fcfg, 'apertura_mes_default', 1))
@@ -260,6 +295,11 @@ def main() -> bool:
                         for _, row in sums.iterrows():
                             a = int(row['anio'])
                             roy_anual_map[a] = roy_anual_map.get(a, 0.0) + float(row['royalty'])
+                        # Sumar por mes (para desglose mensual)
+                        sums_m = dfc.groupby('mes', as_index=False)['royalty'].sum()
+                        for _, row in sums_m.iterrows():
+                            mm = str(row['mes'])
+                            schedule_mensual_series.setdefault(mm, []).append(float(row['royalty']))
                         # Sumar para el año objetivo (para métrica principal)
                         if anio_objetivo is not None:
                             roy_total_schedule += float(dfc[dfc['anio'] == int(anio_objetivo)]['royalty'].sum())
@@ -406,10 +446,60 @@ def main() -> bool:
                 avg_a = float(sum(vals)) / len(vals)
                 sd_a = float(stats.pstdev(vals)) if len(vals) > 1 else 0.0
                 print(f"     - {a}: ${avg_a:,.0f} (σ={sd_a:,.0f})")
+        # Operación mensual de la franquicia modelo: imprimir tabla por año con promedios
+        if modelo_mensual_series:
+            try:
+                _nom_modelo = str(getattr(fcfg, 'nombre_franquicia_modelo', 'Franquicia modelo'))
+            except Exception:
+                _nom_modelo = 'Franquicia modelo'
+            print(f"\n   Operación mensual de franquicia modelo '{_nom_modelo}' (promedios):")
+            meses_sorted = sorted(modelo_mensual_series.keys())
+            anos_map: dict[int, list[str]] = {}
+            for mm in meses_sorted:
+                try:
+                    a = int(str(mm)[:4])
+                except Exception:
+                    continue
+                anos_map.setdefault(a, []).append(mm)
+            for a in sorted(anos_map.keys()):
+                print(f"     Año {a}:")
+                print("       Mes    Reservas        Ingresos          CV          CF     Utilidad")
+                t_res = 0.0
+                t_ing = 0.0
+                t_cv = 0.0
+                t_cf = 0.0
+                t_util = 0.0
+                for mm in sorted(anos_map[a]):
+                    met = modelo_mensual_series.get(mm, {})
+                    res_vals = met.get('res', []) or []
+                    ing_vals = met.get('ing', []) or []
+                    cv_vals = met.get('cv', []) or []
+                    cf_vals = met.get('cf', []) or []
+                    util_vals = met.get('util', []) or []
+                    avg_res = float(sum(res_vals)) / len(res_vals) if len(res_vals) > 0 else 0.0
+                    avg_ing = float(sum(ing_vals)) / len(ing_vals) if len(ing_vals) > 0 else 0.0
+                    avg_cv = float(sum(cv_vals)) / len(cv_vals) if len(cv_vals) > 0 else 0.0
+                    avg_cf = float(sum(cf_vals)) / len(cf_vals) if len(cf_vals) > 0 else 0.0
+                    avg_util = float(sum(util_vals)) / len(util_vals) if len(util_vals) > 0 else 0.0
+                    print(f"       {mm}  {int(round(avg_res)):>9}  ${avg_ing:>12,.0f}  ${avg_cv:>10,.0f}  ${avg_cf:>10,.0f}  ${avg_util:>10,.0f}")
+                    t_res += avg_res
+                    t_ing += avg_ing
+                    t_cv += avg_cv
+                    t_cf += avg_cf
+                    t_util += avg_util
+                print(f"       Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cv:>10,.0f}  ${t_cf:>10,.0f}  ${t_util:>10,.0f}")
         # Fábrica: reporte anual
         if fabrica_ingreso_anual_series:
             print("\n🏭 Fábrica (venta de HotBoats a franquicias del schedule):")
             print("   Supuestos: capacidad_anual = trabajadores * productividad_anual_por_trabajador")
+            # Parámetros de valuación (múltiplos)
+            try:
+                _fcfg_fact_val = getattr(fcfg, 'factory_config', {}) or {}
+                _mult = float(_fcfg_fact_val.get('ebitda_multiple', 6.0))
+                _deuda_neta = float(_fcfg_fact_val.get('deuda_neta', 0))
+                _act_no_op = float(_fcfg_fact_val.get('activos_no_operativos', 0))
+            except Exception:
+                _mult, _deuda_neta, _act_no_op = 6.0, 0.0, 0.0
             for a in sorted(fabrica_ingreso_anual_series.keys()):
                 vals_ing = fabrica_ingreso_anual_series[a]
                 vals_u = fabrica_utilidad_anual_series.get(a, [])
@@ -438,6 +528,13 @@ def main() -> bool:
                 print(f"     - {a}: Ingreso=${avg_ing:,.0f} (σ={sd_ing:,.0f}) | Costos: Var=${avg_cv:,.0f}, Fijos=${avg_cf:,.0f} | Utilidad=${avg_u:,.0f} (σ={sd_u:,.0f})")
                 print(f"           Producidos≈{avg_prod:.1f} | Vendidos≈{avg_vend:.1f} (Franquicias≈{avg_vfr:.1f}, Particulares≈{avg_vpt:.1f}) | Stock final≈{avg_stock:.1f}")
                 print(f"           Ingreso por canal: Franquicias=${avg_ing_fr:,.0f} | Particulares=${avg_ing_pt:,.0f}")
+                # Valuación por año (EV y Equity) usando utilidad como proxy de EBITDA del modelo
+                try:
+                    ev = _mult * avg_u
+                    equity = ev - _deuda_neta + _act_no_op
+                    print(f"           Valorización: EBITDA≈${avg_u:,.0f} × múltiplo={_mult:.1f}x → EV=${ev:,.0f} | Equity≈${equity:,.0f} (Deuda neta=${_deuda_neta:,.0f}, Activos no op=${_act_no_op:,.0f})")
+                except Exception:
+                    pass
         if comp_msg is not None:
             util_fabrica_est, util_terc_est, q_be, cap = comp_msg
             print("\n🔀 Comparación fábrica vs tercerizar (estimación rápida para año objetivo):")
