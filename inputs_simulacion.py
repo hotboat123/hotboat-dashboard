@@ -61,7 +61,7 @@ demanda_por_mes = {
 ticket_promedio = 160_000
 
 # Costo operativo por cada reserva (CLP)
-costo_variable_por_reserva = 45_000 #no se usa
+costo_variable_por_reserva = 45_000 #se usa para las franquicias, lo intentare arreglar
 
 # Desglose opcional del costo operativo por reserva.
 # Si se activa y se define el dict, se generará una fila por componente por cada reserva.

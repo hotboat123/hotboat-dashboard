@@ -138,6 +138,50 @@ def resumen_utilidad_operativa_mensual(
     return res
 
 
+def resumen_operacion_mensual(
+    df_ing: pd.DataFrame,
+    df_cost_op: pd.DataFrame,
+    df_fijos: pd.DataFrame,
+) -> pd.DataFrame:
+    """Devuelve desglose mensual: reservas, ingresos, costos variables, costos fijos y utilidad.
+    - reservas: conteo de filas en df_ing por mes (aprox. número de reservas)
+    - ingresos: suma df_ing por mes
+    - costos_variables: suma df_cost_op por mes (incluye pagos de ayudantes y costos por reserva)
+    - costos_fijos: suma df_fijos por mes
+    - utilidad: ingresos - (costos_variables + costos_fijos)
+    """
+    def group_month_sum(df: pd.DataFrame, value_col: str = "monto") -> pd.DataFrame:
+        if df is None or df.empty:
+            return pd.DataFrame(columns=["mes", value_col]).assign(**{value_col: pd.Series(dtype=float)})
+        d = df.copy()
+        d["mes"] = pd.to_datetime(d["fecha"]).dt.to_period("M").astype(str)
+        return d.groupby("mes", as_index=False)[value_col].sum()
+
+    # Reservas = conteo de registros en df_ing por mes
+    if df_ing is None or df_ing.empty:
+        g_res = pd.DataFrame(columns=["mes", "reservas"]).assign(reservas=pd.Series(dtype=int))
+    else:
+        dcnt = df_ing.copy()
+        dcnt["mes"] = pd.to_datetime(dcnt["fecha"]).dt.to_period("M").astype(str)
+        g_res = dcnt.groupby("mes", as_index=False)["fecha"].count().rename(columns={"fecha": "reservas"})
+
+    g_ing = group_month_sum(df_ing, "monto").rename(columns={"monto": "ingresos"})
+    g_cv = group_month_sum(df_cost_op, "monto").rename(columns={"monto": "costos_variables"})
+    g_cf = group_month_sum(df_fijos, "monto").rename(columns={"monto": "costos_fijos"})
+
+    # Merge y rellenar
+    res = g_res.merge(g_ing, on="mes", how="outer")
+    res = res.merge(g_cv, on="mes", how="outer")
+    res = res.merge(g_cf, on="mes", how="outer")
+    for c in ["reservas", "ingresos", "costos_variables", "costos_fijos"]:
+        if c not in res.columns:
+            res[c] = 0
+        res[c] = res[c].fillna(0)
+    # Utilidad
+    res["utilidad"] = res["ingresos"] - (res["costos_variables"] + res["costos_fijos"])
+    return res.sort_values("mes")
+
+
 def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Ejecuta el escenario escalando la demanda y construyendo los DataFrames de simulación."""
     print("\n" + "-" * 60)
@@ -184,16 +228,35 @@ def ejecutar_escenario(nombre: str, factor: float) -> Tuple[pd.DataFrame, pd.Dat
                     detalle_txt = ", ".join([f"{c.replace('ayudante_', 'ayudante ')}: ${row[c]:,.0f}" for c in cols_det])
                     print(f"      Detalle → {detalle_txt}")
 
-        # Utilidad total mensual y total (incluye costos fijos y marketing)
-        uo = resumen_utilidad_operativa_mensual(df_ing, df_cost_op, df_mark, df_fijos)
-        if uo.empty:
-            print("ℹ️  No hay datos para calcular utilidad operativa")
+        # Desglose mensual: reservas, ingresos, costos variables, costos fijos y utilidad
+        opm = resumen_operacion_mensual(df_ing, df_cost_op, df_fijos)
+        if opm.empty:
+            print("ℹ️  No hay datos para calcular la operación mensual")
         else:
-            print("💼 Utilidad total mensual:")
-            for _, row in uo.iterrows():
-                print(f"  - {row['mes']}: ${row['utilidad']:,.0f}")
-            total_uo = uo["utilidad"].sum()
-            print(f"🧮 Utilidad total del escenario: ${total_uo:,.0f}")
+            print("📊 Operación mensual (reservas, ingresos, CV, CF, utilidad):")
+            # Agrupar por año y presentar tabla con totales
+            opm["anio"] = opm["mes"].str.slice(0, 4).astype(int)
+            for anio, dfy in opm.groupby("anio"):
+                print(f"  Año {anio}:")
+                print("    Mes    Reservas        Ingresos          CV          CF     Utilidad")
+                t_res = t_ing = t_cv = t_cf = t_util = 0.0
+                for _, r in dfy.sort_values("mes").iterrows():
+                    res = int(r.get("reservas", 0) or 0)
+                    ing = float(r.get("ingresos", 0) or 0)
+                    cv = float(r.get("costos_variables", 0) or 0)
+                    cf = float(r.get("costos_fijos", 0) or 0)
+                    util = float(r.get("utilidad", 0) or 0)
+                    print(f"    {r['mes']}  {res:>9}  ${ing:>12,.0f}  ${cv:>10,.0f}  ${cf:>10,.0f}  ${util:>10,.0f}")
+                    t_res += res; t_ing += ing; t_cv += cv; t_cf += cf; t_util += util
+                print(f"    Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cv:>10,.0f}  ${t_cf:>10,.0f}  ${t_util:>10,.0f}")
+            # Totales globales
+            g_res = int(opm["reservas"].sum())
+            g_ing = float(opm["ingresos"].sum())
+            g_cv = float(opm["costos_variables"].sum())
+            g_cf = float(opm["costos_fijos"].sum())
+            g_util = float(opm["utilidad"].sum())
+            print("\n🧮 Totales del escenario:")
+            print(f"  Reservas={g_res} | Ingresos=${g_ing:,.0f} | CV=${g_cv:,.0f} | CF=${g_cf:,.0f} | Utilidad=${g_util:,.0f}")
         return df_ing, df_cost_op, df_mark, df_fijos
     finally:
         # Restaurar demanda original
