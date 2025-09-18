@@ -365,3 +365,5 @@ config_utilidad_operativa = {
 # 12 de septiembre se transfire 160650 desde estado a chile para pagar gelcoat
 # 12 de septiembre compre 7200 con prex en vez e bco estado pq no tenia la billetera, era bolsas de basura y palmito en lata
 #14 de sep paguer short del elya con prex, son 66.218, luego me lo transferi de banco detado
+# 16/9 recibi 5000 en efectivo reserva open sky
+# 17/9 compre por aliexpress con banco de chile en vez de banco estado (aunque compre pg11, pg9 y termocontraible, que son empresa fabrica)

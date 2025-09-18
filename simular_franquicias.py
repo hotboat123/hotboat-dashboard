@@ -288,23 +288,17 @@ def main() -> bool:
                         conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
                     for dia, cantidad in conteo_por_dia.items():
                         pago = 0.0
-                        num_ayudantes_dia = 1 if cantidad == 1 else (2 if cantidad > 1 else 0)
-                        if cantidad == 1 and len(escalas_solitario_sorted) > 0:
-                            for umbral, monto in escalas_solitario_sorted:
-                                if cantidad >= umbral:
-                                    pago = float(monto)
-                                else:
-                                    break
-                            if pago == 0 and escalas_solitario_sorted:
-                                pago = float(escalas_solitario_sorted[0][1])
-                        else:
-                            for umbral, monto in escalas_sorted:
-                                if cantidad >= umbral:
-                                    pago = float(monto)
-                                else:
-                                    break
-                            if pago == 0 and escalas_sorted:
-                                pago = float(escalas_sorted[0][1])
+                        try:
+                            num_ayudantes_dia = int(getattr(cfg, 'numero_ayudantes', 2))
+                        except Exception:
+                            num_ayudantes_dia = 2
+                        for umbral, monto in escalas_sorted:
+                            if cantidad >= umbral:
+                                pago = float(monto)
+                            else:
+                                break
+                        if pago == 0 and escalas_sorted:
+                            pago = float(escalas_sorted[0][1])
                         ctrab_total += float(num_ayudantes_dia) * float(pago)
                 # CF y CRoy
                 cf = float(cfijo_m)

@@ -54,7 +54,7 @@ demanda_por_mes = {
     '2026-09': 25,
     '2026-10': 20,
     '2026-11': 30,
-    '2026-12': 35
+    '2026-12': 30
 }
 
 # Ingreso promedio por cliente (CLP)
@@ -91,9 +91,7 @@ pago_ayudante_escalas = [
 # Si está definida y no vacía, en días con 1 reserva se usará esta escala en vez de `pago_ayudante_escalas`
 # y se pagará a 1 solo ayudante (ignora `numero_ayudantes` ese día).
 # Formato: lista de tuplas (cantidad_reservas, pago_diario). Normalmente basta con (1, monto).
-pago_ayudante_escalas_solitario = [
-    (1, 25_000),  # ejemplo: con 1 cliente, pagar $30.000 a 1 ayudante
-]
+pago_ayudante_escalas_solitario = []
 
 # Número de ayudantes (cada uno recibe el pago según la escala)
 numero_ayudantes = 2

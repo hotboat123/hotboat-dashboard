@@ -809,33 +809,19 @@ def construir_ingresos_y_costos_simulados() -> tuple[pd.DataFrame, pd.DataFrame,
                 conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
 
             for dia, cantidad in conteo_por_dia.items():
-                # Regla de ayudantes por día:
-                # - 1 cliente => 1 ayudante (usa escala solitario si existe)
-                # - >1 clientes => 2 ayudantes (usa escala general)
+                # Regla: siempre pagar a `numero_ayudantes` usando la escala general
                 pago = 0
-                num_ayudantes_dia = 1 if cantidad == 1 else (2 if cantidad > 1 else 0)
                 try:
-                    escalas_solitario = list(getattr(cfg, 'pago_ayudante_escalas_solitario', []) or [])
-                    escalas_solitario_sorted = sorted(escalas_solitario, key=lambda x: x[0])
+                    num_ayudantes_dia = int(getattr(cfg, 'numero_ayudantes', 2))
                 except Exception:
-                    escalas_solitario_sorted = []
-
-                if cantidad == 1 and len(escalas_solitario_sorted) > 0:
-                    for umbral, monto in escalas_solitario_sorted:
-                        if cantidad >= umbral:
-                            pago = monto
-                        else:
-                            break
-                    if pago == 0:
-                        pago = escalas_solitario_sorted[0][1]
-                else:
-                    for umbral, monto in escalas_sorted:
-                        if cantidad >= umbral:
-                            pago = monto
-                        else:
-                            break
-                    if pago == 0 and escalas_sorted:
-                        pago = escalas_sorted[0][1]
+                    num_ayudantes_dia = 2
+                for umbral, monto in escalas_sorted:
+                    if cantidad >= umbral:
+                        pago = monto
+                    else:
+                        break
+                if pago == 0 and escalas_sorted:
+                    pago = escalas_sorted[0][1]
 
                 # Registrar una fila por ayudante para poder sumar por ayudante en el mes
                 num = max(0, int(num_ayudantes_dia))
