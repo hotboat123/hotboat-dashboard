@@ -75,6 +75,10 @@ costo_operativo_detalle_por_reserva = {
 
 # Pago del ayudante escalonado por día según número de reservas ese día
 usar_pago_ayudante_escalonado = True
+# Modo de pago de ayudantes:
+# - 'siempre_dos': siempre paga a `numero_ayudantes` usando `pago_ayudante_escalas`
+# - 'solitario': si hay 1 reserva usa `pago_ayudante_escalas_solitario` y paga a 1 ayudante; si >1 reservas usa escala general y paga a `numero_ayudantes`
+modo_pago_ayudantes = 'solitario'
 # Lista de tuplas: (cantidad_reservas, pago_diario)
 pago_ayudante_escalas = [
     (1, 20_000),
@@ -91,7 +95,9 @@ pago_ayudante_escalas = [
 # Si está definida y no vacía, en días con 1 reserva se usará esta escala en vez de `pago_ayudante_escalas`
 # y se pagará a 1 solo ayudante (ignora `numero_ayudantes` ese día).
 # Formato: lista de tuplas (cantidad_reservas, pago_diario). Normalmente basta con (1, monto).
-pago_ayudante_escalas_solitario = []
+pago_ayudante_escalas_solitario = [
+    (1, 25_000),
+]
 
 # Número de ayudantes (cada uno recibe el pago según la escala)
 numero_ayudantes = 2

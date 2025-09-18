@@ -308,18 +308,33 @@ def main() -> bool:
                         clave = fdt.date()
                         conteo_por_dia[clave] = conteo_por_dia.get(clave, 0) + 1
                     for dia, cantidad in conteo_por_dia.items():
-                        pago = 0.0
+                        # Modo de pago configurable: 'siempre_dos' o 'solitario'
                         try:
-                            num_ayudantes_dia = int(getattr(cfg, 'numero_ayudantes', 2))
+                            modo = str(getattr(cfg, 'modo_pago_ayudantes', 'siempre_dos') or 'siempre_dos').lower()
                         except Exception:
-                            num_ayudantes_dia = 2
-                        for umbral, monto in escalas_sorted:
+                            modo = 'siempre_dos'
+                        pago = 0.0
+                        if modo == 'solitario' and int(cantidad) == 1:
+                            num_ayudantes_dia = 1
+                            try:
+                                escalas_solitario = list(getattr(cfg, 'pago_ayudante_escalas_solitario', []) or [])
+                                escalas_solitario_sorted = sorted(escalas_solitario, key=lambda x: x[0])
+                            except Exception:
+                                escalas_solitario_sorted = []
+                            fuente = escalas_solitario_sorted if len(escalas_solitario_sorted) > 0 else escalas_sorted
+                        else:
+                            try:
+                                num_ayudantes_dia = int(getattr(cfg, 'numero_ayudantes', 2))
+                            except Exception:
+                                num_ayudantes_dia = 2
+                            fuente = escalas_sorted
+                        for umbral, monto in fuente:
                             if cantidad >= umbral:
                                 pago = float(monto)
                             else:
                                 break
-                        if pago == 0 and escalas_sorted:
-                            pago = float(escalas_sorted[0][1])
+                        if pago == 0 and fuente:
+                            pago = float(fuente[0][1])
                         ctrab_total += float(num_ayudantes_dia) * float(pago)
                 # CF, Marketing y CRoy
                 cf = float(cfijo_m)
