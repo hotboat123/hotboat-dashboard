@@ -82,23 +82,32 @@ def _calcular_finanzas_franquicia(demanda_mes: dict, franquicia: dict) -> dict:
         cvar = float(getattr(cfg, 'costo_variable_por_reserva', 0))
     cvar = float(cvar)
     arriendo = float(franquicia.get('arriendo_mensual', 0))
+    # Marketing mensual (por franquicia); fallback a cfg.gasto_marketing_mensual
+    try:
+        marketing_m = float(franquicia.get('marketing_mensual', getattr(cfg, 'gasto_marketing_mensual', 0)))
+    except Exception:
+        marketing_m = 0.0
     rate = float(getattr(fcfg, 'royalty_rate', 0.09))
 
     rows = []
     for ym in sorted(demanda_mes.keys()):
         d = int(demanda_mes[ym])
         ventas = d * ticket
-        costo = arriendo + d * cvar
-        utilidad = ventas - costo
+        costo_var = d * cvar
+        costo_total = arriendo + costo_var + marketing_m
+        utilidad = ventas - costo_total
         royalty = ventas * rate
-        rows.append({'mes': ym, 'demanda': d, 'ventas': ventas, 'costo': costo, 'utilidad': utilidad, 'royalty': royalty})
+        rows.append({'mes': ym, 'demanda': d, 'ventas': ventas, 'costo_var': costo_var, 'marketing': marketing_m, 'arriendo': arriendo, 'costo_total': costo_total, 'utilidad': utilidad, 'royalty': royalty})
     df = pd.DataFrame(rows)
     if not df.empty:
         df['anio'] = df['mes'].str.slice(0, 4).astype(int)
     totales = {
         'demanda_total': int(df['demanda'].sum()) if not df.empty else 0,
         'ventas_total': float(df['ventas'].sum()) if not df.empty else 0.0,
-        'costo_total': float(df['costo'].sum()) if not df.empty else 0.0,
+        'costo_var_total': float(df['costo_var'].sum()) if not df.empty else 0.0,
+        'marketing_total': float(df['marketing'].sum()) if not df.empty else 0.0,
+        'arriendo_total': float(df['arriendo'].sum()) if not df.empty else 0.0,
+        'costo_total': float(df['costo_total'].sum()) if not df.empty else 0.0,
         'utilidad_total': float(df['utilidad'].sum()) if not df.empty else 0.0,
         'royalty_total': float(df['royalty'].sum()) if not df.empty else 0.0,
         'detalle': df,
@@ -216,6 +225,18 @@ def main() -> bool:
                 total_royalties += float(fin_anio)
                 util_fran = float(df[df['anio'] == int(anio_objetivo)]['utilidad'].sum())
                 util_por_franquicia_series.setdefault(nombre, []).append(util_fran)
+                # Imprimir resumen con Marketing separado
+                try:
+                    ventas_t = float(fin.get('ventas_total', 0.0))
+                    cvar_t = float(fin.get('costo_var_total', 0.0))
+                    mark_t = float(fin.get('marketing_total', 0.0))
+                    arr_t = float(fin.get('arriendo_total', 0.0))
+                    ctot_t = float(fin.get('costo_total', 0.0))
+                    util_t = float(fin.get('utilidad_total', 0.0))
+                    roy_t = float(fin.get('royalty_total', 0.0))
+                    print(f"   - {nombre}: Ventas=${ventas_t:,.0f} | CV=${cvar_t:,.0f} | Marketing=${mark_t:,.0f} | Arriendo=${arr_t:,.0f} | Costo Total=${ctot_t:,.0f} | Utilidad=${util_t:,.0f} | Royalty=${roy_t:,.0f}")
+                except Exception:
+                    pass
             if fin['utilidad_total'] <= 0:
                 util_negativa = True
 
@@ -300,17 +321,22 @@ def main() -> bool:
                         if pago == 0 and escalas_sorted:
                             pago = float(escalas_sorted[0][1])
                         ctrab_total += float(num_ayudantes_dia) * float(pago)
-                # CF y CRoy
+                # CF, Marketing y CRoy
                 cf = float(cfijo_m)
+                try:
+                    marketing_m = float(base_mod.get('marketing_mensual', getattr(cfg, 'gasto_marketing_mensual', 0)))
+                except Exception:
+                    marketing_m = 0.0
                 croy = float(ventas * rate)
-                # Utilidad neta de royalties
-                util_calc = float(ventas - (cvops + ctrab_total + cf + croy))
+                # Utilidad neta
+                util_calc = float(ventas - (cvops + ctrab_total + marketing_m + cf + croy))
                 if ym not in modelo_mensual_series:
-                    modelo_mensual_series[ym] = {'res': [], 'ing': [], 'cvops': [], 'ctrab': [], 'cf': [], 'roy': [], 'util': []}
+                    modelo_mensual_series[ym] = {'res': [], 'ing': [], 'cvops': [], 'ctrab': [], 'mark': [], 'cf': [], 'roy': [], 'util': []}
                 modelo_mensual_series[ym]['res'].append(float(reservas_mes))
                 modelo_mensual_series[ym]['ing'].append(ventas)
                 modelo_mensual_series[ym]['cvops'].append(cvops)
                 modelo_mensual_series[ym]['ctrab'].append(ctrab_total)
+                modelo_mensual_series[ym]['mark'].append(marketing_m)
                 modelo_mensual_series[ym]['cf'].append(cf)
                 modelo_mensual_series[ym]['roy'].append(croy)
                 modelo_mensual_series[ym]['util'].append(util_calc)
@@ -593,14 +619,15 @@ def main() -> bool:
                 anos_map.setdefault(a, []).append(mm)
             for a in sorted(anos_map.keys()):
                 print(f"     Año {a}:")
-                print("       Mes    Reservas        Ingresos       CVOps       CTrab          CF        CRoy     Utilidad")
-                t_res = t_ing = t_cvops = t_ctrab = t_cf = t_roy = t_util = 0.0
+                print("       Mes  Reservas  Ingresos         CV        CT        Mkt         CF        CRoy        Utilidad")
+                t_res = t_ing = t_cvops = t_ctrab = t_mark = t_cf = t_roy = t_util = 0.0
                 for mm in sorted(anos_map[a]):
                     met = modelo_mensual_series.get(mm, {})
                     res_vals = met.get('res', []) or []
                     ing_vals = met.get('ing', []) or []
                     cvops_vals = met.get('cvops', []) or []
                     ctrab_vals = met.get('ctrab', []) or []
+                    mark_vals = met.get('mark', []) or []
                     cf_vals = met.get('cf', []) or []
                     roy_vals = met.get('roy', []) or []
                     util_vals = met.get('util', []) or []
@@ -608,12 +635,13 @@ def main() -> bool:
                     avg_ing = float(sum(ing_vals)) / len(ing_vals) if len(ing_vals) > 0 else 0.0
                     avg_cvops = float(sum(cvops_vals)) / len(cvops_vals) if len(cvops_vals) > 0 else 0.0
                     avg_ctrab = float(sum(ctrab_vals)) / len(ctrab_vals) if len(ctrab_vals) > 0 else 0.0
+                    avg_mark = float(sum(mark_vals)) / len(mark_vals) if len(mark_vals) > 0 else 0.0
                     avg_cf = float(sum(cf_vals)) / len(cf_vals) if len(cf_vals) > 0 else 0.0
                     avg_roy = float(sum(roy_vals)) / len(roy_vals) if len(roy_vals) > 0 else 0.0
                     avg_util = float(sum(util_vals)) / len(util_vals) if len(util_vals) > 0 else 0.0
-                    print(f"       {mm}  {int(round(avg_res)):>9}  ${avg_ing:>12,.0f}  ${avg_cvops:>10,.0f}  ${avg_ctrab:>10,.0f}  ${avg_cf:>10,.0f}  ${avg_roy:>10,.0f}  ${avg_util:>10,.0f}")
-                    t_res += avg_res; t_ing += avg_ing; t_cvops += avg_cvops; t_ctrab += avg_ctrab; t_cf += avg_cf; t_roy += avg_roy; t_util += avg_util
-                print(f"       Total     {int(round(t_res)):>9}  ${t_ing:>12,.0f}  ${t_cvops:>10,.0f}  ${t_ctrab:>10,.0f}  ${t_cf:>10,.0f}  ${t_roy:>10,.0f}  ${t_util:>10,.0f}")
+                    print(f"       {mm}  {int(round(avg_res))}  ${avg_ing:,.0f}  ${avg_cvops:,.0f}  ${avg_ctrab:,.0f}  ${avg_mark:,.0f}  ${avg_cf:,.0f}  ${avg_roy:,.0f}  ${avg_util:,.0f}")
+                    t_res += avg_res; t_ing += avg_ing; t_cvops += avg_cvops; t_ctrab += avg_ctrab; t_mark += avg_mark; t_cf += avg_cf; t_roy += avg_roy; t_util += avg_util
+                print(f"       Total  {int(round(t_res))}  ${t_ing:,.0f}  ${t_cvops:,.0f}  ${t_ctrab:,.0f}  ${t_mark:,.0f}  ${t_cf:,.0f}  ${t_roy:,.0f}  ${t_util:,.0f}")
         # Fábrica: reporte anual
         if fabrica_ingreso_anual_series:
             print("\n🏭 Fábrica (venta de HotBoats a franquicias del schedule):")
