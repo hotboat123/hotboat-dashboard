@@ -66,7 +66,7 @@ diccionario_categorias_gastos = {
         "aguirre paillale", "Axel Aguirre", "Nestor", "Francisco godoy"
     ],
     "Sueldo Tom": [
-        "Tomas Andreas", "Prex"
+        "Tomas Andreas", "Prex", "Damjanic silva tom"
     ],
     "Beneficios HotBoat": [
         "Felipe Hidalgo", 
@@ -137,7 +137,7 @@ deudas_manual = [
 ]
 
 descripciones_a_eliminar_gastos = [ #tien e que ser exacto
-    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tomas andreas", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO", "Amortizacion A Linea De Credito",
+    "traspaso deuda internacional", "pago pesos tef", "Pedro Antonio", "Cargo por Pago Tc", "Pago Tarjeta de Credito", "TRASPASO DEUDA interna tra.dolar/peso", "tef a damjanic silva tom", "Traspaso a:Hotboat Spa", "HotBoat compras", "traspaso a:tomas ramirez rondon", "Amortizacion linea de credito", "JUNCALILLO", "Amortizacion A Linea De Credito",
 "pago linea de credito", "Traspaso De:Tomas Damja", "flybondi", "jetsmar", "uber", "santos", "busbud"
 ] 
 

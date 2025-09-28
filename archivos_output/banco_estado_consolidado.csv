@@ -3,26 +3,26 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-08-01,TEF DE FREDES DIAZ RODRIGO ANDRES,,81000.0,504415,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-01,TEF DE HAGEDORN PALOMINO FERNANDA L,,97475.0,601890,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-01,ABONO TRANSBANK TARJETA DEBITO,,79362.0,681252,ingreso transbank diario,Ingreso operativo
-2025-08-01,TEF A DAMJANIC SILVA TOMAS ANDREAS,504415.0,,176837,Sueldo Tom,Sueldo Tom
+2025-08-01,TEF A DAMJANIC SILVA TOMAS ANDREAS,504415.0,,176837,inversion,inversion general
 2025-08-04,TEF DE MUNOZ GARCES HENRY JAVIER,,110000.0,286837,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-04,TEF DE HAGEDORN PALOMINO FERNANDA L,,97475.0,384312,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-04,TEF DE DIAZ DE LA TORRE ROBERTO ALE,,112475.0,496787,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,274312.0,,222475,Sueldo Tom,Sueldo Tom
-2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,222475.0,,0,Sueldo Tom,Sueldo Tom
+2025-08-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,274312.0,,222475,inversion,inversion general
+2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,222475.0,,0,inversion,inversion general
 2025-08-11,TEF DE RODRIGUEZ LOPEZ PATRICIA ALE,,89980.0,89980,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,89980.0,,0,Sueldo Tom,Sueldo Tom
+2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,89980.0,,0,inversion,inversion general
 2025-08-13,ABONO TRANSBANK TARJETA DEBITO,,42354.0,42354,ingreso transbank diario,Ingreso operativo
 2025-08-18,TEF DE TORRES SANHUEZA CONSUELO AND,,59990.0,102344,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-18,TEF DE NAWRATH BALBOA MARCELO IGNAC,,76989.0,179333,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-18,TEF DE GOBETS  ALEXANDRE,,82485.0,261818,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-18,TEF A DAMJANIC SILVA TOMAS ANDREAS,102344.0,,159474,Sueldo Tom,Sueldo Tom
+2025-08-18,TEF A DAMJANIC SILVA TOMAS ANDREAS,102344.0,,159474,inversion,inversion general
 2025-08-19,TEF DE GOBETS  ALEXANDRE,,82485.0,241959,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-19,ABONO TRANSBANK TARJETA DEBITO,,144933.0,386892,ingreso transbank diario,Ingreso operativo
-2025-08-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,386892.0,,0,Sueldo Tom,Sueldo Tom
+2025-08-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,386892.0,,0,inversion,inversion general
 2025-08-22,TEF DE NAGEL VARGAS BENJAMIN MAXIMI,,69990.0,69990,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-25,TEF DE NAGEL VARGAS BENJAMIN MAXIMI,,69990.0,139980,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-25,TEF DE RUBIO JEREZ ALEXANDRO ALEXIS,,238000.0,377980,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-25,TEF A DAMJANIC SILVA TOMAS ANDREAS,139980.0,,238000,Sueldo Tom,Sueldo Tom
+2025-08-25,TEF A DAMJANIC SILVA TOMAS ANDREAS,139980.0,,238000,inversion,inversion general
 2025-08-27,TEF BANCOESTADO DE CANALES BERNER L,,77000.0,315000,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-29,TEF BANCOESTADO DE CANALES BERNER L,,77000.0,392000,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-01,TEF BANCOESTADO DE NORAMBUENA LEIVA,,112485.0,504485,ingreso transferencia hotboat diario,Ingreso operativo
@@ -42,7 +42,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-09-29,TRANSFERENCIA  A AGUIRRE PAILLALEF,40000.0,,412766,Remuneraciones,Costos Variables
 2025-09-29,WEB MERPAGO*MERCADOLIB,14380.0,,398386,Sin categoría,Sin categoría
 2025-09-29,TRANSFERENCIA DESDE BANCO SANTANDER,,30000.0,428386,Sin categoría,Sin categoría
-2025-09-29,TEF A  DAMJANIC SILVA TOM,100000.0,,328386,Sin categoría,Sin categoría
+2025-09-29,TEF A  DAMJANIC SILVA TOM,100000.0,,328386,Sueldo Tom,Sueldo Tom
 2025-01-10,ABONO TRANSBANK TARJETA DEBITO,0.0,45889.0,96843,ingreso transbank diario,Ingreso operativo
 2025-01-13,COMPRA IMPORTADORA  CL,10380.0,0.0,86463,Importaciones,Sin categoría
 2025-01-13,COMPRA SUPERMERCADO CL,24190.0,0.0,62273,Supermercado,Costos Variables
@@ -88,7 +88,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-04-15,TEF DE CASTILLO SANCHEZ CONSTANZA C,0.0,49491.0,458816,ingreso transferencia hotboat diario,Ingreso operativo
 2025-04-15,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0,0.0,433816,Remuneraciones,Costos Variables
 2025-04-15,ABONO TRANSBANK TARJETA DEBITO,0.0,155364.0,589180,ingreso transbank diario,Ingreso operativo
-2025-04-16,TEF A DAMJANIC SILVA TOMAS ANDREAS,564180.0,0.0,25000,Sueldo Tom,Sueldo Tom
+2025-04-16,TEF A DAMJANIC SILVA TOMAS ANDREAS,564180.0,0.0,25000,inversion,inversion general
 2025-04-16,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0,0.0,0,Remuneraciones,Costos Variables
 2025-04-16,TEF DE LABBE OYARCE GIANNINA DEL CA,0.0,83000.0,83000,ingreso transferencia hotboat diario,Ingreso operativo
 2025-04-16,DEPOSITO EN EFECTIVO CAJA VECINA,0.0,40000.0,123000,ingreso transferencia hotboat diario,Ingreso operativo
@@ -130,7 +130,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-03-13,TEF BANCOESTADO DE AGUIRRE CABALLER,0.0,88000.0,1978506,ingreso transferencia hotboat diario,Ingreso operativo
 2025-03-13,TEF A CASTRO MARTINEZ MARTA NOEMI,17000.0,0.0,1961506,Sin categoría,Sin categoría
 2025-03-13,TEF BANCOESTADO A  AGUIRRE PAILLALE,25000.0,0.0,1936506,Remuneraciones,Costos Variables
-2025-03-14,TEF A DAMJANIC SILVA TOMAS ANDREAS,1900000.0,0.0,36506,Sueldo Tom,Sueldo Tom
+2025-03-14,TEF A DAMJANIC SILVA TOMAS ANDREAS,1900000.0,0.0,36506,inversion,inversion general
 2025-03-14,TEF A ROJO SEPULVEDA DENISSE BELEN,35660.0,0.0,846,Sin categoría,Sin categoría
 2025-03-17,TEF DE NAVARRO JARA VALERIA CONSTAN,0.0,69990.0,70836,ingreso transferencia hotboat diario,Ingreso operativo
 2025-03-17,TEF BANCOESTADO DE GUNDERT MIRANDA,0.0,40000.0,110836,ingreso transferencia hotboat diario,Ingreso operativo
@@ -244,7 +244,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-02-12,COMPRA SUPERMERCADO CL,68351.0,0.0,586030,Supermercado,Costos Variables
 2025-02-12,MERPAGO,2350.0,0.0,583680,Sin categoría,Sin categoría
 2025-02-12,ABONO TRANSBANK TARJETA DEBITO,0.0,45889.0,629569,ingreso transbank diario,Ingreso operativo
-2025-02-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,600000.0,0.0,29569,Sueldo Tom,Sueldo Tom
+2025-02-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,600000.0,0.0,29569,inversion,inversion general
 2025-02-13,ABONO TRANSBANK TARJETA DEBITO,0.0,96512.0,126081,ingreso transbank diario,Ingreso operativo
 2025-02-13,COMPRA UNIMARC PUCO CL,29221.0,0.0,96860,Ferretería,Inversión General
 2025-02-13,COMPRA IMPORTADORA  CL,12980.0,0.0,83880,Importaciones,Sin categoría
@@ -306,7 +306,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-05-07,TEF BANCOESTADO DE SANDOVAL MORALES,0.0,100000.0,589598,ingreso transferencia hotboat diario,Ingreso operativo
 2025-05-09,TEF BANCOESTADO A INOSTROZA CANALES,24000.0,0.0,565598,Mano obra HotBoat daniel,Inversión General
 2025-05-12,TEF BANCOESTADO DE DEBOUZY  IORDAN,0.0,69990.0,635588,ingreso transferencia hotboat diario,Ingreso operativo
-2025-05-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,525588.0,0.0,110000,Sueldo Tom,Sueldo Tom
+2025-05-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,525588.0,0.0,110000,inversion,inversion general
 2025-05-12,TEF BANCOESTADO A BURGOS RIVERA ANG,110000.0,0.0,0,Sin categoría,Sin categoría
 2025-05-15,ABONO TRANSBANK TARJETA DEBITO,0.0,96791.0,96791,ingreso transbank diario,Ingreso operativo
 2025-05-19,TEF BANCOESTADO DE BARRIA ORTEGA ER,0.0,62991.0,159782,ingreso transferencia hotboat diario,Ingreso operativo
@@ -343,26 +343,26 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-06-27,TEF DE MOYNA ACUNA PATRICIO EDUARDO,0.0,75000.0,763359,ingreso transferencia hotboat diario,Ingreso operativo
 2025-06-30,TEF DE VIDAL ROJAS STEPHANIE ALEJAN,0.0,97475.0,860834,ingreso transferencia hotboat diario,Ingreso operativo
 2025-06-30,TEF DE VIDAL ROJAS STEPHANIE ALEJAN,0.0,97945.0,958779,ingreso transferencia hotboat diario,Ingreso operativo
-2025-06-30,TEF A DAMJANIC SILVA TOMAS ANDREAS,900000.0,0.0,58779,Sueldo Tom,Sueldo Tom
+2025-06-30,TEF A DAMJANIC SILVA TOMAS ANDREAS,900000.0,0.0,58779,inversion,inversion general
 2025-06-30,TEF BANCOESTADO A AGUIRRE PAILLALEF,15500.0,0.0,43279,Remuneraciones,Costos Variables
 2025-06-30,TEF BANCOESTADO A  AGUIRRE PAILLALE,30000.0,0.0,13279,Remuneraciones,Costos Variables
 2025-07-02,TEF DE PINO MOLINA MELANIE PURISIMA,0.0,82485.0,95764,ingreso transferencia hotboat diario,Ingreso operativo
 2025-07-02,ABONO TRANSBANK TARJETA DEBITO,0.0,181817.0,277581,ingreso transbank diario,Ingreso operativo
 2025-07-03,TEF BANCOESTADO DE LOGISTICA Y TRAN,0.0,82485.0,360066,ingreso transferencia hotboat diario,Ingreso operativo
-2025-07-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,360000.0,0.0,66,Sueldo Tom,Sueldo Tom
+2025-07-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,360000.0,0.0,66,inversion,inversion general
 2025-07-04,TEF DE UNDURRAGA BUSCHMANN MAX,0.0,90000.0,90066,ingreso transferencia hotboat diario,Ingreso operativo
 2025-07-04,ABONO TRANSBANK TARJETA DEBITO,0.0,382218.0,472284,ingreso transbank diario,Ingreso operativo
 2025-07-07,TEF DE MERA CARDENAS MARIA JOSE,0.0,98970.0,571254,ingreso transferencia hotboat diario,Ingreso operativo
 2025-07-07,ABONO TRANSBANK TARJETA DEBITO,0.0,27050.0,598304,ingreso transbank diario,Ingreso operativo
-2025-07-07,TEF A DAMJANIC SILVA TOMAS ANDREAS,598304.0,0.0,0,Sueldo Tom,Sueldo Tom
+2025-07-07,TEF A DAMJANIC SILVA TOMAS ANDREAS,598304.0,0.0,0,inversion,inversion general
 2025-07-08,ABONO TRANSBANK TARJETA DEBITO,0.0,147539.0,147539,ingreso transbank diario,Ingreso operativo
 2025-07-09,ABONO TRANSBANK TARJETA DEBITO,0.0,218387.0,365926,ingreso transbank diario,Ingreso operativo
-2025-07-09,TEF A DAMJANIC SILVA TOMAS ANDREAS,147539.0,0.0,218387,Sueldo Tom,Sueldo Tom
+2025-07-09,TEF A DAMJANIC SILVA TOMAS ANDREAS,147539.0,0.0,218387,inversion,inversion general
 2025-07-10,ABONO TRANSBANK TARJETA DEBITO,0.0,983.0,219370,ingreso transbank diario,Ingreso operativo
 2025-07-11,ABONO TRANSBANK TARJETA DEBITO,0.0,492.0,219862,ingreso transbank diario,Ingreso operativo
-2025-07-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,219370.0,0.0,492,Sueldo Tom,Sueldo Tom
+2025-07-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,219370.0,0.0,492,inversion,inversion general
 2025-07-17,ABONO TRANSBANK TARJETA DEBITO,0.0,88523.0,89015,ingreso transbank diario,Ingreso operativo
-2025-07-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,89015.0,0.0,0,Sueldo Tom,Sueldo Tom
+2025-07-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,89015.0,0.0,0,inversion,inversion general
 2025-07-23,TEF DE DIAZ CARRILLO LUISA FERNANDA,0.0,89990.0,89990,ingreso transferencia hotboat diario,Ingreso operativo
 2025-07-28,TEF BANCOESTADO A DIAZ CARRILLO LUI,40000.0,0.0,49990,Sin categoría,Sin categoría
 2025-07-29,TEF DE ALVAREZ BASTIAS MAURICIO SEG,0.0,194950.0,244940,ingreso transferencia hotboat diario,Ingreso operativo
@@ -371,26 +371,26 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-08-01,TEF DE FREDES DIAZ RODRIGO ANDRES,0.0,81000.0,504415,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-01,TEF DE HAGEDORN PALOMINO FERNANDA L,0.0,97475.0,601890,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-01,ABONO TRANSBANK TARJETA DEBITO,0.0,79362.0,681252,ingreso transbank diario,Ingreso operativo
-2025-08-01,TEF A DAMJANIC SILVA TOMAS ANDREAS,504415.0,0.0,176837,Sueldo Tom,Sueldo Tom
+2025-08-01,TEF A DAMJANIC SILVA TOMAS ANDREAS,504415.0,0.0,176837,inversion,inversion general
 2025-08-04,TEF DE MUNOZ GARCES HENRY JAVIER,0.0,110000.0,286837,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-04,TEF DE HAGEDORN PALOMINO FERNANDA L,0.0,97475.0,384312,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-04,TEF DE DIAZ DE LA TORRE ROBERTO ALE,0.0,112475.0,496787,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,274312.0,0.0,222475,Sueldo Tom,Sueldo Tom
-2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,222475.0,0.0,0,Sueldo Tom,Sueldo Tom
+2025-08-04,TEF A DAMJANIC SILVA TOMAS ANDREAS,274312.0,0.0,222475,inversion,inversion general
+2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,222475.0,0.0,0,inversion,inversion general
 2025-08-11,TEF DE RODRIGUEZ LOPEZ PATRICIA ALE,0.0,89980.0,89980,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,89980.0,0.0,0,Sueldo Tom,Sueldo Tom
+2025-08-11,TEF A DAMJANIC SILVA TOMAS ANDREAS,89980.0,0.0,0,inversion,inversion general
 2025-08-13,ABONO TRANSBANK TARJETA DEBITO,0.0,42354.0,42354,ingreso transbank diario,Ingreso operativo
 2025-08-18,TEF DE TORRES SANHUEZA CONSUELO AND,0.0,59990.0,102344,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-18,TEF DE NAWRATH BALBOA MARCELO IGNAC,0.0,76989.0,179333,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-18,TEF DE GOBETS  ALEXANDRE,0.0,82485.0,261818,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-18,TEF A DAMJANIC SILVA TOMAS ANDREAS,102344.0,0.0,159474,Sueldo Tom,Sueldo Tom
+2025-08-18,TEF A DAMJANIC SILVA TOMAS ANDREAS,102344.0,0.0,159474,inversion,inversion general
 2025-08-19,TEF DE GOBETS  ALEXANDRE,0.0,82485.0,241959,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-19,ABONO TRANSBANK TARJETA DEBITO,0.0,144933.0,386892,ingreso transbank diario,Ingreso operativo
-2025-08-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,386892.0,0.0,0,Sueldo Tom,Sueldo Tom
+2025-08-21,TEF A DAMJANIC SILVA TOMAS ANDREAS,386892.0,0.0,0,inversion,inversion general
 2025-08-22,TEF DE NAGEL VARGAS BENJAMIN MAXIMI,0.0,69990.0,69990,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-25,TEF DE NAGEL VARGAS BENJAMIN MAXIMI,0.0,69990.0,139980,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-25,TEF DE RUBIO JEREZ ALEXANDRO ALEXIS,0.0,238000.0,377980,ingreso transferencia hotboat diario,Ingreso operativo
-2025-08-25,TEF A DAMJANIC SILVA TOMAS ANDREAS,139980.0,0.0,238000,Sueldo Tom,Sueldo Tom
+2025-08-25,TEF A DAMJANIC SILVA TOMAS ANDREAS,139980.0,0.0,238000,inversion,inversion general
 2025-08-27,TEF BANCOESTADO DE CANALES BERNER L,0.0,77000.0,315000,ingreso transferencia hotboat diario,Ingreso operativo
 2025-08-29,TEF BANCOESTADO DE CANALES BERNER L,0.0,77000.0,392000,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-01,TEF BANCOESTADO DE NORAMBUENA LEIVA,0.0,112485.0,504485,ingreso transferencia hotboat diario,Ingreso operativo
@@ -444,25 +444,25 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-09-08,ABONO TRANSBANK TARJETA DEBITO,0.0,59016.0,639627,ingreso transbank diario,Ingreso operativo
 2025-09-08,COMPRA SUPERMERCADO CL,12990.0,0.0,626637,Supermercado,Costos Variables
 2025-09-08,WEB MERPAGO*LIVETICKET,12403.0,0.0,614234,Sin categoría,Sin categoría
-2025-09-08,TEF A DAMJANIC SILVA TOMAS ANDREAS,50000.0,0.0,564234,Sueldo Tom,Sueldo Tom
+2025-09-08,TEF A DAMJANIC SILVA TOMAS ANDREAS,50000.0,0.0,564234,inversion,inversion general
 2025-09-08,TEF BANCOESTADO A AGUIRRE PAILLALEF,20000.0,0.0,544234,Remuneraciones,Costos Variables
 2025-09-09,TEF DE DAMJANIC SILVA TOMAS ANDREAS,0.0,15000.0,559234,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-09,TEF DE HOTBOAT SPA,0.0,38596.0,597830,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-09,GIRO CAJERO AUTOMATICO 08/09 15:45,30000.0,0.0,567830,Sin categoría,Sin categoría
 2025-09-09,GIRO CAJERO AUTOMATICO 08/09 15:47,15000.0,0.0,552830,Sin categoría,Sin categoría
 2025-09-09,COMPRA SOCIEDAD INV CL,6039.0,0.0,546791,Sin categoría,Sin categoría
-2025-09-09,TEF A DAMJANIC SILVA TOMAS ANDREAS,14854.0,0.0,531937,Sueldo Tom,Sueldo Tom
+2025-09-09,TEF A DAMJANIC SILVA TOMAS ANDREAS,14854.0,0.0,531937,inversion,inversion general
 2025-09-09,ABONO TRANSBANK TARJETA DEBITO,0.0,208406.0,740343,ingreso transbank diario,Ingreso operativo
-2025-09-10,TEF A DAMJANIC SILVA TOMAS ANDREAS,571995.0,0.0,168348,Sueldo Tom,Sueldo Tom
-2025-09-10,TEF A DAMJANIC SILVA TOMAS ANDREAS,50000.0,0.0,118348,Sueldo Tom,Sueldo Tom
+2025-09-10,TEF A DAMJANIC SILVA TOMAS ANDREAS,571995.0,0.0,168348,inversion,inversion general
+2025-09-10,TEF A DAMJANIC SILVA TOMAS ANDREAS,50000.0,0.0,118348,inversion,inversion general
 2025-09-11,TEF DE HOTBOAT SPA,0.0,244281.0,362629,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-11,COMPRA SUPERMERCADO CL,1900.0,0.0,360729,Supermercado,Costos Variables
 2025-09-11,TEF BANCOESTADO A ULLOA SILVA GUILL,15000.0,0.0,345729,Sin categoría,Sin categoría
 2025-09-12,COMPRA SUPERMERCADO CL,50462.0,0.0,295267,Supermercado,Costos Variables
 2025-09-12,TEF BANCOESTADO A AGUIRRE PAILLALEF,15000.0,0.0,280267,Remuneraciones,Costos Variables
 2025-09-12,TEF DE HOTBOAT SPA,0.0,326998.0,607265,ingreso transferencia hotboat diario,Ingreso operativo
-2025-09-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,80000.0,0.0,527265,Sueldo Tom,Sueldo Tom
-2025-09-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,160650.0,0.0,366615,Sueldo Tom,Sueldo Tom
+2025-09-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,80000.0,0.0,527265,Sueldo,Sueldos
+2025-09-12,TEF A DAMJANIC SILVA TOMAS ANDREAS,160650.0,0.0,366615,inversion,inversion general
 2025-09-15,TEF BANCOESTADO A AGUIRRE PAILLALEF,40000.0,0.0,326615,Remuneraciones,Costos Variables
 2025-09-15,TEF BANCOESTADO A AGUIRRE PAILLALEF,20000.0,0.0,306615,Remuneraciones,Costos Variables
 2025-09-15,TEF DE FOOT TALA THOMAS STEPHEN,0.0,179960.0,486575,ingreso transferencia hotboat diario,Ingreso operativo
@@ -470,7 +470,7 @@ Fecha,Descripción,Cargos,Abonos,Saldo,Categoría_2,Categoría 1
 2025-09-15,TEF DE LORES FRANZOY ANDRES HECTOR,0.0,171989.0,658602,ingreso transferencia hotboat diario,Ingreso operativo
 2025-09-15,COMPRA MERCADOPAGO* CL,2000.0,0.0,656602,Sin categoría,Sin categoría
 2025-09-15,COMPRA PUCON EN FLO CL,22000.0,0.0,634602,Sin categoría,Sin categoría
-2025-09-15,TEF A DAMJANIC SILVA TOMAS ANDREAS,66218.0,0.0,568384,Sueldo Tom,Sueldo Tom
+2025-09-15,TEF A DAMJANIC SILVA TOMAS ANDREAS,66218.0,0.0,568384,Sueldo,Sueldos
 2025-09-15,TEF A GONZALEZ SANCHEZ MARTINA ISID,150000.0,0.0,418384,Sin categoría,Sin categoría
 2025-09-15,TEF BANCOESTADO A AGUIRRE PAILLALEF,15000.0,0.0,403384,Remuneraciones,Costos Variables
 2025-09-16,TEF BANCOESTADO A AGUIRRE PAILLALEF,10000.0,0.0,393384,Remuneraciones,Costos Variables

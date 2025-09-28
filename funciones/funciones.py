@@ -573,6 +573,149 @@ def exportar_archivos(
     except Exception as e:
         print(f"Error inesperado al guardar consolidado Banco Estado: {str(e)}")
 
+# =====================
+# TRANSFERENCIAS TOMAS DAMJANIC
+# =====================
+
+def clasificar_transferencias_tomas_damjanic(
+    df_be_consolidado: pd.DataFrame,
+    df_abonos_cta_cte: pd.DataFrame,
+    df_gastos: pd.DataFrame,
+    ventana_dias: int = 2,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """
+    Identifica transferencias a 'tomas damjanic' en Banco Estado (cargos) y las separa en:
+    - Banco de Chile: si existe un abono en cuenta corriente por mismo monto y fecha cercana (±ventana_dias)
+    - Prex (sueldo): si no existe abono correspondiente en cuenta corriente
+
+    Efectos:
+    - En df_be_consolidado y df_gastos (origen Banco Estado) setea categorías:
+        * Banco de Chile: Categoría 1 = 'inversion general', Categoría_2 = 'inversion'
+        * Prex: Categoría 1 = 'Sueldos', Categoría_2 = 'Sueldo'
+
+    Returns: (df_be_consolidado_act, df_abonos_cta_cte_act, df_gastos_act)
+    """
+    if not isinstance(df_be_consolidado, pd.DataFrame) or df_be_consolidado.empty:
+        return df_be_consolidado, df_abonos_cta_cte, df_gastos
+
+    df_bec = df_be_consolidado.copy()
+    df_abn = df_abonos_cta_cte.copy() if isinstance(df_abonos_cta_cte, pd.DataFrame) else pd.DataFrame()
+    df_gas = df_gastos.copy()
+
+    # Normalizar tipos
+    if 'Fecha' in df_bec.columns and not pd.api.types.is_datetime64_any_dtype(df_bec['Fecha']):
+        try:
+            df_bec['Fecha'] = pd.to_datetime(df_bec['Fecha'], errors='coerce', dayfirst=True)
+        except Exception:
+            pass
+    if isinstance(df_abn, pd.DataFrame) and not df_abn.empty and 'Fecha' in df_abn.columns and not pd.api.types.is_datetime64_any_dtype(df_abn['Fecha']):
+        try:
+            df_abn['Fecha'] = pd.to_datetime(df_abn['Fecha'], errors='coerce', dayfirst=True)
+        except Exception:
+            pass
+    if 'Fecha' in df_gas.columns and not pd.api.types.is_datetime64_any_dtype(df_gas['Fecha']):
+        try:
+            df_gas['Fecha'] = pd.to_datetime(df_gas['Fecha'], errors='coerce', dayfirst=True)
+        except Exception:
+            pass
+
+    # Montos
+    for col, dfref in [( 'Cargos', df_bec ), ( 'Monto', df_abn ), ( 'Monto', df_gas )]:
+        if isinstance(dfref, pd.DataFrame) and col in dfref.columns:
+            dfref[col] = pd.to_numeric(dfref[col], errors='coerce')
+
+    # Filtrar transferencias a tomas damjanic en Banco Estado (cargos > 0)
+    if 'Descripción' not in df_bec.columns or 'Cargos' not in df_bec.columns:
+        return df_bec, df_abn, df_gas
+
+    mask_td = (
+        df_bec['Descripción'].astype(str).str.lower().str.contains('tomas')
+        & df_bec['Descripción'].astype(str).str.lower().str.contains('damjanic')
+        & (pd.to_numeric(df_bec['Cargos'], errors='coerce').fillna(0) > 0)
+    )
+    df_td = df_bec.loc[mask_td].copy()
+    if df_td.empty:
+        return df_bec, df_abn, df_gas
+
+    # Intentar macheo con abonos cta cte por mismo monto y misma fecha
+    df_td['_Monto'] = pd.to_numeric(df_td['Cargos'], errors='coerce')
+    df_td['_Fecha'] = df_td['Fecha'].dt.date if 'Fecha' in df_td.columns else pd.NaT
+
+    matched_idx = set()
+    if isinstance(df_abn, pd.DataFrame) and not df_abn.empty and all(c in df_abn.columns for c in ['Monto','Fecha','Descripción']):
+        df_idx = df_abn[['Fecha', 'Monto', 'Descripción']].copy()
+        df_idx['_Fecha'] = df_idx['Fecha'].dt.date
+        # Filtrar solo abonos con descripción que contenga "HotBoat Spa"
+        desc_mask = df_idx['Descripción'].astype(str).str.lower().str.contains('hotboat spa')
+        df_idx = df_idx.loc[desc_mask, ['_Fecha','Monto']]
+        # Crear conjunto de llaves exactas (fecha, monto)
+        keys_abn = set(tuple(x) for x in df_idx.dropna().values.tolist())
+        # Revisar cada fila de df_td
+        for i, row in df_td.iterrows():
+            key = (row.get('_Fecha'), row.get('_Monto'))
+            if key in keys_abn:
+                matched_idx.add(i)
+
+    # Aplicar categorías en df_bec
+    if 'Categoría 1' not in df_bec.columns:
+        df_bec['Categoría 1'] = ''
+    if 'Categoría_2' not in df_bec.columns:
+        df_bec['Categoría_2'] = ''
+
+    idx_td = df_td.index
+    idx_bch = [i for i in idx_td if i in matched_idx]
+    idx_prex = [i for i in idx_td if i not in matched_idx]
+
+    if idx_bch:
+        df_bec.loc[idx_bch, 'Categoría 1'] = 'inversion general'
+        df_bec.loc[idx_bch, 'Categoría_2'] = 'inversion'
+    if idx_prex:
+        df_bec.loc[idx_prex, 'Categoría 1'] = 'Sueldos'
+        df_bec.loc[idx_prex, 'Categoría_2'] = 'Sueldo'
+
+    # Aplicar categorías también en df_gas (gastos) para las mismas transferencias (matchear por Fecha y Monto)
+    if isinstance(df_gas, pd.DataFrame) and not df_gas.empty and all(c in df_gas.columns for c in ['Fecha','Monto','Descripción']):
+        # Crear llave por (fecha_dia, monto)
+        gas = df_gas.copy()
+        gas['_fecha_dia'] = gas['Fecha'].dt.date
+        # Restringir a origen Banco Estado si existe la columna
+        if 'Origen' in gas.columns:
+            gas_mask_be = gas['Origen'].astype(str).str.lower().eq('banco estado')
+            gas = gas.loc[gas_mask_be].copy()
+        # Banco Estado montos salen en df_final como Monto (positivo), aquí los cargos son positivos también
+        td_keys = df_td.copy()
+        td_keys['_fecha_dia'] = td_keys['Fecha'].dt.date
+        td_keys['_monto'] = pd.to_numeric(td_keys['Cargos'], errors='coerce')
+
+        # Banco de Chile
+        if idx_bch:
+            k_bch = td_keys.loc[idx_bch, ['_fecha_dia','_monto']].dropna()
+            m_bch = gas.merge(k_bch.drop_duplicates(), left_on=['_fecha_dia','Monto'], right_on=['_fecha_dia','_monto'], how='left', indicator=True)
+            mask_set = m_bch['_merge'].eq('both')
+            idx_to_set = m_bch.index[mask_set]
+            df_gas.loc[idx_to_set, 'Categoría 1'] = 'inversion general'
+            df_gas.loc[idx_to_set, 'Categoría_2'] = 'inversion'
+
+        # Prex
+        if idx_prex:
+            k_prex = td_keys.loc[idx_prex, ['_fecha_dia','_monto']].dropna()
+            m_prex = gas.merge(k_prex.drop_duplicates(), left_on=['_fecha_dia','Monto'], right_on=['_fecha_dia','_monto'], how='left', indicator=True)
+            mask_set = m_prex['_merge'].eq('both')
+            idx_to_set = m_prex.index[mask_set]
+            df_gas.loc[idx_to_set, 'Categoría 1'] = 'Sueldos'
+            df_gas.loc[idx_to_set, 'Categoría_2'] = 'Sueldo'
+
+    # Limpiar columnas temporales
+    for dfc in (df_bec, df_gas):
+        for c in ['_fecha_dia','_monto']:
+            if c in dfc.columns:
+                try:
+                    dfc.drop(columns=[c], inplace=True)
+                except Exception:
+                    pass
+
+    return df_bec, df_abn, df_gas
+
 def obtener_categoria(descripcion, diccionario_categorias):
     descripcion_normalizada = str(descripcion).strip().lower()
     for categoria, palabras_clave in diccionario_categorias.items():
@@ -2437,6 +2580,16 @@ def procesar_archivos_financieros(
     
     # Procesar abonos: obtener por separado
     df_abonos_cta_cte, df_abonos_banco_estado = procesar_abonos(datos_consolidados, config=config)
+
+    # Al final, clasificar transferencias a Tomás Damjanic (Banco Estado → Banco Chile vs Prex)
+    try:
+        be_cons = datos_consolidados.get('banco_estado_consolidado', pd.DataFrame())
+        be_cons_act, df_abonos_cta_cte, df_final = clasificar_transferencias_tomas_damjanic(
+            be_cons, df_abonos_cta_cte, df_final
+        )
+        datos_consolidados['banco_estado_consolidado'] = be_cons_act
+    except Exception as e:
+        print(f"⚠️  No se pudo clasificar transferencias a Tomás Damjanic: {str(e)}")
 
     # Procesar específicamente los abonos de cuenta corriente si existen
     if isinstance(df_abonos_cta_cte, pd.DataFrame) and not df_abonos_cta_cte.empty:
