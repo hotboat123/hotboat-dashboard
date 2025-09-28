@@ -382,7 +382,7 @@ def limpiar_y_ordenar_dataframe(df):
     
     return df_ordenado
 
-def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None, df_final_sin_eliminaciones: pd.DataFrame | None = None):
+def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None, df_final_sin_eliminaciones: pd.DataFrame | None = None, df_abonos_banco_estado: pd.DataFrame | None = None):
     """
     Exporta los DataFrames a archivos CSV en el directorio especificado.
     
@@ -419,6 +419,9 @@ def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_o
     try:
         ruta_abonos = os.path.join(directorio_salida, "abonos hotboat cta cte.csv")
         df_abonos_cta_cte.to_csv(ruta_abonos, index=False)
+        ruta_abonos = os.path.join(directorio_salida, "abonos hotboat banco estado.csv")
+        df_abonos_banco_estado.to_csv(ruta_abonos, index=False)
+        df_abonos_banco_estado
     except PermissionError:
         print(f"Error: No se puede escribir el archivo '{ruta_abonos}'. Por favor, cierre cualquier programa que pueda tener el archivo abierto e intente nuevamente.")
     except Exception as e:
@@ -2262,7 +2265,8 @@ def procesar_archivos_financieros(
             df_abonos_cta_cte,
             directorio_output,
             datos_consolidados.get('cuenta_corriente_consolidado', pd.DataFrame()),
-            df_final_sin_eliminaciones
+            df_final_sin_eliminaciones,
+            df_abonos_banco_estado
         )
         
 

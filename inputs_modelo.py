@@ -360,6 +360,7 @@ config_utilidad_operativa = {
 }
 
 ### notas
+# 8/9 compre calbe 14 awg con bco chile , costos 14854
 # nose en que fecha, pero antes, me deposite 50 de chile a prex desde bco de chile en vez de bco estado, entonces luego transferi los 50 desde estado a chile
 # 11 septiembre compre super con banco estado en vez de prex
 # 12 de septiembre se transfire 160650 desde estado a chile para pagar gelcoat
@@ -367,3 +368,9 @@ config_utilidad_operativa = {
 #14 de sep paguer short del elya con prex, son 66.218, luego me lo transferi de banco detado
 # 16/9 recibi 5000 en efectivo reserva open sky
 # 17/9 compre por aliexpress con banco de chile en vez de banco estado (aunque compre pg11, pg9 y termocontraible, que son empresa fabrica)
+# 21/9/2025 recibi 20000 en efectivo#
+#23/9 compre una caja impermeable para HB3 72V por casi 30 mil con banco de chile (esta bien pq es empresa fabrica)
+#23/9 compre 36000 en leña (12 sacos)
+#25/9 gaste 13.830 en ibacache (comprar comida) con tarjeta banco estado en vez de prex, pq no me funciona prex fisica, y no tenía batería
+#26 /9 compre un iphone SE a 90.000 en efectivo, y compre 79.000 en BMS, herramienta para cripping (baterias) y trenzado para cable 3cm de ancho
+# 28/9 limpia piscina 15000

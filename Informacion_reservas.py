@@ -19,7 +19,7 @@ for archivo in os.listdir('archivos_input/Archivos input reservas/'):
             payments = df
         elif "appointments" in archivo:
             appointments = df
-        elif "reservas" in archivo:
+        elif "reservas_HotBoat" in archivo:
             df_reservas_original = procesar_fechas_reservas(df)
 
 # Procesar las nuevas reservas

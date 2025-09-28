@@ -39,7 +39,7 @@ Puedes agregar tantos meses como quieras en el diccionario demanda_por_mes.
 demanda_por_mes = {
     # Nuevas demandas para probar:
     '2025-08': 16, ## ESTO ES POR SEMANA (FUNCIONA) [3,2,4,5,5]
-    '2025-09': 20,##  (TAMBIEN FUNCIONA)
+    '2025-09': 20,##  (TAMBIEN FUNCIONA) # 20 es el forecast del mes, vamos en 16
     '2025-10': 15,
     '2025-11': 20,
     '2025-12': 25,
