@@ -68,31 +68,145 @@ def leer_excel_mov_no_facturados_nacional(ruta_archivo):
 
 
 def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
-    # Leer el archivo de Excel y buscar la fila que contiene 'Categoría'
-    df = pd.read_excel(ruta_archivo, sheet_name="Movimientos", header=None)  # Leemos sin encabezado
-    
-    # Encontrar la fila donde está la celda 'Categoría'
-    descripcion_fila = df[df.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index[0]
+    """
+    Lee archivos Banco Estado (Chequera / Cartola_en_linea) desde la hoja 'Movimientos',
+    detecta la fila de encabezados y normaliza a columnas:
+    ['Fecha','Descripción','Cargos','Abonos','Saldo'].
 
-    # Leer el archivo nuevamente desde la fila que contiene 'Categoría', usando esa fila como header
-    df_final = pd.read_excel(ruta_archivo, sheet_name="Movimientos", skiprows=descripcion_fila
-                             , header=0)
-    # Agregar el año "2025" a cada fecha
-    df_final['Fecha'] = df_final['Fecha'] + '/' + año_para_fecha_banco_estado
+    Devuelve (df_cargos, df_abonos) con columnas ['Fecha','Descripción','Monto'].
+    """
+    # Leer sin encabezado para detectar la fila con los nombres de columnas
+    hoja_preferidas = ["Movimientos", "Registros"]
+    df_raw = None
+    ultima_exc = None
+    for hoja in hoja_preferidas:
+        try:
+            df_raw = pd.read_excel(ruta_archivo, sheet_name=hoja, header=None)
+            hoja_usada = hoja
+            break
+        except Exception as e:
+            ultima_exc = e
+            continue
+    if df_raw is None:
+        raise ValueError(f"No se pudo leer hoja 'Movimientos' ni 'Registros' en Banco Estado: {ultima_exc}")
 
-    # Crear copias explícitas para evitar SettingWithCopyWarning
-    df_cargos = df_final[df_final['Cheques / Cargos'] > 0].copy()
-    df_abonos = df_final[df_final['Cheques / Cargos'] == 0].copy()
-    
-    # Asignar valores usando loc para evitar advertencias
-    df_abonos.loc[:, 'Monto'] = df_abonos['Depósitos / Abonos']
-    df_abonos.loc[:, 'Monto'] = df_abonos['Monto'].replace({'\$': '', '\.': ''}, regex=True).astype(int)
-    df_abonos = df_abonos[["Fecha","Descripción","Monto"]]
-    
-    df_cargos.loc[:, 'Monto'] = df_cargos['Cheques / Cargos']
-    df_cargos = df_cargos[["Fecha","Descripción","Monto"]]
-  
-    return df_cargos, df_abonos
+    # Buscar la fila de encabezados: debe contener 'fecha' y 'descrip'
+    fila_encabezados = None
+    for i, row in df_raw.iterrows():
+        celdas = [str(x).strip().lower() for x in row if pd.notna(x)]
+        texto = " ".join(celdas)
+        if ('fecha' in texto) and ('descrip' in texto or 'descripcion' in texto):
+            fila_encabezados = i
+            break
+
+    # Fallback: buscar explícitamente 'Descripción' si no se encontró
+    if fila_encabezados is None:
+        coincidencias = df_raw[df_raw.apply(lambda x: x.astype(str).str.contains('Descripción', case=False).any(), axis=1)].index
+        if len(coincidencias) == 0:
+            raise ValueError("No se encontró fila de encabezados con 'Fecha'/'Descripción' en 'Movimientos'")
+        fila_encabezados = coincidencias[0]
+
+    # Leer la tabla usando la fila detectada como encabezado
+    df_movs = pd.read_excel(
+        ruta_archivo,
+        sheet_name=hoja_usada,
+        skiprows=fila_encabezados,
+        header=0
+    )
+
+    # Normalizar nombres posibles a canónicos
+    def normalizar_nombre(col: str) -> str:
+        base = str(col).strip().lower()
+        base = base.replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u")
+        base = base.replace("/", " ")
+        base = " ".join(base.split())
+        if base.startswith('fecha'):
+            return 'Fecha'
+        if base.startswith('descrip') or base == 'descripcion' or 'glosa' in base:
+            return 'Descripción'
+        if 'cargo' in base or 'cheque' in base:
+            return 'Cargos'
+        if 'abono' in base or 'deposito' in base:
+            return 'Abonos'
+        if base.startswith('saldo'):
+            return 'Saldo'
+        if 'monto' in base:
+            return 'Monto'
+        if 'tipo' in base or 'operac' in base or 'movim' in base:
+            return 'Tipo'
+        return col
+
+    df_movs = df_movs.rename(columns={col: normalizar_nombre(col) for col in df_movs.columns})
+
+    # Si no hay columnas Cargos/Abonos pero existe Monto + Tipo, dividir
+    if ('Cargos' not in df_movs.columns or 'Abonos' not in df_movs.columns) and ('Monto' in df_movs.columns):
+        # Limpiar monto a numérico antes de dividir
+        serie_monto = df_movs['Monto'].astype(str)
+        serie_monto = serie_monto.str.replace(r"[^0-9,.-]", "", regex=True).str.replace(",", ".", regex=False)
+        df_movs['Monto'] = pd.to_numeric(serie_monto, errors='coerce')
+        # Usar columna Tipo si existe para orientar signos, si no, usar signo de Monto
+        if 'Tipo' in df_movs.columns:
+            tipo_str = df_movs['Tipo'].astype(str).str.lower()
+            es_cargo = tipo_str.str.contains('cargo')
+            es_abono = tipo_str.str.contains('abono')
+            df_movs['Cargos'] = df_movs['Monto'].where(es_cargo, 0)
+            df_movs['Abonos'] = df_movs['Monto'].where(es_abono, 0)
+        else:
+            df_movs['Cargos'] = df_movs['Monto'].where(pd.to_numeric(df_movs['Monto'], errors='coerce') < 0, 0)
+            df_movs['Abonos'] = df_movs['Monto'].where(pd.to_numeric(df_movs['Monto'], errors='coerce') > 0, 0)
+        # Trabajar con valores positivos
+        df_movs['Cargos'] = df_movs['Cargos'].abs()
+        df_movs['Abonos'] = df_movs['Abonos'].abs()
+
+    # Conservar solo columnas requeridas
+    columnas_objetivo = ['Fecha','Descripción','Cargos','Abonos','Saldo','Monto','Tipo']
+    existentes = [c for c in columnas_objetivo if c in df_movs.columns]
+    df_movs = df_movs[existentes].copy()
+    # Asegurar columnas finales
+    for col in ['Fecha','Descripción','Cargos','Abonos','Saldo']:
+        if col not in df_movs.columns:
+            df_movs[col] = 0 if col in ('Cargos','Abonos') else pd.NA
+
+    # Agregar año si la fecha viene sin año (heurística: tiene un solo '/')
+    try:
+        fechas_str = df_movs['Fecha'].astype(str)
+        necesita_anio = fechas_str.str.count('/') == 1
+        df_movs.loc[necesita_anio, 'Fecha'] = fechas_str[necesita_anio] + '/' + str(año_para_fecha_banco_estado)
+    except Exception:
+        try:
+            df_movs['Fecha'] = df_movs['Fecha'].astype(str) + '/' + str(año_para_fecha_banco_estado)
+        except Exception:
+            pass
+
+    # Limpiar y convertir numéricos (soporta formatos con $ . , espacios)
+    for col in ['Cargos','Abonos','Saldo']:
+        if col in df_movs.columns:
+            serie = df_movs[col].astype(str)
+            serie = serie.str.replace(r"[^0-9,.-]", "", regex=True).str.replace(",", ".", regex=False)
+            df_movs[col] = pd.to_numeric(serie, errors='coerce')
+
+    # Salidas compatibles
+    df_cargos = pd.DataFrame()
+    if 'Cargos' in df_movs.columns:
+        mask_cargos = pd.to_numeric(df_movs['Cargos'], errors='coerce').fillna(0) > 0
+        df_cargos = df_movs.loc[mask_cargos, ['Fecha','Descripción','Cargos']].copy()
+        df_cargos = df_cargos.rename(columns={'Cargos':'Monto'})
+
+    df_abonos = pd.DataFrame()
+    if 'Abonos' in df_movs.columns:
+        mask_abonos = pd.to_numeric(df_movs['Abonos'], errors='coerce').fillna(0) > 0
+        df_abonos = df_movs.loc[mask_abonos, ['Fecha','Descripción','Abonos']].copy()
+        df_abonos = df_abonos.rename(columns={'Abonos':'Monto'})
+
+    # Construir consolidado con formato canónico pedido
+    consolidado_cols = ['Fecha','Descripción','Cargos','Abonos','Saldo']
+    consolidado = df_movs.copy()
+    faltantes = [c for c in consolidado_cols if c not in consolidado.columns]
+    for c in faltantes:
+        consolidado[c] = 0 if c in ('Cargos','Abonos') else pd.NA
+    consolidado = consolidado[consolidado_cols].copy()
+
+    return df_cargos, df_abonos, consolidado
     
 # Función para leer el archivo Mov No facturado
 def leer_excel_mercado_pago(ruta_archivo, año_para_fecha):
@@ -1645,6 +1759,7 @@ class ProcesadorArchivos:
     def __init__(self):
         self.df_banco_estado_abonos = []
         self.df_banco_estado_cargos = []
+        self.df_banco_estado_consolidado = []
         self.df_banco_chile_facturado_nacional = []
         self.df_banco_chile_facturado_internacional = []
         self.df_banco_chile_no_facturado_nacional = []
@@ -1669,12 +1784,17 @@ class ProcesadorArchivos:
         try:
             print(f"📄 Procesando: {nombre_archivo}")
             
-            # Procesar archivos de Chequera (Banco Estado)
-            if "Chequera" in nombre_archivo:
-                print(f"   ✅ Archivo de Chequera detectado")
-                df_cargos, df_abonos = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
+            # Procesar archivos Banco Estado (Chequera / Cartola_en_linea)
+            if ("chequera" in nombre_archivo.lower()) or ("cartola_en_linea" in nombre_archivo.lower()):
+                print(f"   ✅ Archivo de Banco Estado detectado")
+                df_cargos, df_abonos, df_consolidado = leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado)
                 self.df_banco_estado_abonos.append(df_abonos)
                 self.df_banco_estado_cargos.append(df_cargos)
+                if isinstance(df_consolidado, pd.DataFrame) and not df_consolidado.empty:
+                    if not hasattr(self, 'df_banco_estado_consolidado'):
+                        self.df_banco_estado_consolidado = []
+                    self.df_banco_estado_consolidado.append(df_consolidado)
+                    print(f"      🧾 Consolidado Banco Estado: {len(df_consolidado)} filas")
                 return True
                 
             # Procesar archivos de Cartola (Cuenta Corriente)
@@ -1757,6 +1877,25 @@ class ProcesadorArchivos:
         else:
             datos_consolidados['banco_estado_cargos'] = pd.DataFrame()
             print("⚠️  No se encontraron archivos de cargos Banco Estado")
+
+        # Consolidado Banco Estado (formato original normalizado)
+        if self.df_banco_estado_consolidado:
+            df_bec = pd.concat(self.df_banco_estado_consolidado, ignore_index=True)
+            # Normalizar fecha a datetime si posible
+            if 'Fecha' in df_bec.columns:
+                try:
+                    df_bec['Fecha'] = pd.to_datetime(df_bec['Fecha'], errors='coerce', dayfirst=True)
+                except Exception:
+                    pass
+            # Eliminar duplicados razonables
+            subset_cols = [c for c in ['Fecha','Descripción','Cargos','Abonos','Saldo'] if c in df_bec.columns]
+            if subset_cols:
+                df_bec = df_bec.drop_duplicates(subset=subset_cols, keep='first')
+            datos_consolidados['banco_estado_consolidado'] = df_bec.reset_index(drop=True)
+            print(f"✅ Consolidado Banco Estado: {len(datos_consolidados['banco_estado_consolidado'])} registros")
+        else:
+            datos_consolidados['banco_estado_consolidado'] = pd.DataFrame()
+            print("⚠️  No se encontraron archivos consolidados de Banco Estado")
         
         # Consolidar Banco Chile Facturado
         if self.df_banco_chile_facturado_internacional:
@@ -2300,8 +2439,21 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
             - consolidado: DataFrame deduplicado basado en la tabla original, con columnas
               estandarizadas (por ejemplo 'Fecha','Descripción','Cargos (CLP)','Abonos (CLP)' si existen)
     """
-    # Leer la hoja principal sin encabezado
-    df = pd.read_excel(ruta_archivo, sheet_name='Hoja1', header=None)
+    # Leer la hoja principal sin encabezado (soportar nombres comunes)
+    hojas_posibles = ['Hoja1', 'Registros', 'Movimientos']
+    df = None
+    ultima_exc = None
+    hoja_usada = None
+    for hoja in hojas_posibles:
+        try:
+            df = pd.read_excel(ruta_archivo, sheet_name=hoja, header=None)
+            hoja_usada = hoja
+            break
+        except Exception as e:
+            ultima_exc = e
+            continue
+    if df is None:
+        raise ValueError(f"No se pudo leer ninguna hoja válida (Hoja1/Registros/Movimientos) en cartola: {ultima_exc}")
     
     # Buscar la fila donde aparecen "fecha" y "descripción"
     fila_encabezados = None
@@ -2319,7 +2471,7 @@ def leer_cartola_cuenta_corriente(ruta_archivo):
     headers = df.iloc[fila_encabezados].tolist()
     
     # Leer la tabla de transacciones desde la siguiente fila
-    df_transacciones = pd.read_excel(ruta_archivo, sheet_name='Hoja1', skiprows=fila_encabezados + 1, header=None)
+    df_transacciones = pd.read_excel(ruta_archivo, sheet_name=hoja_usada, skiprows=fila_encabezados + 1, header=None)
     df_transacciones.columns = headers
     
     # Limpiar filas vacías
