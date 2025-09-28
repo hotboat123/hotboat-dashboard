@@ -142,7 +142,9 @@ def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     if ('Cargos' not in df_movs.columns or 'Abonos' not in df_movs.columns) and ('Monto' in df_movs.columns):
         # Limpiar monto a numérico antes de dividir
         serie_monto = df_movs['Monto'].astype(str)
-        serie_monto = serie_monto.str.replace(r"[^0-9,.-]", "", regex=True).str.replace(",", ".", regex=False)
+        serie_monto = serie_monto.str.replace(r"[^0-9,.-]", "", regex=True)
+        # Formato chileno: quitar puntos de miles y usar coma como decimal
+        serie_monto = serie_monto.str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
         df_movs['Monto'] = pd.to_numeric(serie_monto, errors='coerce')
         # Usar columna Tipo si existe para orientar signos, si no, usar signo de Monto
         if 'Tipo' in df_movs.columns:
@@ -182,7 +184,9 @@ def leer_excel_banco_estado(ruta_archivo, año_para_fecha_banco_estado):
     for col in ['Cargos','Abonos','Saldo']:
         if col in df_movs.columns:
             serie = df_movs[col].astype(str)
-            serie = serie.str.replace(r"[^0-9,.-]", "", regex=True).str.replace(",", ".", regex=False)
+            serie = serie.str.replace(r"[^0-9,.-]", "", regex=True)
+            # Formato chileno: quitar puntos de miles y usar coma como decimal
+            serie = serie.str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
             df_movs[col] = pd.to_numeric(serie, errors='coerce')
 
     # Salidas compatibles
@@ -496,7 +500,15 @@ def limpiar_y_ordenar_dataframe(df):
     
     return df_ordenado
 
-def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_output", df_cta_cte_consolidado: pd.DataFrame | None = None, df_final_sin_eliminaciones: pd.DataFrame | None = None, df_abonos_banco_estado: pd.DataFrame | None = None):
+def exportar_archivos(
+    df_final,
+    df_abonos_cta_cte,
+    directorio_salida="archivos_output",
+    df_cta_cte_consolidado: pd.DataFrame | None = None,
+    df_final_sin_eliminaciones: pd.DataFrame | None = None,
+    df_abonos_banco_estado: pd.DataFrame | None = None,
+    df_banco_estado_consolidado: pd.DataFrame | None = None,
+):
     """
     Exporta los DataFrames a archivos CSV en el directorio especificado.
     
@@ -550,6 +562,16 @@ def exportar_archivos(df_final, df_abonos_cta_cte, directorio_salida="archivos_o
         print(f"Error: No se puede escribir el archivo '{ruta_consolidado}'. Cierre el archivo e intente nuevamente.")
     except Exception as e:
         print(f"Error inesperado al guardar consolidado cta cte: {str(e)}")
+
+    # Exportar consolidado Banco Estado (si se provee)
+    try:
+        if isinstance(df_banco_estado_consolidado, pd.DataFrame) and not df_banco_estado_consolidado.empty:
+            ruta_be_consolidado = os.path.join(directorio_salida, "banco_estado_consolidado.csv")
+            df_banco_estado_consolidado.to_csv(ruta_be_consolidado, index=False)
+    except PermissionError:
+        print(f"Error: No se puede escribir el archivo '{ruta_be_consolidado}'. Cierre el archivo e intente nuevamente.")
+    except Exception as e:
+        print(f"Error inesperado al guardar consolidado Banco Estado: {str(e)}")
 
 def obtener_categoria(descripcion, diccionario_categorias):
     descripcion_normalizada = str(descripcion).strip().lower()
@@ -1851,7 +1873,7 @@ class ProcesadorArchivos:
             print(f"   ❌ Error procesando {nombre_archivo}: {str(e)}")
             return False
     
-    def consolidar_datos(self) -> dict:
+    def consolidar_datos(self, config: dict | None = None) -> dict:
         """
         Consolida todos los datos procesados
         
@@ -1891,6 +1913,38 @@ class ProcesadorArchivos:
             subset_cols = [c for c in ['Fecha','Descripción','Cargos','Abonos','Saldo'] if c in df_bec.columns]
             if subset_cols:
                 df_bec = df_bec.drop_duplicates(subset=subset_cols, keep='first')
+            # Categorización por descripción usando diccionarios de GASTOS (cargos) y ABONOS (abonos)
+            try:
+                cfg_g = (config or {}).get('gastos', {})
+                cfg_a = (config or {}).get('abonos', {})
+                dic_cat2_g = cfg_g.get('diccionario_categorias')
+                dic_cat1_g = cfg_g.get('diccionario_categoria_1')
+                dic_cat2_a = cfg_a.get('diccionario_categorias')
+                dic_cat1_a = cfg_a.get('diccionario_categoria_1')
+
+                df_bec = df_bec.copy()
+                if 'Categoría_2' not in df_bec.columns:
+                    df_bec['Categoría_2'] = ''
+                if 'Categoría 1' not in df_bec.columns:
+                    df_bec['Categoría 1'] = ''
+
+                # Máscaras
+                es_cargo = 'Cargos' in df_bec.columns and pd.to_numeric(df_bec['Cargos'], errors='coerce').fillna(0) > 0
+                es_abono = 'Abonos' in df_bec.columns and pd.to_numeric(df_bec['Abonos'], errors='coerce').fillna(0) > 0
+
+                # Cargos -> usar diccionarios de gastos
+                if isinstance(dic_cat2_g, dict):
+                    df_bec.loc[es_cargo, 'Categoría_2'] = df_bec.loc[es_cargo, 'Descripción'].apply(lambda d: obtener_categoria(d, dic_cat2_g))
+                if isinstance(dic_cat1_g, dict):
+                    df_bec.loc[es_cargo, 'Categoría 1'] = df_bec.loc[es_cargo, 'Categoría_2'].apply(lambda c2: obtener_categoria(c2, dic_cat1_g))
+
+                # Abonos -> usar diccionarios de abonos
+                if isinstance(dic_cat2_a, dict):
+                    df_bec.loc[es_abono, 'Categoría_2'] = df_bec.loc[es_abono, 'Descripción'].apply(lambda d: obtener_categoria(d, dic_cat2_a))
+                if isinstance(dic_cat1_a, dict):
+                    df_bec.loc[es_abono, 'Categoría 1'] = df_bec.loc[es_abono, 'Categoría_2'].apply(lambda c2: obtener_categoria(c2, dic_cat1_a))
+            except Exception as e:
+                print(f"⚠️  No se pudo categorizar Banco Estado consolidado: {str(e)}")
             datos_consolidados['banco_estado_consolidado'] = df_bec.reset_index(drop=True)
             print(f"✅ Consolidado Banco Estado: {len(datos_consolidados['banco_estado_consolidado'])} registros")
         else:
@@ -2353,7 +2407,7 @@ def procesar_archivos_financieros(
             print(f"⚠️  Archivo no soportado: {archivo}")
     
     # Consolidar datos
-    datos_consolidados = procesador.consolidar_datos()
+    datos_consolidados = procesador.consolidar_datos(config=config)
     
     print("=" * 60)
     print("🔄 PROCESANDO DATOS FINALES...")
@@ -2405,7 +2459,8 @@ def procesar_archivos_financieros(
             directorio_output,
             datos_consolidados.get('cuenta_corriente_consolidado', pd.DataFrame()),
             df_final_sin_eliminaciones,
-            df_abonos_banco_estado
+            df_abonos_banco_estado,
+            datos_consolidados.get('banco_estado_consolidado', pd.DataFrame()),
         )
         
 

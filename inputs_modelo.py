@@ -9,7 +9,13 @@ diccionario_categorias_gastos = {
         "Jaime Catricheo"
     ],
     "Ferretería": [
-        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "SUPERMERCADO", "sociedad inversione", "full cars", "nutriagro", "unimarc", "librer", "doble rr"
+        "FERRETERIA", "SODIMAC", "kupfer", "trapp", "sociedad inversione", "full cars", "nutriagro", "unimarc", "librer", "doble rr"
+    ],
+    "Supermercado": [
+        "SUPERMERCADO"
+    ],
+    "Cervezas": [
+        "Loyola escudero"
     ],
     "Publicidad Meta": [
         "FACEBK", "facebook"
@@ -101,7 +107,7 @@ diccionario_categoria_1_gastos = {
         "Arriendo", "Entel", "Bice Vida", "Seguro", "Plan", "Luz", "Electricidad", "Beneficios HotBoat", "Internet", 
     ],
     "Costos Variables": [
-        "Gas", "Combustible", "Edicion videos","remuneraciones", "leña", "Stock tablas y bebidas" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
+        "Gas", "Combustible", "Edicion videos","remuneraciones", "leña", "Stock tablas y bebidas", "Cervezas", "Supermercado" # "mantención", "limpieza", "repuestos", "transportes", "comisiones",
     ],
     "Costos de Marketing": [
         "Publicidad Meta", "Publicidad Google", "Herramientas de marketing" # "marketing", "promoción",
